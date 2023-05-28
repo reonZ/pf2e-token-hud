@@ -1,0 +1,97 @@
+<div class="spells">
+    {{#if spells.length}}
+    {{#each spells as |entry|}}
+    {{#if entry includeZero=true}}
+    <div class="entry">
+        <div class="header">
+            {{#if (eq @index 0)}}
+            {{localize 'PF2E.SpellCantripLabel'}}
+            {{else}}
+            {{localize (concat 'PF2E.SpellLevel' @index)}}
+            {{/if}}
+        </div>
+        {{#each entry as |spell|}}
+        <div class="spell{{#if spell.expended}} expended{{/if}}{{#if spell.isVirtual}} virtual{{/if}}" data-entry-id="{{spell.entryId}}"
+            data-slot-id="{{spell.slotId}}" data-expended="{{spell.expended}}" data-slot-level="{{spell.slotLevel}}"
+            data-item-id="{{spell.itemId}}" data-cast-level="{{spell.castLevel}}">
+            <div class="img" data-action="show-description">
+                <img src="{{spell.img}}">
+                <i class="fa-solid fa-circle-question"></i>
+            </div>
+            <div class="details">
+                <div class="name">{{spell.name}} {{{actionGlyph spell.action}}}</div>
+                <div class="extras">
+                    <div class="type">{{localize spell.type}}</div>
+                    <div class="actions">
+                        {{#unless spell.isCantrip}}
+
+                        {{#if spell.isFocus}}
+                        <div class="pips" data-action="toggle-pips">
+                            {{#times spell.uses.max}}
+                            <div class="pip">
+                                <i class="{{#if (gt spell.uses.value this)}}fas fa-dot-circle{{else}}far fa-circle{{/if}}"></i>
+                            </div>
+                            {{/times}}
+                        </div>
+
+                        {{else if (or spell.isSpontaneous spell.isInnate spell.isCharge)}}
+                        <div class="uses">
+                            <input type="number" value="{{spell.uses.value}}" data-input-path="{{spell.inputPath}}"
+                                data-entry-id="{{spell.entryId}}" placeholder="0" min="0" max="{{spell.uses.max}}" {{#if
+                                spell.isCharge}}disabled{{/if}}>
+                            {{#if spell.uses.max}}
+                            <input type="text" value="/  {{spell.uses.max}}" disabled>
+                            {{!-- {{else if spell.isCharge}}
+                            <a data-action="recharge-staff"><i class="fas fa-redo"></i></a> --}}
+                            {{/if}}
+                        </div>
+
+                        {{else if spell.isPrepared}}
+                        <a data-action="toggle-prepared">
+                            <i class="fas fa-fw {{#if spell.expended}}fa-plus-square{{else}}fa-minus-square{{/if}}"></i>
+                        </a>
+
+                        {{/if}}
+
+                        {{/unless}}
+
+                        <a {{#if spell.expended}}class="disabled" {{else}}data-action="cast-spell" {{/if}}>
+                            <i class="fa-duotone fa-play"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    {{/if}}
+    {{/each}}
+    {{/if}}
+
+    {{#if rituals.length}}
+    <div class="entry">
+        <div class="header">{{localize 'PF2E.SpellRitualLabel'}}</div>
+        {{#each rituals as |ritual|}}
+        <div class="spell" data-slot-level="{{ritual.level}}" data-slot-id="{{ritual.slotId}}" data-entry-id="rituals"
+            data-item-id="{{ritual.itemId}}">
+            <div class="img" data-action="show-description">
+                <img src="{{ritual.img}}">
+                <i class="fa-solid fa-circle-question"></i>
+            </div>
+            <div class="details">
+                <div class="name">{{ritual.name}}</div>
+                <div class="extras">
+                    <div class="type">{{localize 'PF2E.LevelN' level=ritual.level}}</div>
+                    <div class="actions">
+                        <span>{{ritual.time}}</span>
+                        <a data-action="cast-spell">
+                            <i class="fa-duotone fa-play"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    {{/if}}
+</div>

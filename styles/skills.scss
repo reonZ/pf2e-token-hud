@@ -1,0 +1,136 @@
+#pf2e-token-hud {
+    .sidebar.skills {
+        --color-rank-0: #424242;
+        --color-rank-1: #171f69;
+        --color-rank-2: #3c005e;
+        --color-rank-3: #664400;
+        --color-rank-4: #5e0000;
+
+        gap: 4px;
+
+        .header {
+            font-weight: bold;
+        }
+
+        .skill .header,
+        .lore {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-inline: 4px;
+            gap: 20px;
+
+            .modifier {
+                color: var(--primary);
+                cursor: pointer;
+            }
+
+            .rank {
+                line-height: 1.1;
+                font-size: 0.9em;
+                padding-inline: 2px;
+
+                &.\30 {
+                    color: var(--color-rank-0);
+                }
+
+                &.\31 {
+                    color: var(--color-rank-1);
+                }
+
+                &.\32 {
+                    color: var(--color-rank-2);
+                }
+
+                &.\33 {
+                    color: var(--color-rank-3);
+                }
+
+                &.\34 {
+                    color: var(--color-rank-4);
+                }
+            }
+        }
+
+        .skill .action .name,
+        .lore {
+            height: 1.3em;
+        }
+
+        .skill,
+        .lores {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .skill {
+            .action {
+                display: flex;
+                flex-direction: column;
+                padding-inline: 4px;
+
+                &:not(:hover) {
+                    .name {
+                        .end {
+                            a {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+
+                .name {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+
+                    .end {
+                        display: flex;
+                        align-items: center;
+                        gap: 4px;
+
+                        .trained {
+                            font-size: 0.7em;
+                            font-weight: bold;
+                        }
+
+                        a {
+                            i {
+                                margin-top: 2px;
+                            }
+                        }
+                    }
+                }
+
+                .variants {
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    gap: 4px;
+                    font-size: 0.85em;
+
+                    .variant {
+                        cursor: pointer;
+                        line-height: 1.1;
+                        background: #424242;
+                        border-radius: 2px;
+                        border: 1px solid rgba(0, 0, 0, 0.5);
+                        box-shadow: inset 0 0 0 1px rgb(255 255 255 / 10%);
+                        color: var(--text-light);
+
+                        &:hover {
+                            box-shadow: inset 0 0 6px var(--color-shadow-primary);
+                        }
+                    }
+                }
+            }
+        }
+
+        .lores {
+            .header {
+                text-align: center;
+            }
+        }
+    }
+}

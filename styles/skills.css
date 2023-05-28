@@ -1,0 +1,107 @@
+#pf2e-token-hud .sidebar.skills {
+  --color-rank-0: #424242;
+  --color-rank-1: #171f69;
+  --color-rank-2: #3c005e;
+  --color-rank-3: #664400;
+  --color-rank-4: #5e0000;
+  gap: 4px;
+}
+#pf2e-token-hud .sidebar.skills .header {
+  font-weight: bold;
+}
+#pf2e-token-hud .sidebar.skills .skill .header,
+#pf2e-token-hud .sidebar.skills .lore {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 4px;
+  gap: 20px;
+}
+#pf2e-token-hud .sidebar.skills .skill .header .modifier,
+#pf2e-token-hud .sidebar.skills .lore .modifier {
+  color: var(--primary);
+  cursor: pointer;
+}
+#pf2e-token-hud .sidebar.skills .skill .header .rank,
+#pf2e-token-hud .sidebar.skills .lore .rank {
+  line-height: 1.1;
+  font-size: 0.9em;
+  padding-inline: 2px;
+}
+#pf2e-token-hud .sidebar.skills .skill .header .rank.\30 ,
+#pf2e-token-hud .sidebar.skills .lore .rank.\30  {
+  color: var(--color-rank-0);
+}
+#pf2e-token-hud .sidebar.skills .skill .header .rank.\31 ,
+#pf2e-token-hud .sidebar.skills .lore .rank.\31  {
+  color: var(--color-rank-1);
+}
+#pf2e-token-hud .sidebar.skills .skill .header .rank.\32 ,
+#pf2e-token-hud .sidebar.skills .lore .rank.\32  {
+  color: var(--color-rank-2);
+}
+#pf2e-token-hud .sidebar.skills .skill .header .rank.\33 ,
+#pf2e-token-hud .sidebar.skills .lore .rank.\33  {
+  color: var(--color-rank-3);
+}
+#pf2e-token-hud .sidebar.skills .skill .header .rank.\34 ,
+#pf2e-token-hud .sidebar.skills .lore .rank.\34  {
+  color: var(--color-rank-4);
+}
+#pf2e-token-hud .sidebar.skills .skill .action .name,
+#pf2e-token-hud .sidebar.skills .lore {
+  height: 1.3em;
+}
+#pf2e-token-hud .sidebar.skills .skill,
+#pf2e-token-hud .sidebar.skills .lores {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+#pf2e-token-hud .sidebar.skills .skill .action {
+  display: flex;
+  flex-direction: column;
+  padding-inline: 4px;
+}
+#pf2e-token-hud .sidebar.skills .skill .action:not(:hover) .name .end a {
+  display: none;
+}
+#pf2e-token-hud .sidebar.skills .skill .action .name {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+#pf2e-token-hud .sidebar.skills .skill .action .name .end {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+#pf2e-token-hud .sidebar.skills .skill .action .name .end .trained {
+  font-size: 0.7em;
+  font-weight: bold;
+}
+#pf2e-token-hud .sidebar.skills .skill .action .name .end a i {
+  margin-top: 2px;
+}
+#pf2e-token-hud .sidebar.skills .skill .action .variants {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.85em;
+}
+#pf2e-token-hud .sidebar.skills .skill .action .variants .variant {
+  cursor: pointer;
+  line-height: 1.1;
+  background: #424242;
+  border-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  color: var(--text-light);
+}
+#pf2e-token-hud .sidebar.skills .skill .action .variants .variant:hover {
+  box-shadow: inset 0 0 6px var(--color-shadow-primary);
+}
+#pf2e-token-hud .sidebar.skills .lores .header {
+  text-align: center;
+}

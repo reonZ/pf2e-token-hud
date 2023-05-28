@@ -1,0 +1,112 @@
+<div id="pf2e-token-hud" data-token-id="{{tokenId}}">
+    {{#if tokenId}}
+    <div class="inner">
+        <div class="header">{{name}}</div>
+
+        <hr>
+
+        {{#if hp.max}}
+        <div class="group">
+            <div class="section">
+                <i class="fa-solid fa-heart-half-stroke"></i>
+                <input type="number" name="system.attributes.hp.temp" value="{{hp.temp}}" min="0">
+            </div>
+            {{#if sp.max}}
+            <div class="section">
+                <i class="fa-solid fa-heart-pulse"></i>
+                <div class="numbers">
+                    <input type="number" name="system.attributes.sp.value" value="{{sp.value}}" min="0" max="{{sp.max}}">
+                    /
+                    <span>{{sp.max}}</span>
+                </div>
+            </div>
+            {{/if}}
+            <div class="section">
+                <i class="fa-solid fa-heart"></i>
+                <div class="numbers">
+                    <input type="number" name="system.attributes.hp.value" value="{{hp.value}}" min="0" max="{{hp.max}}">
+                    /
+                    <span>{{hp.max}}</span>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+
+        <div class="group">
+            <div class="section">
+                <i class="fa-regular fa-helmet-battle"></i> {{ac}}
+                <a data-action="take-cover">
+                    {{#if hasCover}}
+                    <i class="fa-solid fa-eye-slash"></i>
+                    {{else}}
+                    <i class="fa-duotone fa-eye-slash"></i>
+                    {{/if}}
+                </a>
+            </div>
+            {{#if shield}}
+            <div class="section">
+                <a data-action="raise-shield">
+                    {{#if shield.broken}}
+                    <i class="fa-regular fa-shield-slash"></i>
+                    {{else if shield.raised}}
+                    <i class="fa-solid fa-shield"></i>
+                    {{else}}
+                    <i class="fa-regular fa-shield"></i>
+                    {{/if}}
+                </a>
+                {{#if shield.ac}}+{{/if}}{{shield.ac}}
+                ({{shield.hardness}})
+                <div class="numbers">
+                    <input type="number" name="shield.value" value="{{shield.hp.value}}" min="0" max="{{shield.hp.max}}">
+                    /
+                    <span>{{shield.hp.max}}</span>
+                </div>
+            </div>
+            {{/if}}
+        </div>
+
+        <div class="group">
+            <div class="section">
+                <a data-action="roll-save" data-save="fortitude"><i class="fa-solid fa-hand-fist"></i>+{{saves.fortitude}}</a>
+            </div>
+            <div class="section">
+                <a data-action="roll-save" data-save="reflex"><i class="fa-solid fa-person-running"></i>+{{saves.reflex}}</a>
+            </div>
+            <div class="section">
+                <a data-action="roll-save" data-save="will"><i class="fa-solid fa-brain"></i>+{{saves.will}}</a>
+            </div>
+        </div>
+
+        {{#if speeds.length}}
+        <div class="group">
+            {{#each speeds as |speed|}}
+            <div class="section">{{{speed.icon}}}{{speed.value}}</div>
+            {{/each}}
+        </div>
+        {{/if}}
+
+        {{#if languages includeZero=true}}
+        <div class="group">
+            <div class="section">
+                <i class="fa-light fa-waveform-lines"></i>
+                {{languages}}
+            </div>
+        </div>
+        {{/if}}
+
+        <hr>
+
+        <div class="footer">
+            <a data-type="actions"><i class="fa-solid fa-sword"></i></a>
+            <a {{#if hasItems}} data-type="items" {{else}} class="disabled" {{/if}}>
+                <i class="fa-solid fa-backpack"></i>
+            </a>
+            <a {{#if hasSpells}} data-type="spells" {{else}} class="disabled" {{/if}}>
+                <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </a>
+            <a data-type="skills"><i class="fa-solid fa-hand"></i></a>
+            <a data-type="extras"><i class="fa-solid fa-gears"></i></a>
+        </div>
+    </div>
+    {{/if}}
+</div>

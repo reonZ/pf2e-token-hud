@@ -1,0 +1,75 @@
+{
+    "pf2e-token-hud": {
+        "settings": {
+            "enabled": {
+                "name": "Enabled",
+                "hint": "Should the module be enabled on this client"
+            },
+            "position": {
+                "name": "Preferred Position",
+                "hint": "Which side of the token would you prefer the HUD to show, if not possible, the module will try first on the opposite side, otherwise on one of the remaining two",
+                "choices": {
+                    "left": "Left",
+                    "right": "Right",
+                    "top": "Top",
+                    "bottom": "Bottom"
+                }
+            },
+            "delay": {
+                "name": "HUD Delay",
+                "hint": "Delay in milliseconds before the HUD showing up on screen"
+            },
+            "order": {
+                "name": "Sort By Types",
+                "hint": "Should the spells be sorted by types before alphabetically in a same table."
+            },
+            "scrollbar": {
+                "name": "Sidebar Scrollbar",
+                "hint": "Should scrollbar be displayed on hud sidebars, if disabled, you will still be able to scroll but won't see the scrollbar anymore."
+            }
+        },
+        "spells": {
+            "empty": "{name} doesn't have any spell.",
+            "charges": "Charges",
+            "staff": "Staff"
+        },
+        "popup": {
+            "close": "Close"
+        },
+        "skills": {
+            "actions": {
+                "earnIncome": "Earn Income",
+                "treatWounds": "Treat Wounds",
+                "borrow-arcane-spell": "Borrow Arcane Spell",
+                "identify-magic": "Identify Magic",
+                "identify-alchemy": "Identify Alchemy",
+                "learn-spell": "Learn a Spell",
+                "crafting-goods": "Crafting Goods",
+                "staging-performance": "Staging a Performance",
+                "distracting-words": "Distracting Words",
+                "gesture": "Gesture",
+                "trick": "Trick",
+                "stabilize": "Stabilize",
+                "stop-bleeding": "Stop Bleeding",
+                "acting": "Acting",
+                "comedy": "Comedy",
+                "dance": "Dance",
+                "keyboards": "Keyboards",
+                "oratory": "Oratory",
+                "percussion": "Percussion",
+                "singing": "Singing",
+                "strings": "Strings",
+                "winds": "Winds",
+                "warning": "Warning"
+            },
+            "modifiers": {
+                "no-crowbar": "No Crowbar"
+            },
+            "variant": {
+                "title": "Variant Skill",
+                "label": "Select a variant skill",
+                "button": "Select"
+            }
+        }
+    }
+}

@@ -1,0 +1,156 @@
+#pf2e-token-hud {
+    .sidebar.spells {
+        gap: 4px;
+
+        .entry {
+            .header {
+                text-align: center;
+            }
+
+            .spell {
+                display: flex;
+                height: 2.43em;
+                margin-top: 2px;
+
+                > * {
+                    z-index: 1;
+                }
+
+                .img {
+                    position: relative;
+                    height: 100%;
+                    aspect-ratio: 1 / 1;
+                    cursor: pointer;
+
+                    img {
+                        border: 1px solid #5e5135;
+                        border-radius: 4px;
+                    }
+
+                    i {
+                        display: none;
+                        position: absolute;
+                        inset: 0;
+                        align-items: center;
+                        justify-content: center;
+                        background: #c9c3b8;
+                        border: 1px solid #363636;
+                        border-radius: 4px;
+                        font-size: 2em;
+                    }
+
+                    &:hover {
+                        i {
+                            display: flex;
+                        }
+                    }
+                }
+
+                .details {
+                    flex: 1;
+                    height: 100%;
+                    overflow: hidden;
+
+                    > * {
+                        padding-inline: 4px;
+                    }
+
+                    .name {
+                        background-color: rgba(120, 100, 82, 0.1);
+                        white-space: nowrap;
+                        font-weight: bold;
+                        padding-right: 12px;
+                        text-overflow: ellipsis;
+                        overflow-x: hidden;
+                    }
+
+                    .extras {
+                        display: flex;
+                        justify-content: space-between;
+                        height: 50%;
+                        gap: 30px;
+
+                        .type {
+                            white-space: nowrap;
+                            font-size: 0.9em;
+                        }
+
+                        .actions {
+                            display: flex;
+                            align-items: center;
+                            gap: 4px;
+                            color: #303030;
+                            font-size: 0.96em;
+                            height: 100%;
+
+                            .uses {
+                                display: flex;
+                                align-items: center;
+                                height: 100%;
+
+                                input {
+                                    border: 0;
+                                    font-size: 0.9em;
+                                    text-align: center;
+                                    height: calc(100% - 2px);
+
+                                    &[type='number'] {
+                                        width: 2ch;
+
+                                        &:disabled {
+                                            background: none;
+                                        }
+                                    }
+
+                                    &[type='text'] {
+                                        background: none;
+                                        width: 4ch;
+                                    }
+                                }
+                            }
+
+                            .pips {
+                                display: flex;
+                                align-items: center;
+                                gap: 1px;
+                                cursor: pointer;
+                                margin-right: 3px;
+
+                                .pip {
+                                    font-size: 0.9em;
+                                    margin-top: 2px;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                &.expended {
+                    .details {
+                        .name {
+                            color: var(--color-disabled);
+                            text-decoration: line-through;
+                        }
+                    }
+                }
+
+                &.virtual {
+                    position: relative;
+
+                    &:before {
+                        content: '';
+                        position: absolute;
+                        height: 100%;
+                        width: 100%;
+                        background-color: rgb(0 5 255 / 7%);
+                        pointer-events: none;
+                    }
+                }
+
+                .description {
+                    display: none;
+                }
+            }
+        }
+    }
+}
