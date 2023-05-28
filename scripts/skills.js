@@ -75,6 +75,14 @@ const ACTIONS_UUIDS = {
     'pick-a-lock': 'Compendium.pf2e.actionspf2e.2EE4aF4SZpYf0R6H',
 }
 
+const DUPLICATE_SKILLS = {
+    escape: { slug: 'escape', cost: '1', type: 2, noSkill: true },
+    'recall-knowledge': { slug: 'recall-knowledge', cost: '1', secret: true },
+    'decipher-writing': { slug: 'decipher-writing', type: 2, trained: true },
+    'identify-magic': { slug: 'identify-magic', trained: true },
+    'learn-spell': { slug: 'learn-spell', trained: true },
+}
+
 const SKILLS = [
     {
         slug: 'perception',
@@ -87,7 +95,7 @@ const SKILLS = [
         slug: 'acrobatics',
         actions: [
             { slug: 'balance', cost: '1', type: 2 },
-            { slug: 'escape', cost: '1', type: 2, noSkill: true },
+            'escape',
             { slug: 'tumble-through', cost: '1', type: 2 },
             { slug: 'maneuver-in-flight', cost: '1', type: 2, trained: true },
             { slug: 'squeeze', type: 2, trained: true },
@@ -96,18 +104,18 @@ const SKILLS = [
     {
         slug: 'arcana',
         actions: [
-            { slug: 'recall-knowledge', cost: '1', secret: true },
+            'recall-knowledge',
             { slug: 'borrow-arcane-spell', trained: true },
-            { slug: 'decipher-writing', type: 2, trained: true },
-            { slug: 'identify-magic', trained: true },
-            { slug: 'learn-spell', trained: true },
+            'decipher-writing',
+            'identify-magic',
+            'learn-spell',
         ],
     },
     {
         slug: 'athletics',
         actions: [
             { slug: 'climb', cost: '1', type: 1 },
-            { slug: 'escape', cost: '1', type: 2, noSkill: true },
+            'escape',
             {
                 slug: 'forceOpen',
                 cost: '1',
@@ -141,7 +149,7 @@ const SKILLS = [
     {
         slug: 'crafting',
         actions: [
-            { slug: 'recall-knowledge', cost: '1', secret: true },
+            'recall-knowledge',
             { slug: 'repair', type: 1 },
             { slug: 'craft', type: 1, trained: true },
             { slug: 'crafting-goods', trained: true },
@@ -191,19 +199,19 @@ const SKILLS = [
     {
         slug: 'nature',
         actions: [
-            { slug: 'command-an-animal', cost: '1', type: 2 },
-            { slug: 'recall-knowledge', cost: '1', secret: true },
-            { slug: 'identify-magic', trained: true },
-            { slug: 'learn-spell', trained: true },
+            { slug: 'command-an-animal', cost: '1', type: 2 }, //
+            'recall-knowledge',
+            'identify-magic',
+            'learn-spell',
         ],
     },
     {
         slug: 'occultism',
         actions: [
-            { slug: 'recall-knowledge', cost: '1', secret: true },
-            { slug: 'decipher-writing', type: 2, trained: true },
-            { slug: 'identify-magic', trained: true },
-            { slug: 'learn-spell', trained: true },
+            'recall-knowledge', //
+            'decipher-writing',
+            'identify-magic',
+            'learn-spell',
         ],
     },
     {
@@ -232,19 +240,19 @@ const SKILLS = [
     {
         slug: 'religion',
         actions: [
-            { slug: 'recall-knowledge', cost: '1', secret: true },
-            { slug: 'decipher-writing', type: 2, trained: true },
-            { slug: 'identify-magic', trained: true },
-            { slug: 'learn-spell', trained: true },
+            'recall-knowledge', //
+            'decipher-writing',
+            'identify-magic',
+            'learn-spell',
         ],
     },
     {
         slug: 'society',
         actions: [
-            { slug: 'recall-knowledge', cost: '1', secret: true },
+            'recall-knowledge', //
             { slug: 'subsist', type: 2 },
             { slug: 'create-forgery', type: 2, trained: true },
-            { slug: 'decipher-writing', type: 2, trained: true },
+            'decipher-writing',
         ],
     },
     {
@@ -275,8 +283,11 @@ const SKILLS = [
     },
 ]
 
-SKILLS.forEach(({ slug, actions }) => {
-    for (const action of actions) {
+SKILLS.forEach(skill => {
+    skill.actions = skill.actions.map(action => (typeof action === 'string' ? DUPLICATE_SKILLS[action] : action))
+
+    const { slug, actions } = skill
+    for (let action of actions) {
         const unslugged = action.slug.replace(/-(.)/g, (_, c) => c.toUpperCase()).capitalize()
 
         action.skillSlug = slug
