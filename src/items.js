@@ -1,4 +1,5 @@
 import { localize, MODULE_ID } from './module.js'
+import { IdentifyItemPopup } from './pf2e.js'
 import { addNameTooltipListeners } from './shared.js'
 
 const ITEMS_TYPES = {
@@ -76,7 +77,8 @@ export function addItemsListeners(el, actor) {
         const item = getItemFromEvent(event, actor)
         if (!item) return
         if (item.isIdentified) item.setIdentificationStatus('unidentified')
-        else item.setIdentificationStatus('identified')
+        else new IdentifyItemPopup(item).render(true)
+        // else item.setIdentificationStatus('identified')
     })
 
     el.find('[data-action=edit-item]').on('click', event => {
