@@ -43,38 +43,9 @@ export async function getItemsData(actor) {
 export function addItemsListeners(el, actor) {
     addNameTooltipListeners(el.find('.item'))
 
-    // new DragDrop({
-    //     dragSelector: '.item',
-    //     dropSelector: null,
-    //     permissions: {
-    //         dragstart: () => true,
-    //         drop: () => false,
-    //     },
-    //     callbacks: {
-    //         dragstart: event => {
-    //             const target = event.target.closest('.item')
-    //             const { itemType, uuid } = target.dataset
-
-    //             const img = new Image()
-    //             img.src = target.querySelector('.item-img img').src
-    //             img.style.width = '32px'
-    //             img.style.height = '32px'
-    //             img.style.borderRadius = '4px'
-    //             img.style.position = 'absolute'
-    //             img.style.left = '-1000px'
-    //             document.body.append(img)
-
-    //             event.dataTransfer.setDragImage(img, 16, 16)
-    //             event.dataTransfer.setData('text/plain', JSON.stringify({ type: 'Item', fromInventory: true, itemType, uuid }))
-    //         },
-    //     },
-    // }).bind(el[0])
-
     const hud = el.closest(`#${MODULE_ID}`)
 
     el.find('.item').on('dragstart', event => {
-        hud.css('opacity', 0.1)
-
         const target = event.target.closest('.item')
         const { itemType, uuid } = target.dataset
 
@@ -93,14 +64,7 @@ export function addItemsListeners(el, actor) {
             JSON.stringify({ type: 'Item', fromInventory: true, itemType, uuid })
         )
 
-        target.addEventListener(
-            'dragend',
-            () => {
-                hud.css('opacity', 1)
-                hud.css('pointerEvents', '')
-            },
-            { once: true }
-        )
+        target.addEventListener('dragend', () => img.remove(), { once: true })
     })
 
     el.find('.quantity input').on('change', event => {

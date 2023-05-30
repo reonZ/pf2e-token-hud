@@ -14,18 +14,5 @@ export async function popup(title, content) {
 
     popup.querySelector('[data-action=close-popup]').addEventListener('click', () => popup.remove())
 
-    popup.addEventListener('dragstart', event => {
-        hud.css('opacity', 0.1)
-
-        event.currentTarget.addEventListener(
-            'dragend',
-            () => {
-                hud.css('opacity', 1)
-                hud.css('pointerEvents', '')
-            },
-            { once: true }
-        )
-    })
-
     hud.append(popup)
 }

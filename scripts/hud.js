@@ -325,7 +325,17 @@ export class HUD extends Application {
         })
 
         html.on('dragover', () => {
+            html.css('opacity', 0.1)
             html.css('pointerEvents', 'none')
+
+            window.addEventListener(
+                'dragend',
+                () => {
+                    html.css('opacity', 1)
+                    html.css('pointerEvents', '')
+                },
+                { once: true }
+            )
         })
 
         html.find('input').on('change', async event => {
