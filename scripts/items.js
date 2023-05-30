@@ -1,13 +1,6 @@
 import { localize, MODULE_ID } from './module.js'
 import { addNameTooltipListeners } from './shared.js'
 
-const ITEMS_ORDER = {
-    weapon: 0,
-    armor: 1,
-    consumable: 2,
-    equipment: 3,
-}
-
 const ITEMS_TYPES = {
     weapon: { order: 0, label: 'PF2E.InventoryWeaponsHeader' },
     armor: { order: 1, label: 'PF2E.InventoryArmorHeader' },
@@ -17,15 +10,10 @@ const ITEMS_TYPES = {
     backpack: { order: 5, label: 'PF2E.InventoryBackpackHeader' },
 }
 
-export function getItems(actor) {
-    return actor.inventory.contents
-    // return actor.inventory.filter(item => !item.isOfType('backpack', 'treasure'))
-}
-
 export async function getItemsData(actor) {
     const categories = {}
 
-    for (const item of getItems(actor)) {
+    for (const item of actor.inventory.contents) {
         categories[item.type] ??= []
         categories[item.type].push(item)
     }

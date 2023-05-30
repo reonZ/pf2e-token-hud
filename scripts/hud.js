@@ -1,5 +1,5 @@
-import { addItemsListeners, getItems, getItemsData } from './items.js'
-import { getSetting, templatePath, localize, MODULE_ID } from './module.js'
+import { addItemsListeners, getItemsData } from './items.js'
+import { getSetting, localize, MODULE_ID, templatePath } from './module.js'
 import { addSkillsListeners, getSkillsData } from './skills.js'
 import { addSpellsListeners, getSpellsData } from './spells.js'
 
@@ -161,7 +161,7 @@ export class HUD extends Application {
             speeds,
             languages: this.actor.system.traits?.languages?.value.join(', '),
             hasSpells: actor.spellcasting.some(x => x.category !== 'items'),
-            hasItems: actor.inventory.coins.copperValue || getItems(actor).length,
+            hasItems: actor.inventory.coins.copperValue || actor.inventory.length,
         }
     }
 
