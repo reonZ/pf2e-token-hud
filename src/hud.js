@@ -47,7 +47,7 @@ export class HUD extends Application {
                 this.#mousedown ||
                 this.#lock ||
                 this.#softLock ||
-                !token instanceof Token ||
+                !(token instanceof Token) ||
                 !token.isOwner ||
                 !token.actor?.isOfType('character', 'npc')
             )
