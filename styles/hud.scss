@@ -54,6 +54,59 @@
             height: 1.4em;
         }
 
+        .item-img {
+            position: relative;
+            min-height: 2.43em;
+            height: 100%;
+            aspect-ratio: 1 / 1;
+
+            img {
+                border: 1px solid #5e5135;
+                border-radius: 4px;
+            }
+        }
+
+        .details {
+            flex: 1;
+            height: 100%;
+            overflow: hidden;
+
+            > * {
+                padding-inline: 4px;
+            }
+
+            .name {
+                background-color: rgba(120, 100, 82, 0.1);
+                white-space: nowrap;
+                font-weight: bold;
+                text-overflow: ellipsis;
+                overflow-x: hidden;
+            }
+
+            .extras {
+                display: flex;
+                justify-content: space-between;
+                height: 50%;
+            }
+
+            input {
+                border: 0;
+                font-size: 0.9em;
+                text-align: center;
+                height: calc(100% - 2px);
+
+                &[type='number'] {
+                    &:disabled {
+                        background: none;
+                    }
+                }
+
+                &[type='text'] {
+                    background: none;
+                }
+            }
+        }
+
         &.no-scrollbar {
             scrollbar-width: none;
 

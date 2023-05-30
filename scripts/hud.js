@@ -1,3 +1,4 @@
+import { addItemsListeners, getItems, getItemsData } from './items.js'
 import { getSetting, templatePath, localize, MODULE_ID } from './module.js'
 import { addSkillsListeners, getSkillsData } from './skills.js'
 import { addSpellsListeners, getSpellsData } from './spells.js'
@@ -21,7 +22,7 @@ const SPEEDS = [
 
 const SIDEBARS = {
     actions: { getData: () => null, addListeners: () => {} },
-    items: { getData: () => null, addListeners: () => {} },
+    items: { getData: getItemsData, addListeners: addItemsListeners },
     spells: { getData: getSpellsData, addListeners: addSpellsListeners },
     skills: { getData: getSkillsData, addListeners: addSkillsListeners },
     extras: { getData: () => null, addListeners: () => {} },
@@ -86,7 +87,7 @@ export class HUD extends Application {
                     if (popup && !popup.contains(target)) popup.remove()
                     return
                 }
-                if (target.closest('.app')) return
+                if (target.closest('.app') || target.closest('.tooltipster-base')) return
                 if (popup) return popup.remove()
                 this.close({ force: true })
             }
@@ -160,7 +161,7 @@ export class HUD extends Application {
             speeds,
             languages: this.actor.system.traits?.languages?.value.join(', '),
             hasSpells: actor.spellcasting.some(x => x.category !== 'items'),
-            hasItems: actor.inventory.size,
+            hasItems: actor.inventory.coins.copperValue || getItems(actor).length,
         }
     }
 
@@ -323,20 +324,8 @@ export class HUD extends Application {
             this.close()
         })
 
-        html.on('dragstart', event => {
-            html.css('opacity', 0.1)
-            event.currentTarget.addEventListener(
-                'dragend',
-                () => {
-                    html.css('opacity', 1)
-                    html.css({ pointerEvents: '' })
-                },
-                { once: true }
-            )
-        })
-
         html.on('dragover', () => {
-            html.css({ pointerEvents: 'none' })
+            html.css('pointerEvents', 'none')
         })
 
         html.find('input').on('change', async event => {
@@ -380,6 +369,9 @@ export class HUD extends Application {
         const { getData, addListeners } = SIDEBARS[type]
         const data = await getData(actor)
         if (!data) return ui.notifications.warn(localize(`${type}.empty`, { name: this.#token.name }))
+
+        data.isGM = game.user.isGM
+        data.isCharacter = actor.isOfType('character')
 
         this.#lock = true
 

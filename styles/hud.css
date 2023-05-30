@@ -45,6 +45,48 @@
   border-right: 0;
   height: 1.4em;
 }
+#pf2e-token-hud .sidebar .item-img {
+  position: relative;
+  min-height: 2.43em;
+  height: 100%;
+  aspect-ratio: 1/1;
+}
+#pf2e-token-hud .sidebar .item-img img {
+  border: 1px solid #5e5135;
+  border-radius: 4px;
+}
+#pf2e-token-hud .sidebar .details {
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+}
+#pf2e-token-hud .sidebar .details > * {
+  padding-inline: 4px;
+}
+#pf2e-token-hud .sidebar .details .name {
+  background-color: rgba(120, 100, 82, 0.1);
+  white-space: nowrap;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+}
+#pf2e-token-hud .sidebar .details .extras {
+  display: flex;
+  justify-content: space-between;
+  height: 50%;
+}
+#pf2e-token-hud .sidebar .details input {
+  border: 0;
+  font-size: 0.9em;
+  text-align: center;
+  height: calc(100% - 2px);
+}
+#pf2e-token-hud .sidebar .details input[type=number]:disabled {
+  background: none;
+}
+#pf2e-token-hud .sidebar .details input[type=text] {
+  background: none;
+}
 #pf2e-token-hud .sidebar.no-scrollbar {
   scrollbar-width: none;
 }

@@ -1,5 +1,6 @@
 import { localize, modifier, MODULE_ID } from './module.js'
-import { getItemSummary, popup } from './popup.js'
+import { popup } from './popup.js'
+import { getItemSummary } from './shared.js'
 
 const CROWBAR_UUIDS = ['Compendium.pf2e.equipment-srd.44F1mfJei4GY8f2X', 'Compendium.pf2e.equipment-srd.4kz3vhkKPUuXBpxk']
 const BON_MOT_UUID = 'Compendium.pf2e.feats-srd.0GF2j54roPFIDmXf'

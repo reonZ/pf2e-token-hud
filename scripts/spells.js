@@ -1,5 +1,6 @@
 import { getSetting, MODULE_ID } from './module.js'
-import { popup, getItemSummary } from './popup.js'
+import { popup } from './popup.js'
+import { addNameTooltipListeners, getItemSummary } from './shared.js'
 
 export async function getSpellsData(actor) {
     const focusPool = actor.system.resources.focus?.value ?? 0
@@ -103,6 +104,8 @@ export async function getSpellsData(actor) {
 }
 
 export function addSpellsListeners(el, actor) {
+    addNameTooltipListeners(el.find('.spell'))
+
     el.find('[data-action=toggle-pips]').on('click contextmenu', event => {
         event.preventDefault()
         const change = event.type === 'click' ? 1 : -1

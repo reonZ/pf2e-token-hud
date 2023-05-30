@@ -1,0 +1,121 @@
+#pf2e-token-hud {
+    .sidebar.items {
+        gap: 4px;
+
+        .hover-content {
+            display: block;
+        }
+
+        .category {
+            .header {
+                text-align: center;
+            }
+
+            .item {
+                display: flex;
+                height: 2.43em;
+                margin-top: 2px;
+
+                .item-img {
+                    img {
+                        pointer-events: none;
+                    }
+                }
+
+                .details {
+                    .name {
+                        &.uncommon {
+                            color: #98513d;
+                        }
+
+                        &.rare {
+                            color: #002664;
+                        }
+
+                        &.unique {
+                            color: #54166e;
+                        }
+                    }
+
+                    .extras {
+                        gap: 30px;
+
+                        .infos {
+                            height: 100%;
+                            display: flex;
+                            align-items: center;
+                            gap: 6px;
+
+                            .quantity {
+                                height: 100%;
+
+                                input {
+                                    width: 4ch;
+                                }
+                            }
+
+                            .bulk {
+                                display: flex;
+                                align-items: center;
+                                gap: 3px;
+                                padding-top: 2px;
+
+                                i {
+                                    font-size: 0.9em;
+                                }
+
+                                span {
+                                    font-size: 0.86em;
+                                }
+                            }
+
+                            .container {
+                                margin-top: 1px;
+                            }
+
+                            .temporary {
+                                font-size: 0.86em;
+                                margin-top: 2px;
+                            }
+                        }
+
+                        .actions {
+                            margin-top: 1px;
+                            font-size: 0.95em;
+                            display: flex;
+                            align-items: center;
+                            gap: 3px;
+
+                            a {
+                                i {
+                                    &.greyed {
+                                        color: rgba(0, 0, 0, 0.5);
+                                    }
+                                }
+                            }
+
+                            .held {
+                                font-size: 1.3em;
+                                position: relative;
+                                margin-top: 3px;
+                                clip-path: polygon(0 0, 100% 0, 100% 87%, 0 87%, 0 0);
+
+                                i {
+                                    position: absolute;
+                                    color: white;
+                                    font-size: 0.5em;
+                                    left: 5.7px;
+                                    top: 3.9px;
+                                }
+                            }
+
+                            .worn {
+                                font-size: 0.94em;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

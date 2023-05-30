@@ -12,17 +12,10 @@
 #pf2e-token-hud .sidebar.spells .entry .spell > * {
   z-index: 1;
 }
-#pf2e-token-hud .sidebar.spells .entry .spell .img {
-  position: relative;
-  height: 100%;
-  aspect-ratio: 1/1;
+#pf2e-token-hud .sidebar.spells .entry .spell .item-img {
   cursor: pointer;
 }
-#pf2e-token-hud .sidebar.spells .entry .spell .img img {
-  border: 1px solid #5e5135;
-  border-radius: 4px;
-}
-#pf2e-token-hud .sidebar.spells .entry .spell .img i {
+#pf2e-token-hud .sidebar.spells .entry .spell .item-img i {
   display: none;
   position: absolute;
   inset: 0;
@@ -33,29 +26,13 @@
   border-radius: 4px;
   font-size: 2em;
 }
-#pf2e-token-hud .sidebar.spells .entry .spell .img:hover i {
+#pf2e-token-hud .sidebar.spells .entry .spell .item-img:hover i {
   display: flex;
-}
-#pf2e-token-hud .sidebar.spells .entry .spell .details {
-  flex: 1;
-  height: 100%;
-  overflow: hidden;
-}
-#pf2e-token-hud .sidebar.spells .entry .spell .details > * {
-  padding-inline: 4px;
 }
 #pf2e-token-hud .sidebar.spells .entry .spell .details .name {
-  background-color: rgba(120, 100, 82, 0.1);
-  white-space: nowrap;
-  font-weight: bold;
   padding-right: 12px;
-  text-overflow: ellipsis;
-  overflow-x: hidden;
 }
 #pf2e-token-hud .sidebar.spells .entry .spell .details .extras {
-  display: flex;
-  justify-content: space-between;
-  height: 50%;
   gap: 30px;
 }
 #pf2e-token-hud .sidebar.spells .entry .spell .details .extras .type {
@@ -75,20 +52,10 @@
   align-items: center;
   height: 100%;
 }
-#pf2e-token-hud .sidebar.spells .entry .spell .details .extras .actions .uses input {
-  border: 0;
-  font-size: 0.9em;
-  text-align: center;
-  height: calc(100% - 2px);
-}
 #pf2e-token-hud .sidebar.spells .entry .spell .details .extras .actions .uses input[type=number] {
   width: 2ch;
 }
-#pf2e-token-hud .sidebar.spells .entry .spell .details .extras .actions .uses input[type=number]:disabled {
-  background: none;
-}
 #pf2e-token-hud .sidebar.spells .entry .spell .details .extras .actions .uses input[type=text] {
-  background: none;
   width: 4ch;
 }
 #pf2e-token-hud .sidebar.spells .entry .spell .details .extras .actions .pips {

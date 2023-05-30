@@ -1,0 +1,84 @@
+#pf2e-token-hud .sidebar.items {
+  gap: 4px;
+}
+#pf2e-token-hud .sidebar.items .hover-content {
+  display: block;
+}
+#pf2e-token-hud .sidebar.items .category .header {
+  text-align: center;
+}
+#pf2e-token-hud .sidebar.items .category .item {
+  display: flex;
+  height: 2.43em;
+  margin-top: 2px;
+}
+#pf2e-token-hud .sidebar.items .category .item .details .name.uncommon {
+  color: #98513d;
+}
+#pf2e-token-hud .sidebar.items .category .item .details .name.rare {
+  color: #002664;
+}
+#pf2e-token-hud .sidebar.items .category .item .details .name.unique {
+  color: #54166e;
+}
+#pf2e-token-hud .sidebar.items .category .item .details .extras {
+  gap: 30px;
+}
+#pf2e-token-hud .sidebar.items .category .item .details .extras .infos {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+#pf2e-token-hud .sidebar.items .category .item .details .extras .infos .quantity {
+  height: 100%;
+}
+#pf2e-token-hud .sidebar.items .category .item .details .extras .infos .quantity input {
+  width: 4ch;
+}
+#pf2e-token-hud .sidebar.items .category .item .details .extras .infos .bulk {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding-top: 2px;
+}
+#pf2e-token-hud .sidebar.items .category .item .details .extras .infos .bulk i {
+  font-size: 0.9em;
+}
+#pf2e-token-hud .sidebar.items .category .item .details .extras .infos .bulk span {
+  font-size: 0.86em;
+}
+#pf2e-token-hud .sidebar.items .category .item .details .extras .infos .container {
+  margin-top: 1px;
+}
+#pf2e-token-hud .sidebar.items .category .item .details .extras .infos .temporary {
+  font-size: 0.86em;
+  margin-top: 2px;
+}
+#pf2e-token-hud .sidebar.items .category .item .details .extras .actions {
+  margin-top: 1px;
+  font-size: 0.95em;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+#pf2e-token-hud .sidebar.items .category .item .details .extras .actions a i.greyed {
+  color: rgba(0, 0, 0, 0.5);
+}
+#pf2e-token-hud .sidebar.items .category .item .details .extras .actions .held {
+  font-size: 1.3em;
+  position: relative;
+  margin-top: 3px;
+  -webkit-clip-path: polygon(0 0, 100% 0, 100% 87%, 0 87%, 0 0);
+          clip-path: polygon(0 0, 100% 0, 100% 87%, 0 87%, 0 0);
+}
+#pf2e-token-hud .sidebar.items .category .item .details .extras .actions .held i {
+  position: absolute;
+  color: white;
+  font-size: 0.5em;
+  left: 5.7px;
+  top: 3.9px;
+}
+#pf2e-token-hud .sidebar.items .category .item .details .extras .actions .worn {
+  font-size: 0.94em;
+}

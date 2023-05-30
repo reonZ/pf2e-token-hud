@@ -14,19 +14,18 @@ export async function popup(title, content) {
 
     popup.querySelector('[data-action=close-popup]').addEventListener('click', () => popup.remove())
 
+    popup.addEventListener('dragstart', event => {
+        hud.css('opacity', 0.1)
+
+        event.currentTarget.addEventListener(
+            'dragend',
+            () => {
+                hud.css('opacity', 1)
+                hud.css('pointerEvents', '')
+            },
+            { once: true }
+        )
+    })
+
     hud.append(popup)
-}
-
-export async function getItemSummary(el, actor) {
-    const dataset = el.data()
-    const item = dataset.itemId ? actor.items.get(dataset.itemId) : await fromUuid(dataset.uuid)
-    const data = await item?.getChatData({}, dataset)
-    if (!data) return
-
-    const description = document.createElement('div')
-    description.classList.add('description')
-
-    await actor.sheet.itemRenderer.renderItemSummary(description, item, data)
-
-    return description
 }

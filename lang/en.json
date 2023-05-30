@@ -70,6 +70,13 @@
                 "label": "Select a variant skill",
                 "button": "Select"
             }
+        },
+        "items": {
+            "delete": {
+                "title": "Delete Confirmation",
+                "ok": "Delete",
+                "cancel": "Cancel"
+            }
         }
     }
 }
