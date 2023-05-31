@@ -1,7 +1,12 @@
+# 0.6.2
+
+-   removed `exploration` and `downtime` actions from the list
+-   some css fixes
+
 # 0.6.1
 
 -   fixed `Character` action without a cost breaking the actions sidebar
--   fixed skill use looping over non existant modifiers array
+-   fixed skill use looping over non existent modifiers array
 
 # 0.6.0
 
