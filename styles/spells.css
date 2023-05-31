@@ -1,12 +1,9 @@
-#pf2e-token-hud .sidebar.spells {
-  gap: 4px;
-}
 #pf2e-token-hud .sidebar.spells .entry .header {
   text-align: center;
 }
 #pf2e-token-hud .sidebar.spells .entry .spell {
   display: flex;
-  height: 2.43em;
+  height: var(--item-height);
   margin-top: 2px;
 }
 #pf2e-token-hud .sidebar.spells .entry .spell > * {
@@ -28,12 +25,6 @@
 }
 #pf2e-token-hud .sidebar.spells .entry .spell .item-img:hover i {
   display: flex;
-}
-#pf2e-token-hud .sidebar.spells .entry .spell .details .name {
-  padding-right: 12px;
-}
-#pf2e-token-hud .sidebar.spells .entry .spell .details .extras {
-  gap: 30px;
 }
 #pf2e-token-hud .sidebar.spells .entry .spell .details .extras .type {
   white-space: nowrap;

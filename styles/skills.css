@@ -4,7 +4,6 @@
   --color-rank-2: #3c005e;
   --color-rank-3: #664400;
   --color-rank-4: #5e0000;
-  gap: 4px;
 }
 #pf2e-token-hud .sidebar.skills .header {
   font-weight: bold;
@@ -14,7 +13,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-inline: 4px;
+  padding-inline: var(--inline-padding);
   gap: 20px;
 }
 #pf2e-token-hud .sidebar.skills .skill .header .modifier,
@@ -61,7 +60,7 @@
 #pf2e-token-hud .sidebar.skills .skill .action {
   display: flex;
   flex-direction: column;
-  padding-inline: 4px;
+  padding-inline: var(--inline-padding);
 }
 #pf2e-token-hud .sidebar.skills .skill .action:not(:hover) .name .end a {
   display: none;
@@ -84,23 +83,7 @@
   margin-top: 2px;
 }
 #pf2e-token-hud .sidebar.skills .skill .action .variants {
-  display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.85em;
-}
-#pf2e-token-hud .sidebar.skills .skill .action .variants .variant {
-  cursor: pointer;
-  line-height: 1.1;
-  background: #424242;
-  border-radius: 2px;
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-  color: var(--text-light);
-}
-#pf2e-token-hud .sidebar.skills .skill .action .variants .variant:hover {
-  box-shadow: inset 0 0 6px var(--color-shadow-primary);
 }
 #pf2e-token-hud .sidebar.skills .lores .header {
   text-align: center;

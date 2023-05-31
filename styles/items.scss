@@ -1,7 +1,5 @@
 #pf2e-token-hud {
     .sidebar.items {
-        gap: 4px;
-
         .hover-content {
             display: block;
         }
@@ -13,7 +11,7 @@
 
             .item {
                 display: flex;
-                height: 2.43em;
+                height: var(--item-height);
                 margin-top: 2px;
 
                 .item-img {
@@ -38,8 +36,6 @@
                     }
 
                     .extras {
-                        gap: 30px;
-
                         .infos {
                             height: 100%;
                             display: flex;
@@ -80,20 +76,6 @@
                         }
 
                         .actions {
-                            margin-top: 1px;
-                            font-size: 0.95em;
-                            display: flex;
-                            align-items: center;
-                            gap: 3px;
-
-                            a {
-                                i {
-                                    &.greyed {
-                                        color: rgba(0, 0, 0, 0.5);
-                                    }
-                                }
-                            }
-
                             .held {
                                 font-size: 1.3em;
                                 position: relative;

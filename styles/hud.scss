@@ -3,6 +3,8 @@
     --inner-border-radius: 4px;
     --outer-padding: 10px;
     --color: #1c1c1c;
+    --item-height: 2.43em;
+    --inline-padding: 4px;
 
     z-index: 90;
     position: absolute;
@@ -25,7 +27,8 @@
         }
     }
 
-    input {
+    input,
+    select {
         color: var(--color);
     }
 
@@ -41,10 +44,13 @@
     .sidebar {
         position: fixed;
         overflow-y: auto;
+        overflow-x: hidden;
         max-height: calc(100vh - 2 * var(--outer-padding));
+        min-width: 14em;
         max-width: 17em;
         display: flex;
         flex-direction: column;
+        gap: var(--inner-padding);
 
         .header {
             background: rgba(96, 88, 86, 0.25);
@@ -56,13 +62,43 @@
 
         .item-img {
             position: relative;
-            min-height: 2.43em;
             height: 100%;
             aspect-ratio: 1 / 1;
 
             img {
                 border: 1px solid #5e5135;
                 border-radius: 4px;
+                height: 100%;
+            }
+        }
+
+        .variants {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            font-size: 0.85em;
+
+            .variant {
+                cursor: pointer;
+                line-height: 1.1;
+                background: #424242;
+                border-radius: 2px;
+                border: 1px solid rgba(0, 0, 0, 0.5);
+                box-shadow: inset 0 0 0 1px rgb(255 255 255 / 10%);
+                color: var(--text-light);
+                padding-inline: 1px;
+
+                &.disabled {
+                    box-shadow: none;
+                    color: #6c6969;
+                    background: #b3b2b2;
+                    cursor: not-allowed;
+                    border-color: #858585;
+                }
+
+                &:not(.disabled):hover {
+                    box-shadow: inset 0 0 6px var(--color-shadow-primary);
+                }
             }
         }
 
@@ -72,7 +108,7 @@
             overflow: hidden;
 
             > * {
-                padding-inline: 4px;
+                padding-inline: var(--inline-padding);
             }
 
             .name {
@@ -80,13 +116,30 @@
                 white-space: nowrap;
                 font-weight: bold;
                 text-overflow: ellipsis;
-                overflow-x: hidden;
+                overflow: hidden;
             }
 
             .extras {
                 display: flex;
                 justify-content: space-between;
+                gap: 30px;
                 height: 50%;
+
+                .actions {
+                    margin-top: 1px;
+                    font-size: 0.95em;
+                    display: flex;
+                    align-items: center;
+                    gap: 3px;
+
+                    a {
+                        i {
+                            &.greyed {
+                                color: rgba(0, 0, 0, 0.5);
+                            }
+                        }
+                    }
+                }
             }
 
             input {

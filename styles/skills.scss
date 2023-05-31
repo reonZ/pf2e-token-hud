@@ -6,8 +6,6 @@
         --color-rank-3: #664400;
         --color-rank-4: #5e0000;
 
-        gap: 4px;
-
         .header {
             font-weight: bold;
         }
@@ -17,7 +15,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding-inline: 4px;
+            padding-inline: var(--inline-padding);
             gap: 20px;
 
             .modifier {
@@ -68,7 +66,7 @@
             .action {
                 display: flex;
                 flex-direction: column;
-                padding-inline: 4px;
+                padding-inline: var(--inline-padding);
 
                 &:not(:hover) {
                     .name {
@@ -104,25 +102,7 @@
                 }
 
                 .variants {
-                    display: flex;
                     flex-wrap: wrap;
-                    align-items: center;
-                    gap: 4px;
-                    font-size: 0.85em;
-
-                    .variant {
-                        cursor: pointer;
-                        line-height: 1.1;
-                        background: #424242;
-                        border-radius: 2px;
-                        border: 1px solid rgba(0, 0, 0, 0.5);
-                        box-shadow: inset 0 0 0 1px rgb(255 255 255 / 10%);
-                        color: var(--text-light);
-
-                        &:hover {
-                            box-shadow: inset 0 0 6px var(--color-shadow-primary);
-                        }
-                    }
                 }
             }
         }

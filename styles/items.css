@@ -1,6 +1,3 @@
-#pf2e-token-hud .sidebar.items {
-  gap: 4px;
-}
 #pf2e-token-hud .sidebar.items .hover-content {
   display: block;
 }
@@ -9,8 +6,11 @@
 }
 #pf2e-token-hud .sidebar.items .category .item {
   display: flex;
-  height: 2.43em;
+  height: var(--item-height);
   margin-top: 2px;
+}
+#pf2e-token-hud .sidebar.items .category .item .item-img img {
+  pointer-events: none;
 }
 #pf2e-token-hud .sidebar.items .category .item .details .name.uncommon {
   color: #98513d;
@@ -20,9 +20,6 @@
 }
 #pf2e-token-hud .sidebar.items .category .item .details .name.unique {
   color: #54166e;
-}
-#pf2e-token-hud .sidebar.items .category .item .details .extras {
-  gap: 30px;
 }
 #pf2e-token-hud .sidebar.items .category .item .details .extras .infos {
   height: 100%;
@@ -54,16 +51,6 @@
 #pf2e-token-hud .sidebar.items .category .item .details .extras .infos .temporary {
   font-size: 0.86em;
   margin-top: 2px;
-}
-#pf2e-token-hud .sidebar.items .category .item .details .extras .actions {
-  margin-top: 1px;
-  font-size: 0.95em;
-  display: flex;
-  align-items: center;
-  gap: 3px;
-}
-#pf2e-token-hud .sidebar.items .category .item .details .extras .actions a i.greyed {
-  color: rgba(0, 0, 0, 0.5);
 }
 #pf2e-token-hud .sidebar.items .category .item .details .extras .actions .held {
   font-size: 1.3em;
