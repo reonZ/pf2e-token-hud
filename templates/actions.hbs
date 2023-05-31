@@ -34,8 +34,20 @@
                 <div class="variant {{#if (eq strike.quantity 0)}}disabled{{/if}}">{{variant.label}}</div>
                 {{/each}}
                 {{#if strike.item.dealsDamage}}
-                <div class="variant">{{localize "PF2E.DamageLabel"}}</div>
-                <div class="variant">{{localize "PF2E.CriticalDamageLabel"}}</div>
+                {{#unless @root.isCharacter}}
+            </div>
+            <div class="variants">
+                {{/unless}}
+                <div class="variant" data-action="strike-damage" title="{{strike.damageFormula}}">
+                    {{#if @root.isCharacter}}
+                    {{localize "PF2E.DamageLabel"}}
+                    {{else}}
+                    {{strike.damageFormula}}
+                    {{/if}}
+                </div>
+                <div class="variant" data-action="strike-critical" title="{{strike.criticalFormula}}">
+                    {{localize "PF2E.CriticalDamageLabel"}}
+                </div>
                 {{/if}}
             </div>
             {{#if (and @root.isCharacter strike.auxiliaryActions.length)}}
@@ -54,11 +66,11 @@
     </div>
     {{/if}}
 
-
-    {{#if actions.length}}
+    {{#if sections.length}}
+    {{#each sections as |section|}}
     <div class="section">
-        <div class="header">{{localize 'PF2E.ActionsActionsHeader'}}</div>
-        {{#each actions as |action|}}
+        <div class="header">{{localize section.label}}</div>
+        {{#each section.actions as |action|}}
         <div class="action details" data-item-id="{{action.id}}">
             <a class="name" data-action="action-description">{{action.name}}</a>
             <div class="extras">
@@ -78,5 +90,6 @@
         </div>
         {{/each}}
     </div>
+    {{/each}}
     {{/if}}
 </div>

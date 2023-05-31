@@ -1,41 +1,59 @@
+import { getSetting } from './module.js'
 import { popup } from './popup.js'
 import { addNameTooltipListeners, getItemFromEvent, getItemSummary } from './shared.js'
 import { actionsUUIDS } from './skills.js'
 
-const ACTIONS_TYPES = {
-    action: { order: 0, label: 'PF2E.ActionTypeAction' },
-    reaction: { order: 1, label: 'PF2E.ActionTypeReaction' },
-    free: { order: 2, label: 'PF2E.ActionTypeFree' },
-    passive: { order: 3, label: 'PF2E.ActionTypePassive' },
+const SECTIONS_TYPES = {
+    action: { order: 0, label: 'PF2E.ActionsActionsHeader', actionLabel: 'PF2E.ActionTypeAction' },
+    reaction: { order: 1, label: 'PF2E.ActionTypeReaction', actionLabel: 'PF2E.ActionTypeReaction' },
+    free: { order: 2, label: 'PF2E.ActionTypeFree', actionLabel: 'PF2E.ActionTypeFree' },
+    passive: { order: 3, label: 'PF2E.ActionTypePassive', actionLabel: 'PF2E.ActionTypePassive' },
 }
 
 export async function getActionsData(actor) {
     const isCharacter = actor.isOfType('character')
-    const strikes = actor.system.actions.slice()
     const toggles = actor.synthetics.toggles.slice()
     const heroActions = isCharacter ? getHeroActions(actor) : null
+    const sorting = getSetting('actions')
     const actions = isCharacter ? getCharacterActions(actor) : getNpcActions(actor)
 
-    // const sections = {}
-    // for (const action of actions) {
-    //     sections[action.type] ??= []
-    //     sections[action.type].push(action)
-    // }
+    const strikes = await Promise.all(
+        actor.system.actions.map(async strike => ({
+            ...strike,
+            damageFormula: await strike.damage?.({ getFormula: true }),
+            criticalFormula: await strike.critical?.({ getFormula: true }),
+        }))
+    )
 
-    // sections = Object.entries(sections)
-    //     .map(([type, actions]) => {
-    //         actions.sort((a, b) => a.name.localeCompare(b.name))
-    //         return { type, actions, label: ACTIONS_TYPES[type].label }
-    //     })
-    //     .sort((a, b) => ACTIONS_TYPES[a.type].order - ACTIONS_TYPES[b.type].order)
+    let sections = {}
 
-    // if (strikes.length || sections.length || heroActions?.length) return { strikes, sections, heroActions }
+    for (const action of actions) {
+        if (sorting !== 'split') {
+            sections.action ??= []
+            sections.action.push(action)
+        } else {
+            sections[action.type] ??= []
+            sections[action.type].push(action)
+        }
+    }
 
-    actions.forEach(action => (action.typeLabel = ACTIONS_TYPES[action.type].label))
-    actions.sort((a, b) => a.name.localeCompare(b.name))
+    sections = Object.entries(sections).map(([type, actions]) => {
+        if (sorting !== 'type') {
+            actions.sort((a, b) => a.name.localeCompare(b.name))
+        } else {
+            actions.sort((a, b) => {
+                const orderA = SECTIONS_TYPES[a.type].order
+                const orderB = SECTIONS_TYPES[b.type].order
+                return orderA === orderB ? a.name.localeCompare(b.name) : orderA - orderB
+            })
+        }
+        return { type, actions, label: SECTIONS_TYPES[type].label }
+    })
 
-    if (toggles.length || strikes.length || actions.length || heroActions?.length)
-        return { toggles, strikes, actions, heroActions }
+    if (sorting === 'split') sections.sort((a, b) => SECTIONS_TYPES[a.type].order - SECTIONS_TYPES[b.type].order)
+
+    if (toggles.length || strikes.length || sections.length || heroActions?.length)
+        return { toggles, strikes, sections, heroActions }
 }
 
 export function addActionsListeners(el, actor) {
@@ -63,6 +81,12 @@ export function addActionsListeners(el, actor) {
         const suboption = toggle.querySelector('select')?.value ?? null
         actor.toggleRollOption(domain, option, itemId ?? null, toggle.querySelector('input').checked, suboption)
     })
+
+    const damage = el.find('[data-action=strike-damage')
+    const critical = el.find('[data-action=strike-critical')
+
+    damage.tooltipster({ position: 'top', theme: 'crb-hover' })
+    critical.tooltipster({ position: 'top', theme: 'crb-hover' })
 }
 
 function getHeroActions(actor) {
@@ -76,11 +100,14 @@ function getCharacterActions(actor) {
 
     return [...actions, ...feats].map(item => {
         const actionCost = item.actionCost
+        const actionType = actionCost.type
+
         return {
             id: item.id,
             type: actionCost.type,
             cost: actionCost,
             name: item.name,
+            typeLabel: SECTIONS_TYPES[actionType].actionLabel,
         }
     })
 }
@@ -88,7 +115,7 @@ function getCharacterActions(actor) {
 function getNpcActions(actor) {
     return actor.itemTypes.action.map(item => {
         const actionCost = item.actionCost
-        const actionType = item.actionCost?.type ?? 'passive'
+        const actionType = actionCost?.type ?? 'passive'
         const hasAura =
             actionType === 'passive' &&
             (item.system.traits.value.includes('aura') || !!item.system.rules.find(r => r.key === 'Aura'))
@@ -98,6 +125,7 @@ function getNpcActions(actor) {
             type: actionType,
             cost: actionCost,
             name: item.name,
+            typeLabel: SECTIONS_TYPES[actionType].actionLabel,
             hasDeathNote: item.system.deathNote,
             hasAura,
         }

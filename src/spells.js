@@ -82,7 +82,7 @@ export async function getSpellsData(actor) {
     }
 
     if (spells.length) {
-        const sort = getSetting('order')
+        const sort = getSetting('spells')
             ? (a, b) => (a.order === b.order ? a.name.localeCompare(b.name) : a.order - b.order)
             : (a, b) => a.name.localeCompare(b.name)
         spells.forEach(entry => entry.sort(sort))

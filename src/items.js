@@ -30,7 +30,6 @@ export async function getItemsData(actor) {
 }
 
 export function addItemsListeners(el, actor) {
-    const hud = el.closest(`#${MODULE_ID}`)
     const item = el.find('.item')
 
     addNameTooltipListeners(item)
