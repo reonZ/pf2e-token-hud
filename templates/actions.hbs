@@ -29,13 +29,15 @@
         {{#if (ne strike.visible false)}}
         <div class="strike details" data-index="{{strike.index}}">
             <div class="name">{{strike.label}}</div>
+
+            {{#if strike.ready}}
             <div class="variants">
                 {{#each strike.variants as |variant|}}
                 <div class="variant {{#if (eq strike.quantity 0)}}disabled{{/if}}" data-action="strike-attack" data-index="{{@index}}">
                     {{variant.label}}
                 </div>
                 {{/each}}
-                {{#if strike.item.dealsDamage}}
+                {{#if strike.item.dealsDamage }}
                 {{#unless @root.isCharacter}}
             </div>
             <div class="variants">
@@ -52,14 +54,49 @@
                 </div>
                 {{/if}}
             </div>
+            {{/if}}
+
             {{#if (and @root.isCharacter strike.auxiliaryActions.length)}}
             <div class="variants">
-                {{#each strike.auxiliaryActions as |action|}}
+                {{#if (and strike.ready strike.ammunition)}}
                 <div class="variant">
+                    <select class="ammos" data-action="strike-ammo">
+                        {{#select strike.ammunition.selected.id}}
+                        <option value="">{{localize "PF2E.NoAmmoLabel"}}</option>
+                        {{#each strike.ammunition.compatible as |ammo|}}
+                        <option value="{{ammo.id}}">{{ammo.name}} ({{ammo.quantity}})</option>
+                        {{/each}}
+                        {{/select}}
+                    </select>
+                </div>
+                {{/if}}
+
+                {{#each strike.auxiliaryActions as |action|}}
+                <div class="variant" data-action="strike-auxiliary" data-index="{{@index}}">
                     <span class="activity-icon">{{action.glyph}}</span>
                     {{action.label}}
+                    {{#if action.options}}
+                    <select class="modular">
+                        {{#each action.options as |option|}}
+                        <option value="{{option.value}}" {{#if option.selected}} selected{{/if}}>
+                            {{option.label}} {{#if option.selected}}&#x2714;{{/if}}
+                        </option>
+                        {{/each}}
+                    </select>
+                    {{/if}}
                 </div>
                 {{/each}}
+
+                {{#if (and strike.versatileOptions.length strike.ready)}}
+                <div class="versatiles">
+                    {{#each strike.versatileOptions as |option|}}
+                    <div class="variant {{#if option.selected}}selected{{/if}}" data-action="toggle-versatile" data-value="{{option.value}}"
+                        title="{{localize (lookup @root.damageTypes [value])}}">
+                        <i class="fa-solid fa-{{option.glyph}} fa-fw"></i>
+                    </div>
+                    {{/each}}
+                </div>
+                {{/if}}
             </div>
             {{/if}}
         </div>

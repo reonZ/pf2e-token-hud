@@ -5,12 +5,13 @@
     --color: #1c1c1c;
     --item-height: 2.43em;
     --inline-padding: 4px;
+    --font-size: 14px;
 
     z-index: 90;
     position: absolute;
     padding: var(--outer-padding);
     color: var(--color);
-    font-size: 14px;
+    font-size: var(--font-size);
 
     a {
         &.disabled {
@@ -75,12 +76,13 @@
         .variants {
             display: flex;
             align-items: center;
-            gap: 2px;
+            flex-wrap: wrap;
+            gap: 1px 2px;
             font-size: 0.85em;
 
             .variant {
                 cursor: pointer;
-                line-height: 1.1;
+                height: calc(var(--font-size) * 1.28);
                 background: #424242;
                 border-radius: 2px;
                 border: 1px solid rgba(0, 0, 0, 0.5);

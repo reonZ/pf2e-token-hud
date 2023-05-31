@@ -1,4 +1,5 @@
 import { getSetting } from './module.js'
+import { toggleWeaponTrait } from './pf2e.js'
 import { popup } from './popup.js'
 import { addNameTooltipListeners, getItemFromEvent, getItemSummary } from './shared.js'
 import { actionsUUIDS } from './skills.js'
@@ -8,6 +9,12 @@ const SECTIONS_TYPES = {
     reaction: { order: 1, label: 'PF2E.ActionTypeReaction', actionLabel: 'PF2E.ActionTypeReaction' },
     free: { order: 2, label: 'PF2E.ActionTypeFree', actionLabel: 'PF2E.ActionTypeFree' },
     passive: { order: 3, label: 'PF2E.ActionTypePassive', actionLabel: 'PF2E.ActionTypePassive' },
+}
+
+const TOOLTIPS = {
+    delay: [500, 0],
+    position: 'top',
+    theme: 'crb-hover',
 }
 
 export async function getActionsData(actor) {
@@ -54,7 +61,7 @@ export async function getActionsData(actor) {
     if (sorting === 'split') sections.sort((a, b) => SECTIONS_TYPES[a.type].order - SECTIONS_TYPES[b.type].order)
 
     if (toggles.length || strikes.length || sections.length || heroActions?.length)
-        return { toggles, strikes, sections, heroActions }
+        return { toggles, strikes, sections, heroActions, damageTypes: CONFIG.PF2E.damageTypes }
 }
 
 export function addActionsListeners(el, actor) {
@@ -102,7 +109,46 @@ export function addActionsListeners(el, actor) {
             const strike = getStrike(event)
             strike?.[action === 'strike-damage' ? 'damage' : 'critical']({ event })
         })
-        .tooltipster({ position: 'top', theme: 'crb-hover' })
+        .tooltipster(TOOLTIPS)
+
+    el.find('[data-action=strike-auxiliary]').on('click', event => {
+        event.preventDefault()
+        if (event.currentTarget !== event.target) return
+
+        const strike = getStrike(event)
+        if (!strike) return
+
+        const { index } = event.currentTarget.dataset
+        const modular = event.currentTarget.querySelector('select')?.value ?? null
+
+        strike.auxiliaryActions?.[index]?.execute({ selection: modular })
+    })
+
+    el.find('[data-action=toggle-versatile]')
+        .on('click', event => {
+            event.preventDefault()
+
+            const weapon = getStrike(event)?.item
+            if (!weapon) return
+
+            const target = event.currentTarget
+            const { value } = target.dataset
+            const baseType = weapon?.system.damage.damageType ?? null
+            const selection = target.classList.contains('selected') || value === baseType ? null : value
+
+            toggleWeaponTrait({ trait: 'versatile', weapon, selection })
+        })
+        .tooltipster(TOOLTIPS)
+
+    el.find('[data-action=strike-ammo]').on('change', event => {
+        event.preventDefault()
+
+        const weapon = getStrike(event)?.item
+        if (!weapon) return
+
+        const ammo = actor.items.get(event.currentTarget.value)
+        weapon.update({ system: { selectedAmmoId: ammo?.id ?? null } })
+    })
 }
 
 function getHeroActions(actor) {

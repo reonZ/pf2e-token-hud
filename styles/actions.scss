@@ -1,6 +1,6 @@
 #pf2e-token-hud {
     .sidebar.actions {
-        max-width: 19em;
+        max-width: 18.5em;
 
         .toggles {
             display: flex;
@@ -54,16 +54,61 @@
             .strike {
                 height: auto;
                 margin-top: 2px;
-                display: grid;
-                grid-auto-rows: 1fr;
+                display: flex;
+                gap: 1px;
+                flex-direction: column;
 
                 .temporary {
                     font-size: 0.86em;
                 }
 
-                .variant {
-                    .activity-icon {
-                        line-height: 1;
+                .variants {
+                    .variant {
+                        .activity-icon {
+                            line-height: 1;
+                        }
+
+                        select {
+                            color: inherit;
+                            border: 0;
+                            background: #6a6a6a;
+                            height: 100%;
+                            appearance: none;
+                            border-radius: 2px;
+
+                            option {
+                                color: black;
+                            }
+
+                            &.modular {
+                                margin-left: 2px;
+                                margin-right: -1px;
+                                padding-right: 0;
+                            }
+
+                            &.ammos {
+                                margin-inline: -1px;
+                            }
+                        }
+                    }
+
+                    .versatiles {
+                        display: flex;
+                        gap: 1px;
+
+                        .variant {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+
+                            &.selected {
+                                background: var(--light);
+
+                                &:hover {
+                                    box-shadow: inset 0 0 4px white;
+                                }
+                            }
+                        }
                     }
                 }
             }

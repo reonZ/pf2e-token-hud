@@ -86,9 +86,10 @@ export function addItemsListeners(el, actor) {
     el.find('[data-action=delete-item]').on('click', event => deleteItem(event, actor))
 
     el.find('[data-action=toggle-item-worn').tooltipster({
-        animation: 'fade',
-        delay: 0,
-        animationDuration: 10,
+        animation: null,
+        updateAnimation: null,
+        animationDuration: 0,
+        delay: [0, 0],
         trigger: 'click',
         contentAsHTML: true,
         interactive: true,
