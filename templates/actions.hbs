@@ -27,11 +27,13 @@
         <div class="header"> {{localize "PF2E.StrikesLabel"}}</div>
         {{#each strikes as |strike|}}
         {{#if (ne strike.visible false)}}
-        <div class="strike details">
+        <div class="strike details" data-index="{{strike.index}}">
             <div class="name">{{strike.label}}</div>
             <div class="variants">
                 {{#each strike.variants as |variant|}}
-                <div class="variant {{#if (eq strike.quantity 0)}}disabled{{/if}}">{{variant.label}}</div>
+                <div class="variant {{#if (eq strike.quantity 0)}}disabled{{/if}}" data-action="strike-attack" data-index="{{@index}}">
+                    {{variant.label}}
+                </div>
                 {{/each}}
                 {{#if strike.item.dealsDamage}}
                 {{#unless @root.isCharacter}}

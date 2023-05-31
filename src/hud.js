@@ -346,11 +346,8 @@ export class HUD extends Application {
 
             target.blur()
 
-            if (attr === 'shield.value') {
-                await actor.heldShield.update({ 'system.hp.value': value })
-            } else {
-                await actor.update({ [attr]: value })
-            }
+            if (attr !== 'shield.value') await actor.update({ [attr]: value })
+            else await actor.heldShield.update({ 'system.hp.value': value })
         })
 
         html.find('[data-action=raise-shield]').on('click', () => {

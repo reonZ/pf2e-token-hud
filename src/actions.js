@@ -18,8 +18,9 @@ export async function getActionsData(actor) {
     const actions = isCharacter ? getCharacterActions(actor) : getNpcActions(actor)
 
     const strikes = await Promise.all(
-        actor.system.actions.map(async strike => ({
+        actor.system.actions.map(async (strike, index) => ({
             ...strike,
+            index,
             damageFormula: await strike.damage?.({ getFormula: true }),
             criticalFormula: await strike.critical?.({ getFormula: true }),
         }))
@@ -82,11 +83,26 @@ export function addActionsListeners(el, actor) {
         actor.toggleRollOption(domain, option, itemId ?? null, toggle.querySelector('input').checked, suboption)
     })
 
-    const damage = el.find('[data-action=strike-damage')
-    const critical = el.find('[data-action=strike-critical')
+    function getStrike(event) {
+        const { index } = event.currentTarget.closest('.strike').dataset
+        return actor.system.actions[index]
+    }
 
-    damage.tooltipster({ position: 'top', theme: 'crb-hover' })
-    critical.tooltipster({ position: 'top', theme: 'crb-hover' })
+    el.find('[data-action=strike-attack]').on('click', event => {
+        event.preventDefault()
+        const { index } = event.currentTarget.dataset
+        const strike = getStrike(event)
+        strike?.variants[index].roll({ event })
+    })
+
+    el.find('[data-action=strike-damage], [data-action=strike-critical]')
+        .on('click', event => {
+            event.preventDefault()
+            const { action } = event.currentTarget.dataset
+            const strike = getStrike(event)
+            strike?.[action === 'strike-damage' ? 'damage' : 'critical']({ event })
+        })
+        .tooltipster({ position: 'top', theme: 'crb-hover' })
 }
 
 function getHeroActions(actor) {
