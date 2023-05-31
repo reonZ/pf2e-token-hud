@@ -115,17 +115,41 @@
 
             .action {
                 display: flex;
-                flex-direction: column;
-                height: var(--item-height);
+                align-items: center;
+                gap: 4px;
                 margin-top: 2px;
+                height: 1.4em;
 
-                .extras {
-                    .actions {
-                        .chat {
-                            font-size: 0.9em;
-                            margin-top: 1px;
+                &:hover {
+                    background-color: #00000014;
+
+                    .icon {
+                        img {
+                            background-color: #00000014;
                         }
                     }
+                }
+
+                .icon {
+                    height: 100%;
+
+                    img {
+                        height: 100%;
+                        border: 0;
+                        background: #c9c5b1;
+                    }
+                }
+
+                .name {
+                    flex: 1;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .chat {
+                    margin-top: 2px;
+                    font-size: 0.9em;
                 }
             }
         }

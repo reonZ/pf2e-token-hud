@@ -1,5 +1,5 @@
 import { getSetting } from './module.js'
-import { toggleWeaponTrait } from './pf2e.js'
+import { getActionIcon, toggleWeaponTrait } from './pf2e.js'
 import { popup } from './popup.js'
 import { addNameTooltipListeners, getItemFromEvent, getItemSummary } from './shared.js'
 import { actionsUUIDS } from './skills.js'
@@ -46,6 +46,11 @@ export async function getActionsData(actor) {
     }
 
     sections = Object.entries(sections).map(([type, actions]) => {
+        actions.forEach(action => {
+            action.img = getActionIcon(action.cost)
+            action.typeLabel = SECTIONS_TYPES[action.type].actionLabel
+        })
+
         if (sorting !== 'type') {
             actions.sort((a, b) => a.name.localeCompare(b.name))
         } else {
@@ -55,6 +60,7 @@ export async function getActionsData(actor) {
                 return orderA === orderB ? a.name.localeCompare(b.name) : orderA - orderB
             })
         }
+
         return { type, actions, label: SECTIONS_TYPES[type].label }
     })
 
@@ -162,14 +168,12 @@ function getCharacterActions(actor) {
 
     return [...actions, ...feats].map(item => {
         const actionCost = item.actionCost
-        const actionType = actionCost.type
 
         return {
             id: item.id,
             type: actionCost.type,
             cost: actionCost,
             name: item.name,
-            typeLabel: SECTIONS_TYPES[actionType].actionLabel,
         }
     })
 }
@@ -187,7 +191,6 @@ function getNpcActions(actor) {
             type: actionType,
             cost: actionCost,
             name: item.name,
-            typeLabel: SECTIONS_TYPES[actionType].actionLabel,
             hasDeathNote: item.system.deathNote,
             hasAura,
         }

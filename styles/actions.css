@@ -92,11 +92,32 @@
 }
 #pf2e-token-hud .sidebar.actions .section .action {
   display: flex;
-  flex-direction: column;
-  height: var(--item-height);
+  align-items: center;
+  gap: 4px;
   margin-top: 2px;
+  height: 1.4em;
 }
-#pf2e-token-hud .sidebar.actions .section .action .extras .actions .chat {
+#pf2e-token-hud .sidebar.actions .section .action:hover {
+  background-color: rgba(0, 0, 0, 0.0784313725);
+}
+#pf2e-token-hud .sidebar.actions .section .action:hover .icon img {
+  background-color: rgba(0, 0, 0, 0.0784313725);
+}
+#pf2e-token-hud .sidebar.actions .section .action .icon {
+  height: 100%;
+}
+#pf2e-token-hud .sidebar.actions .section .action .icon img {
+  height: 100%;
+  border: 0;
+  background: #c9c5b1;
+}
+#pf2e-token-hud .sidebar.actions .section .action .name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#pf2e-token-hud .sidebar.actions .section .action .chat {
+  margin-top: 2px;
   font-size: 0.9em;
-  margin-top: 1px;
 }

@@ -110,22 +110,12 @@
     <div class="section">
         <div class="header">{{localize section.label}}</div>
         {{#each section.actions as |action|}}
-        <div class="action details" data-item-id="{{action.id}}">
-            <a class="name" data-action="action-description">{{action.name}}</a>
-            <div class="extras">
-                <div class="infos">
-                    {{localize action.typeLabel}} {{{actionGlyph action.cost}}}
-                    {{#if action.hasDeathNote}}
-                    <i class="fa-solid fa-skull"></i>
-                    {{/if}}
-                    {{#if action.hasAura}}
-                    <i class="fa-regular fa-circle-dot"></i>
-                    {{/if}}
-                </div>
-                <div class="actions">
-                    <a class="chat" data-action="action-chat"><i class="fa-solid fa-message"></i></a>
-                </div>
+        <div class="action" data-item-id="{{action.id}}">
+            <div class="icon">
+                <img src="{{action.img}}">
             </div>
+            <div class="name">{{action.name}}</div>
+            <a class="chat" data-action="action-chat"><i class="fa-solid fa-message"></i></a>
         </div>
         {{/each}}
     </div>
