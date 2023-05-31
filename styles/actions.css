@@ -98,10 +98,11 @@
   height: 1.4em;
 }
 #pf2e-token-hud .sidebar.actions .section .action:hover {
-  background-color: rgba(0, 0, 0, 0.0784313725);
+  --hover-background: rgb(0 0 0 / 5%);
+  background-color: var(--hover-background);
 }
 #pf2e-token-hud .sidebar.actions .section .action:hover .icon img {
-  background-color: rgba(0, 0, 0, 0.0784313725);
+  background-color: var(--hover-background);
 }
 #pf2e-token-hud .sidebar.actions .section .action .icon {
   height: 100%;

@@ -121,11 +121,13 @@
                 height: 1.4em;
 
                 &:hover {
-                    background-color: #00000014;
+                    --hover-background: rgb(0 0 0 / 5%);
+
+                    background-color: var(--hover-background);
 
                     .icon {
                         img {
-                            background-color: #00000014;
+                            background-color: var(--hover-background);
                         }
                     }
                 }

@@ -111,10 +111,8 @@
         <div class="header">{{localize section.label}}</div>
         {{#each section.actions as |action|}}
         <div class="action" data-item-id="{{action.id}}">
-            <div class="icon">
-                <img src="{{action.img}}">
-            </div>
-            <div class="name">{{action.name}}</div>
+            <div class="icon"> <img src="{{action.img}}"></div>
+            <a class="name" data-action="action-description">{{action.name}}</a>
             <a class="chat" data-action="action-chat"><i class="fa-solid fa-message"></i></a>
         </div>
         {{/each}}
