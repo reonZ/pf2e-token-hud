@@ -171,7 +171,7 @@ function getCharacterActions(actor) {
 
         return {
             id: item.id,
-            type: actionCost.type,
+            type: actionCost?.type ?? 'free',
             cost: actionCost,
             name: item.name,
         }
