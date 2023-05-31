@@ -166,16 +166,24 @@ function getCharacterActions(actor) {
     const actions = actor.itemTypes.action.filter(item => !actionsUUIDS.has(item.sourceId))
     const feats = actor.itemTypes.feat.filter(item => item.actionCost)
 
-    return [...actions, ...feats].map(item => {
-        const actionCost = item.actionCost
+    return (
+        [...actions, ...feats]
+            // TODO maybe some day i will get back to this and give them their own place
+            .filter(actions => {
+                const traits = actions.system.traits.value
+                return !traits.includes('downtime') && !traits.includes('exploration')
+            })
+            .map(item => {
+                const actionCost = item.actionCost
 
-        return {
-            id: item.id,
-            type: actionCost?.type ?? 'free',
-            cost: actionCost,
-            name: item.name,
-        }
-    })
+                return {
+                    id: item.id,
+                    type: actionCost?.type ?? 'free',
+                    cost: actionCost,
+                    name: item.name,
+                }
+            })
+    )
 }
 
 function getNpcActions(actor) {
