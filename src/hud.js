@@ -1,3 +1,4 @@
+import { addActionsListeners, getActionsData } from './actions.js'
 import { addItemsListeners, getItemsData } from './items.js'
 import { getSetting, localize, MODULE_ID, templatePath } from './module.js'
 import { addSkillsListeners, getSkillsData } from './skills.js'
@@ -21,7 +22,7 @@ const SPEEDS = [
 ]
 
 const SIDEBARS = {
-    actions: { getData: () => null, addListeners: () => {} },
+    actions: { getData: getActionsData, addListeners: addActionsListeners },
     items: { getData: getItemsData, addListeners: addItemsListeners },
     spells: { getData: getSpellsData, addListeners: addSpellsListeners },
     skills: { getData: getSkillsData, addListeners: addSkillsListeners },
@@ -161,7 +162,7 @@ export class HUD extends Application {
             speeds,
             languages: this.actor.system.traits?.languages?.value.join(', '),
             hasSpells: actor.spellcasting.some(x => x.category !== 'items'),
-            hasItems: actor.inventory.coins.copperValue || actor.inventory.length,
+            hasItems: actor.inventory.size,
         }
     }
 

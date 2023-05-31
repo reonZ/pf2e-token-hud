@@ -1,0 +1,88 @@
+#pf2e-token-hud {
+    .sidebar.actions {
+        max-width: 19em;
+
+        .toggles {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 3px 6px 0px 2px;
+            line-height: 1.1;
+            overflow: hidden;
+            gap: 4px;
+
+            .toggle {
+                display: flex;
+                flex-direction: column;
+
+                label {
+                    display: flex;
+                    align-items: center;
+                    gap: 2px;
+                    overflow: hidden;
+
+                    input {
+                        margin: 0;
+                        height: 1.1em;
+                    }
+
+                    .name {
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+
+                        &.unchecked-disable {
+                            color: var(--color-text-dark-inactive);
+                        }
+                    }
+                }
+
+                select {
+                    border: none;
+                    height: 1.4em;
+                    margin-left: 18px;
+                    padding: 0;
+                }
+            }
+        }
+
+        .section {
+            .header {
+                text-align: center;
+            }
+
+            .strike {
+                height: auto;
+                margin-top: 2px;
+                display: grid;
+                grid-auto-rows: 1fr;
+
+                .temporary {
+                    font-size: 0.86em;
+                }
+
+                .variant {
+                    .activity-icon {
+                        line-height: 1;
+                    }
+                }
+            }
+
+            .action {
+                display: flex;
+                flex-direction: column;
+                height: var(--item-height);
+                margin-top: 2px;
+
+                .extras {
+                    .actions {
+                        .chat {
+                            font-size: 0.9em;
+                            margin-top: 1px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

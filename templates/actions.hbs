@@ -1,0 +1,82 @@
+<div class="actions">
+    {{#if toggles.length}}
+    <div class="toggles">
+        {{#each toggles as |toggle|}}
+        {{#if (or (not toggle.scope) (eq toggle.scope "actions-tab"))}}
+        <div class="toggle" data-item-id="{{toggle.itemId}}" data-domain="{{toggle.domain}}" data-option="{{toggle.option}}"
+            data-scope="{{toggle.scope}}">
+            <label>
+                <input type="checkbox" data-action="toggle-roll-option" {{disabled (not toggle.enabled)}} {{checked toggle.checked}} />
+                <div class="name {{#if (not (or toggle.checked toggle.enabled))}}unchecked-disabled{{/if}}">{{localize toggle.label}}</div>
+            </label>
+            {{#if toggle.suboptions}}
+            <select data-action="set-suboption">
+                {{#each toggle.suboptions as |suboption|}}
+                <option value="{{suboption.value}}" {{#if suboption.selected}} selected{{/if}}>{{localize suboption.label}}</option>
+                {{/each}}
+            </select>
+            {{/if}}
+        </div>
+        {{/if}}
+        {{/each}}
+    </div>
+    {{/if}}
+
+    {{#if strikes.length}}
+    <div class="section">
+        <div class="header"> {{localize "PF2E.StrikesLabel"}}</div>
+        {{#each strikes as |strike|}}
+        {{#if (ne strike.visible false)}}
+        <div class="strike details">
+            <div class="name">{{strike.label}}</div>
+            <div class="variants">
+                {{#each strike.variants as |variant|}}
+                <div class="variant {{#if (eq strike.quantity 0)}}disabled{{/if}}">{{variant.label}}</div>
+                {{/each}}
+                {{#if strike.item.dealsDamage}}
+                <div class="variant">{{localize "PF2E.DamageLabel"}}</div>
+                <div class="variant">{{localize "PF2E.CriticalDamageLabel"}}</div>
+                {{/if}}
+            </div>
+            {{#if (and @root.isCharacter strike.auxiliaryActions.length)}}
+            <div class="variants">
+                {{#each strike.auxiliaryActions as |action|}}
+                <div class="variant">
+                    <span class="activity-icon">{{action.glyph}}</span>
+                    {{action.label}}
+                </div>
+                {{/each}}
+            </div>
+            {{/if}}
+        </div>
+        {{/if}}
+        {{/each}}
+    </div>
+    {{/if}}
+
+
+    {{#if actions.length}}
+    <div class="section">
+        <div class="header">{{localize 'PF2E.ActionsActionsHeader'}}</div>
+        {{#each actions as |action|}}
+        <div class="action details" data-item-id="{{action.id}}">
+            <a class="name" data-action="action-description">{{action.name}}</a>
+            <div class="extras">
+                <div class="infos">
+                    {{localize action.typeLabel}} {{{actionGlyph action.cost}}}
+                    {{#if action.hasDeathNote}}
+                    <i class="fa-solid fa-skull"></i>
+                    {{/if}}
+                    {{#if action.hasAura}}
+                    <i class="fa-regular fa-circle-dot"></i>
+                    {{/if}}
+                </div>
+                <div class="actions">
+                    <a class="chat" data-action="action-chat"><i class="fa-solid fa-message"></i></a>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+    {{/if}}
+</div>

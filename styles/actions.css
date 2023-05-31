@@ -1,0 +1,65 @@
+#pf2e-token-hud .sidebar.actions {
+  max-width: 19em;
+}
+#pf2e-token-hud .sidebar.actions .toggles {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3px 6px 0px 2px;
+  line-height: 1.1;
+  overflow: hidden;
+  gap: 4px;
+}
+#pf2e-token-hud .sidebar.actions .toggles .toggle {
+  display: flex;
+  flex-direction: column;
+}
+#pf2e-token-hud .sidebar.actions .toggles .toggle label {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  overflow: hidden;
+}
+#pf2e-token-hud .sidebar.actions .toggles .toggle label input {
+  margin: 0;
+  height: 1.1em;
+}
+#pf2e-token-hud .sidebar.actions .toggles .toggle label .name {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+#pf2e-token-hud .sidebar.actions .toggles .toggle label .name.unchecked-disable {
+  color: var(--color-text-dark-inactive);
+}
+#pf2e-token-hud .sidebar.actions .toggles .toggle select {
+  border: none;
+  height: 1.4em;
+  margin-left: 18px;
+  padding: 0;
+}
+#pf2e-token-hud .sidebar.actions .section .header {
+  text-align: center;
+}
+#pf2e-token-hud .sidebar.actions .section .strike {
+  height: auto;
+  margin-top: 2px;
+  display: grid;
+  grid-auto-rows: 1fr;
+}
+#pf2e-token-hud .sidebar.actions .section .strike .temporary {
+  font-size: 0.86em;
+}
+#pf2e-token-hud .sidebar.actions .section .strike .variant .activity-icon {
+  line-height: 1;
+}
+#pf2e-token-hud .sidebar.actions .section .action {
+  display: flex;
+  flex-direction: column;
+  height: var(--item-height);
+  margin-top: 2px;
+}
+#pf2e-token-hud .sidebar.actions .section .action .extras .actions .chat {
+  font-size: 0.9em;
+  margin-top: 1px;
+}
