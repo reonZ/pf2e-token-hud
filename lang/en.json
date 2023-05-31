@@ -3,11 +3,11 @@
         "settings": {
             "enabled": {
                 "name": "Enabled",
-                "hint": "Should the module be enabled on this client"
+                "hint": "Should the module be enabled on this client."
             },
             "position": {
                 "name": "Preferred Position",
-                "hint": "Which side of the token would you prefer the HUD to show, if not possible, the module will try first on the opposite side, otherwise on one of the remaining two",
+                "hint": "Which side of the token would you prefer the HUD to show, if not possible, the module will try first on the opposite side, otherwise on one of the remaining two.",
                 "choices": {
                     "left": "Left",
                     "right": "Right",
@@ -17,15 +17,24 @@
             },
             "delay": {
                 "name": "HUD Delay",
-                "hint": "Delay in milliseconds before the HUD showing up on screen"
+                "hint": "Delay in milliseconds before the HUD showing up on screen."
             },
-            "order": {
-                "name": "Sort By Types",
+            "spells": {
+                "name": "Sort Spells By Type",
                 "hint": "Should the spells be sorted by types before alphabetically in a same table."
             },
             "scrollbar": {
                 "name": "Sidebar Scrollbar",
                 "hint": "Should scrollbar be displayed on hud sidebars, if disabled, you will still be able to scroll but won't see the scrollbar anymore."
+            },
+            "actions": {
+                "name": "Actions Sorting",
+                "hint": "How the actions should be sorted.",
+                "choices": {
+                    "name": "Grouped by Name",
+                    "type": "Grouped by Type",
+                    "split": "Split by Type"
+                }
             }
         },
         "spells": {

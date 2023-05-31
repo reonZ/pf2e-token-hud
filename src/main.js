@@ -17,8 +17,6 @@ function registerSetting(name, type, defValue, extra = {}) {
 
 Hooks.once('setup', () => {
     registerSetting('enabled', Boolean, true, { onChange: enableModule })
-    registerSetting('order', Boolean, false)
-    registerSetting('scrollbar', Boolean, true)
 
     registerSetting('position', String, 'right', {
         choices: {
@@ -36,6 +34,18 @@ Hooks.once('setup', () => {
             step: 50,
         },
     })
+
+    registerSetting('scrollbar', Boolean, true)
+
+    registerSetting('actions', String, 'split', {
+        choices: {
+            name: settingPath('actions', 'choices.name'),
+            type: settingPath('actions', 'choices.type'),
+            split: settingPath('actions', 'choices.split'),
+        },
+    })
+
+    registerSetting('spells', Boolean, false)
 })
 
 Hooks.once('ready', () => {
