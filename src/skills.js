@@ -428,10 +428,12 @@ function rollAction(event, actor, skillSlug, slug, { variant, map }, skill) {
 
     options.modifiers = []
 
-    for (const { condition, modifiers } of action.modifiers) {
-        if (condition && !condition(actor)) continue
-        for (const modifier of modifiers) {
-            options.modifiers.push(new game.pf2e.Modifier(modifier))
+    if (action.modifiers) {
+        for (const { condition, modifiers } of action.modifiers) {
+            if (condition && !condition(actor)) continue
+            for (const modifier of modifiers) {
+                options.modifiers.push(new game.pf2e.Modifier(modifier))
+            }
         }
     }
 
