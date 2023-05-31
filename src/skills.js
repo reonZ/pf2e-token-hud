@@ -2,7 +2,10 @@ import { localize, modifier, MODULE_ID } from './module.js'
 import { popup } from './popup.js'
 import { getItemSummary } from './shared.js'
 
-const CROWBAR_UUIDS = ['Compendium.pf2e.equipment-srd.44F1mfJei4GY8f2X', 'Compendium.pf2e.equipment-srd.4kz3vhkKPUuXBpxk']
+const CROWBAR_UUIDS = new Set([
+    'Compendium.pf2e.equipment-srd.44F1mfJei4GY8f2X',
+    'Compendium.pf2e.equipment-srd.4kz3vhkKPUuXBpxk',
+])
 const BON_MOT_UUID = 'Compendium.pf2e.feats-srd.0GF2j54roPFIDmXf'
 
 const LABELS = {
@@ -49,7 +52,7 @@ const ACTIONS_UUIDS = {
     impersonate: 'Compendium.pf2e.actionspf2e.AJstokjdG6iDjVjE',
     lie: 'Compendium.pf2e.actionspf2e.ewwCglB7XOPLUz72',
     feint: 'Compendium.pf2e.actionspf2e.QNAVeNKtHA0EUw4X',
-    bonMot: 'Compendium.pf2e.feats-srd.0GF2j54roPFIDmXf',
+    bonMot: BON_MOT_UUID,
     gatherInformation: 'Compendium.pf2e.actionspf2e.plBGdZhqq5JBl1D8',
     makeAnImpression: 'Compendium.pf2e.actionspf2e.OX4fy22hQgUHDr0q',
     request: 'Compendium.pf2e.actionspf2e.DCb62iCBrJXy0Ik6',
@@ -125,12 +128,10 @@ const SKILLS = [
                 modifiers: [
                     {
                         condition: actor =>
-                            !actor.itemTypes.equipment.some(
-                                item => item.isHeld && CROWBAR_UUIDS.includes(item.getFlag('core', 'sourceId'))
-                            ),
+                            !actor.itemTypes.equipment.some(item => item.isHeld && CROWBAR_UUIDS.has(item.sourceId)),
                         modifiers: [
                             {
-                                slug: 'no-crowbar',
+                                slug: 'crowbar-missing',
                                 modifier: -2,
                                 type: 'circumstance',
                             },
@@ -329,6 +330,8 @@ const SKILLS_MAP = SKILLS.reduce((skills, { slug, actions }) => {
     return skills
 }, {})
 
+export const actionsUUIDS = new Set(Object.values(ACTIONS_UUIDS).filter(Boolean))
+
 export async function getSkillsData(actor) {
     const skills = []
 
@@ -376,7 +379,7 @@ export function addSkillsListeners(el, actor) {
         if (variant !== null) rollAction(event, actor, skillSlug, slug, target.data(), variant)
     })
 
-    el.find('[data-action=show-description]').on('click', async event => {
+    el.find('[data-action=action-description]').on('click', async event => {
         event.preventDefault()
         const action = $(event.currentTarget).closest('.action')
         const description = await getItemSummary(action, actor)
@@ -406,14 +409,16 @@ async function createVariantDialog(actor, base) {
 }
 
 function rollAction(event, actor, skillSlug, slug, { variant, map }, skill) {
-    const { type, modifiers, secret, noSkill } = SKILLS_MAP[skillSlug].actions[slug]
-    skill ??= noSkill ? undefined : skillSlug
+    const action = SKILLS_MAP[skillSlug].actions[slug]
+    const type = action.type
+
+    skill ??= action.noSkill ? undefined : skillSlug
 
     const options = {
         event,
         actors: [actor],
         variant,
-        rollMode: secret ? 'blindroll' : 'roll',
+        rollMode: action.secret ? 'blindroll' : 'roll',
     }
 
     if (!type) {
@@ -421,13 +426,14 @@ function rollAction(event, actor, skillSlug, slug, { variant, map }, skill) {
         return
     }
 
-    options.modifiers =
-        modifiers
-            ?.flatMap(({ condition, modifiers }) => {
-                if (condition && !condition(actor)) return null
-                return modifiers.map(modifier => new game.pf2e.Modifier(modifier))
-            })
-            .filter(Boolean) ?? []
+    options.modifiers = []
+
+    for (const { condition, modifiers } of action.modifiers) {
+        if (condition && !condition(actor)) continue
+        for (const modifier of modifiers) {
+            options.modifiers.push(new game.pf2e.Modifier(modifier))
+        }
+    }
 
     // old actions
     if (type === 1) {
