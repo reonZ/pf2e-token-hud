@@ -1,6 +1,6 @@
-import { localize, MODULE_ID } from './module.js'
+import { MODULE_ID } from './module.js'
 import { IdentifyItemPopup } from './pf2e.js'
-import { addNameTooltipListeners } from './shared.js'
+import { addNameTooltipListeners, deleteItem, editItem, getItemFromEvent } from './shared.js'
 
 const ITEMS_TYPES = {
     weapon: { order: 0, label: 'PF2E.InventoryWeaponsHeader' },
@@ -30,11 +30,12 @@ export async function getItemsData(actor) {
 }
 
 export function addItemsListeners(el, actor) {
-    addNameTooltipListeners(el.find('.item'))
-
     const hud = el.closest(`#${MODULE_ID}`)
+    const item = el.find('.item')
 
-    el.find('.item').on('dragstart', event => {
+    addNameTooltipListeners(item)
+
+    item.on('dragstart', event => {
         const target = event.target.closest('.item')
         const { itemType, uuid } = target.dataset
 
@@ -81,36 +82,9 @@ export function addItemsListeners(el, actor) {
         // else item.setIdentificationStatus('identified')
     })
 
-    el.find('[data-action=edit-item]').on('click', event => {
-        event.preventDefault()
-        const item = getItemFromEvent(event, actor)
-        item?.sheet.render(true, { focus: true })
-    })
+    el.find('[data-action=edit-item]').on('click', event => editItem(event, actor))
 
-    el.find('[data-action=delete-item]').on('click', async event => {
-        event.preventDefault()
-
-        const item = getItemFromEvent(event, actor)
-        if (!item) return
-
-        if (event.ctrlKey) return item.delete()
-
-        new Dialog({
-            title: localize('items.delete.title'),
-            content: await renderTemplate('systems/pf2e/templates/actors/delete-item-dialog.hbs', { name: item.name }),
-            buttons: {
-                ok: {
-                    icon: '<i class="fa-solid fa-trash"></i>',
-                    label: localize('items.delete.ok'),
-                    callback: () => item.delete(),
-                },
-                cancel: {
-                    icon: '<i class="fas fa-times"></i>',
-                    label: localize('items.delete.cancel'),
-                },
-            },
-        }).render(true)
-    })
+    el.find('[data-action=delete-item]').on('click', event => deleteItem(event, actor))
 
     el.find('[data-action=toggle-item-worn').tooltipster({
         animation: 'fade',
@@ -143,9 +117,4 @@ export function addItemsListeners(el, actor) {
             tooltipster.content(content)
         },
     })
-}
-
-function getItemFromEvent(event, actor) {
-    const { itemId } = event.currentTarget.closest('[data-item-id]').dataset
-    return actor.items.get(itemId)
 }

@@ -133,7 +133,7 @@ export function addSpellsListeners(el, actor) {
         collection.entry.cast(spell, { slot: slotId, level: slotLevel })
     })
 
-    el.find('[data-action=show-description]').on('click', async event => {
+    el.find('[data-action=spell-description]').on('click', async event => {
         event.preventDefault()
         const spell = $(event.currentTarget).closest('.spell')
         const description = await getItemSummary(spell, actor)
