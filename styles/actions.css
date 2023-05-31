@@ -96,6 +96,7 @@
   gap: 4px;
   margin-top: 2px;
   height: 1.4em;
+  padding-inline: var(--inline-padding);
 }
 #pf2e-token-hud .sidebar.actions .section .action:hover {
   --hover-background: rgb(0 0 0 / 5%);
