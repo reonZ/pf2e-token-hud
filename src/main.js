@@ -1,21 +1,24 @@
 import { HUD } from './hud.js'
-import { getSetting, MODULE_ID } from './module.js'
+import { getSetting, localize, MODULE_ID } from './module.js'
 
 let hud = null
 
 function registerSetting(name, type, defValue, extra = {}) {
     game.settings.register(MODULE_ID, name, {
-        ...extra,
         name: settingPath(name, 'name'),
         hint: settingPath(name, 'hint'),
         scope: 'client',
         config: true,
         type,
         default: defValue,
+        ...extra,
     })
 }
 
 Hooks.once('setup', () => {
+    const statuses = ['first', 'second', 'third', 'fourth'].map(x => localize(`settings.status.statuses.${x}`)).join(', ')
+    registerSetting('status', String, statuses, { scope: 'world' })
+
     registerSetting('enabled', Boolean, true, { onChange: enableModule })
 
     registerSetting('position', String, 'right', {

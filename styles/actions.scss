@@ -163,12 +163,16 @@
                     .variants {
                         .variant {
                             &[data-action='strike-attack'] {
-                                background: var(--secondary);
+                                &:not(.disabled) {
+                                    background: var(--secondary);
+                                }
                             }
 
                             &[data-action='strike-damage'],
                             &[data-action='strike-critical'] {
-                                background: var(--primary);
+                                &:not(.disabled) {
+                                    background: var(--primary);
+                                }
                             }
 
                             &[data-action='strike-attack'],

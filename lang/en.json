@@ -48,6 +48,16 @@
                     "self": "Owned tokens only",
                     "all": "All tokens"
                 }
+            },
+            "status": {
+                "name": "Health Status",
+                "hint": "Comma separated strings representing the different divisions of a creature's health state from worst to best (do not include \"dead\"). The module will divide the max health by the number of strings provided. Leave empty to disable.",
+                "statuses": {
+                    "first": "At Death's Door",
+                    "second": "Not Feeling Good",
+                    "third": "Seen Better Days",
+                    "fourth": "Perfectly Fine"
+                }
             }
         },
         "spells": {

@@ -140,6 +140,9 @@ export class HUD extends Application {
         let distance = null
         const isOwner = token.isOwner
         const showDistance = getSetting('distance')
+        const { attributes, saves } = actor
+        const { hp, sp = { max: 0, value: 0 }, ac, shield, speed } = attributes
+        const useStamina = game.settings.get('pf2e', 'staminaVariant')
 
         if (showDistance === 'all' || (showDistance === 'self' && isOwner)) {
             const selected = canvas.tokens.controlled
@@ -154,13 +157,30 @@ export class HUD extends Application {
         }
 
         if (!isOwner) {
+            let status
+            const statuses = getSetting('status')
+                .split(',')
+                .map(x => x.trim())
+                .filter(Boolean)
+
+            if (statuses.length) {
+                const max = hp.max + (useStamina ? sp.max : 0)
+                const current = hp.value + (useStamina ? sp.value : 0)
+                const ratio = current / max
+                const pick = Math.ceil(ratio * statuses.length)
+
+                status = {
+                    hue: ratio * ratio * 122 + 3,
+                    value: pick === 0 ? game.i18n.localize('EFFECT.StatusDead') : statuses.at(pick - 1),
+                }
+            }
+
             return {
+                status,
                 distance,
+                tokenId: token.id,
             }
         }
-
-        const { attributes, saves } = actor
-        const { hp, sp, ac, shield, speed } = attributes
 
         const speeds = SPEEDS.map(s => {
             s.value = (s.type === 'land' ? speed.total : speed.otherSpeeds.find(o => o.type === s.type)?.total) ?? 0
@@ -169,10 +189,11 @@ export class HUD extends Application {
 
         return {
             distance,
+            isOwner,
             tokenId: token.id,
             name: token.document.name,
             hp,
-            sp,
+            sp: useStamina ? sp : { max: 0 },
             ac: ac.value,
             shield,
             hasCover: this.hasCover,
@@ -271,8 +292,8 @@ export class HUD extends Application {
         if (!token) return
 
         const element = this.element[0]
-        const hud = element.getBoundingClientRect()
         const scale = token.worldTransform.a
+        const hud = element.getBoundingClientRect()
         const targetCoords = canvas.clientCoordinatesFromCanvas(token.document._source)
         const target = {
             x: targetCoords.x,
@@ -287,8 +308,9 @@ export class HUD extends Application {
             },
         }
 
-        const positions = POSITIONS[getSetting('position')].slice()
         let coords
+
+        const positions = token.isOwner ? POSITIONS[getSetting('position')].slice() : ['top', 'bottom']
 
         while (positions.length && !coords) {
             const position = positions.shift()

@@ -2,7 +2,7 @@
     {{#if tokenId}}
 
     {{#if distance}}
-    <div class="distance">
+    <div class="distance {{#if isOwner}}free{{/if}}">
         {{#if distance.isTarget}}
         <i class="fa-solid fa-crosshairs-simple"></i>
         {{else}}
@@ -12,6 +12,13 @@
     </div>
     {{/if}}
 
+    {{#if status}}
+    <div class="status" style="--hue: {{status.hue}};">
+        {{status.value}}
+    </div>
+    {{/if}}
+
+    {{#if isOwner}}
     <div class="inner">
         <div class="header">{{name}}</div>
 
@@ -120,5 +127,7 @@
             <a data-type="extras"><i class="fa-solid fa-gears"></i></a>
         </div>
     </div>
+    {{/if}}
+
     {{/if}}
 </div>

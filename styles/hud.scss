@@ -199,25 +199,49 @@
         }
     }
 
-    .distance {
+    .distance,
+    .status {
         --padding-block: 6px;
         --border-width: 2px;
 
-        position: absolute;
-        top: calc(var(--outer-padding) + (var(--padding-block) + var(--border-width)) / 2 + -1px);
-        left: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 6px;
         background: url(/ui/denim075.png) repeat;
         padding: var(--padding-block) 10px;
         color: var(--text-light);
-        transform: translate(-50%, -100%);
-        z-index: -1;
         border-radius: var(--padding-block);
         border: var(--border-width) solid var(--color-border-dark);
         box-shadow: var(--outer-box-shadow);
+        white-space: nowrap;
+        position: relative;
+    }
+
+    .distance {
+        gap: 6px;
+        z-index: -1;
+        width: fit-content;
+
+        &.free {
+            position: absolute;
+            top: calc(var(--outer-padding) + (var(--padding-block) + var(--border-width)) / 2 + -1px);
+            left: 50%;
+            transform: translate(-50%, -100%);
+        }
+
+        &:not(.free):not(:last-child) {
+            margin: auto;
+            top: calc(var(--border-width) + var(--inner-padding));
+            border-radius: var(--padding-block) var(--padding-block) 0 0;
+        }
+    }
+
+    .status {
+        color: hsl(var(--hue) 75% 40%);
+        font-weight: bold;
+        letter-spacing: 0.5px;
+        top: var(--inner-padding);
+        min-width: 7em;
     }
 
     .inner {
