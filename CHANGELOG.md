@@ -1,3 +1,8 @@
+# 0.10.0
+
+-   added a `Distance Unit` setting allowing the customization of the displayed `Distance to Token` on the tooltip, expects a string containing the multiplier, the unit and the number of decimals all separated by commas
+-   added a `Sidebars Max Height` setting allowing the customization of the sidebars max height, accepts any css string used for a `height` property
+
 # 0.9.0
 
 -   added a `Distance to Token` setting with the option to disable, show on all tokens or only on owned token tooltips
