@@ -6,6 +6,7 @@
   --item-height: 2.43em;
   --inline-padding: 4px;
   --font-size: 14px;
+  --outer-box-shadow: 0 0 20px var(--color-shadow-dark);
   z-index: 90;
   position: absolute;
   padding: var(--outer-padding);
@@ -32,7 +33,7 @@
   border-radius: var(--inner-border-radius);
   background: url(/ui/parchment.jpg) repeat;
   padding: var(--inner-padding);
-  box-shadow: 0 0 12px 0px black;
+  box-shadow: var(--outer-box-shadow);
 }
 #pf2e-token-hud .sidebar {
   position: fixed;
@@ -158,9 +159,28 @@
   content: "";
   z-index: -1;
   position: absolute;
-  background: #2c2c2c;
+  background: rgba(0, 0, 0, 0.7803921569);
   inset: calc(-1 * var(--inner-padding) - 1px);
   border-radius: var(--inner-border-radius) var(--inner-border-radius) 0 0;
+}
+#pf2e-token-hud .distance {
+  --padding-block: 6px;
+  --border-width: 2px;
+  position: absolute;
+  top: calc(var(--outer-padding) + (var(--padding-block) + var(--border-width)) / 2 - 1px);
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: url(/ui/denim075.png) repeat;
+  padding: var(--padding-block) 10px;
+  color: var(--text-light);
+  transform: translate(-50%, -100%);
+  z-index: -1;
+  border-radius: var(--padding-block);
+  border: var(--border-width) solid var(--color-border-dark);
+  box-shadow: var(--outer-box-shadow);
 }
 #pf2e-token-hud .inner {
   max-width: 17em;

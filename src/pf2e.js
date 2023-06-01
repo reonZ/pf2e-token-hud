@@ -1,6 +1,5 @@
 /**
- * Those are directly copied from the PF2e system
- * because they are not accesible to us in the global
+ * Those are directly copied from the PF2e system because they are not accesible to us in the global
  */
 
 const dcAdjustments = new Map([
@@ -266,7 +265,7 @@ export class IdentifyItemPopup extends FormApplication {
 
 /**
  * This one is used to create chat message for items directly picked from compendiums
- * So it is not technically a direct copy/paste of the system code but a rearanged version
+ * So it is not technically a direct copy/paste of the system code but a slightly rearanged version
  */
 export async function unownedItemToMessage(event, item, actor, { rollMode = undefined, create = true, data = {} }) {
     const template = `systems/pf2e/templates/chat/${item.type}-card.hbs`

@@ -1,5 +1,17 @@
 <div id="pf2e-token-hud" data-token-id="{{tokenId}}">
     {{#if tokenId}}
+
+    {{#if distance}}
+    <div class="distance">
+        {{#if distance.isTarget}}
+        <i class="fa-solid fa-crosshairs-simple"></i>
+        {{else}}
+        <i class="fa-solid fa-expand"></i>
+        {{/if}}
+        <div class="range">{{distance.range}} ft.</div>
+    </div>
+    {{/if}}
+
     <div class="inner">
         <div class="header">{{name}}</div>
 

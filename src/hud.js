@@ -49,7 +49,6 @@ export class HUD extends Application {
                 this.#lock ||
                 this.#softLock ||
                 !(token instanceof Token) ||
-                !token.isOwner ||
                 !token.actor?.isOfType('character', 'npc')
             )
                 return
@@ -138,6 +137,23 @@ export class HUD extends Application {
         const actor = this.#token?.actor
         if (!actor) return {}
 
+        const selected = canvas.tokens.controlled
+        let isTarget = false
+        let target = selected.length === 1 ? selected[0] : null
+        if (!target || target === token) {
+            const targets = game.user.targets
+            target = targets.size === 1 ? targets.first() : null
+            isTarget = true
+        }
+
+        const distance = target && target !== token ? { isTarget, range: token.distanceTo(target) } : null
+
+        if (!token.isOwner) {
+            return {
+                distance,
+            }
+        }
+
         const { attributes, saves } = actor
         const { hp, sp, ac, shield, speed } = attributes
 
@@ -147,6 +163,7 @@ export class HUD extends Application {
         })
 
         return {
+            distance,
             tokenId: token.id,
             name: token.document.name,
             hp,
