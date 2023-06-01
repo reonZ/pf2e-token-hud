@@ -1,3 +1,8 @@
+# 0.7.1
+
+-   fixed `1 to 3` spells overflowing out of the sidebar
+-   fixed focus cantrip showing as expended when all focus points were depleted
+
 # 0.7.0
 
 -   added initiative action in the skills sidebar under `Perception`, it will only appear if an encounter is available, also, as opposed to all other skill actions, you cannot `right click` to select a variant skill to roll initiative (the system doesn't handle it)
