@@ -39,6 +39,15 @@
             "actions-colors": {
                 "name": "Strikes & Damages System Colors",
                 "hint": "When enabled, the module will replicate the system color scheme of the stikes and damages buttons in the actor sheet."
+            },
+            "distance": {
+                "name": "Distance to Token",
+                "hint": "Should the distance to selected/targeted token be displayed on the hud.",
+                "choices": {
+                    "none": "Disabled",
+                    "self": "Owned tokens only",
+                    "all": "All tokens"
+                }
             }
         },
         "spells": {

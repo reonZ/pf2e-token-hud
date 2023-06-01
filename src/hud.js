@@ -137,18 +137,23 @@ export class HUD extends Application {
         const actor = this.#token?.actor
         if (!actor) return {}
 
-        const selected = canvas.tokens.controlled
-        let isTarget = false
-        let target = selected.length === 1 ? selected[0] : null
-        if (!target || target === token) {
-            const targets = game.user.targets
-            target = targets.size === 1 ? targets.first() : null
-            isTarget = true
+        let distance = null
+        const isOwner = token.isOwner
+        const showDistance = getSetting('distance')
+
+        if (showDistance === 'all' || (showDistance === 'self' && isOwner)) {
+            const selected = canvas.tokens.controlled
+            let isTarget = false
+            let target = selected.length === 1 ? selected[0] : null
+            if (!target || target === token) {
+                const targets = game.user.targets
+                target = targets.size === 1 ? targets.first() : null
+                isTarget = true
+            }
+            distance = target && target !== token ? { isTarget, range: token.distanceTo(target) } : null
         }
 
-        const distance = target && target !== token ? { isTarget, range: token.distanceTo(target) } : null
-
-        if (!token.isOwner) {
+        if (!isOwner) {
             return {
                 distance,
             }

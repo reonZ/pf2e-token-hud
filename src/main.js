@@ -35,6 +35,14 @@ Hooks.once('setup', () => {
         },
     })
 
+    registerSetting('distance', String, 'all', {
+        choices: {
+            none: settingPath('distance', 'choices.none'),
+            self: settingPath('distance', 'choices.self'),
+            all: settingPath('distance', 'choices.all'),
+        },
+    })
+
     registerSetting('scrollbar', Boolean, true)
 
     registerSetting('actions', String, 'split', {
