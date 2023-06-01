@@ -9,6 +9,7 @@ const CROWBAR_UUIDS = new Set([
 const BON_MOT_UUID = 'Compendium.pf2e.feats-srd.0GF2j54roPFIDmXf'
 
 const LABELS = {
+    initiative: 'PF2E.InitiativeLabel',
     'recall-knowledge': 'PF2E.RecallKnowledge.Label',
     'cover-tracks': 'PF2E.TravelSpeed.ExplorationActivities.CoverTracks',
     earnIncome: `${MODULE_ID}.skills.actions.earnIncome`,
@@ -91,6 +92,11 @@ const SKILLS = [
     {
         slug: 'perception',
         actions: [
+            {
+                slug: 'initiative',
+                custom: (actor, options) => actor.initiative.roll(options),
+                condition: () => game.combat,
+            },
             { slug: 'sense-motive', cost: '1', type: 2 },
             { slug: 'seek', cost: '1', type: 2 },
         ],
@@ -421,11 +427,6 @@ function rollAction(event, actor, skillSlug, slug, { variant, map }, skill) {
         rollMode: action.secret ? 'blindroll' : 'roll',
     }
 
-    if (!type) {
-        getSkill(skill, actor).roll(options)
-        return
-    }
-
     options.modifiers = []
 
     if (action.modifiers) {
@@ -435,6 +436,14 @@ function rollAction(event, actor, skillSlug, slug, { variant, map }, skill) {
                 options.modifiers.push(new game.pf2e.Modifier(modifier))
             }
         }
+    }
+
+    if (action.custom) {
+        action.custom(actor, options)
+        return
+    } else if (!type) {
+        getSkill(skill, actor).roll(options)
+        return
     }
 
     // old actions

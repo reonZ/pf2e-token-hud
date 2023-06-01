@@ -45,6 +45,8 @@ Hooks.once('setup', () => {
         },
     })
 
+    registerSetting('actions-colors', Boolean, true)
+
     registerSetting('spells', Boolean, false)
 })
 

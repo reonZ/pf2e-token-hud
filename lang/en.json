@@ -35,6 +35,10 @@
                     "type": "Grouped by Type",
                     "split": "Split by Type"
                 }
+            },
+            "actions-colors": {
+                "name": "Strikes & Damages System Colors",
+                "hint": "When enabled, the module will replicate the system color scheme of the stikes and damages buttons in the actor sheet."
             }
         },
         "spells": {

@@ -1,4 +1,4 @@
-import { addActionsListeners, getActionsData } from './actions.js'
+import { addActionsListeners, getActionsData, getActionsOptions } from './actions.js'
 import { addItemsListeners, getItemsData } from './items.js'
 import { getSetting, localize, MODULE_ID, templatePath } from './module.js'
 import { addSkillsListeners, getSkillsData } from './skills.js'
@@ -22,7 +22,7 @@ const SPEEDS = [
 ]
 
 const SIDEBARS = {
-    actions: { getData: getActionsData, addListeners: addActionsListeners },
+    actions: { getData: getActionsData, addListeners: addActionsListeners, getOptions: getActionsOptions },
     items: { getData: getItemsData, addListeners: addItemsListeners },
     spells: { getData: getSpellsData, addListeners: addSpellsListeners },
     skills: { getData: getSkillsData, addListeners: addSkillsListeners },
@@ -374,8 +374,9 @@ export class HUD extends Application {
     async #openSidebar(event) {
         const actor = this.actor
         const type = typeof event === 'string' ? event : event.currentTarget.dataset.type
-        const { getData, addListeners } = SIDEBARS[type]
+        const { getData, addListeners, getOptions } = SIDEBARS[type]
         const data = await getData(actor)
+        const { classList = [] } = (getOptions && (await getOptions(actor))) || {}
         if (!data) return ui.notifications.warn(localize(`${type}.empty`, { name: this.#token.name }))
 
         data.isGM = game.user.isGM
@@ -393,7 +394,7 @@ export class HUD extends Application {
         tmp.innerHTML = await renderTemplate(templatePath(type), data)
 
         const sidebar = tmp.firstElementChild
-        sidebar.classList.add('sidebar')
+        sidebar.classList.add('sidebar', ...classList)
         if (!getSetting('scrollbar')) sidebar.classList.add('no-scrollbar')
         sidebar.dataset.type = type
         this.element.append(sidebar)

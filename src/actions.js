@@ -70,6 +70,10 @@ export async function getActionsData(actor) {
         return { toggles, strikes, sections, heroActions, damageTypes: CONFIG.PF2E.damageTypes }
 }
 
+export function getActionsOptions(actor) {
+    if (getSetting('actions-colors')) return { classList: ['attack-damage-system-colors'] }
+}
+
 export function addActionsListeners(el, actor) {
     addNameTooltipListeners(el.find('.toggle'))
     addNameTooltipListeners(el.find('.strike'))

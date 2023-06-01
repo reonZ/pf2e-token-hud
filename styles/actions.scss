@@ -156,5 +156,33 @@
                 }
             }
         }
+
+        &.attack-damage-system-colors {
+            .section {
+                .strike {
+                    .variants {
+                        .variant {
+                            &[data-action='strike-attack'] {
+                                background: var(--secondary);
+                            }
+
+                            &[data-action='strike-damage'],
+                            &[data-action='strike-critical'] {
+                                background: var(--primary);
+                            }
+
+                            &[data-action='strike-attack'],
+                            &[data-action='strike-damage'],
+                            &[data-action='strike-critical'] {
+                                &:not(.disabled):hover {
+                                    box-shadow: none;
+                                    text-shadow: 0 0 2px white;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

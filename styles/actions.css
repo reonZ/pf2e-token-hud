@@ -123,3 +123,13 @@
   margin-top: 2px;
   font-size: 0.9em;
 }
+#pf2e-token-hud .sidebar.actions.attack-damage-system-colors .section .strike .variants .variant[data-action=strike-attack] {
+  background: var(--secondary);
+}
+#pf2e-token-hud .sidebar.actions.attack-damage-system-colors .section .strike .variants .variant[data-action=strike-damage], #pf2e-token-hud .sidebar.actions.attack-damage-system-colors .section .strike .variants .variant[data-action=strike-critical] {
+  background: var(--primary);
+}
+#pf2e-token-hud .sidebar.actions.attack-damage-system-colors .section .strike .variants .variant[data-action=strike-attack]:not(.disabled):hover, #pf2e-token-hud .sidebar.actions.attack-damage-system-colors .section .strike .variants .variant[data-action=strike-damage]:not(.disabled):hover, #pf2e-token-hud .sidebar.actions.attack-damage-system-colors .section .strike .variants .variant[data-action=strike-critical]:not(.disabled):hover {
+  box-shadow: none;
+  text-shadow: 0 0 2px white;
+}
