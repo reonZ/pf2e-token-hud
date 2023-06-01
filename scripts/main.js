@@ -1,2 +1,1598 @@
-(()=>{var ue=Object.defineProperty;var l=(i,t)=>ue(i,"name",{value:t,configurable:!0});var m="pf2e-token-hud";function h(i){return game.settings.get(m,i)}l(h,"getSetting");function g(...i){let t=i.at(-1),s=typeof t=="object",e=s?i.slice(0,-1):i;return e.unshift(m),game.i18n[s?"format":"localize"](e.join("."),t)}l(g,"localize");function x(i){return`modules/${m}/templates/${i}.hbs`}l(x,"templatePath");function H(i){return i>=0?`+${i}`:i}l(H,"modifier");var me=new Map([["incredibly-easy",-10],["very-easy",-5],["easy",-2],["normal",0],["hard",2],["very-hard",5],["incredibly-hard",10]]),fe=new Map([[-1,13],[0,14],[1,15],[2,16],[3,18],[4,19],[5,20],[6,22],[7,23],[8,24],[9,26],[10,27],[11,28],[12,30],[13,31],[14,32],[15,34],[16,35],[17,36],[18,38],[19,39],[20,40],[21,42],[22,44],[23,46],[24,48],[25,50]]),U=new Set(["arcane","divine","occult","primal"]),R={0:"systems/pf2e/icons/actions/FreeAction.webp",free:"systems/pf2e/icons/actions/FreeAction.webp",1:"systems/pf2e/icons/actions/OneAction.webp",2:"systems/pf2e/icons/actions/TwoActions.webp",3:"systems/pf2e/icons/actions/ThreeActions.webp","1 or 2":"systems/pf2e/icons/actions/OneTwoActions.webp","1 to 3":"systems/pf2e/icons/actions/OneThreeActions.webp","2 or 3":"systems/pf2e/icons/actions/TwoThreeActions.webp",reaction:"systems/pf2e/icons/actions/Reaction.webp",passive:"systems/pf2e/icons/actions/Passive.webp"};function _(i,t="systems/pf2e/icons/actions/Empty.webp"){if(i===null)return R.passive;let s=typeof i!="object"?i:i.type==="action"?i.value:i.type,e=String(s??"").toLowerCase().trim();return R[e]??t}l(_,"getActionIcon");async function z({weapon:i,trait:t,selection:s}){if(i.system.traits.toggles[t].selection===s)return!1;let n=i.actor?.items.get(i.id);return n?.isOfType("weapon")&&n===i?await n.update({[`system.traits.toggles.${t}.selection`]:s}):n?.isOfType("weapon")&&i.altUsageType==="melee"?n.update({[`system.meleeUsage.traitToggles.${t}`]:s}):await n?.rules.find(r=>r.key==="Strike"&&!r.ignored&&r.slug===i.slug)?.toggleTrait({trait:t,selection:s}),!0}l(z,"toggleWeaponTrait");function ge(i,t="normal"){return i+(me.get(t)??0)}l(ge,"adjustDC");function ye(i="common"){switch(i){case"uncommon":return"hard";case"rare":return"very-hard";case"unique":return"incredibly-hard";default:return"normal"}}l(ye,"rarityToDCAdjustment");function j(i,t="common"){return ge(i,ye(t))}l(j,"adjustDCByRarity");function he(i,{proficiencyWithoutLevel:t,rarity:s="common"}={}){let e=game.settings.get("pf2e","proficiencyVariant");t??=e==="ProficiencyWithoutLevel";let n=fe.get(i)??14;return j(t?n-Math.max(i,0):n,s)}l(he,"calculateDC");function ve(i){return i.traits.has("cursed")?"unique":i.rarity}l(ve,"getDcRarity");function be(i){let t=i.system.traits.value;return new Set(t.filter(s=>Ie(U,s)))}l(be,"getMagicTraditions");function ke(i,t,s){let e={occult:t,primal:t,divine:t,arcane:t},n=be(i);for(let a of U)n.size>0&&!n.has(a)&&(e[a]=t+s);return{arcana:e.arcane,nature:e.primal,religion:e.divine,occultism:e.occult}}l(ke,"getIdentifyMagicDCs");function we(i,{proficiencyWithoutLevel:t=!1,notMatchingTraditionModifier:s}){let e=he(i.level,{proficiencyWithoutLevel:t}),n=ve(i),a=j(e,n);return i.isMagical?ke(i,a,s):i.isAlchemical?{crafting:a}:{dc:a}}l(we,"getItemIdentificationDCs");function Te(i,t){return(typeof t=="string"||typeof t=="number")&&t in i}l(Te,"objectHasKey");function Ie(i,t){return i.has(t)}l(Ie,"setHasElement");var P=class extends FormApplication{static get defaultOptions(){return{...super.defaultOptions,id:"identify-item",title:game.i18n.localize("PF2E.identification.Identify"),template:"systems/pf2e/templates/actors/identify-item.hbs",width:"auto",classes:["identify-popup"]}}get item(){return this.object}async getData(){let t=this.object,s=game.settings.get("pf2e","identifyMagicNotMatchingTraditionModifier"),e=game.settings.get("pf2e","proficiencyVariant")==="ProficiencyWithoutLevel",n=we(t,{proficiencyWithoutLevel:e,notMatchingTraditionModifier:s});return{...await super.getData(),isMagic:t.isMagical,isAlchemical:t.isAlchemical,dcs:n}}activateListeners(t){t.find("button.update-identification").on("click",s=>{let e=$(s.delegateTarget);this.submit({updateData:{status:e.val()}})}),t.find("button.post-skill-checks").on("click",async()=>{let s=this.item,e=s.system.identification.unidentified.img,n=s.system.identification.unidentified.name,a=s.system.identification.identified.name,r=$("div#identify-item").find("tr").toArray().flatMap(p=>{let u=p.dataset.skill,d=Number(p.dataset.dc);if(!(Number.isInteger(d)&&Te(CONFIG.PF2E.skillList,u)))return[];let f=game.i18n.localize(CONFIG.PF2E.skillList[u]);return{slug:u,name:f,dc:d}}),c=s.isMagical?"action:identify-magic":s.isAlchemical?"action:identify-alchemy":null,o=await renderTemplate("systems/pf2e/templates/actors/identify-item-chat-skill-checks.hbs",{itemImg:e,itemName:n,identifiedName:a,rollOptions:["concentrate","exploration","secret",c].filter(Boolean),skills:r});await CONFIG.ChatMessage.documentClass.create({user:game.user.id,content:o})})}async _updateObject(t,s){let e=s.status;e==="identified"&&await this.item.setIdentificationStatus(e)}};l(P,"IdentifyItemPopup");async function E(i,t){let s=$(`#${m}`);if(!s.length)return;s.find(".popup").remove();let e=document.createElement("div");e.innerHTML=await renderTemplate(x("popup"),{title:i,close:g("popup.close")});let n=e.firstElementChild;n.append(t),n.querySelector("[data-action=close-popup]").addEventListener("click",()=>n.remove()),s.append(n)}l(E,"popup");async function L(i,t){let s=i.data(),e=s.itemId?t.items.get(s.itemId):await fromUuid(s.uuid),n=await e?.getChatData({},s);if(!n)return;let a=document.createElement("div");return a.classList.add("description"),await t.sheet.itemRenderer.renderItemSummary(a,e,n),a}l(L,"getItemSummary");function C(i){i.on("mouseenter",t=>{t.preventDefault();let s=t.currentTarget.querySelector(".name");if(s.scrollWidth<=s.clientWidth)return;let e=s.innerHTML.trim();game.tooltip.activate(t.currentTarget,{text:e})}),i.on("mouseleave",t=>{t.preventDefault(),game.tooltip.deactivate()}),i.on("mousedown",t=>{game.tooltip.deactivate()})}l(C,"addNameTooltipListeners");function G(i,t){i.preventDefault(),w(i,t)?.sheet.render(!0,{focus:!0})}l(G,"editItem");async function W(i,t){i.preventDefault();let s=w(i,t);if(s){if(i.ctrlKey)return s.delete();new Dialog({title:g("deleteItem.title"),content:await renderTemplate("systems/pf2e/templates/actors/delete-item-dialog.hbs",{name:s.name}),buttons:{ok:{icon:'<i class="fa-solid fa-trash"></i>',label:g("deleteItem.ok"),callback:()=>s.delete()},cancel:{icon:'<i class="fas fa-times"></i>',label:g("deleteItem.cancel")}}}).render(!0)}}l(W,"deleteItem");function w(i,t){let{itemId:s}=i.currentTarget.closest("[data-item-id]").dataset;return t.items.get(s)}l(w,"getItemFromEvent");var Ce=new Set(["Compendium.pf2e.equipment-srd.44F1mfJei4GY8f2X","Compendium.pf2e.equipment-srd.4kz3vhkKPUuXBpxk"]),V="Compendium.pf2e.feats-srd.0GF2j54roPFIDmXf",De={initiative:"PF2E.InitiativeLabel","recall-knowledge":"PF2E.RecallKnowledge.Label","cover-tracks":"PF2E.TravelSpeed.ExplorationActivities.CoverTracks",earnIncome:`${m}.skills.actions.earnIncome`,treatWounds:`${m}.skills.actions.treatWounds`,"borrow-arcane-spell":`${m}.skills.actions.borrow-arcane-spell`,"identify-magic":`${m}.skills.actions.identify-magic`,"identify-alchemy":`${m}.skills.actions.identify-alchemy`,"learn-spell":`${m}.skills.actions.learn-spell`,"crafting-goods":`${m}.skills.actions.crafting-goods`,"staging-performance":`${m}.skills.actions.staging-performance`},J={"sense-motive":"Compendium.pf2e.actionspf2e.1xRFPTFtWtGJ9ELw",seek:"Compendium.pf2e.actionspf2e.BlAOM2X92SI6HMtJ",balance:"Compendium.pf2e.actionspf2e.M76ycLAqHoAgbcej",escape:"Compendium.pf2e.actionspf2e.SkZAQRkLLkmBQNB9","tumble-through":"Compendium.pf2e.actionspf2e.21WIfSu7Xd7uKqV8","maneuver-in-flight":"Compendium.pf2e.actionspf2e.Qf1ylAbdVi1rkc8M",squeeze:"Compendium.pf2e.actionspf2e.kMcV8e5EZUxa6evt","recall-knowledge":"Compendium.pf2e.actionspf2e.1OagaWtBpVXExToo","borrow-arcane-spell":"Compendium.pf2e.actionspf2e.OizxuPb44g3eHPFh","decipher-writing":"Compendium.pf2e.actionspf2e.d9gbpiQjChYDYA2L","identify-magic":"Compendium.pf2e.actionspf2e.eReSHVEPCsdkSL4G","learn-spell":"Compendium.pf2e.actionspf2e.Q5iIYCFdqJFM31GW",climb:"Compendium.pf2e.actionspf2e.pprgrYQ1QnIDGZiy",forceOpen:"Compendium.pf2e.actionspf2e.SjmKHgI7a5Z9JzBx",grapple:"Compendium.pf2e.actionspf2e.PMbdMWc2QroouFGD",highJump:"Compendium.pf2e.actionspf2e.2HJ4yuEFY1Cast4h",longJump:"Compendium.pf2e.actionspf2e.JUvAvruz7yRQXfz2",shove:"Compendium.pf2e.actionspf2e.7blmbDrQFNfdT731",swim:"Compendium.pf2e.actionspf2e.c8TGiZ48ygoSPofx",trip:"Compendium.pf2e.actionspf2e.ge56Lu1xXVFYUnLP",disarm:"Compendium.pf2e.actionspf2e.Dt6B1slsBy8ipJu9",repair:"Compendium.pf2e.actionspf2e.bT3skovyLUtP22ME",craft:"Compendium.pf2e.actionspf2e.rmwa3OyhTZ2i2AHl","crafting-goods":"",earnIncome:"Compendium.pf2e.actionspf2e.QyzlsLrqM0EEwd7j","identify-alchemy":"Compendium.pf2e.actionspf2e.Q4kdWVOf2ztIBFg1",createADiversion:"Compendium.pf2e.actionspf2e.GkmbTGfg8KcgynOA",impersonate:"Compendium.pf2e.actionspf2e.AJstokjdG6iDjVjE",lie:"Compendium.pf2e.actionspf2e.ewwCglB7XOPLUz72",feint:"Compendium.pf2e.actionspf2e.QNAVeNKtHA0EUw4X",bonMot:V,gatherInformation:"Compendium.pf2e.actionspf2e.plBGdZhqq5JBl1D8",makeAnImpression:"Compendium.pf2e.actionspf2e.OX4fy22hQgUHDr0q",request:"Compendium.pf2e.actionspf2e.DCb62iCBrJXy0Ik6",coerce:"Compendium.pf2e.actionspf2e.tHCqgwjtQtzNqVvd",demoralize:"Compendium.pf2e.actionspf2e.2u915NdUyQan6uKF","administer-first-aid":"Compendium.pf2e.actionspf2e.MHLuKy4nQO2Z4Am1","treat-disease":"Compendium.pf2e.actionspf2e.TC7OcDa7JlWbqMaN","treat-poison":"Compendium.pf2e.actionspf2e.KjoCEEmPGTeFE4hh",treatWounds:"Compendium.pf2e.actionspf2e.1kGNdIIhuglAjIp9","command-an-animal":"Compendium.pf2e.actionspf2e.q9nbyIF0PEBqMtYe",perform:"Compendium.pf2e.actionspf2e.EEDElIyin4z60PXx","staging-performance":"",subsist:"Compendium.pf2e.actionspf2e.49y9Ec4bDii8pcD3","create-forgery":"Compendium.pf2e.actionspf2e.ftG89SjTSa9DYDOD","conceal-an-object":"Compendium.pf2e.actionspf2e.qVNVSmsgpKFGk9hV",hide:"Compendium.pf2e.actionspf2e.XMcnh4cSI32tljXa",sneak:"Compendium.pf2e.actionspf2e.VMozDqMMuK5kpoX4",senseDirection:"Compendium.pf2e.actionspf2e.fJImDBQfqfjKJOhk","cover-tracks":"Compendium.pf2e.actionspf2e.SB7cMECVtE06kByk",track:"Compendium.pf2e.actionspf2e.EA5vuSgJfiHH7plD","palm-an-object":"Compendium.pf2e.actionspf2e.ijZ0DDFpMkWqaShd",steal:"Compendium.pf2e.actionspf2e.RDXXE7wMrSPCLv5k","disable-device":"Compendium.pf2e.actionspf2e.cYdz2grcOcRt4jk6","pick-a-lock":"Compendium.pf2e.actionspf2e.2EE4aF4SZpYf0R6H"},Se={escape:{slug:"escape",cost:"1",type:2,noSkill:!0},"recall-knowledge":{slug:"recall-knowledge",cost:"1",secret:!0},"decipher-writing":{slug:"decipher-writing",type:2,trained:!0},"identify-magic":{slug:"identify-magic",trained:!0},"learn-spell":{slug:"learn-spell",trained:!0}},F=[{slug:"perception",actions:[{slug:"initiative",custom:(i,t)=>i.initiative.roll(t),condition:()=>game.combat},{slug:"sense-motive",cost:"1",type:2},{slug:"seek",cost:"1",type:2}]},{slug:"acrobatics",actions:[{slug:"balance",cost:"1",type:2},"escape",{slug:"tumble-through",cost:"1",type:2},{slug:"maneuver-in-flight",cost:"1",type:2,trained:!0},{slug:"squeeze",type:2,trained:!0}]},{slug:"arcana",actions:["recall-knowledge",{slug:"borrow-arcane-spell",trained:!0},"decipher-writing","identify-magic","learn-spell"]},{slug:"athletics",actions:[{slug:"climb",cost:"1",type:1},"escape",{slug:"forceOpen",cost:"1",type:1,map:!0,modifiers:[{condition:i=>!i.itemTypes.equipment.some(t=>t.isHeld&&Ce.has(t.sourceId)),modifiers:[{slug:"crowbar-missing",modifier:-2,type:"circumstance"}]}]},{slug:"grapple",cost:"1",type:1,map:!0},{slug:"highJump",cost:"1",type:1},{slug:"longJump",cost:"1",type:1},{slug:"shove",cost:"1",type:1,map:!0},{slug:"swim",cost:"1",type:1},{slug:"trip",cost:"1",type:2,map:!0},{slug:"disarm",cost:"1",type:1,map:!0,trained:!0}]},{slug:"crafting",actions:["recall-knowledge",{slug:"repair",type:1},{slug:"craft",type:1,trained:!0},{slug:"crafting-goods",trained:!0},{slug:"earnIncome",type:3,trained:!0},{slug:"identify-alchemy",trained:!0}]},{slug:"deception",actions:[{slug:"createADiversion",cost:"1",type:1,variants:["distracting-words","gesture","trick"]},{slug:"impersonate",type:1},{slug:"lie",type:1},{slug:"feint",cost:"1",type:1,trained:!0}]},{slug:"diplomacy",actions:[{slug:"bonMot",cost:"1",type:1,condition:i=>i.itemTypes.feat.some(t=>t.getFlag("core","sourceId")===V)},{slug:"gatherInformation",type:1},{slug:"makeAnImpression",type:1},{slug:"request",cost:"1",type:1}]},{slug:"intimidation",actions:[{slug:"coerce",type:2},{slug:"demoralize",cost:"1",type:2}]},{slug:"medicine",actions:[{slug:"administer-first-aid",cost:"2",type:2,variants:["stabilize","stop-bleeding"]},{slug:"treat-disease",type:2,trained:!0},{slug:"treat-poison",cost:"1",type:2,trained:!0},{slug:"treatWounds",type:1,trained:!0}]},{slug:"nature",actions:[{slug:"command-an-animal",cost:"1",type:2},"recall-knowledge","identify-magic","learn-spell"]},{slug:"occultism",actions:["recall-knowledge","decipher-writing","identify-magic","learn-spell"]},{slug:"performance",actions:[{slug:"perform",cost:"1",type:1,variants:["acting","comedy","dance","keyboards","oratory","percussion","singing","strings","winds","warning"]},{slug:"staging-performance",trained:!0}]},{slug:"religion",actions:["recall-knowledge","decipher-writing","identify-magic","learn-spell"]},{slug:"society",actions:["recall-knowledge",{slug:"subsist",type:2},{slug:"create-forgery",type:2,trained:!0},"decipher-writing"]},{slug:"stealth",actions:[{slug:"conceal-an-object",cost:"1",type:2},{slug:"hide",cost:"1",type:2},{slug:"sneak",cost:"1",type:2}]},{slug:"survival",actions:[{slug:"senseDirection",type:1},{slug:"subsist",type:2},{slug:"cover-tracks",trained:!0},{slug:"track",type:1,trained:!0}]},{slug:"thievery",actions:[{slug:"palm-an-object",cost:"1",type:2},{slug:"steal",cost:"1",type:2},{slug:"disable-device",cost:"2",type:2,trained:!0},{slug:"pick-a-lock",cost:"2",type:2,trained:!0}]}];F.forEach(i=>{i.actions=i.actions.map(e=>typeof e=="string"?Se[e]:e);let{slug:t,actions:s}=i;for(let e of s){let n=e.slug.replace(/-(.)/g,(a,r)=>r.toUpperCase()).capitalize();e.skillSlug=t,e.uuid=J[e.slug],e.label=De[e.slug]??`PF2E.Actions.${n}.Title`,e.variants?e.variants=e.variants.map(a=>({slug:a,label:`${m}.skills.actions.${a}`})):e.map&&(e.variants=[{label:"PF2E.Roll.Normal"},{label:"PF2E.MAPAbbreviationLabel",map:-5},{label:"PF2E.MAPAbbreviationLabel",map:-10}]),e.modifiers?.forEach(({modifiers:a})=>{a.forEach(r=>{r.label=`${m}.skills.modifiers.${r.slug}`})})}});var Ee=F.map(i=>i.slug),Le=F.reduce((i,{slug:t,actions:s})=>(i[t]={slug:t,actions:s.reduce((e,n)=>(e[n.slug]=n,e),{})},i),{}),X=new Set(Object.values(J).filter(Boolean));async function K(i){let t=[];for(let e=0;e<F.length;e++){let{slug:n,actions:a}=F[e],{label:r,rank:c,mod:o}=O(n,i);t[e]={slug:n,label:r,rank:c,actions:a.filter(p=>!p.condition||p.condition(i)),modifier:H(o)}}let s=Object.values(i.skills).filter(e=>e.lore).map(({label:e,rank:n,mod:a,slug:r})=>({slug:r,label:e,rank:n,modifier:H(a)}));return{skills:t,lores:s}}l(K,"getSkillsData");function O(i,t){return i==="perception"?t.perception:t.skills[i]}l(O,"getSkill");function Q(i,t){i.find("[data-action=roll-skill]").on("click",s=>{s.preventDefault();let{slug:e}=s.currentTarget.dataset;O(e,t).roll({event:s})}),i.find("[data-action=roll-action]").on("click contextmenu",async s=>{s.preventDefault();let e=$(s.currentTarget),{skillSlug:n,slug:a}=e.closest(".action").data(),r=s.type==="contextmenu"?await Ae(t,n):void 0;r!==null&&xe(s,t,n,a,e.data(),r)}),i.find("[data-action=action-description]").on("click",async s=>{s.preventDefault();let e=$(s.currentTarget).closest(".action"),n=await L(e,t);n&&E(e.find(".name").children().html().trim(),n)})}l(Q,"addSkillsListeners");async function Ae(i,t){let s='<p style="text-align: center; margin-block: 0 8px;">';s+=`<strong>${g("skills.variant.label")}</strong> <select>`;for(let e of Ee)s+=`<option value="${e}" ${e===t?"selected":""}>${O(e,i).label}</option>`;return s+="</select></p>",Dialog.prompt({title:g("skills.variant.title"),label:g("skills.variant.button"),callback:e=>e.find("select").val(),rejectClose:!1,content:s,options:{width:280}})}l(Ae,"createVariantDialog");function xe(i,t,s,e,{variant:n,map:a},r){let c=Le[s].actions[e],o=c.type;r??=c.noSkill?void 0:s;let p={event:i,actors:[t],variant:n,rollMode:c.secret?"blindroll":"roll"};if(p.modifiers=[],c.modifiers){for(let{condition:u,modifiers:d}of c.modifiers)if(!(u&&!u(t)))for(let f of d)p.modifiers.push(new game.pf2e.Modifier(f))}if(c.custom){c.custom(t,p);return}else if(!o){O(r,t).roll(p);return}o===1?(p.skill=r,a&&p.modifiers.push(new game.pf2e.Modifier({label:"PF2E.MultipleAttackPenalty",modifier:a})),game.pf2e.actions[e](p)):o===2?(p.statistic=r,a&&(p.multipleAttackPenalty=a/-5),game.pf2e.actions.get(e).use(p)):o===3&&game.pf2e.actions[e](t)}l(xe,"rollAction");var A={action:{order:0,label:"PF2E.ActionsActionsHeader",actionLabel:"PF2E.ActionTypeAction"},reaction:{order:1,label:"PF2E.ActionTypeReaction",actionLabel:"PF2E.ActionTypeReaction"},free:{order:2,label:"PF2E.ActionTypeFree",actionLabel:"PF2E.ActionTypeFree"},passive:{order:3,label:"PF2E.ActionTypePassive",actionLabel:"PF2E.ActionTypePassive"}},Y={delay:[500,0],position:"top",theme:"crb-hover"};async function Z(i){let t=i.isOfType("character"),s=i.synthetics.toggles.slice(),e=t?Pe(i):null,n=h("actions"),a=t?Fe(i):Me(i),r=await Promise.all(i.system.actions.map(async(o,p)=>({...o,index:p,damageFormula:await o.damage?.({getFormula:!0}),criticalFormula:await o.critical?.({getFormula:!0})}))),c={};for(let o of a)n!=="split"?(c.action??=[],c.action.push(o)):(c[o.type]??=[],c[o.type].push(o));if(c=Object.entries(c).map(([o,p])=>(p.forEach(u=>{u.img=_(u.cost),u.typeLabel=A[u.type].actionLabel}),n!=="type"?p.sort((u,d)=>u.name.localeCompare(d.name)):p.sort((u,d)=>{let f=A[u.type].order,b=A[d.type].order;return f===b?u.name.localeCompare(d.name):f-b}),{type:o,actions:p,label:A[o].label})),n==="split"&&c.sort((o,p)=>A[o.type].order-A[p.type].order),s.length||r.length||c.length||e?.length)return{toggles:s,strikes:r,sections:c,heroActions:e,damageTypes:CONFIG.PF2E.damageTypes}}l(Z,"getActionsData");function ee(i){if(h("actions-colors"))return{classList:["attack-damage-system-colors"]}}l(ee,"getActionsOptions");function te(i,t){C(i.find(".toggle")),C(i.find(".strike")),C(i.find(".action")),i.find("[data-action=action-chat]").on("click",e=>{e.preventDefault(),w(e,t).toMessage(e,{create:!0})}),i.find("[data-action=action-description]").on("click",async e=>{e.preventDefault();let n=$(e.currentTarget).closest(".action"),a=await L(n,t);a&&E(n.find(".name").html().trim(),a)}),i.find("[data-action=toggle-roll-option], [data-action=set-suboption]").on("click",e=>{e.preventDefault();let n=e.currentTarget.closest(".toggle"),{domain:a,option:r,itemId:c}=n.dataset,o=n.querySelector("select")?.value??null;t.toggleRollOption(a,r,c??null,n.querySelector("input").checked,o)});function s(e){let{index:n}=e.currentTarget.closest(".strike").dataset;return t.system.actions[n]}l(s,"getStrike"),i.find("[data-action=strike-attack]").on("click",e=>{e.preventDefault();let{index:n}=e.currentTarget.dataset;s(e)?.variants[n].roll({event:e})}),i.find("[data-action=strike-damage], [data-action=strike-critical]").on("click",e=>{e.preventDefault();let{action:n}=e.currentTarget.dataset;s(e)?.[n==="strike-damage"?"damage":"critical"]({event:e})}).tooltipster(Y),i.find("[data-action=strike-auxiliary]").on("click",e=>{if(e.preventDefault(),e.currentTarget!==e.target)return;let n=s(e);if(!n)return;let{index:a}=e.currentTarget.dataset,r=e.currentTarget.querySelector("select")?.value??null;n.auxiliaryActions?.[a]?.execute({selection:r})}),i.find("[data-action=toggle-versatile]").on("click",e=>{e.preventDefault();let n=s(e)?.item;if(!n)return;let a=e.currentTarget,{value:r}=a.dataset,c=n?.system.damage.damageType??null,o=a.classList.contains("selected")||r===c?null:r;z({trait:"versatile",weapon:n,selection:o})}).tooltipster(Y),i.find("[data-action=strike-ammo]").on("change",e=>{e.preventDefault();let n=s(e)?.item;if(!n)return;let a=t.items.get(e.currentTarget.value);n.update({system:{selectedAmmoId:a?.id??null}})})}l(te,"addActionsListeners");function Pe(i){let t=game.modules.get("pf2e-hero-actions");return t?.active?t.api.getHeroActions(i):null}l(Pe,"getHeroActions");function Fe(i){let t=i.itemTypes.action.filter(e=>!X.has(e.sourceId)),s=i.itemTypes.feat.filter(e=>e.actionCost);return[...t,...s].filter(e=>{let n=e.system.traits.value;return!n.includes("downtime")&&!n.includes("exploration")}).map(e=>{let n=e.actionCost;return{id:e.id,type:n?.type??"free",cost:n,name:e.name}})}l(Fe,"getCharacterActions");function Me(i){return i.itemTypes.action.map(t=>{let s=t.actionCost,e=s?.type??"passive",n=e==="passive"&&(t.system.traits.value.includes("aura")||!!t.system.rules.find(a=>a.key==="Aura"));return{id:t.id,type:e,cost:s,name:t.name,hasDeathNote:t.system.deathNote,hasAura:n}})}l(Me,"getNpcActions");var N={weapon:{order:0,label:"PF2E.InventoryWeaponsHeader"},armor:{order:1,label:"PF2E.InventoryArmorHeader"},consumable:{order:2,label:"PF2E.InventoryConsumablesHeader"},equipment:{order:3,label:"PF2E.InventoryEquipmentHeader"},treasure:{order:4,label:"PF2E.InventoryTreasureHeader"},backpack:{order:5,label:"PF2E.InventoryBackpackHeader"}};async function ie(i){let t={};for(let s of i.inventory.contents)t[s.type]??=[],t[s.type].push(s);return{categories:Object.entries(t).map(([s,e])=>(e.sort((n,a)=>n.name.localeCompare(a.name)),{type:s,items:e,label:N[s].label})).sort((s,e)=>N[s.type].order-N[e.type].order)}}l(ie,"getItemsData");function se(i,t){let s=i.find(".item");C(s),s.on("dragstart",e=>{let n=e.target.closest(".item"),{itemType:a,uuid:r}=n.dataset,c=new Image;c.src=n.querySelector(".item-img img").src,c.style.width="32px",c.style.height="32px",c.style.borderRadius="4px",c.style.position="absolute",c.style.left="-1000px",document.body.append(c),e.originalEvent.dataTransfer.setDragImage(c,16,16),e.originalEvent.dataTransfer.setData("text/plain",JSON.stringify({type:"Item",fromInventory:!0,itemType:a,uuid:r})),n.addEventListener("dragend",()=>c.remove(),{once:!0})}),i.find(".quantity input").on("change",e=>{w(e,t)?.update({"system.quantity":e.currentTarget.valueAsNumber})}),i.find("[data-action=toggle-item-invest]").on("click",e=>{e.preventDefault();let{itemId:n}=e.currentTarget.closest(".item").dataset;t.toggleInvested(n)}),i.find("[data-action=repair-item]").on("click",e=>{e.preventDefault();let n=w(e,t);n&&game.pf2e.actions.repair({item:n,actors:[t]})}),i.find("[data-action=toggle-identified]").on("click",e=>{e.preventDefault();let n=w(e,t);n&&(n.isIdentified?n.setIdentificationStatus("unidentified"):new P(n).render(!0))}),i.find("[data-action=edit-item]").on("click",e=>G(e,t)),i.find("[data-action=delete-item]").on("click",e=>W(e,t)),i.find("[data-action=toggle-item-worn").tooltipster({animation:null,updateAnimation:null,animationDuration:0,delay:[0,0],trigger:"click",contentAsHTML:!0,interactive:!0,arrow:!1,side:["bottom","top"],theme:"crb-hover",minWidth:120,content:"",functionBefore:async function(e,{event:n,origin:a}){let r=w(n,t);if(!r)return;let c=document.createElement("div");c.innerHTML=await renderTemplate("systems/pf2e/templates/actors/partials/carry-type.hbs",{item:r});let o=c.children[1];$(o).find("[data-carry-type]").on("click",p=>{let{carryType:u,handsHeld:d=0,inSlot:f}=$(p.currentTarget).data();t.adjustCarryType(r,u,d,f),e.close()}),e.content(o)}})}l(se,"addItemsListeners");async function ne(i){let t=i.system.resources.focus?.value??0,s=i.spellcasting.regular,e=[];for(let r of s){let c=r.id,o=await r.getSheetData(),p=r.system?.prepared?.value==="charge",u=getProperty(r,"flags.pf2e-staves.staveID")!==void 0,d={value:getProperty(r,"flags.pf2e-staves.charges")??0};for(let f of o.levels){if(!f.active.length||f.uses?.max===0)continue;let b=[],S=f.active.filter(k=>k&&k.uses?.max!==0);for(let k=0;k<S.length;k++){let{spell:I,expended:ce,virtual:le,uses:pe,castLevel:de}=S[k];b.push({name:I.name,img:I.img,castLevel:de??I.level,slotId:k,entryId:c,itemId:I.id,inputId:o.isInnate?I.id:o.id,inputPath:p?"flags.pf2e-staves.charges":o.isInnate?"system.location.uses.value":`system.slots.slot${f.level}.value`,isCharge:p,isVirtual:le,isInnate:o.isInnate,isCantrip:f.isCantrip,isFocus:o.isFocusPool,isPrepared:o.isPrepared,isSpontaneous:o.isSpontaneous||o.isFlexible,slotLevel:f.level,uses:pe??(p?d:f.uses),expended:ce??(o.isFocusPool?t<=0:!1),action:I.system.time.value,type:p?u?`${m}.spells.staff`:`${m}.spells.charges`:o.isInnate?"PF2E.PreparationTypeInnate":o.isSpontaneous?"PF2E.PreparationTypeSpontaneous":o.isFlexible?"PF2E.SpellFlexibleLabel":o.isFocusPool?"PF2E.SpellFocusLabel":"PF2E.SpellPreparedLabel",order:p?0:o.isPrepared?1:o.isFocusPool?2:o.isInnate?3:o.isSpontaneous?4:5})}b.length&&(e[f.level]??=[],e[f.level].push(...b))}}if(e.length){let r=h("spells")?(c,o)=>c.order===o.order?c.name.localeCompare(o.name):c.order-o.order:(c,o)=>c.name.localeCompare(o.name);e.forEach(c=>c.sort(r))}let a=(await i.spellcasting.ritual?.getSheetData())?.levels.flatMap((r,c)=>r.active.map(({spell:o})=>({name:o.name,img:o.img,slotId:c,itemId:o.id,level:o.level,time:o.system.time.value})));if(e.length||a?.length)return{spells:e,rituals:a}}l(ne,"getSpellsData");function oe(i,t){C(i.find(".spell")),i.find("[data-action=toggle-pips]").on("click contextmenu",s=>{s.preventDefault();let e=s.type==="click"?1:-1,n=(t.system.resources.focus?.value??0)+e;t.update({"system.resources.focus.value":n})}),i.find("[data-action=toggle-prepared]").on("click",s=>{s.preventDefault();let{slotLevel:e,slotId:n,entryId:a,expended:r}=$(s.currentTarget).closest(".spell").data();t.spellcasting.collections.get(a)?.setSlotExpendedState(e??0,n??0,r!==!0)}),i.find("[data-action=cast-spell]").on("click",s=>{s.preventDefault();let{slotLevel:e,slotId:n,entryId:a,itemId:r}=$(s.currentTarget).closest(".spell").data(),c=t.spellcasting.collections.get(a,{strict:!0});if(!c)return;let o=c.get(r,{strict:!0});o&&c.entry.cast(o,{slot:n,level:e})}),i.find("[data-action=spell-description]").on("click",async s=>{s.preventDefault();let e=$(s.currentTarget).closest(".spell"),n=await L(e,t);n&&E(e.find(".name").html().trim(),n)}),i.find("[data-input-path]").on("change",async s=>{let{inputPath:e,entryId:n}=$(s.currentTarget).data(),a=s.currentTarget.valueAsNumber;await t.updateEmbeddedDocuments("Item",[{_id:n,[e]:a}])})}l(oe,"addSpellsListeners");var q="Compendium.pf2e.other-effects.I9lfZUiCwMiGogVi",Oe={left:["left","right","top","bottom"],right:["right","left","top","bottom"],top:["top","bottom","left","right"],bottom:["bottom","top","left","right"]},$e=[{type:"land",icon:'<i class="fa-solid fa-shoe-prints"></i>'},{type:"burrow",icon:'<i class="fa-solid fa-chevrons-down"></i>'},{type:"climb",icon:'<i class="fa-solid fa-spider"></i>'},{type:"fly",icon:'<i class="fa-solid fa-feather"></i>'},{type:"swim",icon:'<i class="fa-solid fa-person-swimming"></i>'}],He={actions:{getData:Z,addListeners:te,getOptions:ee},items:{getData:ie,addListeners:se},spells:{getData:ne,addListeners:oe},skills:{getData:K,addListeners:Q},extras:{getData:()=>null,addListeners:()=>{}}},M=class extends Application{#e=null;#c=null;#t=null;#i=!1;#s=null;#n;#a=!1;#o=!1;#r=!1;constructor(){super(),this.hoverToken=(t,s)=>{if(this.#a||this.#o||this.#r||!(t instanceof Token)||!t.isOwner||!t.actor?.isOfType("character","npc"))return;let e=t.localTransform,n=t.document;if(!(e.tx!==n.x||e.ty!==n.y)&&(this.#i=s,!(s&&this.#e===t&&this.rendered)))if(s){if(this.#e&&delete this.#e.actor.apps[m],this.#e=t,!this.#s)return this.render();clearTimeout(this.#s),this.#s=null,this.render(!0)}else this.close()},this.#n=t=>{if(t.type==="mouseup"){this.#a=!1;return}let s=t.target,e=this.element[0];if(e){let n=e.querySelector(".popup");if(e.contains(s)){n&&!n.contains(s)&&n.remove();return}if(s.closest(".app")||s.closest(".tooltipster-base"))return;if(n)return n.remove();this.close({force:!0})}this.#o=!1,this.#a=!0},this.forceClose=()=>this.close({force:!0}),this.deleteToken=t=>{this.#e&&t.id===this.#e.id&&this.close({force:!0})},window.addEventListener("mousedown",this.#n),window.addEventListener("mouseup",this.#n)}delete(){this.close({force:!0}),window.removeEventListener("mousedown",this.#n),window.removeEventListener("mouseup",this.#n)}static get defaultOptions(){return mergeObject(super.defaultOptions,{popOut:!1,minimizable:!1,template:x("hud")})}get token(){return this.#e}get actor(){return this.#e?.actor}get hasCover(){return this.actor?.itemTypes.effect.find(t=>t.flags.core?.sourceId===q)}getData(){let t=this.#e,s=this.#e?.actor;if(!s)return{};let{attributes:e,saves:n}=s,{hp:a,sp:r,ac:c,shield:o,speed:p}=e,u=$e.map(d=>(d.value=(d.type==="land"?p.total:p.otherSpeeds.find(f=>f.type===d.type)?.total)??0,d));return{tokenId:t.id,name:t.document.name,hp:a,sp:r,ac:c.value,shield:o,hasCover:this.hasCover,saves:{fortitude:n.fortitude.mod,reflex:n.reflex.mod,will:n.will.mod},speeds:u,languages:this.actor.system.traits?.languages?.value.join(", "),hasSpells:s.spellcasting.some(d=>d.category!=="items"),hasItems:s.inventory.size}}#l(){this.#e=null,this.#i=!1,this.#o=!1,this.#r=!1,this.#t!==null&&(clearTimeout(this.#t),this.#t=null);let t=Application.RENDER_STATES;this._state=t.CLOSING;let s=this.element;if(!s)return this._state=t.CLOSED;s.css({minHeight:0});for(let e of this.constructor._getInheritanceChain())Hooks.call(`close${e.name}`,this,s);s.remove(),this._element=null,this._state=t.CLOSED}close(t={}){let s=Application.RENDER_STATES;if(!(!t.force&&!this.#t&&![s.RENDERED,s.ERROR].includes(this._state))){if(t.force)return this.#l(t);this.#s=setTimeout(()=>{this.#s=null,!this.#i&&this.#l(t)})}}async _render(t=!1,s={}){let e,n;if(this.#c===this.#e){let a=this.element.find(".sidebar")[0];a&&(e=a.dataset.type,n=a.scrollTop)}if(await super._render(t,s),e){let a=await this.#p(e);n>0&&(a.scrollTop=n)}this.#c=this.#e}render(t){if(!this.#e?.actor||this.#a)return;if(t)return super.render(!0);let s=h("delay");s?this.#t=setTimeout(()=>super.render(!0),s):super.render(!0)}_injectHTML(t){$("body").append(t),this._element=t}setPosition(){let t=this.#e;if(!t)return;let s=this.element[0],e=s.getBoundingClientRect(),n=t.worldTransform.a,a=canvas.clientCoordinatesFromCanvas(t.document._source),r={x:a.x,y:a.y,width:t.hitArea.width*n,height:t.hitArea.height*n,get right(){return this.x+this.width},get bottom(){return this.y+this.height}},c=Oe[h("position")].slice(),o;for(;c.length&&!o;){let p=c.shift();p==="left"?(o={x:r.x-e.width,y:B(e,r)},o.x<0&&(o=void 0)):p==="right"?(o={x:r.right,y:B(e,r)},o.x+e.width>window.innerWidth&&(o=void 0)):p==="top"?(o={x:ae(e,r),y:r.y-e.height},o.y<0&&(o=void 0)):p==="bottom"&&(o={x:ae(e,r),y:r.bottom},o.y+e.height>window.innerHeight&&(o=void 0))}return o&&(s.style.left=`${o.x}px`,s.style.top=`${o.y}px`),o}activateListeners(t){let e=this.#e?.actor;e&&(e.apps[m]=this,t.on("mouseenter",()=>{this.#i=!0,this.#r=!0}),t.on("mouseleave",()=>{this.#r=!1,!this.#o&&(this.#i=!1,this.close())}),t.on("dragover",()=>{t.css("opacity",.1),t.css("pointerEvents","none"),window.addEventListener("dragend",()=>{t.css("opacity",1),t.css("pointerEvents","")},{once:!0})}),t.find("input").on("change",async n=>{let a=n.currentTarget,r=a.valueAsNumber,c=a.name;a.blur(),c!=="shield.value"?await e.update({[c]:r}):await e.heldShield.update({"system.hp.value":r})}),t.find("[data-action=raise-shield]").on("click",()=>{game.pf2e.actions.raiseAShield({actors:[e]})}),t.find("[data-action=take-cover]").on("click",async()=>{let n=(await fromUuid(q)).toObject();setProperty(n,"flags.core.sourceId",q);let a=this.hasCover;this.hasCover?await a.delete():await e.createEmbeddedDocuments("Item",[n])}),t.find("[data-action=roll-save]").on("click",n=>{let a=n.currentTarget.dataset.save;e.saves[a].roll({event:n})}),t.find(".inner .footer [data-type]").on("click",this.#p.bind(this)))}async#p(t){let s=this.actor,e=typeof t=="string"?t:t.currentTarget.dataset.type,{getData:n,addListeners:a,getOptions:r}=He[e],c=await n(s),{classList:o=[]}=r&&await r(s)||{};if(!c)return ui.notifications.warn(g(`${e}.empty`,{name:this.#e.name}));c.isGM=game.user.isGM,c.isCharacter=s.isOfType("character"),this.#o=!0;let p=this.element;p.find(".sidebar").remove(),p.find(".inner .footer [data-type]").removeClass("active"),p.find(`.inner .footer [data-type=${e}]`).addClass("active"),p=p[0];let u=document.createElement("div");u.innerHTML=await renderTemplate(x(e),c);let d=u.firstElementChild;d.classList.add("sidebar",...o),h("scrollbar")||d.classList.add("no-scrollbar"),d.dataset.type=e,this.element.append(d);let f=d.getBoundingClientRect(),b=p.getBoundingClientRect(),S=b.x-f.width;S<0&&(S=b.right);let k=parseInt(window.getComputedStyle(p).padding),I=B(f,b,k);return d.style.left=`${S}px`,d.style.top=`${I}px`,a($(d),s),d}};l(M,"HUD");function B(i,t,s=0){let e=t.y+t.height/2-i.height/2;return e+i.height>window.innerHeight&&(e=window.innerHeight-i.height-s),e<0&&(e=s),e}l(B,"postionFromTargetY");function ae(i,t){let s=t.x+t.width/2-i.width/2;return s+i.width>window.innerWidth&&(y=window.innerWidth-i.width),s<0&&(s=0),s}l(ae,"postionFromTargetX");var v=null;function D(i,t,s,e={}){game.settings.register(m,i,{...e,name:T(i,"name"),hint:T(i,"hint"),scope:"client",config:!0,type:t,default:s})}l(D,"registerSetting");Hooks.once("setup",()=>{D("enabled",Boolean,!0,{onChange:re}),D("position",String,"right",{choices:{left:T("position","choices.left"),right:T("position","choices.right"),top:T("position","choices.top"),bottom:T("position","choices.bottom")}}),D("delay",Number,250,{range:{min:0,max:2e3,step:50}}),D("scrollbar",Boolean,!0),D("actions",String,"split",{choices:{name:T("actions","choices.name"),type:T("actions","choices.type"),split:T("actions","choices.split")}}),D("actions-colors",Boolean,!0),D("spells",Boolean,!1)});Hooks.once("ready",()=>{h("enabled")&&re(!0)});function T(i,t){return`${m}.settings.${i}.${t}`}l(T,"settingPath");function re(i){i&&!v?(v=new M,Hooks.on("hoverToken",v.hoverToken),Hooks.on("deleteToken",v.deleteToken),Hooks.on("canvasPan",v.forceClose)):!i&&v&&(Hooks.off("hoverToken",v.hoverToken),Hooks.off("deleteToken",v.deleteToken),Hooks.off("canvasPan",v.forceClose),v.delete(),v=null)}l(re,"enableModule");})();
+(() => {
+  var __defProp = Object.defineProperty;
+  var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+
+  // src/module.js
+  var MODULE_ID = "pf2e-token-hud";
+  function getSetting(setting) {
+    return game.settings.get(MODULE_ID, setting);
+  }
+  __name(getSetting, "getSetting");
+  function localize(...args) {
+    const data = args.at(-1);
+    const useFormat = typeof data === "object";
+    const keys = useFormat ? args.slice(0, -1) : args;
+    keys.unshift(MODULE_ID);
+    return game.i18n[useFormat ? "format" : "localize"](keys.join("."), data);
+  }
+  __name(localize, "localize");
+  function templatePath(template) {
+    return `modules/${MODULE_ID}/templates/${template}.hbs`;
+  }
+  __name(templatePath, "templatePath");
+  function modifier(mod) {
+    return mod >= 0 ? `+${mod}` : mod;
+  }
+  __name(modifier, "modifier");
+
+  // src/pf2e.js
+  var dcAdjustments = /* @__PURE__ */ new Map([
+    ["incredibly-easy", -10],
+    ["very-easy", -5],
+    ["easy", -2],
+    ["normal", 0],
+    ["hard", 2],
+    ["very-hard", 5],
+    ["incredibly-hard", 10]
+  ]);
+  var dcByLevel = /* @__PURE__ */ new Map([
+    [-1, 13],
+    [0, 14],
+    [1, 15],
+    [2, 16],
+    [3, 18],
+    [4, 19],
+    [5, 20],
+    [6, 22],
+    [7, 23],
+    [8, 24],
+    [9, 26],
+    [10, 27],
+    [11, 28],
+    [12, 30],
+    [13, 31],
+    [14, 32],
+    [15, 34],
+    [16, 35],
+    [17, 36],
+    [18, 38],
+    [19, 39],
+    [20, 40],
+    [21, 42],
+    [22, 44],
+    [23, 46],
+    [24, 48],
+    [25, 50]
+  ]);
+  var MAGIC_TRADITIONS = /* @__PURE__ */ new Set(["arcane", "divine", "occult", "primal"]);
+  var actionImgMap = {
+    0: "systems/pf2e/icons/actions/FreeAction.webp",
+    free: "systems/pf2e/icons/actions/FreeAction.webp",
+    1: "systems/pf2e/icons/actions/OneAction.webp",
+    2: "systems/pf2e/icons/actions/TwoActions.webp",
+    3: "systems/pf2e/icons/actions/ThreeActions.webp",
+    "1 or 2": "systems/pf2e/icons/actions/OneTwoActions.webp",
+    "1 to 3": "systems/pf2e/icons/actions/OneThreeActions.webp",
+    "2 or 3": "systems/pf2e/icons/actions/TwoThreeActions.webp",
+    reaction: "systems/pf2e/icons/actions/Reaction.webp",
+    passive: "systems/pf2e/icons/actions/Passive.webp"
+  };
+  function getActionIcon(action, fallback = "systems/pf2e/icons/actions/Empty.webp") {
+    if (action === null)
+      return actionImgMap["passive"];
+    const value = typeof action !== "object" ? action : action.type === "action" ? action.value : action.type;
+    const sanitized = String(value ?? "").toLowerCase().trim();
+    return actionImgMap[sanitized] ?? fallback;
+  }
+  __name(getActionIcon, "getActionIcon");
+  async function toggleWeaponTrait({ weapon, trait, selection }) {
+    const current = weapon.system.traits.toggles[trait].selection;
+    if (current === selection)
+      return false;
+    const item = weapon.actor?.items.get(weapon.id);
+    if (item?.isOfType("weapon") && item === weapon) {
+      await item.update({ [`system.traits.toggles.${trait}.selection`]: selection });
+    } else if (item?.isOfType("weapon") && weapon.altUsageType === "melee") {
+      item.update({ [`system.meleeUsage.traitToggles.${trait}`]: selection });
+    } else {
+      const rule = item?.rules.find((r) => r.key === "Strike" && !r.ignored && r.slug === weapon.slug);
+      await rule?.toggleTrait({ trait, selection });
+    }
+    return true;
+  }
+  __name(toggleWeaponTrait, "toggleWeaponTrait");
+  function adjustDC(dc, adjustment = "normal") {
+    return dc + (dcAdjustments.get(adjustment) ?? 0);
+  }
+  __name(adjustDC, "adjustDC");
+  function rarityToDCAdjustment(rarity = "common") {
+    switch (rarity) {
+      case "uncommon":
+        return "hard";
+      case "rare":
+        return "very-hard";
+      case "unique":
+        return "incredibly-hard";
+      default:
+        return "normal";
+    }
+  }
+  __name(rarityToDCAdjustment, "rarityToDCAdjustment");
+  function adjustDCByRarity(dc, rarity = "common") {
+    return adjustDC(dc, rarityToDCAdjustment(rarity));
+  }
+  __name(adjustDCByRarity, "adjustDCByRarity");
+  function calculateDC(level, { proficiencyWithoutLevel, rarity = "common" } = {}) {
+    const pwlSetting = game.settings.get("pf2e", "proficiencyVariant");
+    proficiencyWithoutLevel ??= pwlSetting === "ProficiencyWithoutLevel";
+    const dc = dcByLevel.get(level) ?? 14;
+    if (proficiencyWithoutLevel) {
+      return adjustDCByRarity(dc - Math.max(level, 0), rarity);
+    } else {
+      return adjustDCByRarity(dc, rarity);
+    }
+  }
+  __name(calculateDC, "calculateDC");
+  function getDcRarity(item) {
+    return item.traits.has("cursed") ? "unique" : item.rarity;
+  }
+  __name(getDcRarity, "getDcRarity");
+  function getMagicTraditions(item) {
+    const traits = item.system.traits.value;
+    return new Set(traits.filter((t) => setHasElement(MAGIC_TRADITIONS, t)));
+  }
+  __name(getMagicTraditions, "getMagicTraditions");
+  function getIdentifyMagicDCs(item, baseDC, notMatchingTraditionModifier) {
+    const result = {
+      occult: baseDC,
+      primal: baseDC,
+      divine: baseDC,
+      arcane: baseDC
+    };
+    const traditions = getMagicTraditions(item);
+    for (const key of MAGIC_TRADITIONS) {
+      if (traditions.size > 0 && !traditions.has(key)) {
+        result[key] = baseDC + notMatchingTraditionModifier;
+      }
+    }
+    return { arcana: result.arcane, nature: result.primal, religion: result.divine, occultism: result.occult };
+  }
+  __name(getIdentifyMagicDCs, "getIdentifyMagicDCs");
+  function getItemIdentificationDCs(item, { proficiencyWithoutLevel = false, notMatchingTraditionModifier }) {
+    const baseDC = calculateDC(item.level, { proficiencyWithoutLevel });
+    const rarity = getDcRarity(item);
+    const dc = adjustDCByRarity(baseDC, rarity);
+    if (item.isMagical) {
+      return getIdentifyMagicDCs(item, dc, notMatchingTraditionModifier);
+    } else if (item.isAlchemical) {
+      return { crafting: dc };
+    } else {
+      return { dc };
+    }
+  }
+  __name(getItemIdentificationDCs, "getItemIdentificationDCs");
+  function objectHasKey(obj, key) {
+    return (typeof key === "string" || typeof key === "number") && key in obj;
+  }
+  __name(objectHasKey, "objectHasKey");
+  function setHasElement(set, value) {
+    return set.has(value);
+  }
+  __name(setHasElement, "setHasElement");
+  var IdentifyItemPopup = class extends FormApplication {
+    static get defaultOptions() {
+      return {
+        ...super.defaultOptions,
+        id: "identify-item",
+        title: game.i18n.localize("PF2E.identification.Identify"),
+        template: "systems/pf2e/templates/actors/identify-item.hbs",
+        width: "auto",
+        classes: ["identify-popup"]
+      };
+    }
+    get item() {
+      return this.object;
+    }
+    async getData() {
+      const item = this.object;
+      const notMatchingTraditionModifier = game.settings.get("pf2e", "identifyMagicNotMatchingTraditionModifier");
+      const proficiencyWithoutLevel = game.settings.get("pf2e", "proficiencyVariant") === "ProficiencyWithoutLevel";
+      const dcs = getItemIdentificationDCs(item, { proficiencyWithoutLevel, notMatchingTraditionModifier });
+      return {
+        ...await super.getData(),
+        isMagic: item.isMagical,
+        isAlchemical: item.isAlchemical,
+        dcs
+      };
+    }
+    activateListeners($form) {
+      $form.find("button.update-identification").on("click", (event) => {
+        const $button = $(event.delegateTarget);
+        this.submit({ updateData: { status: $button.val() } });
+      });
+      $form.find("button.post-skill-checks").on("click", async () => {
+        const item = this.item;
+        const itemImg = item.system.identification.unidentified.img;
+        const itemName = item.system.identification.unidentified.name;
+        const identifiedName = item.system.identification.identified.name;
+        const skills = $("div#identify-item").find("tr").toArray().flatMap((row) => {
+          const slug = row.dataset.skill;
+          const dc = Number(row.dataset.dc);
+          if (!(Number.isInteger(dc) && objectHasKey(CONFIG.PF2E.skillList, slug))) {
+            return [];
+          }
+          const name = game.i18n.localize(CONFIG.PF2E.skillList[slug]);
+          return { slug, name, dc };
+        });
+        const actionOption = item.isMagical ? "action:identify-magic" : item.isAlchemical ? "action:identify-alchemy" : null;
+        const content = await renderTemplate("systems/pf2e/templates/actors/identify-item-chat-skill-checks.hbs", {
+          itemImg,
+          itemName,
+          identifiedName,
+          // We don't want to install remeda just for that so we do our own thing
+          // rollOptions: R.compact(['concentrate', 'exploration', 'secret', actionOption]),
+          rollOptions: ["concentrate", "exploration", "secret", actionOption].filter(Boolean),
+          skills
+        });
+        await CONFIG.ChatMessage.documentClass.create({ user: game.user.id, content });
+      });
+    }
+    async _updateObject(_event, formData) {
+      const status = formData["status"];
+      if (status === "identified") {
+        await this.item.setIdentificationStatus(status);
+      }
+    }
+  };
+  __name(IdentifyItemPopup, "IdentifyItemPopup");
+
+  // src/popup.js
+  async function popup(title, content) {
+    const hud2 = $(`#${MODULE_ID}`);
+    if (!hud2.length)
+      return;
+    hud2.find(".popup").remove();
+    const tmp = document.createElement("div");
+    tmp.innerHTML = await renderTemplate(templatePath("popup"), { title, close: localize("popup.close") });
+    const popup2 = tmp.firstElementChild;
+    popup2.append(content);
+    popup2.querySelector("[data-action=close-popup]").addEventListener("click", () => popup2.remove());
+    hud2.append(popup2);
+  }
+  __name(popup, "popup");
+
+  // src/shared.js
+  async function getItemSummary(el, actor) {
+    const dataset = el.data();
+    const item = dataset.itemId ? actor.items.get(dataset.itemId) : await fromUuid(dataset.uuid);
+    const data = await item?.getChatData({}, dataset);
+    if (!data)
+      return;
+    const description = document.createElement("div");
+    description.classList.add("description");
+    await actor.sheet.itemRenderer.renderItemSummary(description, item, data);
+    return description;
+  }
+  __name(getItemSummary, "getItemSummary");
+  function addNameTooltipListeners(el) {
+    el.on("mouseenter", (event) => {
+      event.preventDefault();
+      const target = event.currentTarget.querySelector(".name");
+      if (target.scrollWidth <= target.clientWidth)
+        return;
+      const name = target.innerHTML.trim();
+      game.tooltip.activate(event.currentTarget, { text: name });
+    });
+    el.on("mouseleave", (event) => {
+      event.preventDefault();
+      game.tooltip.deactivate();
+    });
+    el.on("mousedown", (event) => {
+      game.tooltip.deactivate();
+    });
+  }
+  __name(addNameTooltipListeners, "addNameTooltipListeners");
+  function editItem(event, actor) {
+    event.preventDefault();
+    const item = getItemFromEvent(event, actor);
+    item?.sheet.render(true, { focus: true });
+  }
+  __name(editItem, "editItem");
+  async function deleteItem(event, actor) {
+    event.preventDefault();
+    const item = getItemFromEvent(event, actor);
+    if (!item)
+      return;
+    if (event.ctrlKey)
+      return item.delete();
+    new Dialog({
+      title: localize("deleteItem.title"),
+      content: await renderTemplate("systems/pf2e/templates/actors/delete-item-dialog.hbs", { name: item.name }),
+      buttons: {
+        ok: {
+          icon: '<i class="fa-solid fa-trash"></i>',
+          label: localize("deleteItem.ok"),
+          callback: () => item.delete()
+        },
+        cancel: {
+          icon: '<i class="fas fa-times"></i>',
+          label: localize("deleteItem.cancel")
+        }
+      }
+    }).render(true);
+  }
+  __name(deleteItem, "deleteItem");
+  function getItemFromEvent(event, actor) {
+    const { itemId } = event.currentTarget.closest("[data-item-id]").dataset;
+    return actor.items.get(itemId);
+  }
+  __name(getItemFromEvent, "getItemFromEvent");
+
+  // src/skills.js
+  var CROWBAR_UUIDS = /* @__PURE__ */ new Set([
+    "Compendium.pf2e.equipment-srd.44F1mfJei4GY8f2X",
+    "Compendium.pf2e.equipment-srd.4kz3vhkKPUuXBpxk"
+  ]);
+  var BON_MOT_UUID = "Compendium.pf2e.feats-srd.0GF2j54roPFIDmXf";
+  var LABELS = {
+    initiative: "PF2E.InitiativeLabel",
+    "recall-knowledge": "PF2E.RecallKnowledge.Label",
+    "cover-tracks": "PF2E.TravelSpeed.ExplorationActivities.CoverTracks",
+    earnIncome: `${MODULE_ID}.skills.actions.earnIncome`,
+    treatWounds: `${MODULE_ID}.skills.actions.treatWounds`,
+    "borrow-arcane-spell": `${MODULE_ID}.skills.actions.borrow-arcane-spell`,
+    "identify-magic": `${MODULE_ID}.skills.actions.identify-magic`,
+    "identify-alchemy": `${MODULE_ID}.skills.actions.identify-alchemy`,
+    "learn-spell": `${MODULE_ID}.skills.actions.learn-spell`,
+    "crafting-goods": `${MODULE_ID}.skills.actions.crafting-goods`,
+    "staging-performance": `${MODULE_ID}.skills.actions.staging-performance`
+  };
+  var ACTIONS_UUIDS = {
+    "sense-motive": "Compendium.pf2e.actionspf2e.1xRFPTFtWtGJ9ELw",
+    seek: "Compendium.pf2e.actionspf2e.BlAOM2X92SI6HMtJ",
+    balance: "Compendium.pf2e.actionspf2e.M76ycLAqHoAgbcej",
+    escape: "Compendium.pf2e.actionspf2e.SkZAQRkLLkmBQNB9",
+    "tumble-through": "Compendium.pf2e.actionspf2e.21WIfSu7Xd7uKqV8",
+    "maneuver-in-flight": "Compendium.pf2e.actionspf2e.Qf1ylAbdVi1rkc8M",
+    squeeze: "Compendium.pf2e.actionspf2e.kMcV8e5EZUxa6evt",
+    "recall-knowledge": "Compendium.pf2e.actionspf2e.1OagaWtBpVXExToo",
+    "borrow-arcane-spell": "Compendium.pf2e.actionspf2e.OizxuPb44g3eHPFh",
+    "decipher-writing": "Compendium.pf2e.actionspf2e.d9gbpiQjChYDYA2L",
+    "identify-magic": "Compendium.pf2e.actionspf2e.eReSHVEPCsdkSL4G",
+    "learn-spell": "Compendium.pf2e.actionspf2e.Q5iIYCFdqJFM31GW",
+    climb: "Compendium.pf2e.actionspf2e.pprgrYQ1QnIDGZiy",
+    forceOpen: "Compendium.pf2e.actionspf2e.SjmKHgI7a5Z9JzBx",
+    grapple: "Compendium.pf2e.actionspf2e.PMbdMWc2QroouFGD",
+    highJump: "Compendium.pf2e.actionspf2e.2HJ4yuEFY1Cast4h",
+    longJump: "Compendium.pf2e.actionspf2e.JUvAvruz7yRQXfz2",
+    shove: "Compendium.pf2e.actionspf2e.7blmbDrQFNfdT731",
+    swim: "Compendium.pf2e.actionspf2e.c8TGiZ48ygoSPofx",
+    trip: "Compendium.pf2e.actionspf2e.ge56Lu1xXVFYUnLP",
+    disarm: "Compendium.pf2e.actionspf2e.Dt6B1slsBy8ipJu9",
+    repair: "Compendium.pf2e.actionspf2e.bT3skovyLUtP22ME",
+    craft: "Compendium.pf2e.actionspf2e.rmwa3OyhTZ2i2AHl",
+    "crafting-goods": "",
+    earnIncome: "Compendium.pf2e.actionspf2e.QyzlsLrqM0EEwd7j",
+    "identify-alchemy": "Compendium.pf2e.actionspf2e.Q4kdWVOf2ztIBFg1",
+    createADiversion: "Compendium.pf2e.actionspf2e.GkmbTGfg8KcgynOA",
+    impersonate: "Compendium.pf2e.actionspf2e.AJstokjdG6iDjVjE",
+    lie: "Compendium.pf2e.actionspf2e.ewwCglB7XOPLUz72",
+    feint: "Compendium.pf2e.actionspf2e.QNAVeNKtHA0EUw4X",
+    bonMot: BON_MOT_UUID,
+    gatherInformation: "Compendium.pf2e.actionspf2e.plBGdZhqq5JBl1D8",
+    makeAnImpression: "Compendium.pf2e.actionspf2e.OX4fy22hQgUHDr0q",
+    request: "Compendium.pf2e.actionspf2e.DCb62iCBrJXy0Ik6",
+    coerce: "Compendium.pf2e.actionspf2e.tHCqgwjtQtzNqVvd",
+    demoralize: "Compendium.pf2e.actionspf2e.2u915NdUyQan6uKF",
+    "administer-first-aid": "Compendium.pf2e.actionspf2e.MHLuKy4nQO2Z4Am1",
+    "treat-disease": "Compendium.pf2e.actionspf2e.TC7OcDa7JlWbqMaN",
+    "treat-poison": "Compendium.pf2e.actionspf2e.KjoCEEmPGTeFE4hh",
+    treatWounds: "Compendium.pf2e.actionspf2e.1kGNdIIhuglAjIp9",
+    "command-an-animal": "Compendium.pf2e.actionspf2e.q9nbyIF0PEBqMtYe",
+    perform: "Compendium.pf2e.actionspf2e.EEDElIyin4z60PXx",
+    "staging-performance": "",
+    subsist: "Compendium.pf2e.actionspf2e.49y9Ec4bDii8pcD3",
+    "create-forgery": "Compendium.pf2e.actionspf2e.ftG89SjTSa9DYDOD",
+    "conceal-an-object": "Compendium.pf2e.actionspf2e.qVNVSmsgpKFGk9hV",
+    hide: "Compendium.pf2e.actionspf2e.XMcnh4cSI32tljXa",
+    sneak: "Compendium.pf2e.actionspf2e.VMozDqMMuK5kpoX4",
+    senseDirection: "Compendium.pf2e.actionspf2e.fJImDBQfqfjKJOhk",
+    "cover-tracks": "Compendium.pf2e.actionspf2e.SB7cMECVtE06kByk",
+    track: "Compendium.pf2e.actionspf2e.EA5vuSgJfiHH7plD",
+    "palm-an-object": "Compendium.pf2e.actionspf2e.ijZ0DDFpMkWqaShd",
+    steal: "Compendium.pf2e.actionspf2e.RDXXE7wMrSPCLv5k",
+    "disable-device": "Compendium.pf2e.actionspf2e.cYdz2grcOcRt4jk6",
+    "pick-a-lock": "Compendium.pf2e.actionspf2e.2EE4aF4SZpYf0R6H"
+  };
+  var DUPLICATE_SKILLS = {
+    escape: { slug: "escape", cost: "1", type: 2, noSkill: true },
+    "recall-knowledge": { slug: "recall-knowledge", cost: "1", secret: true },
+    "decipher-writing": { slug: "decipher-writing", type: 2, trained: true },
+    "identify-magic": { slug: "identify-magic", trained: true },
+    "learn-spell": { slug: "learn-spell", trained: true }
+  };
+  var SKILLS = [
+    {
+      slug: "perception",
+      actions: [
+        {
+          slug: "initiative",
+          custom: (actor, options) => actor.initiative.roll(options),
+          condition: () => game.combat
+        },
+        { slug: "sense-motive", cost: "1", type: 2 },
+        { slug: "seek", cost: "1", type: 2 }
+      ]
+    },
+    {
+      slug: "acrobatics",
+      actions: [
+        { slug: "balance", cost: "1", type: 2 },
+        "escape",
+        { slug: "tumble-through", cost: "1", type: 2 },
+        { slug: "maneuver-in-flight", cost: "1", type: 2, trained: true },
+        { slug: "squeeze", type: 2, trained: true }
+      ]
+    },
+    {
+      slug: "arcana",
+      actions: [
+        "recall-knowledge",
+        { slug: "borrow-arcane-spell", trained: true },
+        "decipher-writing",
+        "identify-magic",
+        "learn-spell"
+      ]
+    },
+    {
+      slug: "athletics",
+      actions: [
+        { slug: "climb", cost: "1", type: 1 },
+        "escape",
+        {
+          slug: "forceOpen",
+          cost: "1",
+          type: 1,
+          map: true,
+          modifiers: [
+            {
+              condition: (actor) => !actor.itemTypes.equipment.some((item) => item.isHeld && CROWBAR_UUIDS.has(item.sourceId)),
+              modifiers: [
+                {
+                  slug: "crowbar-missing",
+                  modifier: -2,
+                  type: "circumstance"
+                }
+              ]
+            }
+          ]
+        },
+        { slug: "grapple", cost: "1", type: 1, map: true },
+        { slug: "highJump", cost: "1", type: 1 },
+        { slug: "longJump", cost: "1", type: 1 },
+        { slug: "shove", cost: "1", type: 1, map: true },
+        { slug: "swim", cost: "1", type: 1 },
+        { slug: "trip", cost: "1", type: 2, map: true },
+        { slug: "disarm", cost: "1", type: 1, map: true, trained: true }
+      ]
+    },
+    {
+      slug: "crafting",
+      actions: [
+        "recall-knowledge",
+        { slug: "repair", type: 1 },
+        { slug: "craft", type: 1, trained: true },
+        { slug: "crafting-goods", trained: true },
+        { slug: "earnIncome", type: 3, trained: true },
+        { slug: "identify-alchemy", trained: true }
+      ]
+    },
+    {
+      slug: "deception",
+      actions: [
+        { slug: "createADiversion", cost: "1", type: 1, variants: ["distracting-words", "gesture", "trick"] },
+        { slug: "impersonate", type: 1 },
+        { slug: "lie", type: 1 },
+        { slug: "feint", cost: "1", type: 1, trained: true }
+      ]
+    },
+    {
+      slug: "diplomacy",
+      actions: [
+        {
+          slug: "bonMot",
+          cost: "1",
+          type: 1,
+          condition: (actor) => actor.itemTypes.feat.some((feat) => feat.getFlag("core", "sourceId") === BON_MOT_UUID)
+        },
+        { slug: "gatherInformation", type: 1 },
+        { slug: "makeAnImpression", type: 1 },
+        { slug: "request", cost: "1", type: 1 }
+      ]
+    },
+    {
+      slug: "intimidation",
+      actions: [
+        { slug: "coerce", type: 2 },
+        { slug: "demoralize", cost: "1", type: 2 }
+      ]
+    },
+    {
+      slug: "medicine",
+      actions: [
+        { slug: "administer-first-aid", cost: "2", type: 2, variants: ["stabilize", "stop-bleeding"] },
+        { slug: "treat-disease", type: 2, trained: true },
+        { slug: "treat-poison", cost: "1", type: 2, trained: true },
+        { slug: "treatWounds", type: 1, trained: true }
+      ]
+    },
+    {
+      slug: "nature",
+      actions: [
+        { slug: "command-an-animal", cost: "1", type: 2 },
+        //
+        "recall-knowledge",
+        "identify-magic",
+        "learn-spell"
+      ]
+    },
+    {
+      slug: "occultism",
+      actions: [
+        "recall-knowledge",
+        //
+        "decipher-writing",
+        "identify-magic",
+        "learn-spell"
+      ]
+    },
+    {
+      slug: "performance",
+      actions: [
+        {
+          slug: "perform",
+          cost: "1",
+          type: 1,
+          variants: [
+            "acting",
+            "comedy",
+            "dance",
+            "keyboards",
+            "oratory",
+            "percussion",
+            "singing",
+            "strings",
+            "winds",
+            "warning"
+          ]
+        },
+        { slug: "staging-performance", trained: true }
+      ]
+    },
+    {
+      slug: "religion",
+      actions: [
+        "recall-knowledge",
+        //
+        "decipher-writing",
+        "identify-magic",
+        "learn-spell"
+      ]
+    },
+    {
+      slug: "society",
+      actions: [
+        "recall-knowledge",
+        //
+        { slug: "subsist", type: 2 },
+        { slug: "create-forgery", type: 2, trained: true },
+        "decipher-writing"
+      ]
+    },
+    {
+      slug: "stealth",
+      actions: [
+        { slug: "conceal-an-object", cost: "1", type: 2 },
+        { slug: "hide", cost: "1", type: 2 },
+        { slug: "sneak", cost: "1", type: 2 }
+      ]
+    },
+    {
+      slug: "survival",
+      actions: [
+        { slug: "senseDirection", type: 1 },
+        { slug: "subsist", type: 2 },
+        { slug: "cover-tracks", trained: true },
+        { slug: "track", type: 1, trained: true }
+      ]
+    },
+    {
+      slug: "thievery",
+      actions: [
+        { slug: "palm-an-object", cost: "1", type: 2 },
+        { slug: "steal", cost: "1", type: 2 },
+        { slug: "disable-device", cost: "2", type: 2, trained: true },
+        { slug: "pick-a-lock", cost: "2", type: 2, trained: true }
+      ]
+    }
+  ];
+  SKILLS.forEach((skill) => {
+    skill.actions = skill.actions.map((action) => typeof action === "string" ? DUPLICATE_SKILLS[action] : action);
+    const { slug, actions } = skill;
+    for (let action of actions) {
+      const unslugged = action.slug.replace(/-(.)/g, (_, c) => c.toUpperCase()).capitalize();
+      action.skillSlug = slug;
+      action.uuid = ACTIONS_UUIDS[action.slug];
+      action.label = LABELS[action.slug] ?? `PF2E.Actions.${unslugged}.Title`;
+      if (action.variants) {
+        action.variants = action.variants.map((variant) => ({
+          slug: variant,
+          label: `${MODULE_ID}.skills.actions.${variant}`
+        }));
+      } else if (action.map) {
+        action.variants = [
+          { label: "PF2E.Roll.Normal" },
+          { label: "PF2E.MAPAbbreviationLabel", map: -5 },
+          { label: "PF2E.MAPAbbreviationLabel", map: -10 }
+        ];
+      }
+      action.modifiers?.forEach(({ modifiers }) => {
+        modifiers.forEach((modifier2) => {
+          modifier2.label = `${MODULE_ID}.skills.modifiers.${modifier2.slug}`;
+        });
+      });
+    }
+  });
+  var SKILLS_SLUGS = SKILLS.map((skill) => skill.slug);
+  var SKILLS_MAP = SKILLS.reduce((skills, { slug, actions }) => {
+    skills[slug] = {
+      slug,
+      actions: actions.reduce((actions2, action) => {
+        actions2[action.slug] = action;
+        return actions2;
+      }, {})
+    };
+    return skills;
+  }, {});
+  var actionsUUIDS = new Set(Object.values(ACTIONS_UUIDS).filter(Boolean));
+  async function getSkillsData(actor) {
+    const skills = [];
+    for (let i = 0; i < SKILLS.length; i++) {
+      const { slug, actions } = SKILLS[i];
+      const { label, rank, mod } = getSkill(slug, actor);
+      skills[i] = {
+        slug,
+        label,
+        rank,
+        actions: actions.filter((action) => !action.condition || action.condition(actor)),
+        modifier: modifier(mod)
+      };
+    }
+    const lores = Object.values(actor.skills).filter((skill) => skill.lore).map(({ label, rank, mod, slug }) => ({
+      slug,
+      label,
+      rank,
+      modifier: modifier(mod)
+    }));
+    return { skills, lores };
+  }
+  __name(getSkillsData, "getSkillsData");
+  function getSkill(slug, actor) {
+    return slug === "perception" ? actor.perception : actor.skills[slug];
+  }
+  __name(getSkill, "getSkill");
+  function addSkillsListeners(el, actor) {
+    el.find("[data-action=roll-skill]").on("click", (event) => {
+      event.preventDefault();
+      const { slug } = event.currentTarget.dataset;
+      getSkill(slug, actor).roll({ event });
+    });
+    el.find("[data-action=roll-action]").on("click contextmenu", async (event) => {
+      event.preventDefault();
+      const target = $(event.currentTarget);
+      const { skillSlug, slug } = target.closest(".action").data();
+      const variant = event.type === "contextmenu" ? await createVariantDialog(actor, skillSlug) : void 0;
+      if (variant !== null)
+        rollAction(event, actor, skillSlug, slug, target.data(), variant);
+    });
+    el.find("[data-action=action-description]").on("click", async (event) => {
+      event.preventDefault();
+      const action = $(event.currentTarget).closest(".action");
+      const description = await getItemSummary(action, actor);
+      if (description)
+        popup(action.find(".name").children().html().trim(), description);
+    });
+  }
+  __name(addSkillsListeners, "addSkillsListeners");
+  async function createVariantDialog(actor, base) {
+    let content = '<p style="text-align: center; margin-block: 0 8px;">';
+    content += `<strong>${localize("skills.variant.label")}</strong> <select>`;
+    for (const slug of SKILLS_SLUGS) {
+      const selected = slug === base ? "selected" : "";
+      content += `<option value="${slug}" ${selected}>${getSkill(slug, actor).label}</option>`;
+    }
+    content += "</select></p>";
+    return Dialog.prompt({
+      title: localize("skills.variant.title"),
+      label: localize("skills.variant.button"),
+      callback: (html) => html.find("select").val(),
+      rejectClose: false,
+      content,
+      options: { width: 280 }
+    });
+  }
+  __name(createVariantDialog, "createVariantDialog");
+  function rollAction(event, actor, skillSlug, slug, { variant, map }, skill) {
+    const action = SKILLS_MAP[skillSlug].actions[slug];
+    const type = action.type;
+    skill ??= action.noSkill ? void 0 : skillSlug;
+    const options = {
+      event,
+      actors: [actor],
+      variant,
+      rollMode: action.secret ? "blindroll" : "roll"
+    };
+    options.modifiers = [];
+    if (action.modifiers) {
+      for (const { condition, modifiers } of action.modifiers) {
+        if (condition && !condition(actor))
+          continue;
+        for (const modifier2 of modifiers) {
+          options.modifiers.push(new game.pf2e.Modifier(modifier2));
+        }
+      }
+    }
+    if (action.custom) {
+      action.custom(actor, options);
+      return;
+    } else if (!type) {
+      getSkill(skill, actor).roll(options);
+      return;
+    }
+    if (type === 1) {
+      options.skill = skill;
+      if (map)
+        options.modifiers.push(new game.pf2e.Modifier({ label: "PF2E.MultipleAttackPenalty", modifier: map }));
+      game.pf2e.actions[slug](options);
+    } else if (type === 2) {
+      options.statistic = skill;
+      if (map)
+        options.multipleAttackPenalty = map / -5;
+      game.pf2e.actions.get(slug).use(options);
+    } else if (type === 3) {
+      game.pf2e.actions[slug](actor);
+    }
+  }
+  __name(rollAction, "rollAction");
+
+  // src/actions.js
+  var SECTIONS_TYPES = {
+    action: { order: 0, label: "PF2E.ActionsActionsHeader", actionLabel: "PF2E.ActionTypeAction" },
+    reaction: { order: 1, label: "PF2E.ActionTypeReaction", actionLabel: "PF2E.ActionTypeReaction" },
+    free: { order: 2, label: "PF2E.ActionTypeFree", actionLabel: "PF2E.ActionTypeFree" },
+    passive: { order: 3, label: "PF2E.ActionTypePassive", actionLabel: "PF2E.ActionTypePassive" }
+  };
+  var TOOLTIPS = {
+    delay: [500, 0],
+    position: "top",
+    theme: "crb-hover"
+  };
+  async function getActionsData(actor) {
+    const isCharacter = actor.isOfType("character");
+    const toggles = actor.synthetics.toggles.slice();
+    const heroActions = isCharacter ? getHeroActions(actor) : null;
+    const sorting = getSetting("actions");
+    const actions = isCharacter ? getCharacterActions(actor) : getNpcActions(actor);
+    const strikes = await Promise.all(
+      actor.system.actions.map(async (strike, index) => ({
+        ...strike,
+        index,
+        damageFormula: await strike.damage?.({ getFormula: true }),
+        criticalFormula: await strike.critical?.({ getFormula: true })
+      }))
+    );
+    let sections = {};
+    for (const action of actions) {
+      if (sorting !== "split") {
+        sections.action ??= [];
+        sections.action.push(action);
+      } else {
+        sections[action.type] ??= [];
+        sections[action.type].push(action);
+      }
+    }
+    sections = Object.entries(sections).map(([type, actions2]) => {
+      actions2.forEach((action) => {
+        action.img = getActionIcon(action.cost);
+        action.typeLabel = SECTIONS_TYPES[action.type].actionLabel;
+      });
+      if (sorting !== "type") {
+        actions2.sort((a, b) => a.name.localeCompare(b.name));
+      } else {
+        actions2.sort((a, b) => {
+          const orderA = SECTIONS_TYPES[a.type].order;
+          const orderB = SECTIONS_TYPES[b.type].order;
+          return orderA === orderB ? a.name.localeCompare(b.name) : orderA - orderB;
+        });
+      }
+      return { type, actions: actions2, label: SECTIONS_TYPES[type].label };
+    });
+    if (sorting === "split")
+      sections.sort((a, b) => SECTIONS_TYPES[a.type].order - SECTIONS_TYPES[b.type].order);
+    if (toggles.length || strikes.length || sections.length || heroActions?.length)
+      return { toggles, strikes, sections, heroActions, damageTypes: CONFIG.PF2E.damageTypes };
+  }
+  __name(getActionsData, "getActionsData");
+  function getActionsOptions(actor) {
+    if (getSetting("actions-colors"))
+      return { classList: ["attack-damage-system-colors"] };
+  }
+  __name(getActionsOptions, "getActionsOptions");
+  function addActionsListeners(el, actor) {
+    addNameTooltipListeners(el.find(".toggle"));
+    addNameTooltipListeners(el.find(".strike"));
+    addNameTooltipListeners(el.find(".action"));
+    el.find("[data-action=action-chat]").on("click", (event) => {
+      event.preventDefault();
+      const item = getItemFromEvent(event, actor);
+      item.toMessage(event, { create: true });
+    });
+    el.find("[data-action=action-description]").on("click", async (event) => {
+      event.preventDefault();
+      const action = $(event.currentTarget).closest(".action");
+      const description = await getItemSummary(action, actor);
+      if (description)
+        popup(action.find(".name").html().trim(), description);
+    });
+    el.find("[data-action=toggle-roll-option], [data-action=set-suboption]").on("click", (event) => {
+      event.preventDefault();
+      const toggle = event.currentTarget.closest(".toggle");
+      const { domain, option, itemId } = toggle.dataset;
+      const suboption = toggle.querySelector("select")?.value ?? null;
+      actor.toggleRollOption(domain, option, itemId ?? null, toggle.querySelector("input").checked, suboption);
+    });
+    function getStrike(event) {
+      const { index } = event.currentTarget.closest(".strike").dataset;
+      return actor.system.actions[index];
+    }
+    __name(getStrike, "getStrike");
+    el.find("[data-action=strike-attack]").on("click", (event) => {
+      event.preventDefault();
+      const { index } = event.currentTarget.dataset;
+      const strike = getStrike(event);
+      strike?.variants[index].roll({ event });
+    });
+    el.find("[data-action=strike-damage], [data-action=strike-critical]").on("click", (event) => {
+      event.preventDefault();
+      const { action } = event.currentTarget.dataset;
+      const strike = getStrike(event);
+      strike?.[action === "strike-damage" ? "damage" : "critical"]({ event });
+    }).tooltipster(TOOLTIPS);
+    el.find("[data-action=strike-auxiliary]").on("click", (event) => {
+      event.preventDefault();
+      if (event.currentTarget !== event.target)
+        return;
+      const strike = getStrike(event);
+      if (!strike)
+        return;
+      const { index } = event.currentTarget.dataset;
+      const modular = event.currentTarget.querySelector("select")?.value ?? null;
+      strike.auxiliaryActions?.[index]?.execute({ selection: modular });
+    });
+    el.find("[data-action=toggle-versatile]").on("click", (event) => {
+      event.preventDefault();
+      const weapon = getStrike(event)?.item;
+      if (!weapon)
+        return;
+      const target = event.currentTarget;
+      const { value } = target.dataset;
+      const baseType = weapon?.system.damage.damageType ?? null;
+      const selection = target.classList.contains("selected") || value === baseType ? null : value;
+      toggleWeaponTrait({ trait: "versatile", weapon, selection });
+    }).tooltipster(TOOLTIPS);
+    el.find("[data-action=strike-ammo]").on("change", (event) => {
+      event.preventDefault();
+      const weapon = getStrike(event)?.item;
+      if (!weapon)
+        return;
+      const ammo = actor.items.get(event.currentTarget.value);
+      weapon.update({ system: { selectedAmmoId: ammo?.id ?? null } });
+    });
+  }
+  __name(addActionsListeners, "addActionsListeners");
+  function getHeroActions(actor) {
+    const heroActionsModule = game.modules.get("pf2e-hero-actions");
+    return heroActionsModule?.active ? heroActionsModule.api.getHeroActions(actor) : null;
+  }
+  __name(getHeroActions, "getHeroActions");
+  function getCharacterActions(actor) {
+    const actions = actor.itemTypes.action.filter((item) => !actionsUUIDS.has(item.sourceId));
+    const feats = actor.itemTypes.feat.filter((item) => item.actionCost);
+    return [...actions, ...feats].filter((actions2) => {
+      const traits = actions2.system.traits.value;
+      return !traits.includes("downtime") && !traits.includes("exploration");
+    }).map((item) => {
+      const actionCost = item.actionCost;
+      return {
+        id: item.id,
+        type: actionCost?.type ?? "free",
+        cost: actionCost,
+        name: item.name
+      };
+    });
+  }
+  __name(getCharacterActions, "getCharacterActions");
+  function getNpcActions(actor) {
+    return actor.itemTypes.action.map((item) => {
+      const actionCost = item.actionCost;
+      const actionType = actionCost?.type ?? "passive";
+      const hasAura = actionType === "passive" && (item.system.traits.value.includes("aura") || !!item.system.rules.find((r) => r.key === "Aura"));
+      return {
+        id: item.id,
+        type: actionType,
+        cost: actionCost,
+        name: item.name,
+        hasDeathNote: item.system.deathNote,
+        hasAura
+      };
+    });
+  }
+  __name(getNpcActions, "getNpcActions");
+
+  // src/items.js
+  var ITEMS_TYPES = {
+    weapon: { order: 0, label: "PF2E.InventoryWeaponsHeader" },
+    armor: { order: 1, label: "PF2E.InventoryArmorHeader" },
+    consumable: { order: 2, label: "PF2E.InventoryConsumablesHeader" },
+    equipment: { order: 3, label: "PF2E.InventoryEquipmentHeader" },
+    treasure: { order: 4, label: "PF2E.InventoryTreasureHeader" },
+    backpack: { order: 5, label: "PF2E.InventoryBackpackHeader" }
+  };
+  async function getItemsData(actor) {
+    const categories = {};
+    for (const item of actor.inventory.contents) {
+      categories[item.type] ??= [];
+      categories[item.type].push(item);
+    }
+    return {
+      categories: Object.entries(categories).map(([type, items]) => {
+        items.sort((a, b) => a.name.localeCompare(b.name));
+        return { type, items, label: ITEMS_TYPES[type].label };
+      }).sort((a, b) => ITEMS_TYPES[a.type].order - ITEMS_TYPES[b.type].order)
+    };
+  }
+  __name(getItemsData, "getItemsData");
+  function addItemsListeners(el, actor) {
+    const item = el.find(".item");
+    addNameTooltipListeners(item);
+    item.on("dragstart", (event) => {
+      const target = event.target.closest(".item");
+      const { itemType, uuid } = target.dataset;
+      const img = new Image();
+      img.src = target.querySelector(".item-img img").src;
+      img.style.width = "32px";
+      img.style.height = "32px";
+      img.style.borderRadius = "4px";
+      img.style.position = "absolute";
+      img.style.left = "-1000px";
+      document.body.append(img);
+      event.originalEvent.dataTransfer.setDragImage(img, 16, 16);
+      event.originalEvent.dataTransfer.setData(
+        "text/plain",
+        JSON.stringify({ type: "Item", fromInventory: true, itemType, uuid })
+      );
+      target.addEventListener("dragend", () => img.remove(), { once: true });
+    });
+    el.find(".quantity input").on("change", (event) => {
+      getItemFromEvent(event, actor)?.update({ "system.quantity": event.currentTarget.valueAsNumber });
+    });
+    el.find("[data-action=toggle-item-invest]").on("click", (event) => {
+      event.preventDefault();
+      const { itemId } = event.currentTarget.closest(".item").dataset;
+      actor.toggleInvested(itemId);
+    });
+    el.find("[data-action=repair-item]").on("click", (event) => {
+      event.preventDefault();
+      const item2 = getItemFromEvent(event, actor);
+      if (item2)
+        game.pf2e.actions.repair({ item: item2, actors: [actor] });
+    });
+    el.find("[data-action=toggle-identified]").on("click", (event) => {
+      event.preventDefault();
+      const item2 = getItemFromEvent(event, actor);
+      if (!item2)
+        return;
+      if (item2.isIdentified)
+        item2.setIdentificationStatus("unidentified");
+      else
+        new IdentifyItemPopup(item2).render(true);
+    });
+    el.find("[data-action=edit-item]").on("click", (event) => editItem(event, actor));
+    el.find("[data-action=delete-item]").on("click", (event) => deleteItem(event, actor));
+    el.find("[data-action=toggle-item-worn").tooltipster({
+      animation: null,
+      updateAnimation: null,
+      animationDuration: 0,
+      delay: [0, 0],
+      trigger: "click",
+      contentAsHTML: true,
+      interactive: true,
+      arrow: false,
+      side: ["bottom", "top"],
+      theme: "crb-hover",
+      minWidth: 120,
+      content: "",
+      functionBefore: async function(tooltipster, { event, origin }) {
+        const item2 = getItemFromEvent(event, actor);
+        if (!item2)
+          return;
+        const tmp = document.createElement("div");
+        tmp.innerHTML = await renderTemplate("systems/pf2e/templates/actors/partials/carry-type.hbs", { item: item2 });
+        const content = tmp.children[1];
+        $(content).find("[data-carry-type]").on("click", (event2) => {
+          const { carryType, handsHeld = 0, inSlot } = $(event2.currentTarget).data();
+          actor.adjustCarryType(item2, carryType, handsHeld, inSlot);
+          tooltipster.close();
+        });
+        tooltipster.content(content);
+      }
+    });
+  }
+  __name(addItemsListeners, "addItemsListeners");
+
+  // src/spells.js
+  async function getSpellsData(actor) {
+    const focusPool = actor.system.resources.focus?.value ?? 0;
+    const entries = actor.spellcasting.regular;
+    const spells = [];
+    for (const entry of entries) {
+      const entryId = entry.id;
+      const data = await entry.getSheetData();
+      const isCharge = entry.system?.prepared?.value === "charge";
+      const isStaff = getProperty(entry, "flags.pf2e-staves.staveID") !== void 0;
+      const charges = { value: getProperty(entry, "flags.pf2e-staves.charges") ?? 0 };
+      for (const slot of data.levels) {
+        if (!slot.active.length || slot.uses?.max === 0)
+          continue;
+        const slotSpells = [];
+        const actives = slot.active.filter((x) => x && x.uses?.max !== 0);
+        for (let slotId = 0; slotId < actives.length; slotId++) {
+          const { spell, expended, virtual, uses, castLevel } = actives[slotId];
+          slotSpells.push({
+            name: spell.name,
+            img: spell.img,
+            castLevel: castLevel ?? spell.level,
+            slotId,
+            entryId,
+            itemId: spell.id,
+            inputId: data.isInnate ? spell.id : data.id,
+            inputPath: isCharge ? "flags.pf2e-staves.charges" : data.isInnate ? "system.location.uses.value" : `system.slots.slot${slot.level}.value`,
+            isCharge,
+            isVirtual: virtual,
+            isInnate: data.isInnate,
+            isCantrip: slot.isCantrip,
+            isFocus: data.isFocusPool,
+            isPrepared: data.isPrepared,
+            isSpontaneous: data.isSpontaneous || data.isFlexible,
+            slotLevel: slot.level,
+            uses: uses ?? (isCharge ? charges : slot.uses),
+            expended: expended ?? (data.isFocusPool && !slot.isCantrip ? focusPool <= 0 : false),
+            action: spell.system.time.value,
+            type: isCharge ? isStaff ? `${MODULE_ID}.spells.staff` : `${MODULE_ID}.spells.charges` : data.isInnate ? "PF2E.PreparationTypeInnate" : data.isSpontaneous ? "PF2E.PreparationTypeSpontaneous" : data.isFlexible ? "PF2E.SpellFlexibleLabel" : data.isFocusPool ? "PF2E.SpellFocusLabel" : "PF2E.SpellPreparedLabel",
+            order: isCharge ? 0 : data.isPrepared ? 1 : data.isFocusPool ? 2 : data.isInnate ? 3 : data.isSpontaneous ? 4 : 5
+          });
+        }
+        if (slotSpells.length) {
+          spells[slot.level] ??= [];
+          spells[slot.level].push(...slotSpells);
+        }
+      }
+    }
+    if (spells.length) {
+      const sort = getSetting("spells") ? (a, b) => a.order === b.order ? a.name.localeCompare(b.name) : a.order - b.order : (a, b) => a.name.localeCompare(b.name);
+      spells.forEach((entry) => entry.sort(sort));
+    }
+    const ritualData = await actor.spellcasting.ritual?.getSheetData();
+    const rituals = ritualData?.levels.flatMap(
+      (slot, slotId) => slot.active.map(({ spell }) => ({
+        name: spell.name,
+        img: spell.img,
+        slotId,
+        itemId: spell.id,
+        level: spell.level,
+        time: spell.system.time.value
+      }))
+    );
+    if (spells.length || rituals?.length)
+      return { spells, rituals };
+  }
+  __name(getSpellsData, "getSpellsData");
+  function addSpellsListeners(el, actor) {
+    addNameTooltipListeners(el.find(".spell"));
+    el.find("[data-action=toggle-pips]").on("click contextmenu", (event) => {
+      event.preventDefault();
+      const change = event.type === "click" ? 1 : -1;
+      const points = (actor.system.resources.focus?.value ?? 0) + change;
+      actor.update({ "system.resources.focus.value": points });
+    });
+    el.find("[data-action=toggle-prepared]").on("click", (event) => {
+      event.preventDefault();
+      const { slotLevel, slotId, entryId, expended } = $(event.currentTarget).closest(".spell").data();
+      const collection = actor.spellcasting.collections.get(entryId);
+      collection?.setSlotExpendedState(slotLevel ?? 0, slotId ?? 0, expended !== true);
+    });
+    el.find("[data-action=cast-spell]").on("click", (event) => {
+      event.preventDefault();
+      const { slotLevel, slotId, entryId, itemId } = $(event.currentTarget).closest(".spell").data();
+      const collection = actor.spellcasting.collections.get(entryId, { strict: true });
+      if (!collection)
+        return;
+      const spell = collection.get(itemId, { strict: true });
+      if (!spell)
+        return;
+      collection.entry.cast(spell, { slot: slotId, level: slotLevel });
+    });
+    el.find("[data-action=spell-description]").on("click", async (event) => {
+      event.preventDefault();
+      const spell = $(event.currentTarget).closest(".spell");
+      const description = await getItemSummary(spell, actor);
+      if (description)
+        popup(spell.find(".name").html().trim(), description);
+    });
+    el.find("[data-input-path]").on("change", async (event) => {
+      const { inputPath, entryId } = $(event.currentTarget).data();
+      const value = event.currentTarget.valueAsNumber;
+      await actor.updateEmbeddedDocuments("Item", [{ _id: entryId, [inputPath]: value }]);
+    });
+  }
+  __name(addSpellsListeners, "addSpellsListeners");
+
+  // src/hud.js
+  var COVER_UUID = "Compendium.pf2e.other-effects.I9lfZUiCwMiGogVi";
+  var POSITIONS = {
+    left: ["left", "right", "top", "bottom"],
+    right: ["right", "left", "top", "bottom"],
+    top: ["top", "bottom", "left", "right"],
+    bottom: ["bottom", "top", "left", "right"]
+  };
+  var SPEEDS = [
+    { type: "land", icon: '<i class="fa-solid fa-shoe-prints"></i>' },
+    { type: "burrow", icon: '<i class="fa-solid fa-chevrons-down"></i>' },
+    { type: "climb", icon: '<i class="fa-solid fa-spider"></i>' },
+    { type: "fly", icon: '<i class="fa-solid fa-feather"></i>' },
+    { type: "swim", icon: '<i class="fa-solid fa-person-swimming"></i>' }
+  ];
+  var SIDEBARS = {
+    actions: { getData: getActionsData, addListeners: addActionsListeners, getOptions: getActionsOptions },
+    items: { getData: getItemsData, addListeners: addItemsListeners },
+    spells: { getData: getSpellsData, addListeners: addSpellsListeners },
+    skills: { getData: getSkillsData, addListeners: addSkillsListeners },
+    extras: { getData: () => null, addListeners: () => {
+    } }
+  };
+  var HUD = class extends Application {
+    #token = null;
+    #lastToken = null;
+    #delay = null;
+    #hover = false;
+    #closing = null;
+    #mouseevent;
+    #mousedown = false;
+    #lock = false;
+    #softLock = false;
+    constructor() {
+      super();
+      this.hoverToken = (token, hover) => {
+        if (this.#mousedown || this.#lock || this.#softLock || !(token instanceof Token) || !token.isOwner || !token.actor?.isOfType("character", "npc"))
+          return;
+        const transform = token.localTransform;
+        const document2 = token.document;
+        if (transform.tx !== document2.x || transform.ty !== document2.y)
+          return;
+        this.#hover = hover;
+        if (hover && this.#token === token && this.rendered)
+          return;
+        if (hover) {
+          if (this.#token)
+            delete this.#token.actor.apps[MODULE_ID];
+          this.#token = token;
+          if (!this.#closing)
+            return this.render();
+          clearTimeout(this.#closing);
+          this.#closing = null;
+          this.render(true);
+        } else {
+          this.close();
+        }
+      };
+      this.#mouseevent = (event) => {
+        if (event.type === "mouseup") {
+          this.#mousedown = false;
+          return;
+        }
+        const target = event.target;
+        const el = this.element[0];
+        if (el) {
+          const popup2 = el.querySelector(".popup");
+          if (el.contains(target)) {
+            if (popup2 && !popup2.contains(target))
+              popup2.remove();
+            return;
+          }
+          if (target.closest(".app") || target.closest(".tooltipster-base"))
+            return;
+          if (popup2)
+            return popup2.remove();
+          this.close({ force: true });
+        }
+        this.#lock = false;
+        this.#mousedown = true;
+      };
+      this.forceClose = () => this.close({ force: true });
+      this.deleteToken = (token) => {
+        if (this.#token && token.id === this.#token.id)
+          this.close({ force: true });
+      };
+      window.addEventListener("mousedown", this.#mouseevent);
+      window.addEventListener("mouseup", this.#mouseevent);
+    }
+    delete() {
+      this.close({ force: true });
+      window.removeEventListener("mousedown", this.#mouseevent);
+      window.removeEventListener("mouseup", this.#mouseevent);
+    }
+    static get defaultOptions() {
+      return mergeObject(super.defaultOptions, {
+        popOut: false,
+        minimizable: false,
+        template: templatePath("hud")
+      });
+    }
+    get token() {
+      return this.#token;
+    }
+    get actor() {
+      return this.#token?.actor;
+    }
+    get hasCover() {
+      return this.actor?.itemTypes.effect.find((effect) => effect.flags.core?.sourceId === COVER_UUID);
+    }
+    getData() {
+      const token = this.#token;
+      const actor = this.#token?.actor;
+      if (!actor)
+        return {};
+      const { attributes, saves } = actor;
+      const { hp, sp, ac, shield, speed } = attributes;
+      const speeds = SPEEDS.map((s) => {
+        s.value = (s.type === "land" ? speed.total : speed.otherSpeeds.find((o) => o.type === s.type)?.total) ?? 0;
+        return s;
+      });
+      return {
+        tokenId: token.id,
+        name: token.document.name,
+        hp,
+        sp,
+        ac: ac.value,
+        shield,
+        hasCover: this.hasCover,
+        saves: {
+          fortitude: saves.fortitude.mod,
+          reflex: saves.reflex.mod,
+          will: saves.will.mod
+        },
+        speeds,
+        languages: this.actor.system.traits?.languages?.value.join(", "),
+        hasSpells: actor.spellcasting.some((x) => x.category !== "items"),
+        hasItems: actor.inventory.size
+      };
+    }
+    #close() {
+      this.#token = null;
+      this.#hover = false;
+      this.#lock = false;
+      this.#softLock = false;
+      if (this.#delay !== null) {
+        clearTimeout(this.#delay);
+        this.#delay = null;
+      }
+      const states = Application.RENDER_STATES;
+      this._state = states.CLOSING;
+      let el = this.element;
+      if (!el)
+        return this._state = states.CLOSED;
+      el.css({ minHeight: 0 });
+      for (let cls of this.constructor._getInheritanceChain()) {
+        Hooks.call(`close${cls.name}`, this, el);
+      }
+      el.remove();
+      this._element = null;
+      this._state = states.CLOSED;
+    }
+    close(options = {}) {
+      const states = Application.RENDER_STATES;
+      if (!options.force && !this.#delay && ![states.RENDERED, states.ERROR].includes(this._state))
+        return;
+      if (options.force)
+        return this.#close(options);
+      this.#closing = setTimeout(() => {
+        this.#closing = null;
+        if (this.#hover)
+          return;
+        this.#close(options);
+      });
+    }
+    async _render(force = false, options = {}) {
+      let sidebarType;
+      let scrollTop;
+      if (this.#lastToken === this.#token) {
+        const sidebar = this.element.find(".sidebar")[0];
+        if (sidebar) {
+          sidebarType = sidebar.dataset.type;
+          scrollTop = sidebar.scrollTop;
+        }
+      }
+      await super._render(force, options);
+      if (sidebarType) {
+        const sidebar = await this.#openSidebar(sidebarType);
+        if (scrollTop > 0)
+          sidebar.scrollTop = scrollTop;
+      }
+      this.#lastToken = this.#token;
+    }
+    render(force) {
+      if (!this.#token?.actor || this.#mousedown)
+        return;
+      if (force)
+        return super.render(true);
+      const delay = getSetting("delay");
+      if (!delay)
+        super.render(true);
+      else
+        this.#delay = setTimeout(() => super.render(true), delay);
+    }
+    _injectHTML(html) {
+      $("body").append(html);
+      this._element = html;
+    }
+    setPosition() {
+      const token = this.#token;
+      if (!token)
+        return;
+      const element = this.element[0];
+      const hud2 = element.getBoundingClientRect();
+      const scale = token.worldTransform.a;
+      const targetCoords = canvas.clientCoordinatesFromCanvas(token.document._source);
+      const target = {
+        x: targetCoords.x,
+        y: targetCoords.y,
+        width: token.hitArea.width * scale,
+        height: token.hitArea.height * scale,
+        get right() {
+          return this.x + this.width;
+        },
+        get bottom() {
+          return this.y + this.height;
+        }
+      };
+      const positions = POSITIONS[getSetting("position")].slice();
+      let coords;
+      while (positions.length && !coords) {
+        const position = positions.shift();
+        if (position === "left") {
+          coords = {
+            x: target.x - hud2.width,
+            y: postionFromTargetY(hud2, target)
+          };
+          if (coords.x < 0)
+            coords = void 0;
+        } else if (position === "right") {
+          coords = {
+            x: target.right,
+            y: postionFromTargetY(hud2, target)
+          };
+          if (coords.x + hud2.width > window.innerWidth)
+            coords = void 0;
+        } else if (position === "top") {
+          coords = {
+            x: postionFromTargetX(hud2, target),
+            y: target.y - hud2.height
+          };
+          if (coords.y < 0)
+            coords = void 0;
+        } else if (position === "bottom") {
+          coords = {
+            x: postionFromTargetX(hud2, target),
+            y: target.bottom
+          };
+          if (coords.y + hud2.height > window.innerHeight)
+            coords = void 0;
+        }
+      }
+      if (coords) {
+        element.style.left = `${coords.x}px`;
+        element.style.top = `${coords.y}px`;
+      }
+      return coords;
+    }
+    activateListeners(html) {
+      const token = this.#token;
+      const actor = token?.actor;
+      if (!actor)
+        return;
+      actor.apps[MODULE_ID] = this;
+      html.on("mouseenter", () => {
+        this.#hover = true;
+        this.#softLock = true;
+      });
+      html.on("mouseleave", () => {
+        this.#softLock = false;
+        if (this.#lock)
+          return;
+        this.#hover = false;
+        this.close();
+      });
+      html.on("dragover", () => {
+        html.css("opacity", 0.1);
+        html.css("pointerEvents", "none");
+        window.addEventListener(
+          "dragend",
+          () => {
+            html.css("opacity", 1);
+            html.css("pointerEvents", "");
+          },
+          { once: true }
+        );
+      });
+      html.find("input").on("change", async (event) => {
+        const target = event.currentTarget;
+        const value = target.valueAsNumber;
+        const attr = target.name;
+        target.blur();
+        if (attr !== "shield.value")
+          await actor.update({ [attr]: value });
+        else
+          await actor.heldShield.update({ "system.hp.value": value });
+      });
+      html.find("[data-action=raise-shield]").on("click", () => {
+        game.pf2e.actions.raiseAShield({ actors: [actor] });
+      });
+      html.find("[data-action=take-cover]").on("click", async () => {
+        const source = (await fromUuid(COVER_UUID)).toObject();
+        setProperty(source, "flags.core.sourceId", COVER_UUID);
+        const hasCover = this.hasCover;
+        if (this.hasCover)
+          await hasCover.delete();
+        else
+          await actor.createEmbeddedDocuments("Item", [source]);
+      });
+      html.find("[data-action=roll-save]").on("click", (event) => {
+        const save = event.currentTarget.dataset.save;
+        actor.saves[save].roll({ event });
+      });
+      html.find(".inner .footer [data-type]").on("click", this.#openSidebar.bind(this));
+    }
+    async #openSidebar(event) {
+      const actor = this.actor;
+      const type = typeof event === "string" ? event : event.currentTarget.dataset.type;
+      const { getData, addListeners, getOptions } = SIDEBARS[type];
+      const data = await getData(actor);
+      const { classList = [] } = getOptions && await getOptions(actor) || {};
+      if (!data)
+        return ui.notifications.warn(localize(`${type}.empty`, { name: this.#token.name }));
+      data.isGM = game.user.isGM;
+      data.isCharacter = actor.isOfType("character");
+      this.#lock = true;
+      let element = this.element;
+      element.find(".sidebar").remove();
+      element.find(".inner .footer [data-type]").removeClass("active");
+      element.find(`.inner .footer [data-type=${type}]`).addClass("active");
+      element = element[0];
+      const tmp = document.createElement("div");
+      tmp.innerHTML = await renderTemplate(templatePath(type), data);
+      const sidebar = tmp.firstElementChild;
+      sidebar.classList.add("sidebar", ...classList);
+      if (!getSetting("scrollbar"))
+        sidebar.classList.add("no-scrollbar");
+      sidebar.dataset.type = type;
+      this.element.append(sidebar);
+      const rect = sidebar.getBoundingClientRect();
+      const target = element.getBoundingClientRect();
+      let left = target.x - rect.width;
+      if (left < 0)
+        left = target.right;
+      const elPadding = parseInt(window.getComputedStyle(element).padding);
+      let top = postionFromTargetY(rect, target, elPadding);
+      sidebar.style.left = `${left}px`;
+      sidebar.style.top = `${top}px`;
+      addListeners($(sidebar), actor);
+      return sidebar;
+    }
+  };
+  __name(HUD, "HUD");
+  function postionFromTargetY(el, target, margin = 0) {
+    let y2 = target.y + target.height / 2 - el.height / 2;
+    if (y2 + el.height > window.innerHeight)
+      y2 = window.innerHeight - el.height - margin;
+    if (y2 < 0)
+      y2 = margin;
+    return y2;
+  }
+  __name(postionFromTargetY, "postionFromTargetY");
+  function postionFromTargetX(el, target) {
+    let x = target.x + target.width / 2 - el.width / 2;
+    if (x + el.width > window.innerWidth)
+      y = window.innerWidth - el.width;
+    if (x < 0)
+      x = 0;
+    return x;
+  }
+  __name(postionFromTargetX, "postionFromTargetX");
+
+  // src/main.js
+  var hud = null;
+  function registerSetting(name, type, defValue, extra = {}) {
+    game.settings.register(MODULE_ID, name, {
+      ...extra,
+      name: settingPath(name, "name"),
+      hint: settingPath(name, "hint"),
+      scope: "client",
+      config: true,
+      type,
+      default: defValue
+    });
+  }
+  __name(registerSetting, "registerSetting");
+  Hooks.once("setup", () => {
+    registerSetting("enabled", Boolean, true, { onChange: enableModule });
+    registerSetting("position", String, "right", {
+      choices: {
+        left: settingPath("position", "choices.left"),
+        right: settingPath("position", "choices.right"),
+        top: settingPath("position", "choices.top"),
+        bottom: settingPath("position", "choices.bottom")
+      }
+    });
+    registerSetting("delay", Number, 250, {
+      range: {
+        min: 0,
+        max: 2e3,
+        step: 50
+      }
+    });
+    registerSetting("scrollbar", Boolean, true);
+    registerSetting("actions", String, "split", {
+      choices: {
+        name: settingPath("actions", "choices.name"),
+        type: settingPath("actions", "choices.type"),
+        split: settingPath("actions", "choices.split")
+      }
+    });
+    registerSetting("actions-colors", Boolean, true);
+    registerSetting("spells", Boolean, false);
+  });
+  Hooks.once("ready", () => {
+    if (getSetting("enabled"))
+      enableModule(true);
+  });
+  function settingPath(setting, key) {
+    return `${MODULE_ID}.settings.${setting}.${key}`;
+  }
+  __name(settingPath, "settingPath");
+  function enableModule(enabled) {
+    if (enabled && !hud) {
+      hud = new HUD();
+      Hooks.on("hoverToken", hud.hoverToken);
+      Hooks.on("deleteToken", hud.deleteToken);
+      Hooks.on("canvasPan", hud.forceClose);
+    } else if (!enabled && hud) {
+      Hooks.off("hoverToken", hud.hoverToken);
+      Hooks.off("deleteToken", hud.deleteToken);
+      Hooks.off("canvasPan", hud.forceClose);
+      hud.delete();
+      hud = null;
+    }
+  }
+  __name(enableModule, "enableModule");
+})();
 //# sourceMappingURL=main.js.map
