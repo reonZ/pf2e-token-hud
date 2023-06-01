@@ -48,6 +48,8 @@ Hooks.once('setup', () => {
 
     registerSetting('unit', String, '')
 
+    registerSetting('height', String, '')
+
     registerSetting('scrollbar', Boolean, true)
 
     registerSetting('actions', String, 'split', {

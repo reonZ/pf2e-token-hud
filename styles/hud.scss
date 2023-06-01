@@ -44,10 +44,13 @@
     }
 
     .sidebar {
+        --capped-height: calc(100vh - 2 * var(--outer-padding));
+        --max-height: --capped-height;
+
         position: fixed;
         overflow-y: auto;
         overflow-x: hidden;
-        max-height: calc(100vh - 2 * var(--outer-padding));
+        max-height: min(var(--max-height), var(--capped-height));
         min-width: 14em;
         max-width: 17em;
         display: flex;

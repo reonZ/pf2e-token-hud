@@ -27,6 +27,10 @@
                 "name": "Sidebar Scrollbar",
                 "hint": "Should scrollbar be displayed on hud sidebars, if disabled, you will still be able to scroll but won't see the scrollbar anymore."
             },
+            "height": {
+                "name": "Sidebars Max Height",
+                "hint": "Sets the sidebars max height, can be any css string used for a 'height' property (e.g. '50%' or '300px'). The module will make sure that the sidebars won't cross the limits of the viewport's height."
+            },
             "actions": {
                 "name": "Actions Sorting",
                 "hint": "How the actions should be sorted.",
@@ -51,7 +55,7 @@
             },
             "unit": {
                 "name": "Distance Unit",
-                "hint": "An string representing the multiplier, the unit and the number of decimals (all separated by a comma) used when displaying the 'Distance To Token'. Example: '0.3, m, 2'. Leaving empty defaults to: '1, ft, 0', "
+                "hint": "An string representing the multiplier, the unit and the number of decimals (all separated by commas) used when displaying the 'Distance To Token'. Example: '0.3, m, 2'. Leaving empty defaults to: '1, ft, 0', "
             },
             "status": {
                 "name": "Health Status",

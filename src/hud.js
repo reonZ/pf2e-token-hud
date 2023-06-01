@@ -454,6 +454,7 @@ export class HUD extends Application {
         sidebar.classList.add('sidebar', ...classList)
         if (!getSetting('scrollbar')) sidebar.classList.add('no-scrollbar')
         sidebar.dataset.type = type
+        sidebar.style.setProperty('--max-height', getSetting('height').trim() || '100%')
         this.element.append(sidebar)
 
         const rect = sidebar.getBoundingClientRect()
