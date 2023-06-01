@@ -203,6 +203,7 @@
     .status {
         --padding-block: 6px;
         --border-width: 2px;
+        --inner-padding: calc(var(--outer-padding) / 2);
 
         display: flex;
         align-items: center;

@@ -46,6 +46,8 @@ Hooks.once('setup', () => {
         },
     })
 
+    registerSetting('unit', String, '')
+
     registerSetting('scrollbar', Boolean, true)
 
     registerSetting('actions', String, 'split', {

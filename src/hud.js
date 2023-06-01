@@ -145,15 +145,28 @@ export class HUD extends Application {
         const useStamina = game.settings.get('pf2e', 'staminaVariant')
 
         if (showDistance === 'all' || (showDistance === 'self' && isOwner)) {
+            const unitSplit = getSetting('unit').split(',')
+            const multiplier = Number(unitSplit[0]?.trim()) || 1
+            const unit = unitSplit[1]?.trim() || game.system.gridUnits
+            const decimals = Number(unitSplit[2]?.trim()) || 0
             const selected = canvas.tokens.controlled
+
             let isTarget = false
             let target = selected.length === 1 ? selected[0] : null
+
             if (!target || target === token) {
                 const targets = game.user.targets
                 target = targets.size === 1 ? targets.first() : null
                 isTarget = true
             }
-            distance = target && target !== token ? { isTarget, range: token.distanceTo(target) } : null
+
+            if (target && target !== token) {
+                distance = {
+                    unit,
+                    isTarget,
+                    range: (token.distanceTo(target) * multiplier).toFixed(decimals),
+                }
+            }
         }
 
         if (!isOwner) {
