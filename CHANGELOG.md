@@ -1,3 +1,10 @@
+# 0.8.0
+
+-   added showing distance from token on the hud tooltip
+    -   if one token is selected and is not the currently hovered one, the distance to the selected token will be shown
+    -   if not, then the same thing will be tested for a targeted token instead
+    -   a different icon is shown to indicate if it is a selected or targeted token
+
 # 0.7.1
 
 -   fixed `1 to 3` spells overflowing out of the sidebar
