@@ -111,7 +111,7 @@
 #pf2e-token-hud .sidebar.actions .section .action .icon img {
   height: 100%;
   border: 0;
-  background: #c9c5b1;
+  mix-blend-mode: color-burn;
 }
 #pf2e-token-hud .sidebar.actions .section .action .name {
   flex: 1;

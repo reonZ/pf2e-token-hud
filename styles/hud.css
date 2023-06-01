@@ -107,7 +107,7 @@
 #pf2e-token-hud .sidebar .details .extras {
   display: flex;
   justify-content: space-between;
-  gap: 30px;
+  gap: 6px;
   height: 50%;
 }
 #pf2e-token-hud .sidebar .details .extras .actions {

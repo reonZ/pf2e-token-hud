@@ -42,7 +42,7 @@
             }
         },
         "spells": {
-            "empty": "{name} doesn't have any spell, magic is evil anyways.",
+            "empty": "{name} doesn't have any spells, magic is evil anyways.",
             "charges": "Charges",
             "staff": "Staff"
         },
