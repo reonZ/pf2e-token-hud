@@ -1,3 +1,9 @@
+# 0.9.0
+
+-   added a `Distance to Token` setting with the option to disable, show on all tokens or only on owned token tooltips
+-   added a `Health Status` setting allowing the GM to specify the different states of a creature's health (only used for non-owned tokens)
+-   the module will display both the `Distance to Token` and `Health Status` on non-owned tokens when appropriate
+
 # 0.8.0
 
 -   added showing distance from token on the hud tooltip
