@@ -45,7 +45,7 @@ export async function getSpellsData(actor) {
                     isSpontaneous: data.isSpontaneous || data.isFlexible,
                     slotLevel: slot.level,
                     uses: uses ?? (isCharge ? charges : slot.uses),
-                    expended: expended ?? (data.isFocusPool ? focusPool <= 0 : false),
+                    expended: expended ?? (data.isFocusPool && !slot.isCantrip ? focusPool <= 0 : false),
                     action: spell.system.time.value,
                     type: isCharge
                         ? isStaff
