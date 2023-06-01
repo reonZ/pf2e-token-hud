@@ -1,4 +1,5 @@
 import { localize, modifier, MODULE_ID } from './module.js'
+import { unownedItemToMessage } from './pf2e.js'
 import { popup } from './popup.js'
 import { getItemSummary } from './shared.js'
 
@@ -390,6 +391,13 @@ export function addSkillsListeners(el, actor) {
         const action = $(event.currentTarget).closest('.action')
         const description = await getItemSummary(action, actor)
         if (description) popup(action.find('.name').children().html().trim(), description)
+    })
+
+    el.find('[data-action=action-chat]').on('click', async event => {
+        event.preventDefault()
+        const { uuid } = event.currentTarget.closest('.action').dataset
+        const item = await fromUuid(uuid)
+        if (item) unownedItemToMessage(event, item, actor, { create: true })
     })
 }
 

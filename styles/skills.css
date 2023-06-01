@@ -82,6 +82,10 @@
 #pf2e-token-hud .sidebar.skills .skill .action .name .end a i {
   margin-top: 2px;
 }
+#pf2e-token-hud .sidebar.skills .skill .action .name .end a.chat {
+  margin-top: 2px;
+  font-size: 0.9em;
+}
 #pf2e-token-hud .sidebar.skills .lores .header {
   text-align: center;
 }
