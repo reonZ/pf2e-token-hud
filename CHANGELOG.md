@@ -1,3 +1,11 @@
+# 0.11.0
+
+-   added `dying` and `wounded` pips to the tooltip, the dying icon itself is used to roll a `Recovery Check`
+-   added a `Hide Untrained Skills` setting (enabled by default) that will hide all skill actions that requires the character to be trained when they are in fact not trained in the associated skill.
+-   added a `Show Spell Tradition` setting (disabled by default) that will show the first letter of the spellcasting tradition just be fore the spellcasting category (i.e. 'A| Spontaneous')
+-   moved `initiative` from the skills sidebar to the extras sidebar and now allows the selection of an alternate skill
+-   the module settings menu now displays headers for the different setting groups for better readability
+
 # 0.10.0
 
 -   added a `Distance Unit` setting allowing the customization of the displayed `Distance to Token` on the tooltip, expects a string containing the multiplier, the unit and the number of decimals all separated by commas
