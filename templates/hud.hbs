@@ -25,22 +25,33 @@
                 <i class="fa-solid fa-heart-half-stroke"></i>
                 <input type="number" name="system.attributes.hp.temp" value="{{hp.temp}}" min="0">
             </div>
-            {{#if sp.max}}
-            <div class="section">
-                <i class="fa-solid fa-heart-pulse"></i>
-                <div class="numbers">
-                    <input type="number" name="system.attributes.sp.value" value="{{sp.value}}" min="0" max="{{sp.max}}">
-                    /
-                    <span>{{sp.max}}</span>
-                </div>
-            </div>
-            {{/if}}
             <div class="section">
                 <i class="fa-solid fa-heart"></i>
                 <div class="numbers">
                     <input type="number" name="system.attributes.hp.value" value="{{hp.value}}" min="0" max="{{hp.max}}">
                     /
                     <span>{{hp.max}}</span>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+
+        {{#if sp.max}}
+        <div class="group">
+            <div class="section">
+                <a data-action="use-resolve"><i class="fa-solid fa-circle-r"></i></a>
+                <div class="numbers">
+                    <input type="number" name="system.attributes.resolve.value" value="{{resolve.value}}" min="0" max="{{resolve.max}}">
+                    /
+                    <span>{{resolve.max}}</span>
+                </div>
+            </div>
+            <div class="section">
+                <i class="fa-solid fa-heart-pulse"></i>
+                <div class="numbers">
+                    <input type="number" name="system.attributes.sp.value" value="{{sp.value}}" min="0" max="{{sp.max}}">
+                    /
+                    <span>{{sp.max}}</span>
                 </div>
             </div>
         </div>
@@ -68,7 +79,7 @@
                     <i class="fa-regular fa-shield"></i>
                     {{/if}}
                 </a>
-                {{#if shield.ac}}+{{/if}}{{shield.ac}}
+                {{!-- {{#if shield.ac}}+{{/if}}{{shield.ac}} --}}
                 ({{shield.hardness}})
                 <div class="numbers">
                     <input type="number" name="shield.value" value="{{shield.hp.value}}" min="0" max="{{shield.hp.max}}">

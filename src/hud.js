@@ -6,6 +6,7 @@ import { addSkillsListeners, getSkillsData } from './skills.js'
 import { addSpellsListeners, getSpellsData } from './spells.js'
 
 const COVER_UUID = 'Compendium.pf2e.other-effects.I9lfZUiCwMiGogVi'
+const RESOLVE_UUID = 'Compendium.pf2e.feats-srd.jFmdevE4nKevovzo'
 
 const POSITIONS = {
     left: ['left', 'right', 'top', 'bottom'],
@@ -147,7 +148,7 @@ export class HUD extends Application {
         const showDistance = getSetting('distance')
         const isCharacter = this.isCharacter
         const { attributes, saves, heroPoints } = actor
-        const { hp, sp = { max: 0, value: 0 }, ac, shield, speed, dying, wounded } = attributes
+        const { hp, sp = { max: 0, value: 0 }, resolve, ac, shield, speed, dying, wounded } = attributes
         const useStamina = game.settings.get('pf2e', 'staminaVariant')
 
         if (showDistance === 'all' || (showDistance === 'self' && isOwner)) {
@@ -218,6 +219,7 @@ export class HUD extends Application {
             dying,
             wounded,
             shield,
+            resolve,
             isCharacter,
             hasCover: this.hasCover,
             saves: {
@@ -447,6 +449,8 @@ export class HUD extends Application {
             else actor.decreaseCondition(condition)
         })
 
+        html.find('[data-action=use-resolve]').on('click', () => useResolve(actor))
+
         html.find('.inner .footer [data-type]').on('click', this.#openSidebar.bind(this))
     }
 
@@ -512,4 +516,76 @@ function postionFromTargetX(el, target) {
     if (x + el.width > window.innerWidth) y = window.innerWidth - el.width
     if (x < 0) x = 0
     return x
+}
+
+function useResolve(actor) {
+    function toChat(content) {
+        ChatMessage.create({
+            user: game.user.id,
+            content,
+            speaker: ChatMessage.getSpeaker({ actor }),
+        })
+    }
+
+    const { name, attributes } = actor
+    const { sp, resolve } = attributes
+    const fullStamina = localize('hud.resolve.full', { name })
+    const noResolve = game.i18n.format('PF2E.Actions.SteelYourResolve.NoStamina', { name })
+
+    if (sp.value === sp.max) return ui.notifications.warn(fullStamina)
+    if (resolve.value < 1) return ui.notifications.warn(noResolve)
+
+    const hasSteel = actor.itemTypes.feat.find(item => item.sourceId === RESOLVE_UUID)
+
+    let content = '<p><input type="radio" name="pick" value="breather" style="margin-right: 6px;'
+    if (!hasSteel) content += ' display: none;'
+    content += '" checked><span>'
+    if (hasSteel) content += `<strong>${localize('hud.resolve.breather.label')}:</strong> `
+    content += `${localize('hud.resolve.breather.msg')}</span></p>`
+
+    if (hasSteel) {
+        content += '<p><input type="radio" name="pick" value="steel" style="margin-right: 6px;">'
+        content += `<span><strong>${game.i18n.localize('PF2E.Actions.SteelYourResolve.Title')}:</strong> `
+        content += `${localize('hud.resolve.steel.msg')}</span></p>`
+    }
+
+    new Dialog({
+        title: localize('hud.resolve.title'),
+        content,
+        buttons: {
+            yes: {
+                icon: "<i class='fas fa-check'></i>",
+                label: localize('hud.resolve.yes'),
+                callback: async html => {
+                    const { attributes } = actor
+                    const { sp, resolve } = attributes
+
+                    if (sp.value === sp.max) return toChat(fullStamina)
+                    if (resolve.value < 1) return toChat(noResolve)
+
+                    const selected = html.find('input:checked').val()
+                    const ratio = `${sp.value}/${sp.max}`
+
+                    if (selected === 'breather') {
+                        toChat(localize('hud.resolve.breather.used', { name, ratio }))
+                        await actor.update({
+                            'system.attributes.sp.value': sp.max,
+                            'system.attributes.resolve.value': resolve.value - 1,
+                        })
+                    } else {
+                        toChat(game.i18n.format('PF2E.Actions.SteelYourResolve.RecoverStamina', { name, ratio }))
+                        const newSP = sp.value + Math.floor(sp.max / 2)
+                        await actor.update({
+                            'system.attributes.sp.value': Math.min(newSP, sp.max),
+                            'system.attributes.resolve.value': resolve.value - 1,
+                        })
+                    }
+                },
+            },
+            no: {
+                icon: "<i class='fas fa-times'></i>",
+                label: localize('hud.resolve.no'),
+            },
+        },
+    }).render(true)
 }

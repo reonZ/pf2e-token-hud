@@ -52,6 +52,10 @@ Hooks.once('setup', () => {
 
     registerSetting('scrollbar', Boolean, true)
 
+    registerSetting('spells-columns', Boolean, false)
+
+    registerSetting('skills-columns', Boolean, false)
+
     // actions
 
     registerSetting('actions', String, 'split', {
@@ -70,13 +74,9 @@ Hooks.once('setup', () => {
 
     registerSetting('tradition', Boolean, false)
 
-    registerSetting('spells-columns', Boolean, false)
-
     // skills
 
     registerSetting('untrained', Boolean, true)
-
-    registerSetting('skills-columns', Boolean, false)
 })
 
 Hooks.once('ready', () => {

@@ -151,6 +151,22 @@
             "title": "Delete Confirmation",
             "ok": "Delete",
             "cancel": "Cancel"
+        },
+        "hud": {
+            "resolve": {
+                "title": "Use Resolve Point",
+                "yes": "Accept",
+                "no": "Cancel",
+                "full": "{name} is full of stamina and doesn't need to rest.",
+                "breather": {
+                    "label": "Take a Breather",
+                    "msg": "Rest for 10 minutes, spend a resolve point and regain all your stamina.",
+                    "used": "{name} has {ratio} SP and spends a resolve point, taking a 10 minute breather. Stamina Refreshed."
+                },
+                "steel": {
+                    "msg": "Use an action, spend a resolve point and regain half your stamina."
+                }
+            }
         }
     }
 }
