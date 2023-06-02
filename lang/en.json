@@ -28,7 +28,7 @@
                 "hint": "Should scrollbar be displayed on hud sidebars, if disabled, you will still be able to scroll but won't see the scrollbar anymore."
             },
             "height": {
-                "name": "Sidebars Max Height",
+                "name": "Sidebar Max Height",
                 "hint": "Sets the sidebars max height, can be any css string used for a 'height' property (e.g. '50%' or '300px'). The module will make sure that the sidebars won't cross the limits of the viewport's height."
             },
             "actions": {
@@ -66,6 +66,10 @@
                     "third": "Seen Better Days",
                     "fourth": "Perfectly Fine"
                 }
+            },
+            "untrained": {
+                "name": "Hide Untrained Skills",
+                "hint": "When enabled, skills that requires a minimum of being trained will not be shown in the skills sidebar."
             }
         },
         "spells": {

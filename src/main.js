@@ -16,8 +16,16 @@ function registerSetting(name, type, defValue, extra = {}) {
 }
 
 Hooks.once('setup', () => {
+    /**
+     * GM
+     */
+
     const statuses = ['first', 'second', 'third', 'fourth'].map(x => localize(`settings.status.statuses.${x}`)).join(', ')
     registerSetting('status', String, statuses, { scope: 'world' })
+
+    /**
+     * CLIENT
+     */
 
     registerSetting('enabled', Boolean, true, { onChange: enableModule })
 
@@ -38,6 +46,8 @@ Hooks.once('setup', () => {
         },
     })
 
+    // distance
+
     registerSetting('distance', String, 'all', {
         choices: {
             none: settingPath('distance', 'choices.none'),
@@ -48,9 +58,13 @@ Hooks.once('setup', () => {
 
     registerSetting('unit', String, '')
 
+    // sidebar
+
     registerSetting('height', String, '')
 
     registerSetting('scrollbar', Boolean, true)
+
+    // actions
 
     registerSetting('actions', String, 'split', {
         choices: {
@@ -62,7 +76,13 @@ Hooks.once('setup', () => {
 
     registerSetting('actions-colors', Boolean, true)
 
+    // spells
+
     registerSetting('spells', Boolean, false)
+
+    // skills
+
+    registerSetting('untrained', Boolean, true)
 })
 
 Hooks.once('ready', () => {

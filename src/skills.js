@@ -1,4 +1,4 @@
-import { localize, modifier, MODULE_ID } from './module.js'
+import { getSetting, localize, modifier, MODULE_ID } from './module.js'
 import { unownedItemToMessage } from './pf2e.js'
 import { popup } from './popup.js'
 import { getItemSummary } from './shared.js'
@@ -346,12 +346,19 @@ export async function getSkillsData(actor) {
         const { slug, actions } = SKILLS[i]
         const { label, rank, mod } = getSkill(slug, actor)
 
+        const noUntrained = !getSetting('untrained')
+        const notCharacter = !actor.isOfType('character')
+
         skills[i] = {
             slug,
             label,
             rank,
-            actions: actions.filter(action => !action.condition || action.condition(actor)),
             modifier: modifier(mod),
+            actions: actions.filter(
+                action =>
+                    (noUntrained || notCharacter || !action.trained || actor.skills[slug].rank >= 1) &&
+                    (!action.condition || action.condition(actor))
+            ),
         }
     }
 
