@@ -21,7 +21,10 @@
             <div class="details">
                 <div class="name">{{spell.name}}</div>
                 <div class="extras">
-                    <div class="type">{{localize spell.type}} {{{actionGlyph spell.action}}}</div>
+                    <div class="type">
+                        {{#if spell.tradition}}{{spell.tradition}}| {{/if}}
+                        {{localize spell.type}} {{{actionGlyph spell.action}}}
+                    </div>
                     <div class="actions">
                         {{#unless spell.isCantrip}}
 

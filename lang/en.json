@@ -70,6 +70,10 @@
             "untrained": {
                 "name": "Hide Untrained Skills",
                 "hint": "When enabled, skills that requires a minimum of being trained will not be shown in the skills sidebar."
+            },
+            "tradition": {
+                "name": "Show Spell Tradition",
+                "hint": "This will add the first letter of the tradition before the the spellcasting category."
             }
         },
         "spells": {

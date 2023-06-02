@@ -1,6 +1,3 @@
-#pf2e-token-hud .sidebar.actions {
-  max-width: 18.5em;
-}
 #pf2e-token-hud .sidebar.actions .toggles {
   display: flex;
   flex-direction: column;

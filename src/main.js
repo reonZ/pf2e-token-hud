@@ -80,6 +80,8 @@ Hooks.once('setup', () => {
 
     registerSetting('spells', Boolean, false)
 
+    registerSetting('tradition', Boolean, false)
+
     // skills
 
     registerSetting('untrained', Boolean, true)

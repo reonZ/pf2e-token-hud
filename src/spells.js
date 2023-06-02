@@ -5,10 +5,12 @@ import { addNameTooltipListeners, getItemSummary } from './shared.js'
 export async function getSpellsData(actor) {
     const focusPool = actor.system.resources.focus?.value ?? 0
     const entries = actor.spellcasting.regular
+    const showTradition = getSetting('tradition')
     const spells = []
 
     for (const entry of entries) {
         const entryId = entry.id
+        const tradition = showTradition && entry.statistic.label[0]
         const data = await entry.getSheetData()
         const isCharge = entry.system?.prepared?.value === 'charge'
         const isStaff = getProperty(entry, 'flags.pf2e-staves.staveID') !== undefined
@@ -26,6 +28,7 @@ export async function getSpellsData(actor) {
                 slotSpells.push({
                     name: spell.name,
                     img: spell.img,
+                    tradition,
                     castLevel: castLevel ?? spell.level,
                     slotId,
                     entryId,
