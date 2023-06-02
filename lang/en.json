@@ -85,6 +85,14 @@
             "tradition": {
                 "name": "Show Spell Tradition",
                 "hint": "This will add the first letter of the tradition before the the spellcasting category."
+            },
+            "skills-columns": {
+                "name": "Two Columns Skills",
+                "hint": "Will split the skills sidebar into 2 columns."
+            },
+            "spells-columns": {
+                "name": "Two Columns Spells",
+                "hint": "Will split the spells sidebar into 2 columns."
             }
         },
         "spells": {

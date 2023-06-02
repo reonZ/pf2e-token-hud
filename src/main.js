@@ -70,9 +70,13 @@ Hooks.once('setup', () => {
 
     registerSetting('tradition', Boolean, false)
 
+    registerSetting('spells-columns', Boolean, false)
+
     // skills
 
     registerSetting('untrained', Boolean, true)
+
+    registerSetting('skills-columns', Boolean, false)
 })
 
 Hooks.once('ready', () => {

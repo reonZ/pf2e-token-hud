@@ -475,6 +475,7 @@ export class HUD extends Application {
         const sidebar = tmp.firstElementChild
         sidebar.classList.add('sidebar', ...classList)
         if (!getSetting('scrollbar')) sidebar.classList.add('no-scrollbar')
+        if (data.doubled) sidebar.classList.add('doubled')
         sidebar.dataset.type = type
         sidebar.style.setProperty('--max-height', getSetting('height').trim() || '100%')
         this.element.append(sidebar)

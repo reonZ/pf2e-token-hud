@@ -369,7 +369,7 @@ export async function getSkillsData(actor) {
             modifier: modifier(mod),
         }))
 
-    return { skills, lores }
+    return { skills, lores, doubled: getSetting('skills-columns') }
 }
 
 function getSkill(slug, actor) {

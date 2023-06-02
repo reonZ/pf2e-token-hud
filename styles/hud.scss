@@ -46,16 +46,25 @@
     .sidebar {
         --capped-height: calc(100vh - 2 * var(--outer-padding));
         --max-height: --capped-height;
+        --min-width: 14em;
+        --max-width: 18.5em;
 
         position: fixed;
         overflow-y: auto;
         overflow-x: hidden;
         max-height: min(var(--max-height), var(--capped-height));
-        min-width: 14em;
-        max-width: 18.5em;
+        min-width: var(--min-width);
+        max-width: var(--max-width);
         display: flex;
         flex-direction: column;
         gap: var(--inner-padding);
+
+        &.doubled {
+            min-width: calc(var(--min-width) * 2);
+            max-width: calc(var(--max-width) * 2);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
 
         .header {
             background: rgba(96, 88, 86, 0.25);

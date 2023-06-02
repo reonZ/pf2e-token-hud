@@ -103,7 +103,7 @@ export async function getSpellsData(actor) {
         }))
     )
 
-    if (spells.length || rituals?.length) return { spells, rituals }
+    if (spells.length || rituals?.length) return { spells, rituals, doubled: getSetting('spells-columns') }
 }
 
 export function addSpellsListeners(el, actor) {
