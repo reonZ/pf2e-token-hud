@@ -94,6 +94,7 @@ Hooks.on('renderSettingsConfig', (_, html) => {
     beforeGroup('distance', 'client.distance')
     beforeGroup('height', 'client.sidebar')
     beforeGroup('actions', 'client.actions')
+    beforeGroup('spells', 'client.spells')
     beforeGroup('untrained', 'client.skills')
 })
 
