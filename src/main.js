@@ -3,18 +3,6 @@ import { getSetting, localize, MODULE_ID } from './module.js'
 
 let hud = null
 
-function registerSetting(name, type, defValue, extra = {}) {
-    game.settings.register(MODULE_ID, name, {
-        name: settingPath(name, 'name'),
-        hint: settingPath(name, 'hint'),
-        scope: 'client',
-        config: true,
-        type,
-        default: defValue,
-        ...extra,
-    })
-}
-
 Hooks.once('setup', () => {
     /**
      * GM
@@ -91,8 +79,38 @@ Hooks.once('ready', () => {
     if (getSetting('enabled')) enableModule(true)
 })
 
+Hooks.on('renderSettingsConfig', (_, html) => {
+    const tab = html.find(`.tab[data-tab=${MODULE_ID}]`)
+
+    function beforeGroup(name, key, dom = 'h3') {
+        const localized = localize(`menu.${key}`)
+        tab.find(`[name="${MODULE_ID}.${name}"]`).closest('.form-group').before(`<${dom}>${localized}</${dom}>`)
+    }
+
+    if (game.user.isGM) {
+        beforeGroup('enabled', 'client.header', 'h2')
+    }
+
+    beforeGroup('distance', 'client.distance')
+    beforeGroup('height', 'client.sidebar')
+    beforeGroup('actions', 'client.actions')
+    beforeGroup('untrained', 'client.skills')
+})
+
 function settingPath(setting, key) {
     return `${MODULE_ID}.settings.${setting}.${key}`
+}
+
+function registerSetting(name, type, defValue, extra = {}) {
+    game.settings.register(MODULE_ID, name, {
+        name: settingPath(name, 'name'),
+        hint: settingPath(name, 'hint'),
+        scope: 'client',
+        config: true,
+        type,
+        default: defValue,
+        ...extra,
+    })
 }
 
 function enableModule(enabled) {

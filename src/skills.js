@@ -341,13 +341,12 @@ export const actionsUUIDS = new Set(Object.values(ACTIONS_UUIDS).filter(Boolean)
 
 export async function getSkillsData(actor) {
     const skills = []
+    const noUntrained = !getSetting('untrained')
+    const notCharacter = !actor.isOfType('character')
 
     for (let i = 0; i < SKILLS.length; i++) {
         const { slug, actions } = SKILLS[i]
         const { label, rank, mod } = getSkill(slug, actor)
-
-        const noUntrained = !getSetting('untrained')
-        const notCharacter = !actor.isOfType('character')
 
         skills[i] = {
             slug,

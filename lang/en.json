@@ -1,5 +1,16 @@
 {
     "pf2e-token-hud": {
+        "menu": {
+            "gm": {},
+            "client": {
+                "header": "Client Settings",
+                "distance": "Distance",
+                "sidebar": "Sidebar",
+                "actions": "Actions",
+                "spells": "Spells",
+                "skills": "Skills"
+            }
+        },
         "settings": {
             "enabled": {
                 "name": "Enabled",
