@@ -93,11 +93,6 @@ const SKILLS = [
     {
         slug: 'perception',
         actions: [
-            {
-                slug: 'initiative',
-                custom: (actor, options) => actor.initiative.roll(options),
-                condition: () => game.combat,
-            },
             { slug: 'sense-motive', cost: '1', type: 2 },
             { slug: 'seek', cost: '1', type: 2 },
         ],
@@ -324,7 +319,7 @@ SKILLS.forEach(skill => {
     }
 })
 
-const SKILLS_SLUGS = SKILLS.map(skill => skill.slug)
+export const SKILLS_SLUGS = SKILLS.map(skill => skill.slug)
 
 const SKILLS_MAP = SKILLS.reduce((skills, { slug, actions }) => {
     skills[slug] = {
@@ -338,6 +333,10 @@ const SKILLS_MAP = SKILLS.reduce((skills, { slug, actions }) => {
 }, {})
 
 export const actionsUUIDS = new Set(Object.values(ACTIONS_UUIDS).filter(Boolean))
+
+export function getSkillLabel(slug) {
+    return game.i18n.localize(slug === 'perception' ? 'PF2E.PerceptionLabel' : CONFIG.PF2E.skillList[slug])
+}
 
 export async function getSkillsData(actor) {
     const skills = []
@@ -413,7 +412,8 @@ async function createVariantDialog(actor, base) {
 
     for (const slug of SKILLS_SLUGS) {
         const selected = slug === base ? 'selected' : ''
-        content += `<option value="${slug}" ${selected}>${getSkill(slug, actor).label}</option>`
+        const label = getSkillLabel(slug)
+        content += `<option value="${slug}" ${selected}>${label}</option>`
     }
 
     content += '</select></p>'

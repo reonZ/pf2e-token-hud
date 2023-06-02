@@ -1,4 +1,3 @@
-import { MODULE_ID } from './module.js'
 import { IdentifyItemPopup } from './pf2e.js'
 import { addNameTooltipListeners, deleteItem, editItem, getItemFromEvent } from './shared.js'
 
@@ -56,8 +55,8 @@ export function addItemsListeners(el, actor) {
         target.addEventListener('dragend', () => img.remove(), { once: true })
     })
 
-    el.find('.quantity input').on('change', event => {
-        getItemFromEvent(event, actor)?.update({ 'system.quantity': event.currentTarget.valueAsNumber })
+    el.find('.quantity input').on('change', async event => {
+        await getItemFromEvent(event, actor)?.update({ 'system.quantity': event.currentTarget.valueAsNumber })
     })
 
     el.find('[data-action=toggle-item-invest]').on('click', event => {

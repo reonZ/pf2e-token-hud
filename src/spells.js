@@ -109,11 +109,11 @@ export async function getSpellsData(actor) {
 export function addSpellsListeners(el, actor) {
     addNameTooltipListeners(el.find('.spell'))
 
-    el.find('[data-action=toggle-pips]').on('click contextmenu', event => {
+    el.find('[data-action=toggle-pips]').on('click contextmenu', async event => {
         event.preventDefault()
         const change = event.type === 'click' ? 1 : -1
         const points = (actor.system.resources.focus?.value ?? 0) + change
-        actor.update({ 'system.resources.focus.value': points })
+        await actor.update({ 'system.resources.focus.value': points })
     })
 
     el.find('[data-action=toggle-prepared]').on('click', event => {

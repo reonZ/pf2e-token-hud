@@ -1,4 +1,5 @@
 import { addActionsListeners, getActionsData, getActionsOptions } from './actions.js'
+import { addExtrasListeners, getExtrasData } from './extras.js'
 import { addItemsListeners, getItemsData } from './items.js'
 import { getSetting, localize, MODULE_ID, templatePath } from './module.js'
 import { addSkillsListeners, getSkillsData } from './skills.js'
@@ -26,7 +27,7 @@ const SIDEBARS = {
     items: { getData: getItemsData, addListeners: addItemsListeners },
     spells: { getData: getSpellsData, addListeners: addSpellsListeners },
     skills: { getData: getSkillsData, addListeners: addSkillsListeners },
-    extras: { getData: () => null, addListeners: () => {} },
+    extras: { getData: getExtrasData, addListeners: addExtrasListeners },
 }
 
 export class HUD extends Application {
@@ -168,7 +169,7 @@ export class HUD extends Application {
             if (target && target !== token) {
                 distance = {
                     unit,
-                    isTarget,
+                    icon: isTarget ? '<i class="fa-solid fa-crosshairs-simple"></i>' : '<i class="fa-solid fa-expand"></i>',
                     range: (token.distanceTo(target) * multiplier).toFixed(decimals),
                 }
             }

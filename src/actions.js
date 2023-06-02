@@ -150,14 +150,14 @@ export function addActionsListeners(el, actor) {
         })
         .tooltipster(TOOLTIPS)
 
-    el.find('[data-action=strike-ammo]').on('change', event => {
+    el.find('[data-action=strike-ammo]').on('change', async event => {
         event.preventDefault()
 
         const weapon = getStrike(event)?.item
         if (!weapon) return
 
         const ammo = actor.items.get(event.currentTarget.value)
-        weapon.update({ system: { selectedAmmoId: ammo?.id ?? null } })
+        await weapon.update({ system: { selectedAmmoId: ammo?.id ?? null } })
     })
 }
 

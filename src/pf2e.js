@@ -97,7 +97,7 @@ export async function toggleWeaponTrait({ weapon, trait, selection }) {
     if (item?.isOfType('weapon') && item === weapon) {
         await item.update({ [`system.traits.toggles.${trait}.selection`]: selection })
     } else if (item?.isOfType('weapon') && weapon.altUsageType === 'melee') {
-        item.update({ [`system.meleeUsage.traitToggles.${trait}`]: selection })
+        await item.update({ [`system.meleeUsage.traitToggles.${trait}`]: selection })
     } else {
         const rule = item?.rules.find(r => r.key === 'Strike' && !r.ignored && r.slug === weapon.slug)
         await rule?.toggleTrait({ trait, selection })

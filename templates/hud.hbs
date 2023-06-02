@@ -3,12 +3,7 @@
 
     {{#if distance}}
     <div class="distance {{#if isOwner}}free{{/if}}">
-        {{#if distance.isTarget}}
-        <i class="fa-solid fa-crosshairs-simple"></i>
-        {{else}}
-        <i class="fa-solid fa-expand"></i>
-        {{/if}}
-        <div class="range">{{distance.range}} {{distance.unit}}</div>
+        {{{distance.icon}}} <div class="range">{{distance.range}} {{distance.unit}}</div>
     </div>
     {{/if}}
 
