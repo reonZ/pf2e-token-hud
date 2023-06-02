@@ -5,4 +5,17 @@
             {{selectOptions initiative.skills selected=initiative.selected nameAttr="slug" labelAttr="label"}}
         </select>
     </div>
+    <hr>
+    <div class="row">
+        <a data-action="test-for-the-night">
+            <i class="fa-solid fa-bed"></i> {{localize "PF2E.Actor.Character.Rest.Label"}}
+        </a>
+    </div>
+    {{#if hasDailies}}
+    <div class="row">
+        <a data-action="prepare-dailies">
+            <i class="fa-solid fa-mug-saucer"></i> {{localize "pf2e-dailies.sheet.title"}}
+        </a>
+    </div>
+    {{/if}}
 </div>
