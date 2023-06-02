@@ -132,6 +132,10 @@ export class HUD extends Application {
         return this.actor?.itemTypes.effect.find(effect => effect.flags.core?.sourceId === COVER_UUID)
     }
 
+    get isCharacter() {
+        return this.actor?.isOfType('character')
+    }
+
     getData() {
         const token = this.#token
         const actor = this.#token?.actor
@@ -140,8 +144,9 @@ export class HUD extends Application {
         let distance = null
         const isOwner = token.isOwner
         const showDistance = getSetting('distance')
-        const { attributes, saves } = actor
-        const { hp, sp = { max: 0, value: 0 }, ac, shield, speed } = attributes
+        const isCharacter = this.isCharacter
+        const { attributes, saves, heroPoints } = actor
+        const { hp, sp = { max: 0, value: 0 }, ac, shield, speed, dying, wounded } = attributes
         const useStamina = game.settings.get('pf2e', 'staminaVariant')
 
         if (showDistance === 'all' || (showDistance === 'self' && isOwner)) {
@@ -208,7 +213,11 @@ export class HUD extends Application {
             hp,
             sp: useStamina ? sp : { max: 0 },
             ac: ac.value,
+            hero: heroPoints,
+            dying,
+            wounded,
             shield,
+            isCharacter,
             hasCover: this.hasCover,
             saves: {
                 fortitude: saves.fortitude.mod,
@@ -425,6 +434,18 @@ export class HUD extends Application {
             actor.saves[save].roll({ event })
         })
 
+        html.find('[data-action=recovery-check]').on('click', event => {
+            actor.rollRecovery(event)
+        })
+
+        html.find('[data-action=toggle-dying], [data-action=toggle-wounded]').on('click contextmenu', event => {
+            const condition = event.currentTarget.dataset.action === 'toggle-dying' ? 'dying' : 'wounded'
+            const max = actor.system.attributes[condition]?.max
+            if (!max) return
+            if (event.type === 'click') actor.increaseCondition(condition, { max })
+            else actor.decreaseCondition(condition)
+        })
+
         html.find('.inner .footer [data-type]').on('click', this.#openSidebar.bind(this))
     }
 
@@ -437,7 +458,7 @@ export class HUD extends Application {
         if (!data) return ui.notifications.warn(localize(`${type}.empty`, { name: this.#token.name }))
 
         data.isGM = game.user.isGM
-        data.isCharacter = actor.isOfType('character')
+        data.isCharacter = this.isCharacter
 
         this.#lock = true
 

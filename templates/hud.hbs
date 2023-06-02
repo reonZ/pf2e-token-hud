@@ -96,6 +96,20 @@
             </div>
         </div>
 
+        {{#if isCharacter}}
+        <div class="group">
+            <div class="section">
+                <a data-action="recovery-check"><i class="fa-solid fa-skull"></i></a>
+                {{> pips max=dying.max value=dying.value action="toggle-dying"}}
+            </div>
+
+            <div class="section">
+                <i class="fa-solid fa-tombstone"></i>
+                {{> pips max=wounded.max value=wounded.value action="toggle-wounded"}}
+            </div>
+        </div>
+        {{/if}}
+
         {{#if speeds.length}}
         <div class="group">
             {{#each speeds as |speed|}}
@@ -131,3 +145,11 @@
 
     {{/if}}
 </div>
+
+{{#*inline "pips"}}
+<div class="pips" data-action="{{action}}">
+    {{#times max}}
+    <i class="{{#if (gt ../value this)}}fas fa-dot-circle{{else}}far fa-circle{{/if}}"></i>
+    {{/times}}
+</div>
+{{/inline}}
