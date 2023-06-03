@@ -1,3 +1,10 @@
+# 1.2.0
+
+-   changed the name of the module for `PF2e Interactive Token Tooltip`, the HUD part was misleading
+-   fully integrated the `PF2e Hero Actions` module into this one, you can find them in the actions sidebar
+-   added `Remove Death Line` setting, when enabled, the tooltip will not display the whole dying/wounded line
+-   added `aid` action to the extras sidebar, it is joined with `escape` which is removed from the skills sidebar, just like for the skill actions, you can use `shift` and/or `ctrl` on them and also `right click` to use a variant skill
+
 # 1.1.0
 
 -   you can now select which speed to display in the hud by opening the `speeds` tooltip and clicking on the speed for this actor (this is a per user choice)
