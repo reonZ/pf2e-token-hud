@@ -1,20 +1,32 @@
+# 1.0.0
+
+-   added `level`, `alignment` and `Hero Points` pips in the tooltip
+-   added `Two Columns Skills` and `Two Columns Spells` settings (disabled by default)
+-   added `Rest for the Night` action in the extras sidebar
+-   added `Daily Preparations` action in the extras sidebar (shows only if the `PF2e Dailies` is active)
+-   merged `speeds` and `languages` into a single icon each with their own tooltip displaying the full details, they are accompagned with a new `IWR` and `senses` icons
+-   added `Tooltips on Click` setting (enabled by default) used for the `speeds`, `languages` and `IWR` tooltips to be shown on click instead of hover
+-   moved `stamina` to its own line in the tooltip and added the `resolve` data with it, the resolve icon itself is used to use both `Take a Breather` and `Steel Your Resolve` if available
+-   clicking on the button of the currently opened sidebar will now close it instead of doing nothing
+-   fixed issue with tooltip showing up if a click was registered between the token hover and the end of the delay time
+
 # 0.11.0
 
 -   added `dying` and `wounded` pips to the tooltip, the dying icon itself is used to roll a `Recovery Check`
--   added a `Hide Untrained Skills` setting (enabled by default) that will hide all skill actions that requires the character to be trained when they are in fact not trained in the associated skill.
--   added a `Show Spell Tradition` setting (disabled by default) that will show the first letter of the spellcasting tradition just be fore the spellcasting category (i.e. 'A| Spontaneous')
+-   added `Hide Untrained Skills` setting (enabled by default) that will hide all skill actions that requires the character to be trained when they are in fact not trained in the associated skill.
+-   added `Show Spell Tradition` setting (disabled by default) that will show the first letter of the spellcasting tradition just be fore the spellcasting category (i.e. 'A| Spontaneous')
 -   moved `initiative` from the skills sidebar to the extras sidebar and now allows the selection of an alternate skill
 -   the module settings menu now displays headers for the different setting groups for better readability
 
 # 0.10.0
 
--   added a `Distance Unit` setting allowing the customization of the displayed `Distance to Token` on the tooltip, expects a string containing the multiplier, the unit and the number of decimals all separated by commas
--   added a `Sidebars Max Height` setting allowing the customization of the sidebars max height, accepts any css string used for a `height` property
+-   added `Distance Unit` setting allowing the customization of the displayed `Distance to Token` on the tooltip, expects a string containing the multiplier, the unit and the number of decimals all separated by commas
+-   added `Sidebars Max Height` setting allowing the customization of the sidebars max height, accepts any css string used for a `height` property
 
 # 0.9.0
 
--   added a `Distance to Token` setting with the option to disable, show on all tokens or only on owned token tooltips
--   added a `Health Status` setting allowing the GM to specify the different states of a creature's health (only used for non-owned tokens)
+-   added `Distance to Token` setting with the option to disable, show on all tokens or only on owned token tooltips
+-   added `Health Status` setting allowing the GM to specify the different states of a creature's health (only used for non-owned tokens)
 -   the module will display both the `Distance to Token` and `Health Status` on non-owned tokens when appropriate
 
 # 0.8.0
