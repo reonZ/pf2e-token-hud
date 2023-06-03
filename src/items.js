@@ -77,12 +77,17 @@ export function addItemsListeners(el, actor) {
         if (!item) return
         if (item.isIdentified) item.setIdentificationStatus('unidentified')
         else new IdentifyItemPopup(item).render(true)
-        // else item.setIdentificationStatus('identified')
     })
 
-    el.find('[data-action=edit-item]').on('click', event => editItem(event, actor))
+    el.find('[data-action=edit-item]').on('click', event => {
+        event.preventDefault()
+        editItem(event, actor)
+    })
 
-    el.find('[data-action=delete-item]').on('click', event => deleteItem(event, actor))
+    el.find('[data-action=delete-item]').on('click', event => {
+        event.preventDefault()
+        deleteItem(event, actor)
+    })
 
     el.find('[data-action=toggle-item-worn').tooltipster({
         animation: null,

@@ -264,7 +264,7 @@ export class HUD extends Application {
             value: (type === 'land' ? speed.total : speed.otherSpeeds.find(s => s.type === type)?.total) || 0,
         }))
 
-        const selectedSpeed = Math.clamped(getFlag(actor, `speeds.selected.${game.user.id}`) || 0, 0, 4)
+        const selectedSpeed = getFlag(actor, `speeds.selected.${game.user.id}`) || 0
         const mainSpeed = speeds.splice(selectedSpeed, 1)[0]
 
         let otherSpeeds = speeds
@@ -298,7 +298,7 @@ export class HUD extends Application {
                 will: saves.will.mod,
             },
             speeds: {
-                main: { value: mainSpeed.value, icon: mainSpeed.icon },
+                main: mainSpeed,
                 others: otherSpeeds,
             },
             iwr:
