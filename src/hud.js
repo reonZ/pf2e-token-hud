@@ -264,7 +264,7 @@ export class HUD extends Application {
             value: (type === 'land' ? speed.total : speed.otherSpeeds.find(s => s.type === type)?.total) || 0,
         }))
 
-        const selectedSpeed = Math.clamped(getFlag(actor, 'speeds.selected') || 0, 0, 4)
+        const selectedSpeed = Math.clamped(getFlag(actor, `speeds.selected.${game.user.id}`) || 0, 0, 4)
         const mainSpeed = speeds.splice(selectedSpeed, 1)[0]
 
         let otherSpeeds = speeds
@@ -568,7 +568,7 @@ export class HUD extends Application {
                 tooltip.querySelectorAll('[data-index]').forEach(speed => {
                     speed.addEventListener('click', async event => {
                         event.preventDefault()
-                        await setFlag(actor, 'speeds.selected', speed.dataset.index)
+                        await setFlag(actor, `speeds.selected.${game.user.id}`, Number(speed.dataset.index))
                     })
                 })
             })
