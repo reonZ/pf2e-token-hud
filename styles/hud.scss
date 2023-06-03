@@ -265,7 +265,7 @@
         }
 
         i {
-            margin-inline: 4px;
+            margin-inline: 3px;
         }
 
         .header {
@@ -278,12 +278,22 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 0.43em;
+            gap: 1em;
             min-height: 1.86em;
 
             .section {
                 display: flex;
                 align-items: center;
+
+                &.info {
+                    cursor: help;
+
+                    &.disabled {
+                        cursor: default;
+                        pointer-events: none;
+                        color: var(--color-disabled);
+                    }
+                }
 
                 input[type='number'] {
                     color: var(--color);
@@ -332,5 +342,14 @@
             align-items: center;
             justify-content: space-evenly;
         }
+    }
+}
+
+.crb-hover .tooltipster-box .tooltipster-content .hover-content.info {
+    white-space: nowrap;
+    min-width: 100px;
+
+    li ul {
+        padding-left: 1em;
     }
 }

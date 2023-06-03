@@ -79,8 +79,8 @@
                 }
             },
             "untrained": {
-                "name": "Hide Untrained Skills",
-                "hint": "When enabled, skills that requires a minimum of being trained will not be shown in the skills sidebar."
+                "name": "Hide Untrained Skill Actions",
+                "hint": "When enabled, skill actions that requires a minimum of being trained will not be shown in the skills sidebar."
             },
             "tradition": {
                 "name": "Show Spell Tradition",
@@ -93,6 +93,10 @@
             "spells-columns": {
                 "name": "Two Columns Spells",
                 "hint": "Will split the spells sidebar into 2 columns."
+            },
+            "info-click": {
+                "name": "Tooltips on Click",
+                "hint": "Should the different tooltips (speeds, languages, IWR, senses) in the main HUD show on click instead of hover."
             }
         },
         "spells": {

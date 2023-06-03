@@ -222,7 +222,7 @@
   margin-block: var(--inner-padding);
 }
 #pf2e-token-hud .inner i {
-  margin-inline: 4px;
+  margin-inline: 3px;
 }
 #pf2e-token-hud .inner .header {
   text-align: center;
@@ -233,12 +233,20 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.43em;
+  gap: 1em;
   min-height: 1.86em;
 }
 #pf2e-token-hud .inner .group .section {
   display: flex;
   align-items: center;
+}
+#pf2e-token-hud .inner .group .section.info {
+  cursor: help;
+}
+#pf2e-token-hud .inner .group .section.info.disabled {
+  cursor: default;
+  pointer-events: none;
+  color: var(--color-disabled);
 }
 #pf2e-token-hud .inner .group .section input[type=number] {
   color: var(--color);
@@ -278,4 +286,12 @@
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+}
+
+.crb-hover .tooltipster-box .tooltipster-content .hover-content.info {
+  white-space: nowrap;
+  min-width: 100px;
+}
+.crb-hover .tooltipster-box .tooltipster-content .hover-content.info li ul {
+  padding-left: 1em;
 }

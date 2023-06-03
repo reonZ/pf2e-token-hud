@@ -15,6 +15,7 @@ const TOOLTIPS = {
     delay: [500, 0],
     position: 'top',
     theme: 'crb-hover',
+    arrow: false,
 }
 
 export async function getActionsData(actor) {

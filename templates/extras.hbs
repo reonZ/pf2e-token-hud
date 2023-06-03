@@ -6,6 +6,9 @@
         </select>
     </div>
     <hr>
+
+
+    {{#if isCharacter}}
     <div class="row">
         <a data-action="test-for-the-night">
             <i class="fa-solid fa-bed"></i> {{localize "PF2E.Actor.Character.Rest.Label"}}
@@ -17,5 +20,6 @@
             <i class="fa-solid fa-mug-saucer"></i> {{localize "pf2e-dailies.sheet.title"}}
         </a>
     </div>
+    {{/if}}
     {{/if}}
 </div>

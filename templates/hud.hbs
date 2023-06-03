@@ -19,6 +19,24 @@
 
         <hr>
 
+        <div class="group">
+            {{#if isCharacter}}
+            <div class="section">
+                <i class="fa-solid fa-circle-h"></i>
+                {{> pips max=hero.max value=hero.value action="toggle-hero"}}
+            </div>
+            {{/if}}
+
+            <div class="section">
+                {{{alignment.icon}}}
+                {{alignment.value}}
+            </div>
+
+            <div class="section">
+                <i class="fa-solid fa-user-graduate"></i>{{level}}
+            </div>
+        </div>
+
         {{#if hp.max}}
         <div class="group">
             <div class="section">
@@ -116,22 +134,12 @@
         </div>
         {{/if}}
 
-        {{#if speeds.length}}
         <div class="group">
-            {{#each speeds as |speed|}}
-            <div class="section">{{{speed.icon}}}{{speed.value}}</div>
-            {{/each}}
+            {{> info tooltip=speeds.others icon='fa-solid fa-shoe-prints' value=speeds.land}}
+            {{> info tooltip=languages icon='fa-solid fa-language'}}
+            {{> info tooltip=senses icon='fa-solid fa-signal-stream'}}
+            {{> info tooltip=iwr icon='fa-solid fa-solid fa-ankh'}}
         </div>
-        {{/if}}
-
-        {{#if languages includeZero=true}}
-        <div class="group">
-            <div class="section">
-                <i class="fa-light fa-waveform-lines"></i>
-                {{languages}}
-            </div>
-        </div>
-        {{/if}}
 
         <hr>
 
@@ -157,5 +165,12 @@
     {{#times max}}
     <i class="{{#if (gt ../value this)}}fas fa-dot-circle{{else}}far fa-circle{{/if}}"></i>
     {{/times}}
+</div>
+{{/inline}}
+
+{{#*inline "info"}}
+<div class="section info {{#unless tooltip includeZero=true}}disabled{{/unless}}" data-action="show-info" {{#if tooltip includeZero=true}}
+    title="<div class='hover-content info'><ul>{{tooltip}}</ul></div>" {{/if}}>
+    <i class="{{icon}}"></i>{{value}}
 </div>
 {{/inline}}

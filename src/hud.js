@@ -15,13 +15,13 @@ const POSITIONS = {
     bottom: ['bottom', 'top', 'left', 'right'],
 }
 
-const SPEEDS = [
-    { type: 'land', icon: '<i class="fa-solid fa-shoe-prints"></i>' },
-    { type: 'burrow', icon: '<i class="fa-solid fa-chevrons-down"></i>' },
-    { type: 'climb', icon: '<i class="fa-solid fa-spider"></i>' },
-    { type: 'fly', icon: '<i class="fa-solid fa-feather"></i>' },
-    { type: 'swim', icon: '<i class="fa-solid fa-person-swimming"></i>' },
-]
+const ALIGNMENTS = {
+    G: '<i class="fa-solid fa-face-smile-halo"></i>',
+    N: '<i class="fa-solid fa-face-meh"></i>',
+    E: '<i class="fa-solid fa-face-angry-horns"></i>',
+}
+
+const SPEEDS = ['burrow', 'climb', 'fly', 'swim']
 
 const SIDEBARS = {
     actions: { getData: getActionsData, addListeners: addActionsListeners, getOptions: getActionsOptions },
@@ -92,6 +92,9 @@ export class HUD extends Application {
                 if (target.closest('.app') || target.closest('.tooltipster-base')) return
                 if (popup) return popup.remove()
                 this.close({ force: true })
+            } else if (this.#delay) {
+                clearTimeout(this.#delay)
+                this.#delay = null
             }
 
             this.#lock = false
@@ -147,8 +150,21 @@ export class HUD extends Application {
         const isOwner = token.isOwner
         const showDistance = getSetting('distance')
         const isCharacter = this.isCharacter
-        const { attributes, saves, heroPoints } = actor
-        const { hp, sp = { max: 0, value: 0 }, resolve, ac, shield, speed, dying, wounded } = attributes
+        const { attributes, saves, heroPoints, system, alignment } = actor
+        const { traits } = system
+        const {
+            hp,
+            sp = { max: 0, value: 0 },
+            resolve,
+            ac,
+            shield,
+            speed,
+            dying,
+            wounded,
+            resistances,
+            weaknesses,
+            immunities,
+        } = attributes
         const useStamina = game.settings.get('pf2e', 'staminaVariant')
 
         if (showDistance === 'all' || (showDistance === 'self' && isOwner)) {
@@ -202,10 +218,36 @@ export class HUD extends Application {
             }
         }
 
-        const speeds = SPEEDS.map(s => {
-            s.value = (s.type === 'land' ? speed.total : speed.otherSpeeds.find(o => o.type === s.type)?.total) ?? 0
-            return s
-        })
+        const speeds = SPEEDS.map(type => ({
+            label: game.i18n.localize(CONFIG.PF2E.speedTypes[type]),
+            value: speed.otherSpeeds.find(s => s.type === type)?.total ?? 0,
+        }))
+        if (speed.details) speeds.push({ label: game.i18n.localize('PF2E.DetailsHeading'), value: speed.details })
+
+        function toInfo(str) {
+            return `<li>${str.trim()}</li>`
+        }
+
+        function sort(a, b) {
+            return a.localeCompare(b)
+        }
+
+        const languages = actor.system.traits?.languages?.value
+            .map(x => game.i18n.localize(CONFIG.PF2E.languages[x]))
+            .sort(sort)
+            .map(toInfo)
+            .join('')
+
+        const senses = isCharacter ? traits.senses.map(x => x.label) : traits.senses.value.split(',')
+
+        function toIWR(category, header) {
+            if (!category.length) return ''
+            return (
+                `<li>${game.i18n.localize(header)}<ul>` +
+                category.map(x => toInfo(x.label.replace('-', ' ').titleCase())).join('') +
+                '</ul></li>'
+            )
+        }
 
         return {
             distance,
@@ -220,6 +262,11 @@ export class HUD extends Application {
             wounded,
             shield,
             resolve,
+            alignment: {
+                value: alignment,
+                icon: ALIGNMENTS[alignment.at(-1)],
+            },
+            level: actor.level,
             isCharacter,
             hasCover: this.hasCover,
             saves: {
@@ -227,8 +274,16 @@ export class HUD extends Application {
                 reflex: saves.reflex.mod,
                 will: saves.will.mod,
             },
-            speeds,
-            languages: this.actor.system.traits?.languages?.value.join(', '),
+            speeds: {
+                land: speed.total,
+                others: speeds.map(({ value, label }) => `<li>${label}: ${value}</li>`).join(''),
+            },
+            iwr:
+                toIWR(immunities, 'PF2E.ImmunitiesLabel') +
+                toIWR(weaknesses, 'PF2E.WeaknessesLabel') +
+                toIWR(resistances, 'PF2E.ResistancesLabel'),
+            senses: senses.map(toInfo).join(''),
+            languages,
             hasSpells: actor.spellcasting.some(x => x.category !== 'items'),
             hasItems: actor.inventory.size,
         }
@@ -419,11 +474,22 @@ export class HUD extends Application {
             else await actor.heldShield.update({ 'system.hp.value': value })
         })
 
-        html.find('[data-action=raise-shield]').on('click', () => {
+        html.find('[data-action=toggle-hero]').on('click contextmenu', event => {
+            event.preventDefault()
+            const { max, value } = actor.heroPoints
+            const change = event.type === 'click' ? 1 : -1
+            const newValue = Math.clamped(value + change, 0, max)
+            if (newValue !== value) actor.update({ 'system.resources.heroPoints.value': newValue })
+        })
+
+        html.find('[data-action=raise-shield]').on('click', event => {
+            event.preventDefault()
             game.pf2e.actions.raiseAShield({ actors: [actor] })
         })
 
-        html.find('[data-action=take-cover]').on('click', async () => {
+        html.find('[data-action=take-cover]').on('click', async event => {
+            event.preventDefault()
+
             const source = (await fromUuid(COVER_UUID)).toObject()
             setProperty(source, 'flags.core.sourceId', COVER_UUID)
 
@@ -433,30 +499,62 @@ export class HUD extends Application {
         })
 
         html.find('[data-action=roll-save]').on('click', event => {
+            event.preventDefault()
             const save = event.currentTarget.dataset.save
             actor.saves[save].roll({ event })
         })
 
         html.find('[data-action=recovery-check]').on('click', event => {
+            event.preventDefault()
             actor.rollRecovery(event)
         })
 
         html.find('[data-action=toggle-dying], [data-action=toggle-wounded]').on('click contextmenu', event => {
+            event.preventDefault()
+
             const condition = event.currentTarget.dataset.action === 'toggle-dying' ? 'dying' : 'wounded'
             const max = actor.system.attributes[condition]?.max
+
             if (!max) return
             if (event.type === 'click') actor.increaseCondition(condition, { max })
             else actor.decreaseCondition(condition)
         })
 
-        html.find('[data-action=use-resolve]').on('click', () => useResolve(actor))
+        html.find('[data-action=use-resolve]').on('click', event => {
+            event.preventDefault()
+            useResolve(actor)
+        })
+
+        html.find('[data-action=show-info]')
+            .on('mouseleave', event => {
+                $(event.currentTarget).tooltipster('hide')
+            })
+            .tooltipster({
+                delay: [500, 0],
+                position: ['top', 'bottom', 'left', 'right'],
+                theme: 'crb-hover',
+                arrow: false,
+                animationDuration: 0,
+                contentAsHTML: true,
+                trigger: getSetting('info-click') ? 'click' : 'hover',
+            })
 
         html.find('.inner .footer [data-type]').on('click', this.#openSidebar.bind(this))
     }
 
-    async #openSidebar(event) {
+    async #openSidebar(type) {
+        type = typeof type === 'string' ? type : type.currentTarget.dataset.type
+
+        let element = this.element
+        let sidebar = element.find('.sidebar')
+        const action = sidebar[0]?.dataset.type
+
+        sidebar.remove()
+        element.find('.inner .footer [data-type]').removeClass('active')
+
+        if (action === type) return
+
         const actor = this.actor
-        const type = typeof event === 'string' ? event : event.currentTarget.dataset.type
         const { getData, addListeners, getOptions } = SIDEBARS[type]
         const data = await getData(actor)
         const { classList = [] } = (getOptions && (await getOptions(actor))) || {}
@@ -467,16 +565,13 @@ export class HUD extends Application {
 
         this.#lock = true
 
-        let element = this.element
-        element.find('.sidebar').remove()
-        element.find('.inner .footer [data-type]').removeClass('active')
         element.find(`.inner .footer [data-type=${type}]`).addClass('active')
         element = element[0]
 
         const tmp = document.createElement('div')
         tmp.innerHTML = await renderTemplate(templatePath(type), data)
 
-        const sidebar = tmp.firstElementChild
+        sidebar = tmp.firstElementChild
         sidebar.classList.add('sidebar', ...classList)
         if (!getSetting('scrollbar')) sidebar.classList.add('no-scrollbar')
         if (data.doubled) sidebar.classList.add('doubled')

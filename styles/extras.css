@@ -2,6 +2,9 @@
   width: 100%;
   margin: 0;
 }
+#pf2e-token-hud .sidebar.extras hr:last-child {
+  display: none;
+}
 #pf2e-token-hud .sidebar.extras .row {
   display: flex;
   align-items: center;
