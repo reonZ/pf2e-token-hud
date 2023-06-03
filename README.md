@@ -1,4 +1,4 @@
-# FoundryVTT PF2e Token Hud
+# FoundryVTT PF2e Interactive Token Tooltip
 
 This module will generate an interactive token tooltip to access all the most used `Character` and `Npc` features.
 
