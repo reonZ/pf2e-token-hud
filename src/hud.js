@@ -291,6 +291,7 @@ export class HUD extends Application {
             },
             level: actor.level,
             isCharacter,
+            showDeathLine: isCharacter && !getSetting('no-death'),
             hasCover: this.hasCover,
             saves: {
                 fortitude: saves.fortitude.mod,

@@ -18,7 +18,7 @@
             },
             "position": {
                 "name": "Preferred Position",
-                "hint": "Which side of the token would you prefer the HUD to show, if not possible, the module will try first on the opposite side, otherwise on one of the remaining two.",
+                "hint": "Which side of the token would you prefer the main tooltip to show, if not possible, the module will try first on the opposite side, otherwise on one of the remaining two.",
                 "choices": {
                     "left": "Left",
                     "right": "Right",
@@ -27,8 +27,8 @@
                 }
             },
             "delay": {
-                "name": "HUD Delay",
-                "hint": "Delay in milliseconds before the HUD showing up on screen."
+                "name": "Tooltip Delay",
+                "hint": "Delay in milliseconds before the main tooltip showing up on screen."
             },
             "spells": {
                 "name": "Sort Spells By Type",
@@ -96,7 +96,11 @@
             },
             "info-click": {
                 "name": "Tooltips on Click",
-                "hint": "Should the different tooltips (speeds, languages, IWR, senses) in the main HUD show on click instead of hover."
+                "hint": "Should the different tooltips (speeds, languages, IWR, senses) in the main tooltip show on click instead of hover."
+            },
+            "no-death": {
+                "name": "Remove Death Line",
+                "hint": "If enabled, the whole dying and wounded line will be removed from the main tooltip"
             }
         },
         "spells": {

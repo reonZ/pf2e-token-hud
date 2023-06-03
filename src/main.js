@@ -34,6 +34,7 @@ Hooks.once('setup', () => {
         },
     })
 
+    registerSetting('no-death', Boolean, false)
     // registerSetting('info-click', Boolean, true)
 
     // distance
