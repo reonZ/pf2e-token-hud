@@ -21,9 +21,22 @@ const TOOLTIPS = {
 export async function getActionsData(actor) {
     const isCharacter = actor.isOfType('character')
     const toggles = actor.synthetics.toggles.slice()
-    const heroActions = isCharacter ? getHeroActions(actor) : null
     const sorting = getSetting('actions')
     const actions = isCharacter ? getCharacterActions(actor) : getNpcActions(actor)
+
+    let heroActions
+    const heroActionsModule = game.modules.get('pf2e-hero-actions')
+    if (heroActionsModule?.active && isCharacter) {
+        const actions = heroActionsModule.api.getHeroActions(actor)
+        const diff = actor.heroPoints.value - actions.length
+
+        heroActions = {
+            actions,
+            draw: Math.max(diff, 0),
+            discard: Math.abs(Math.min(diff, 0)),
+            canTrade: actions.length && game.settings.get('pf2e-hero-actions', 'trade'),
+        }
+    }
 
     const strikes = await Promise.all(
         actor.system.actions.map(async (strike, index) => ({
@@ -80,50 +93,80 @@ export function addActionsListeners(el, actor) {
     addNameTooltipListeners(el.find('.strike'))
     addNameTooltipListeners(el.find('.action'))
 
-    el.find('[data-action=action-chat]').on('click', event => {
-        event.preventDefault()
-        const item = getItemFromEvent(event, actor)
-        item.toMessage(event, { create: true })
-    })
-
-    el.find('[data-action=action-description]').on('click', async event => {
-        event.preventDefault()
-        const action = $(event.currentTarget).closest('.action')
-        const description = await getItemSummary(action, actor)
-        if (description) popup(action.find('.name').html().trim(), description)
-    })
-
-    el.find('[data-action=toggle-roll-option], [data-action=set-suboption]').on('click', event => {
-        event.preventDefault()
-        const toggle = event.currentTarget.closest('.toggle')
-        const { domain, option, itemId } = toggle.dataset
-        const suboption = toggle.querySelector('select')?.value ?? null
-        actor.toggleRollOption(domain, option, itemId ?? null, toggle.querySelector('input').checked, suboption)
-    })
+    function action(action, callback, type = 'click') {
+        action = typeof action === 'string' ? [action] : action
+        action = action.map(x => `[data-action=${x}]`).join(', ')
+        return el.find(action).on(type, event => {
+            event.preventDefault()
+            callback(event)
+        })
+    }
 
     function getStrike(event) {
         const { index } = event.currentTarget.closest('.strike').dataset
         return actor.system.actions[index]
     }
 
-    el.find('[data-action=strike-attack]').on('click', event => {
-        event.preventDefault()
+    function getUuid(event) {
+        return $(event.currentTarget).closest('.action').data().uuid
+    }
+
+    action('action-chat', event => {
+        const item = getItemFromEvent(event, actor)
+        item?.toMessage(event, { create: true })
+    })
+
+    action('action-description', async event => {
+        const action = $(event.currentTarget).closest('.action')
+        const description = await getItemSummary(action, actor)
+        if (description) popup(action.find('.name').html().trim(), description)
+    })
+
+    action('hero-action-description', async event => {
+        const { description, name } = (await getHeroActionDescription(getUuid(event))) ?? {}
+        if (description) popup(name, description)
+    })
+
+    action('hero-action-chat', async event => {
+        await game.modules.get('pf2e-hero-actions')?.api.sendActionToChat(actor, getUuid(event))
+    })
+
+    action('draw-hero-action', async event => {
+        await game.modules.get('pf2e-hero-actions')?.api.drawHeroActions(actor)
+    })
+
+    action('use-hero-action', async event => {
+        await game.modules.get('pf2e-hero-actions')?.api.useHeroAction(actor, getUuid(event))
+    })
+
+    action('discard-hero-action', async event => {
+        await game.modules.get('pf2e-hero-actions')?.api.discardHeroActions(actor, getUuid(event))
+    })
+
+    action('trade-hero-action', async event => {
+        game.modules.get('pf2e-hero-actions')?.api.tradeHeroAction(actor)
+    })
+
+    action('strike-attack', event => {
         const { index } = event.currentTarget.dataset
         const strike = getStrike(event)
         strike?.variants[index].roll({ event })
     })
 
-    el.find('[data-action=strike-damage], [data-action=strike-critical]')
-        .on('click', event => {
-            event.preventDefault()
-            const { action } = event.currentTarget.dataset
-            const strike = getStrike(event)
-            strike?.[action === 'strike-damage' ? 'damage' : 'critical']({ event })
-        })
-        .tooltipster(TOOLTIPS)
+    action(['toggle-roll-option', 'set-suboption'], event => {
+        const toggle = event.currentTarget.closest('.toggle')
+        const { domain, option, itemId } = toggle.dataset
+        const suboption = toggle.querySelector('select')?.value ?? null
+        actor.toggleRollOption(domain, option, itemId ?? null, toggle.querySelector('input').checked, suboption)
+    })
 
-    el.find('[data-action=strike-auxiliary]').on('click', event => {
-        event.preventDefault()
+    action(['strike-damage', 'strike-critical'], event => {
+        const { action } = event.currentTarget.dataset
+        const strike = getStrike(event)
+        strike?.[action === 'strike-damage' ? 'damage' : 'critical']({ event })
+    }).tooltipster(TOOLTIPS)
+
+    action('strike-auxiliary', event => {
         if (event.currentTarget !== event.target) return
 
         const strike = getStrike(event)
@@ -135,36 +178,33 @@ export function addActionsListeners(el, actor) {
         strike.auxiliaryActions?.[index]?.execute({ selection: modular })
     })
 
-    el.find('[data-action=toggle-versatile]')
-        .on('click', event => {
-            event.preventDefault()
-
-            const weapon = getStrike(event)?.item
-            if (!weapon) return
-
-            const target = event.currentTarget
-            const { value } = target.dataset
-            const baseType = weapon?.system.damage.damageType ?? null
-            const selection = target.classList.contains('selected') || value === baseType ? null : value
-
-            toggleWeaponTrait({ trait: 'versatile', weapon, selection })
-        })
-        .tooltipster(TOOLTIPS)
-
-    el.find('[data-action=strike-ammo]').on('change', async event => {
-        event.preventDefault()
-
+    action('toggle-versatile', event => {
         const weapon = getStrike(event)?.item
         if (!weapon) return
 
-        const ammo = actor.items.get(event.currentTarget.value)
-        await weapon.update({ system: { selectedAmmoId: ammo?.id ?? null } })
-    })
+        const target = event.currentTarget
+        const { value } = target.dataset
+        const baseType = weapon?.system.damage.damageType ?? null
+        const selection = target.classList.contains('selected') || value === baseType ? null : value
+
+        toggleWeaponTrait({ trait: 'versatile', weapon, selection })
+    }).tooltipster(TOOLTIPS)
+
+    action(
+        'strike-ammo',
+        async event => {
+            const weapon = getStrike(event)?.item
+            if (!weapon) return
+
+            const ammo = actor.items.get(event.currentTarget.value)
+            await weapon.update({ system: { selectedAmmoId: ammo?.id ?? null } })
+        },
+        'change'
+    )
 }
 
-function getHeroActions(actor) {
-    const heroActionsModule = game.modules.get('pf2e-hero-actions')
-    return heroActionsModule?.active ? heroActionsModule.api.getHeroActions(actor) : null
+function getHeroActionDescription(uuid) {
+    return game.modules.get('pf2e-hero-actions')?.api.getHeroActionDetails(uuid)
 }
 
 function getCharacterActions(actor) {

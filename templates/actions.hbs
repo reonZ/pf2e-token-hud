@@ -105,13 +105,40 @@
     </div>
     {{/if}}
 
+    {{#if heroActions}}
+    <div class="section">
+        <div class="header">
+            {{localize 'pf2e-hero-actions.templates.heroActions.label'}}
+            <div class="menu">
+                {{#if heroActions.draw}}
+                <a data-action="draw-hero-action">+{{heroActions.draw}}</a>
+                {{else if heroActions.canTrade}}
+                <a data-action="trade-hero-action"><i class="fa-solid fa-handshake"></i></a>
+                {{/if}}
+            </div>
+        </div>
+        {{#each heroActions.actions as |action|}}
+        <div class="action" data-uuid="{{action.uuid}}">
+            <div class="icon"><img src="systems/pf2e/icons/actions/Passive.webp"></div>
+            <a class="name" data-action="hero-action-description">{{action.name}}</a>
+            {{#if ../heroActions.discard}}
+            <a data-action="discard-hero-action"><i class="fa-solid fa-trash"></i></a>
+            {{else}}
+            <a data-action="use-hero-action"><i class="fa-solid fa-play"></i></a>
+            {{/if}}
+            <a class="chat" data-action="hero-action-chat"><i class="fa-solid fa-message"></i></a>
+        </div>
+        {{/each}}
+    </div>
+    {{/if}}
+
     {{#if sections.length}}
     {{#each sections as |section|}}
     <div class="section">
         <div class="header">{{localize section.label}}</div>
         {{#each section.actions as |action|}}
         <div class="action" data-item-id="{{action.id}}">
-            <div class="icon"> <img src="{{action.img}}"></div>
+            <div class="icon"><img src="{{action.img}}"></div>
             <a class="name" data-action="action-description">{{action.name}}</a>
             <a class="chat" data-action="action-chat"><i class="fa-solid fa-message"></i></a>
         </div>

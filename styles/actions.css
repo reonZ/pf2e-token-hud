@@ -37,6 +37,16 @@
 }
 #pf2e-token-hud .sidebar.actions .section .header {
   text-align: center;
+  position: relative;
+}
+#pf2e-token-hud .sidebar.actions .section .header .menu {
+  position: absolute;
+  top: 0;
+  right: 4px;
+}
+#pf2e-token-hud .sidebar.actions .section .header .menu i {
+  font-size: 1.1em;
+  margin-top: 1px;
 }
 #pf2e-token-hud .sidebar.actions .section .strike {
   height: auto;

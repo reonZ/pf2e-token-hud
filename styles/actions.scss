@@ -47,6 +47,18 @@
         .section {
             .header {
                 text-align: center;
+                position: relative;
+
+                .menu {
+                    position: absolute;
+                    top: 0;
+                    right: 4px;
+
+                    i {
+                        font-size: 1.1em;
+                        margin-top: 1px;
+                    }
+                }
             }
 
             .strike {
