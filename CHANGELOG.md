@@ -1,8 +1,15 @@
+# 1.1.0
+
+-   you can now select which speed to display in the hud by opening the `speeds` tooltip and clicking on the speed for this actor
+-   removed `Tooltips on Click` setting, disabling it was interfering with the new selectable `speeds` feature
+-   made both the held `ctrl` and the check for `right click` more accurate
+-   fixed closing a sidebar not removing the lock on the tooltip
+
 # 1.0.1
 
 -   fixed `Rest for the Night` not doing anything, i actually forgot to even implement it to begin with oops
--   fixed `right click` while dragging with `left click` (for instace to create waypoints with `Drag Ruler`) would disable the tooltip display prevention
--   the tooltip will now be prevented from showing for as long as the `ctrl` kkey is held (useful for when using the core ruling tool)
+-   fixed `right click` while dragging with `left click` (for instance to create waypoints with `Drag Ruler`) would disable the tooltip display prevention
+-   the tooltip will now be prevented from showing for as long as the `ctrl` key is held (useful for when using the core ruling tool)
 
 # 1.0.0
 
