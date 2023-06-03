@@ -1,25 +1,45 @@
 <div class="extras">
     <div class="row">
-        <a data-action="roll-initiative">{{localize 'PF2E.InitiativeLabel'}}</a>
+        {{> roll action='roll-initiative' label='PF2E.InitiativeLabel'}}
         <select name="system.attributes.initiative.statistic">
             {{selectOptions initiative.skills selected=initiative.selected nameAttr="slug" labelAttr="label"}}
         </select>
     </div>
-    <hr>
 
+    <hr>
 
     {{#if isCharacter}}
     <div class="row">
-        <a data-action="rest-for-the-night">
-            <i class="fa-solid fa-bed"></i> {{localize "PF2E.Actor.Character.Rest.Label"}}
-        </a>
+        {{> roll action='rest-for-the-night' icon='fa-solid fa-bed' label='PF2E.Actor.Character.Rest.Label'}}
     </div>
     {{#if hasDailies}}
     <div class="row">
-        <a data-action="prepare-dailies">
-            <i class="fa-solid fa-mug-saucer"></i> {{localize "pf2e-dailies.sheet.title"}}
-        </a>
+        {{> roll action='prepare-dailies' icon='fa-solid fa-mug-saucer' label='pf2e-dailies.sheet.title'}}
     </div>
     {{/if}}
+    <hr>
     {{/if}}
+
+    <div class="row">
+        {{> roll action='roll-aid' cost='reaction' label='PF2E.Actions.Aid.Title'}}
+    </div>
+
+    <div class="row">
+        {{> roll action='roll-escape' cost=1 label='PF2E.Actions.Escape.Title'}}
+    </div>
 </div>
+
+{{#*inline 'roll'}}
+<a data-action="{{action}}">
+    {{#if cost}}
+    {{localize label}}
+    {{{actionGlyph cost}}}
+    {{else if icon}}
+    <i class="{{icon}}"></i>
+    {{localize label}}
+    {{else}}
+    {{localize label}}
+    <i class="fa-solid fa-dice-d20"></i>
+    {{/if}}
+</a>
+{{/inline}}

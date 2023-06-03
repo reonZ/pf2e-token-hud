@@ -14,10 +14,24 @@
             align-items: center;
             justify-content: space-between;
             padding-inline: var(--inline-padding);
+            gap: 20px;
 
             select {
                 border: 0;
                 height: 100%;
+            }
+
+            > a {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                white-space: nowrap;
+
+                .activity-icon {
+                    font-size: 1.7em;
+                    line-height: 0.5;
+                    display: inline-block;
+                }
             }
         }
     }

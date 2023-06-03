@@ -101,7 +101,7 @@ const SKILLS = [
         slug: 'acrobatics',
         actions: [
             { slug: 'balance', cost: '1', type: 2 },
-            'escape',
+            // 'escape',
             { slug: 'tumble-through', cost: '1', type: 2 },
             { slug: 'maneuver-in-flight', cost: '1', type: 2, trained: true },
             { slug: 'squeeze', type: 2, trained: true },
@@ -121,7 +121,7 @@ const SKILLS = [
         slug: 'athletics',
         actions: [
             { slug: 'climb', cost: '1', type: 1 },
-            'escape',
+            // 'escape',
             {
                 slug: 'forceOpen',
                 cost: '1',
@@ -387,7 +387,7 @@ export function addSkillsListeners(el, actor) {
         event.preventDefault()
         const target = $(event.currentTarget)
         const { skillSlug, slug } = target.closest('.action').data()
-        const variant = event.type === 'contextmenu' ? await createVariantDialog(actor, skillSlug) : undefined
+        const variant = event.type === 'contextmenu' ? await createVariantDialog(skillSlug) : undefined
         if (variant !== null) rollAction(event, actor, skillSlug, slug, target.data(), variant)
     })
 
@@ -406,7 +406,7 @@ export function addSkillsListeners(el, actor) {
     })
 }
 
-async function createVariantDialog(actor, base) {
+export async function createVariantDialog(base) {
     let content = '<p style="text-align: center; margin-block: 0 8px;">'
     content += `<strong>${localize('skills.variant.label')}</strong> <select>`
 

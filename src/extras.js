@@ -1,4 +1,4 @@
-import { getSkillLabel, SKILLS_SLUGS } from './skills.js'
+import { createVariantDialog, getSkillLabel, SKILLS_SLUGS } from './skills.js'
 
 export async function getExtrasData(actor) {
     const { attributes } = actor
@@ -20,19 +20,42 @@ export function addExtrasListeners(el, actor) {
         await actor.update({ [target.name]: value })
     })
 
-    el.find('[data-action=roll-initiative]').on('click', async event => {
-        event.preventDefault()
+    function action(action, callback, type = 'click') {
+        el.find(`[data-action=${action}]`).on(type, event => {
+            event.preventDefault()
+            callback(event)
+        })
+    }
+
+    action('roll-initiative', async event => {
         await actor.initiative.roll({ event })
     })
 
-    el.find('[data-action=prepare-dailies]').on('click', async event => {
-        event.preventDefault()
+    action('prepare-dailies', event => {
         const dailies = game.modules.get('pf2e-dailies')
         if (dailies.active) dailies.api.openDailiesInterface(actor)
     })
 
-    el.find('[data-action=rest-for-the-night]').on('click', event => {
-        event.preventDefault()
+    action('rest-for-the-night', event => {
         game.pf2e.actions.restForTheNight({ actors: [actor] })
     })
+
+    action(
+        'roll-aid',
+        async event => {
+            const statistic = await createVariantDialog()
+            const note = { text: '@UUID[Compendium.pf2e.other-effects.AHMUpMbaVkZ5A1KX]' }
+            if (statistic !== null) game.pf2e.actions.get('aid').use({ event, actors: [actor], statistic, notes: [note] })
+        },
+        'click contextmenu'
+    )
+
+    action(
+        'roll-escape',
+        async event => {
+            const statistic = event.type === 'contextmenu' ? await createVariantDialog() : undefined
+            if (statistic !== null) game.pf2e.actions.get('escape').use({ event, actors: [actor], statistic })
+        },
+        'click contextmenu'
+    )
 }
