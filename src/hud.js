@@ -1,7 +1,7 @@
 import { addActionsListeners, getActionsData, getActionsOptions } from './actions.js'
 import { addExtrasListeners, getExtrasData } from './extras.js'
 import { addItemsListeners, getItemsData } from './items.js'
-import { getSetting, localize, MODULE_ID, templatePath } from './module.js'
+import { getFlag, getSetting, localize, MODULE_ID, setFlag, templatePath } from './module.js'
 import { addSkillsListeners, getSkillsData } from './skills.js'
 import { addSpellsListeners, getSpellsData } from './spells.js'
 
@@ -21,7 +21,13 @@ const ALIGNMENTS = {
     E: '<i class="fa-solid fa-face-angry-horns"></i>',
 }
 
-const SPEEDS = ['burrow', 'climb', 'fly', 'swim']
+const SPEEDS = [
+    { type: 'land', icon: 'fa-solid fa-shoe-prints' },
+    { type: 'burrow', icon: 'fa-solid fa-chevrons-down' },
+    { type: 'climb', icon: 'fa-solid fa-spider' },
+    { type: 'fly', icon: 'fa-solid fa-feather' },
+    { type: 'swim', icon: 'fa-solid fa-person-swimming' },
+]
 
 const SIDEBARS = {
     actions: { getData: getActionsData, addListeners: addActionsListeners, getOptions: getActionsOptions },
@@ -76,14 +82,14 @@ export class HUD extends Application {
 
         this.#mouseevent = event => {
             const button = event.button
-            if (![0, 2].includes(event.button)) return
+            if (![0, 2].includes(button)) return
 
             if (event.type === 'mouseup') {
-                this.#mousedown[event.button] = false
+                this.#mousedown[button] = false
                 return
             }
 
-            this.#mousedown[event.button] = true
+            this.#mousedown[button] = true
 
             const target = event.target
             const el = this.element[0]
@@ -226,12 +232,6 @@ export class HUD extends Application {
             }
         }
 
-        const speeds = SPEEDS.map(type => ({
-            label: game.i18n.localize(CONFIG.PF2E.speedTypes[type]),
-            value: speed.otherSpeeds.find(s => s.type === type)?.total ?? 0,
-        }))
-        if (speed.details) speeds.push({ label: game.i18n.localize('PF2E.DetailsHeading'), value: speed.details })
-
         function toInfo(str) {
             return `<li>${str.trim()}</li>`
         }
@@ -256,6 +256,21 @@ export class HUD extends Application {
                 '</ul></li>'
             )
         }
+
+        const speeds = SPEEDS.map(({ type, icon }, index) => ({
+            index,
+            icon,
+            label: game.i18n.localize(CONFIG.PF2E.speedTypes[type] ?? 'PF2E.SpeedTypesLand'),
+            value: (type === 'land' ? speed.total : speed.otherSpeeds.find(s => s.type === type)?.total) || 0,
+        }))
+
+        const selectedSpeed = Math.clamped(getFlag(actor, 'speeds.selected') || 0, 0, 4)
+        const mainSpeed = speeds.splice(selectedSpeed, 1)[0]
+
+        let otherSpeeds = speeds
+            .map(({ value, label, index }) => `<a data-index="${index}"><li>${label}: ${value}</li></a>`)
+            .join('')
+        if (speed.details) otherSpeeds += `<li>${game.i18n.localize('PF2E.DetailsHeading')}: ${speed.details}</li>`
 
         return {
             distance,
@@ -283,8 +298,8 @@ export class HUD extends Application {
                 will: saves.will.mod,
             },
             speeds: {
-                land: speed.total,
-                others: speeds.map(({ value, label }) => `<li>${label}: ${value}</li>`).join(''),
+                main: { value: mainSpeed.value, icon: mainSpeed.icon },
+                others: otherSpeeds,
             },
             iwr:
                 toIWR(immunities, 'PF2E.ImmunitiesLabel') +
@@ -533,18 +548,33 @@ export class HUD extends Application {
             useResolve(actor)
         })
 
-        html.find('[data-action=show-info]')
-            .on('mouseleave', event => {
-                $(event.currentTarget).tooltipster('hide')
+        const infos = html.find('[data-action=show-info]')
+        infos.tooltipster({
+            position: ['top', 'bottom', 'left', 'right'],
+            theme: 'crb-hover',
+            arrow: false,
+            animationDuration: 0,
+            contentAsHTML: true,
+            trigger: 'click',
+        })
+        infos.filter(':not(.speeds)').on('mouseleave', event => {
+            $(event.currentTarget).tooltipster('hide')
+        })
+        infos
+            .filter('.speeds')
+            .tooltipster('option', 'interactive', true)
+            .tooltipster('option', 'functionReady', (tooltipster, { origin, tooltip }) => {
+                this.#lock = true
+                tooltip.querySelectorAll('[data-index]').forEach(speed => {
+                    speed.addEventListener('click', async event => {
+                        event.preventDefault()
+                        await setFlag(actor, 'speeds.selected', speed.dataset.index)
+                    })
+                })
             })
-            .tooltipster({
-                delay: [500, 0],
-                position: ['top', 'bottom', 'left', 'right'],
-                theme: 'crb-hover',
-                arrow: false,
-                animationDuration: 0,
-                contentAsHTML: true,
-                trigger: getSetting('info-click') ? 'click' : 'hover',
+            .tooltipster('option', 'functionAfter', () => {
+                if (html.find('.sidebar').length) return
+                this.#lock = false
             })
 
         html.find('.inner .footer [data-type]').on('click', this.#openSidebar.bind(this))
@@ -560,7 +590,10 @@ export class HUD extends Application {
         sidebar.remove()
         element.find('.inner .footer [data-type]').removeClass('active')
 
-        if (action === type) return
+        if (action === type) {
+            this.#lock = false
+            return
+        }
 
         const actor = this.actor
         const { getData, addListeners, getOptions } = SIDEBARS[type]
@@ -592,11 +625,9 @@ export class HUD extends Application {
 
         let left = target.x - rect.width
         if (left < 0) left = target.right
-        // left -= target.x
 
         const elPadding = parseInt(window.getComputedStyle(element).padding)
         let top = postionFromTargetY(rect, target, elPadding)
-        // top -= target.y
 
         sidebar.style.left = `${left}px`
         sidebar.style.top = `${top}px`

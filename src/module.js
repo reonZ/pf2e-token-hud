@@ -21,3 +21,11 @@ export function templatePath(template) {
 export function modifier(mod) {
     return mod >= 0 ? `+${mod}` : mod
 }
+
+export function getFlag(doc, flag) {
+    return doc.getFlag(MODULE_ID, flag)
+}
+
+export function setFlag(doc, flag, value) {
+    return doc.setFlag(MODULE_ID, flag, value)
+}

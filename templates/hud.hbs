@@ -135,7 +135,7 @@
         {{/if}}
 
         <div class="group">
-            {{> info tooltip=speeds.others icon='fa-solid fa-shoe-prints' value=speeds.land}}
+            {{> info tooltip=speeds.others icon=speeds.main.icon value=speeds.main.value class='speeds'}}
             {{> info tooltip=languages icon='fa-solid fa-language'}}
             {{> info tooltip=senses icon='fa-solid fa-signal-stream'}}
             {{> info tooltip=iwr icon='fa-solid fa-solid fa-ankh'}}
@@ -169,8 +169,8 @@
 {{/inline}}
 
 {{#*inline "info"}}
-<div class="section info {{#unless tooltip includeZero=true}}disabled{{/unless}}" data-action="show-info" {{#if tooltip includeZero=true}}
-    title="<div class='hover-content info'><ul>{{tooltip}}</ul></div>" {{/if}}>
+<div class="section info {{#unless tooltip includeZero=true}}disabled{{/unless}} {{#if class}}{{class}}{{/if}}" data-action="show-info"
+    {{#if tooltip includeZero=true}} title="<div class='hover-content info'><ul>{{tooltip}}</ul></div>" {{/if}}>
     <i class="{{icon}}"></i>{{value}}
 </div>
 {{/inline}}
