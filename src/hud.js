@@ -50,6 +50,7 @@ export class HUD extends Application {
                 this.#mousedown ||
                 this.#lock ||
                 this.#softLock ||
+                game.keyboard.downKeys.has('ControlLeft') ||
                 !(token instanceof Token) ||
                 !token.actor?.isOfType('character', 'npc')
             )
@@ -76,9 +77,11 @@ export class HUD extends Application {
 
         this.#mouseevent = event => {
             if (event.type === 'mouseup') {
-                this.#mousedown = false
+                this.#mousedown--
                 return
             }
+
+            this.#mousedown++
 
             const target = event.target
             const el = this.element[0]
@@ -98,7 +101,6 @@ export class HUD extends Application {
             }
 
             this.#lock = false
-            this.#mousedown = true
         }
 
         this.forceClose = () => this.close({ force: true })
