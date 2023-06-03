@@ -1,6 +1,6 @@
 # 1.1.0
 
--   you can now select which speed to display in the hud by opening the `speeds` tooltip and clicking on the speed for this actor
+-   you can now select which speed to display in the hud by opening the `speeds` tooltip and clicking on the speed for this actor (this is a per user choice)
 -   removed `Tooltips on Click` setting, disabling it was interfering with the new selectable `speeds` feature
 -   made both the held `ctrl` and the check for `right click` more accurate
 -   fixed closing a sidebar not removing the lock on the tooltip
