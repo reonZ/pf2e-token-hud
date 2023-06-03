@@ -1,10 +1,16 @@
+# 1.0.1
+
+-   fixed `Rest for the Night` not doing anything, i actually forgot to even implement it to begin with oops
+-   fixed `right click` while dragging with `left click` (for instace to create waypoints with `Drag Ruler`) would disable the tooltip display prevention
+-   the tooltip will now be prevented from showing for as long as the `ctrl` kkey is held (useful for when using the core ruling tool)
+
 # 1.0.0
 
 -   added `level`, `alignment` and `Hero Points` pips in the tooltip
 -   added `Two Columns Skills` and `Two Columns Spells` settings (disabled by default)
 -   added `Rest for the Night` action in the extras sidebar
 -   added `Daily Preparations` action in the extras sidebar (shows only if the `PF2e Dailies` is active)
--   merged `speeds` and `languages` into a single icon each with their own tooltip displaying the full details, they are accompagned with a new `IWR` and `senses` icons
+-   merged `speeds` and `languages` into a single icon each with their own tooltip displaying the full details, they are accompanied with a new `IWR` and `senses` icons
 -   added `Tooltips on Click` setting (enabled by default) used for the `speeds`, `languages` and `IWR` tooltips to be shown on click instead of hover
 -   moved `stamina` to its own line in the tooltip and added the `resolve` data with it, the resolve icon itself is used to use both `Take a Breather` and `Steel Your Resolve` if available
 -   clicking on the button of the currently opened sidebar will now close it instead of doing nothing
