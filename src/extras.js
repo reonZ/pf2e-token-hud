@@ -30,4 +30,9 @@ export function addExtrasListeners(el, actor) {
         const dailies = game.modules.get('pf2e-dailies')
         if (dailies.active) dailies.api.openDailiesInterface(actor)
     })
+
+    el.find('[data-action=rest-for-the-night]').on('click', event => {
+        event.preventDefault()
+        game.pf2e.actions.restForTheNight({ actors: [actor] })
+    })
 }
