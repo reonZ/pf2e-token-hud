@@ -38,7 +38,7 @@ export class HUD extends Application {
     #hover = false
     #closing = null
     #mouseevent
-    #mousedown = false
+    #mousedown = [false, false, false]
     #lock = false
     #softLock = false
 
@@ -47,10 +47,9 @@ export class HUD extends Application {
 
         this.hoverToken = (token, hover) => {
             if (
-                this.#mousedown ||
+                this.mousedown ||
                 this.#lock ||
                 this.#softLock ||
-                game.keyboard.downKeys.has('ControlLeft') ||
                 !(token instanceof Token) ||
                 !token.actor?.isOfType('character', 'npc')
             )
@@ -63,7 +62,7 @@ export class HUD extends Application {
             this.#hover = hover
             if (hover && this.#token === token && this.rendered) return
 
-            if (hover) {
+            if (hover && !game.keyboard.downKeys.has('ControlLeft')) {
                 if (this.#token) delete this.#token.actor.apps[MODULE_ID]
                 this.#token = token
                 if (!this.#closing) return this.render()
@@ -76,12 +75,15 @@ export class HUD extends Application {
         }
 
         this.#mouseevent = event => {
+            const button = event.button
+            if (![0, 2].includes(event.button)) return
+
             if (event.type === 'mouseup') {
-                this.#mousedown--
+                this.#mousedown[event.button] = false
                 return
             }
 
-            this.#mousedown++
+            this.#mousedown[event.button] = true
 
             const target = event.target
             const el = this.element[0]
@@ -125,6 +127,10 @@ export class HUD extends Application {
             minimizable: false,
             template: templatePath('hud'),
         })
+    }
+
+    get mousedown() {
+        return this.#mousedown[0] || this.#mousedown[2]
     }
 
     get token() {
@@ -355,7 +361,7 @@ export class HUD extends Application {
     }
 
     render(force) {
-        if (!this.#token?.actor || this.#mousedown) return
+        if (!this.#token?.actor || this.mousedown) return
 
         if (force) return super.render(true)
 
