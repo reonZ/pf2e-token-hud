@@ -1,3 +1,10 @@
+# 1.4.0
+
+-   added `Health Status on Owned` setting allowing the display of the health status on the regular tooltip instead of just on the non-owned token one
+-   prevent the tooltip from showing up when hovering over a chat card owned by a token
+-   clicking anywhere on the tooltip will now bring in on top of everything respecting the way the foundry does it
+-   reduced the space the distance and health status indicators are taking on screen
+
 # 1.3.2
 
 -   fixed extras sidebar crashing if the module `PF2e Dailies` isn't physically on the server's drive
