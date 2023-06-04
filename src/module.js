@@ -1,4 +1,24 @@
+import { HUD } from './hud.js'
+
 export const MODULE_ID = 'pf2e-token-hud'
+
+let hud = null
+export function enableModule(enabled) {
+    if (enabled && !hud) {
+        hud = new HUD()
+
+        Hooks.on('hoverToken', hud.hoverToken)
+        Hooks.on('deleteToken', hud.deleteToken)
+        Hooks.on('canvasPan', hud.forceClose)
+    } else if (!enabled && hud) {
+        Hooks.off('hoverToken', hud.hoverToken)
+        Hooks.off('deleteToken', hud.deleteToken)
+        Hooks.off('canvasPan', hud.forceClose)
+
+        hud.delete()
+        hud = null
+    }
+}
 
 export function getSetting(setting) {
     return game.settings.get(MODULE_ID, setting)
