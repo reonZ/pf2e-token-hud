@@ -2,7 +2,7 @@
 
 -   added `Health Status on Owned` setting allowing the display of the health status on the regular tooltip instead of just on the non-owned token one
 -   prevent the tooltip from showing up when hovering over a chat card owned by a token
--   clicking anywhere on the tooltip will now bring in on top of everything respecting the way the foundry does it
+-   clicking anywhere on the tooltip will now bring in on top of everything respecting the way the foundry does it (the tooltip is now part of the `ui.windows` stack)
 -   reduced the space the distance and health status indicators are taking on screen
 
 # 1.3.2
