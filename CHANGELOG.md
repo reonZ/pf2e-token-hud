@@ -5,7 +5,7 @@
     -   `Disabled` the keybind is not used
     -   `Owned tokens only` the keybind will only affect owned tokens and the others will use the delay as usual, you can short circuit the delay by hitting the key on those still
     -   `Owned and non-owned` will force the use of the keybind for any type of tooltip, no delay is used in that case
--   remove `warning` variant for the perform skill action, not sure i had been smoking when i did this
+-   remove `warning` variant from the perform skill action, not sure what i had been smoking when i did this
 -   fixed tooltip re-rendering actually using the delay
 -   fixed not being able to change the number of uses for innate spells
 -   fixed issue with tooltip not re-rendering when triggering a change by clicking outside an input onto another part of the tooltip
