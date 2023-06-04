@@ -8,7 +8,7 @@
     {{/if}}
 
     {{#if status}}
-    <div class="status" style="--hue: {{status.hue}};">
+    <div class="status {{#if isOwner}}free{{/if}}" style="--hue: {{status.hue}};">
         {{status.value}}
     </div>
     {{/if}}

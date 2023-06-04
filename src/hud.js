@@ -224,8 +224,8 @@ export class HUD extends Application {
             }
         }
 
-        if (!isOwner) {
-            let status
+        let status
+        if (!isOwner || getSetting('see-status')) {
             const statuses = getSetting('status')
                 .split(',')
                 .map(x => x.trim())
@@ -242,7 +242,9 @@ export class HUD extends Application {
                     value: pick === 0 ? game.i18n.localize('EFFECT.StatusDead') : statuses.at(pick - 1),
                 }
             }
+        }
 
+        if (!isOwner) {
             return {
                 status,
                 distance,
@@ -292,6 +294,7 @@ export class HUD extends Application {
 
         return {
             distance,
+            status,
             isOwner,
             tokenId: token.id,
             name: token.document.name,
@@ -477,6 +480,8 @@ export class HUD extends Application {
         if (!actor) return
 
         actor.apps[MODULE_ID] = this
+
+        html.on('mousedown', () => this.bringToTop())
 
         html.on('mouseenter', () => {
             this.#hover = true

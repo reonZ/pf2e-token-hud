@@ -38,7 +38,8 @@ export function registerSettings() {
     })
 
     register('no-death', Boolean, false)
-    // registerSetting('info-click', Boolean, true)
+
+    register('see-status', Boolean, false)
 
     // distance
 

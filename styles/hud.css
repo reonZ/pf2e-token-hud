@@ -175,20 +175,24 @@
 }
 #pf2e-token-hud .distance,
 #pf2e-token-hud .status {
-  --padding-block: 6px;
+  --padding-block: 2px;
   --border-width: 2px;
   --inner-padding: calc(var(--outer-padding) / 2);
   display: flex;
   align-items: center;
   justify-content: center;
   background: url(/ui/denim075.png) repeat;
-  padding: var(--padding-block) 10px;
+  background-color: rgba(0, 0, 0, 0.3490196078);
+  padding: var(--padding-block) 4px;
   color: var(--text-light);
-  border-radius: var(--padding-block);
-  border: var(--border-width) solid var(--color-border-dark);
+  border-radius: 4px;
   box-shadow: var(--outer-box-shadow);
   white-space: nowrap;
   position: relative;
+  text-shadow: 1px 0 black, -1px 0 black, 0 1px black, 0 -1px black;
+  padding: 2px 4px;
+  font-weight: bold;
+  font-size: 1.1em;
 }
 #pf2e-token-hud .distance {
   gap: 6px;
@@ -199,21 +203,31 @@
 }
 #pf2e-token-hud .distance.free {
   position: absolute;
-  top: calc(var(--outer-padding) + (var(--padding-block) + var(--border-width)) / 2 - 1px);
+  top: 0;
   left: 50%;
-  transform: translate(-50%, -100%);
+  transform: translate(-50%, calc(-50% - var(--border-width) / 2));
 }
 #pf2e-token-hud .distance:not(.free):not(:last-child) {
   margin: auto;
   top: calc(var(--border-width) + var(--inner-padding));
-  border-radius: var(--padding-block) var(--padding-block) 0 0;
+  border-radius: 4px 4px 0 0;
 }
 #pf2e-token-hud .status {
   color: hsl(var(--hue), 75%, 40%);
   font-weight: bold;
   letter-spacing: 0.5px;
-  top: var(--inner-padding);
+}
+#pf2e-token-hud .status.free {
+  position: absolute;
+  top: auto;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, calc(50% - var(--border-width) / 2));
+  z-index: -1;
+}
+#pf2e-token-hud .status:not(.free) {
   min-width: 7em;
+  top: var(--inner-padding);
 }
 #pf2e-token-hud .inner {
   max-width: 17em;

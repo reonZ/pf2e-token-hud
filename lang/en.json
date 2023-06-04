@@ -84,6 +84,10 @@
                     "fourth": "Perfectly Fine"
                 }
             },
+            "see-status": {
+                "name": "Health Status on Owned",
+                "hint": "When enabled, the health status will also be displayed on the regular tooltip instead of exclusively on non-owned ones."
+            },
             "untrained": {
                 "name": "Hide Untrained Skill Actions",
                 "hint": "When enabled, skill actions that requires a minimum of being trained will not be shown in the skills sidebar."
@@ -99,10 +103,6 @@
             "spells-columns": {
                 "name": "Two Columns Spells",
                 "hint": "Will split the spells sidebar into 2 columns."
-            },
-            "info-click": {
-                "name": "Tooltips on Click",
-                "hint": "Should the different tooltips (speeds, languages, IWR, senses) in the main tooltip show on click instead of hover."
             },
             "no-death": {
                 "name": "Remove Death Line",
