@@ -69,8 +69,7 @@ export class HUD extends Application {
             if (hover && this.#token === token && this.rendered) return
 
             if (hover && !game.keyboard.downKeys.has('ControlLeft')) {
-                if (this.#token) delete this.#token.actor.apps[MODULE_ID]
-                this.#token = token
+                this.#setToken(token)
                 if (!this.#closing) return this.render()
                 clearTimeout(this.#closing)
                 this.#closing = null
@@ -153,6 +152,12 @@ export class HUD extends Application {
 
     get isCharacter() {
         return this.actor?.isOfType('character')
+    }
+
+    #setToken(token) {
+        if (token === this.#token) return
+        if (this.#token) delete this.#token.actor.apps?.[MODULE_ID]
+        this.#token = token
     }
 
     getData() {
@@ -314,7 +319,7 @@ export class HUD extends Application {
     }
 
     #close() {
-        this.#token = null
+        this.#setToken(null)
         this.#hover = false
         this.#lock = false
         this.#softLock = false
@@ -377,7 +382,7 @@ export class HUD extends Application {
     }
 
     render(force) {
-        if (!this.#token?.actor || this.mousedown) return
+        if (!this.#token?.actor) return
 
         if (force) return super.render(true)
 
