@@ -10,15 +10,7 @@ export function getHud() {
 export function enableModule(enabled) {
     if (enabled && !hud) {
         hud = new HUD()
-
-        Hooks.on('hoverToken', hud.hoverToken)
-        Hooks.on('deleteToken', hud.deleteToken)
-        Hooks.on('canvasPan', hud.forceClose)
     } else if (!enabled && hud) {
-        Hooks.off('hoverToken', hud.hoverToken)
-        Hooks.off('deleteToken', hud.deleteToken)
-        Hooks.off('canvasPan', hud.forceClose)
-
         hud.delete()
         hud = null
     }

@@ -48,14 +48,19 @@ export class HUD extends Application {
     #mousedown = [false, false, false]
     #lock = false
     #softLock = false
+    #hoverToken = null
+    #deleteToken = null
 
     constructor() {
         super()
 
         this.forceClose = () => this.close({ force: true })
 
-        this.hoverToken = (token, hover) => {
+        this.#hoverToken = (token, hover) => {
+            const hoverSidebar = $(window.document).find(':hover').filter('#sidebar').length
+
             if (
+                hoverSidebar ||
                 this.mousedown ||
                 this.#lock ||
                 this.#softLock ||
@@ -125,18 +130,27 @@ export class HUD extends Application {
             this.#lock = false
         }
 
-        this.deleteToken = token => {
+        this.#deleteToken = token => {
             if (this.#token && token.id === this.#token.id) this.forceClose()
         }
 
         window.addEventListener('mousedown', this.#mouseevent)
         window.addEventListener('mouseup', this.#mouseevent)
+
+        Hooks.on('hoverToken', this.#hoverToken)
+        Hooks.on('deleteToken', this.#deleteToken)
+        Hooks.on('canvasPan', this.forceClose)
     }
 
     delete() {
         this.forceClose()
+
         window.removeEventListener('mousedown', this.#mouseevent)
         window.removeEventListener('mouseup', this.#mouseevent)
+
+        Hooks.off('hoverToken', this.#hoverToken)
+        Hooks.off('deleteToken', this.#deleteToken)
+        Hooks.off('canvasPan', this.forceClose)
     }
 
     static get defaultOptions() {
