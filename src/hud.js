@@ -362,6 +362,7 @@ export class HUD extends Application {
 
         this._element = null
         this._state = states.CLOSED
+        delete ui.windows[this.appId]
     }
 
     close(options = {}) {
@@ -387,6 +388,7 @@ export class HUD extends Application {
         }
 
         await super._render(force, options)
+        ui.windows[this.appId] = this
 
         if (sidebarType) {
             const sidebar = await this.#openSidebar(sidebarType)
