@@ -5,7 +5,9 @@ import { registerSettings, renderSettingsConfig } from './settings.js'
 Hooks.once('setup', () => {
     registerSettings()
     registerKeybindings()
+})
 
+Hooks.once('ready', () => {
     if (getSetting('enabled')) enableModule(true)
 })
 
