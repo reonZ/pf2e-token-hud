@@ -1,6 +1,7 @@
 import { addActionsListeners, getActionsData, getActionsOptions } from './actions.js'
 import { addExtrasListeners, getExtrasData } from './extras.js'
 import { addItemsListeners, getItemsData } from './items.js'
+import { isHolding } from './keybindings.js'
 import { getFlag, getSetting, localize, MODULE_ID, setFlag, templatePath } from './module.js'
 import { addSkillsListeners, getSkillsData } from './skills.js'
 import { addSpellsListeners, getSpellsData } from './spells.js'
@@ -51,6 +52,8 @@ export class HUD extends Application {
     constructor() {
         super()
 
+        this.forceClose = () => this.close({ force: true })
+
         this.hoverToken = (token, hover) => {
             if (
                 this.mousedown ||
@@ -70,10 +73,22 @@ export class HUD extends Application {
 
             if (hover && !game.keyboard.downKeys.has('ControlLeft')) {
                 this.#setToken(token)
-                if (!this.#closing) return this.render()
+
+                const holdingSetting = getSetting('holding')
+                const holding = isHolding()
+                if (holdingSetting !== 'none' && !holding && (holdingSetting === 'all' || token.isOwner)) return
+
+                if (!this.#closing) {
+                    return this.render(
+                        null,
+                        null,
+                        holdingSetting === 'none' || (holdingSetting === 'owned' && !token.isOwner && !holding)
+                    )
+                }
+
                 clearTimeout(this.#closing)
                 this.#closing = null
-                this.render(true)
+                this.render()
             } else {
                 this.close()
             }
@@ -101,7 +116,7 @@ export class HUD extends Application {
                 }
                 if (target.closest('.app') || target.closest('.tooltipster-base')) return
                 if (popup) return popup.remove()
-                this.close({ force: true })
+                this.forceClose()
             } else if (this.#delay) {
                 clearTimeout(this.#delay)
                 this.#delay = null
@@ -110,10 +125,8 @@ export class HUD extends Application {
             this.#lock = false
         }
 
-        this.forceClose = () => this.close({ force: true })
-
         this.deleteToken = token => {
-            if (this.#token && token.id === this.#token.id) this.close({ force: true })
+            if (this.#token && token.id === this.#token.id) this.forceClose()
         }
 
         window.addEventListener('mousedown', this.#mouseevent)
@@ -121,7 +134,7 @@ export class HUD extends Application {
     }
 
     delete() {
-        this.close({ force: true })
+        this.forceClose()
         window.removeEventListener('mousedown', this.#mouseevent)
         window.removeEventListener('mouseup', this.#mouseevent)
     }
@@ -318,7 +331,7 @@ export class HUD extends Application {
         }
     }
 
-    #close() {
+    #close(options) {
         this.#setToken(null)
         this.#hover = false
         this.#lock = false
@@ -330,6 +343,8 @@ export class HUD extends Application {
         }
 
         const states = Application.RENDER_STATES
+        if (!options.force && ![states.RENDERED, states.ERROR].includes(this._state)) return
+
         this._state = states.CLOSING
 
         let el = this.element
@@ -347,9 +362,6 @@ export class HUD extends Application {
     }
 
     close(options = {}) {
-        const states = Application.RENDER_STATES
-        if (!options.force && !this.#delay && ![states.RENDERED, states.ERROR].includes(this._state)) return
-
         if (options.force) return this.#close(options)
 
         this.#closing = setTimeout(() => {
@@ -381,10 +393,10 @@ export class HUD extends Application {
         this.#lastToken = this.#token
     }
 
-    render(force) {
+    render(force, options, useDelay) {
         if (!this.#token?.actor) return
 
-        if (force) return super.render(true)
+        if (!useDelay) return super.render(true)
 
         const delay = getSetting('delay')
         if (!delay) super.render(true)

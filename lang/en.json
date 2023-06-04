@@ -11,6 +11,12 @@
                 "skills": "Skills"
             }
         },
+        "keybinds": {
+            "hold": {
+                "name": "Hold to Display",
+                "hint": "The key that needs to be held to display a token tooltip."
+            }
+        },
         "settings": {
             "enabled": {
                 "name": "Enabled",
@@ -100,7 +106,16 @@
             },
             "no-death": {
                 "name": "Remove Death Line",
-                "hint": "If enabled, the whole dying and wounded line will be removed from the main tooltip"
+                "hint": "If enabled, the whole dying and wounded line will be removed from the main tooltip."
+            },
+            "holding": {
+                "name": "Use Hold Keybind",
+                "hint": "Should you be required to hold the 'Hold to Display' keybind to display a token tooltip. Can be set to only affect owned tokens, in which case the non-owned tooltip would use the delay as usual, you can short circuit the delay by hitting the key on those still.",
+                "choices": {
+                    "none": "Disabled",
+                    "owned": "Owned tokens only",
+                    "all": "Owned and non-owned"
+                }
             }
         },
         "spells": {

@@ -3,6 +3,10 @@ import { HUD } from './hud.js'
 export const MODULE_ID = 'pf2e-token-hud'
 
 let hud = null
+export function getHud() {
+    return hud
+}
+
 export function enableModule(enabled) {
     if (enabled && !hud) {
         hud = new HUD()

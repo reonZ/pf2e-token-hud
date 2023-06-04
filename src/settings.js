@@ -5,23 +5,23 @@ export function registerSettings() {
      * GM
      */
     const statuses = ['first', 'second', 'third', 'fourth'].map(x => localize(`settings.status.statuses.${x}`)).join(', ')
-    registerSetting('status', String, statuses, { scope: 'world' })
+    register('status', String, statuses, { scope: 'world' })
 
     /**
      * CLIENT
      */
-    registerSetting('enabled', Boolean, true, { onChange: enableModule })
+    register('enabled', Boolean, true, { onChange: enableModule })
 
-    registerSetting('position', String, 'right', {
+    register('position', String, 'right', {
         choices: {
-            left: settingPath('position', 'choices.left'),
-            right: settingPath('position', 'choices.right'),
-            top: settingPath('position', 'choices.top'),
-            bottom: settingPath('position', 'choices.bottom'),
+            left: path('position', 'choices.left'),
+            right: path('position', 'choices.right'),
+            top: path('position', 'choices.top'),
+            bottom: path('position', 'choices.bottom'),
         },
     })
 
-    registerSetting('delay', Number, 250, {
+    register('delay', Number, 250, {
         range: {
             min: 0,
             max: 2000,
@@ -29,52 +29,60 @@ export function registerSettings() {
         },
     })
 
-    registerSetting('no-death', Boolean, false)
+    register('holding', String, 'none', {
+        choices: {
+            none: path('holding', 'choices.none'),
+            owned: path('holding', 'choices.owned'),
+            all: path('holding', 'choices.all'),
+        },
+    })
+
+    register('no-death', Boolean, false)
     // registerSetting('info-click', Boolean, true)
 
     // distance
 
-    registerSetting('distance', String, 'all', {
+    register('distance', String, 'all', {
         choices: {
-            none: settingPath('distance', 'choices.none'),
-            self: settingPath('distance', 'choices.self'),
-            all: settingPath('distance', 'choices.all'),
+            none: path('distance', 'choices.none'),
+            self: path('distance', 'choices.self'),
+            all: path('distance', 'choices.all'),
         },
     })
 
-    registerSetting('unit', String, '')
+    register('unit', String, '')
 
     // sidebar
 
-    registerSetting('height', String, '')
+    register('height', String, '')
 
-    registerSetting('scrollbar', Boolean, true)
+    register('scrollbar', Boolean, true)
 
-    registerSetting('spells-columns', Boolean, false)
+    register('spells-columns', Boolean, false)
 
-    registerSetting('skills-columns', Boolean, false)
+    register('skills-columns', Boolean, false)
 
     // actions
 
-    registerSetting('actions', String, 'split', {
+    register('actions', String, 'split', {
         choices: {
-            name: settingPath('actions', 'choices.name'),
-            type: settingPath('actions', 'choices.type'),
-            split: settingPath('actions', 'choices.split'),
+            name: path('actions', 'choices.name'),
+            type: path('actions', 'choices.type'),
+            split: path('actions', 'choices.split'),
         },
     })
 
-    registerSetting('actions-colors', Boolean, true)
+    register('actions-colors', Boolean, true)
 
     // spells
 
-    registerSetting('spells', Boolean, false)
+    register('spells', Boolean, false)
 
-    registerSetting('tradition', Boolean, false)
+    register('tradition', Boolean, false)
 
     // skills
 
-    registerSetting('untrained', Boolean, true)
+    register('untrained', Boolean, true)
 }
 
 export function renderSettingsConfig(_, html) {
@@ -96,14 +104,14 @@ export function renderSettingsConfig(_, html) {
     beforeGroup('untrained', 'client.skills')
 }
 
-function settingPath(setting, key) {
+function path(setting, key) {
     return `${MODULE_ID}.settings.${setting}.${key}`
 }
 
-function registerSetting(name, type, defValue, extra = {}) {
+function register(name, type, defValue, extra = {}) {
     game.settings.register(MODULE_ID, name, {
-        name: settingPath(name, 'name'),
-        hint: settingPath(name, 'hint'),
+        name: path(name, 'name'),
+        hint: path(name, 'hint'),
         scope: 'client',
         config: true,
         type,
