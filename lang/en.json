@@ -140,8 +140,7 @@
                 "percussion": "Percussion",
                 "singing": "Singing",
                 "strings": "Strings",
-                "winds": "Winds",
-                "warning": "Warning"
+                "winds": "Winds"
             },
             "modifiers": {
                 "crowbar-missing": "No Crowbar"
