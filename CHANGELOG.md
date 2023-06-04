@@ -1,3 +1,7 @@
+# 1.3.2
+
+-   fixed extras sidebar crashing if the module `PF2e Dailies` isn't physically on the server's drive
+
 # 1.3.1
 
 -   fixed skill actions labels being broken
