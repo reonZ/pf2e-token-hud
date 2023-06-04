@@ -1,7 +1,9 @@
-import { getSetting, localize, modifier, MODULE_ID } from './module.js'
+import { getSetting, localize, modifier } from './module.js'
 import { unownedItemToMessage } from './pf2e.js'
 import { popup } from './popup.js'
 import { getItemSummary } from './shared.js'
+
+const MODULE_ID = 'pf2e-token-hud'
 
 const CROWBAR_UUIDS = new Set([
     'Compendium.pf2e.equipment-srd.44F1mfJei4GY8f2X',
