@@ -9,7 +9,7 @@ export async function getExtrasData(actor) {
             selected: initiative.statistic,
             skills: SKILLS_SLUGS.map(slug => ({ slug, label: getSkillLabel(slug) })),
         },
-        hasDailies: game.modules.get('pf2e-dailies').active,
+        hasDailies: game.modules.get('pf2e-dailies')?.active,
     }
 }
 
@@ -33,7 +33,7 @@ export function addExtrasListeners(el, actor) {
 
     action('prepare-dailies', event => {
         const dailies = game.modules.get('pf2e-dailies')
-        if (dailies.active) dailies.api.openDailiesInterface(actor)
+        if (dailies?.active) dailies.api.openDailiesInterface(actor)
     })
 
     action('rest-for-the-night', event => {
