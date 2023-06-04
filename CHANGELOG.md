@@ -1,3 +1,7 @@
+# 1.3.1
+
+-   fixed skill actions labels being broken
+
 # 1.3.0
 
 -   added `Hold to Display` keybind
