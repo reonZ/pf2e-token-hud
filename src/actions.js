@@ -133,6 +133,18 @@ export function addActionsListeners(el, actor) {
         popup(strike.label, description)
     })
 
+    action('trait-description', event => {
+        const strike = getStrike(event)
+        if (!strike) return
+
+        const { index } = event.currentTarget.dataset
+        const trait = strike.traits[index]
+        if (!trait) return
+
+        const description = game.i18n.localize(trait.description)
+        if (description) popup(game.i18n.localize(trait.label), description)
+    })
+
     // IS OWNER
     if (!actor.isOwner) return
 

@@ -39,7 +39,7 @@
             {{#if (or strike.traits.length strike.additionalEffects.length)}}
             <div class="traits">
                 {{#each strike.traits as |trait|}}
-                <div class="trait">
+                <div class="trait info" data-action="trait-description" data-index="{{@index}}">
                     {{localize trait.label}}
                 </div>
                 {{/each}}
