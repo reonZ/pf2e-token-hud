@@ -1,0 +1,27 @@
+<div class="item-description">
+    <p>{{{localize description}}}</p>
+    <hr />
+    <dl>
+        <dt>{{{localize "PF2E.CritSuccess"}}}</dt>
+        <dd>{{{localize criticalSuccess}}}</dd>
+        <dt>{{{localize "PF2E.Success"}}}</dt>
+        <dd>{{{localize success}}}</dd>
+    </dl>
+</div>
+<div class="item-properties tags">
+    {{#each traits as |trait|}}
+    <span class="tag {{trait.cssClass}}" {{#if trait.description}} data-description="{{trait.description}}" {{/if}}>{{trait.label}}</span>
+    {{/each}}
+    {{#each weaponTraits as |trait|}}
+    <span class="tag tag_alt {{trait.cssClass}}" {{#if trait.description}} data-description="{{trait.description}}"
+        {{/if}}>{{trait.label}}</span>
+    {{/each}}
+    {{#if item.system.reload.label}}
+    <span class="tag tag_secondary">{{item.system.reload.label}}</span>
+    {{/if}}
+    {{#if item.system.maxRange}}
+    <span class="tag tag_secondary">{{localize (concat "PF2E.TraitRange" item.system.maxRange)}}</span>
+    {{else if item.system.range}}
+    <span class="tag tag_secondary">{{localize (concat "PF2E.TraitRangeIncrement" item.system.range)}}</span>
+    {{/if}}
+</div>

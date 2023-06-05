@@ -1,4 +1,4 @@
-import { getSetting } from './module.js'
+import { getSetting, templatePath } from './module.js'
 import { getActionIcon, toggleWeaponTrait } from './pf2e.js'
 import { popup } from './popup.js'
 import { addNameTooltipListeners, getItemFromEvent, getItemSummary } from './shared.js'
@@ -120,6 +120,18 @@ export function addActionsListeners(el, actor) {
     action('hero-action-description', async event => {
         const { description, name } = (await getHeroActionDescription(getUuid(event))) ?? {}
         if (description) popup(name, description)
+    })
+
+    action('strike-description', async event => {
+        const strike = getStrike(event)
+        if (!strike) return
+
+        const description = document.createElement('div')
+        description.classList.add('description')
+        // this one is a copy of the system template, there is nothing to generate it
+        description.innerHTML = await renderTemplate(templatePath('strike-description'), strike)
+
+        popup(strike.label, description)
     })
 
     // IS OWNER

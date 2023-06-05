@@ -72,6 +72,21 @@
                     font-size: 0.86em;
                 }
 
+                .traits {
+                    display: flex;
+                    align-items: center;
+                    flex-wrap: wrap;
+                    gap: 1px;
+                    font-size: 0.85em;
+
+                    .trait {
+                        background-color: #00000014;
+                        border-radius: 4px;
+                        border: 1px solid rgb(0 0 0 / 30%);
+                        padding-inline: 1px;
+                    }
+                }
+
                 .variants {
                     .variant {
                         .activity-icon {

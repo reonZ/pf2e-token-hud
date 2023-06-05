@@ -58,6 +58,19 @@
 #pf2e-token-hud .sidebar.actions .section .strike .temporary {
   font-size: 0.86em;
 }
+#pf2e-token-hud .sidebar.actions .section .strike .traits {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1px;
+  font-size: 0.85em;
+}
+#pf2e-token-hud .sidebar.actions .section .strike .traits .trait {
+  background-color: rgba(0, 0, 0, 0.0784313725);
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  padding-inline: 1px;
+}
 #pf2e-token-hud .sidebar.actions .section .strike .variants .variant .activity-icon {
   line-height: 1;
 }
