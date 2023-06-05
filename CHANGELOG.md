@@ -1,3 +1,12 @@
+# 1.6.0
+
+-   added magazines icon for strikes that use them
+-   added a way to show `Npc` strike trait descriptions by clicking on them
+-   added `Party as Observed` GM setting, when enabled, all actors in the `Party` alliance will be cinsidered as observed
+-   the `Owned tokens only` option of `Use Hold Keybind` now will allow the GM (previsouly it did nothing special because GMs own all the tokens) to see the small alternative tooltip when they don't hold the `Hold to Display`, at any moment they can hit the key to instead see the full tooltip
+-   moved non-cantrip focus spells to their own section instead of populating the highest spell slot one
+-   fixed invalid languages breaking the tooltip display (could happen if a now removed homebrew language was still in the actor's data)
+
 # 1.5.0
 
 -   added traits to `NPC` strike attacks

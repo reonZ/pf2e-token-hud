@@ -11,6 +11,7 @@ Starting to work on some bullet points for the future readme:
 -   the holding keybind can either be used before hovering over a token or during
 -   using the holding keybind while hovering over a non-owned token while having the setting set to `Owned Only` will short-circuit the delay regardless
 -   you can select the speed to be displayed in the tooltip by opening the speeds tooltip and selecting one (this is a per user choice)
+-   you can use the `Owned tokens only` option of `Use Hold Keybind` as a GM (normally it would do nothing special because GMs own all the tokens) to see the small alternative tooltip when you don't hold the `Hold to Display`, at any moment you can hit the key to instead see the full tooltip
 
 # CHANGELOG
 
