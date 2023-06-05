@@ -19,7 +19,8 @@ export function addNameTooltipListeners(el) {
         event.preventDefault()
 
         const target = event.currentTarget.querySelector('.name')
-        if (target.scrollWidth <= target.clientWidth) return
+        const { width } = target.getBoundingClientRect()
+        if (target.scrollWidth <= Math.ceil(width)) return
 
         const name = target.innerHTML.trim()
         game.tooltip.activate(event.currentTarget, { text: name })
