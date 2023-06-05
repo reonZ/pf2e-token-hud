@@ -91,6 +91,28 @@
                 border-radius: 4px;
                 height: 100%;
             }
+
+            &.hover {
+                cursor: pointer;
+
+                i {
+                    display: none;
+                    position: absolute;
+                    inset: 0;
+                    align-items: center;
+                    justify-content: center;
+                    background: #c9c3b8;
+                    border: 1px solid #363636;
+                    border-radius: 4px;
+                    font-size: 2em;
+                }
+
+                &:hover {
+                    i {
+                        display: flex;
+                    }
+                }
+            }
         }
 
         .variants {

@@ -9,9 +9,6 @@
   height: var(--item-height);
   margin-top: 2px;
 }
-#pf2e-token-hud .sidebar.items .category .item .item-img img {
-  pointer-events: none;
-}
 #pf2e-token-hud .sidebar.items .category .item .details .name.uncommon {
   color: #98513d;
 }

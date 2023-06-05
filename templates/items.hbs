@@ -5,8 +5,9 @@
         {{#each category.items as |item|}}
         <div class="item" data-item-id="{{item.id}}" data-uuid="{{item.uuid}}" data-item-type="{{item.type}}" {{#if
             @root.isOwner}}draggable="true" {{/if}}>
-            <div class="item-img">
+            <div class="item-img hover" data-action="item-chat">
                 <img src="{{item.img}}" draggable="false">
+                <i class="fa-solid fa-message"></i>
             </div>
             <div class="details">
                 <a data-action="item-description" class="name {{item.rarity}}">{{item.name}}</a>

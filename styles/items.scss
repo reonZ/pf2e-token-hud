@@ -14,12 +14,6 @@
                 height: var(--item-height);
                 margin-top: 2px;
 
-                .item-img {
-                    img {
-                        pointer-events: none;
-                    }
-                }
-
                 .details {
                     .name {
                         &.uncommon {

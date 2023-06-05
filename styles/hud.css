@@ -79,6 +79,23 @@
   border-radius: 4px;
   height: 100%;
 }
+#pf2e-token-hud .sidebar .item-img.hover {
+  cursor: pointer;
+}
+#pf2e-token-hud .sidebar .item-img.hover i {
+  display: none;
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  background: #c9c3b8;
+  border: 1px solid #363636;
+  border-radius: 4px;
+  font-size: 2em;
+}
+#pf2e-token-hud .sidebar .item-img.hover:hover i {
+  display: flex;
+}
 #pf2e-token-hud .sidebar .variants {
   display: flex;
   align-items: center;

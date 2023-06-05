@@ -34,10 +34,15 @@ export function addItemsListeners(el, actor) {
 
     addNameTooltipListeners(item)
 
-    item.on('click', async event => {
+    item.find('[data-action=item-description]').on('click', async event => {
         event.preventDefault()
         const item = $(event.currentTarget).closest('.item')
         showItemSummary(item, actor)
+    })
+
+    item.find('[data-action=item-chat]').on('click', async event => {
+        const item = getItemFromEvent(event, actor)
+        item?.toMessage(event, { create: true })
     })
 
     // IS OWNER
