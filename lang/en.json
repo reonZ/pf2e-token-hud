@@ -129,6 +129,10 @@
             "chat": {
                 "name": "Disable Chat Card Hover",
                 "hint": "Will prevent the tooltip to show up when hovering a chat card owned by a token."
+            },
+            "party": {
+                "name": "Party as Observed",
+                "hint": "Consider actors in the 'Party' alliance to be observed by players."
             }
         },
         "spells": {

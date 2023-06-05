@@ -50,6 +50,7 @@ export class HUD extends Application {
     #softLock = false
     #hoverToken = null
     #deleteToken = null
+    #isObserved = false
 
     constructor() {
         super()
@@ -57,8 +58,6 @@ export class HUD extends Application {
         this.forceClose = () => this.close({ force: true })
 
         this.#hoverToken = (token, hover) => {
-            const isOwner = token.isOwner
-            const isObserver = isOwner || (token.observer && getSetting('observer'))
             const hoverSidebar = getSetting('chat') && $(window.document).find(':hover').filter('#sidebar').length
 
             if (
@@ -71,6 +70,9 @@ export class HUD extends Application {
             )
                 return
 
+            const isParty = token.actor.system.details.alliance === 'party'
+            const isObserver = (this.#isObserved =
+                token.isOwner || (getSetting('observer') && (token.observer || (isParty && getSetting('party')))))
             const transform = token.localTransform
             const document = token.document
             if (transform.tx !== document.x || transform.ty !== document.y) return
@@ -196,7 +198,7 @@ export class HUD extends Application {
 
         let distance = null
         const isOwner = token.isOwner
-        const isObserver = isOwner || (token.observer && getSetting('observer'))
+        const isObserver = this.#isObserved
         const showDistance = getSetting('distance')
         const isCharacter = this.isCharacter
         const { attributes, saves, heroPoints, system, alignment } = actor
@@ -457,7 +459,7 @@ export class HUD extends Application {
 
         let coords
 
-        const positions = token.observer ? POSITIONS[getSetting('position')].slice() : ['top', 'bottom']
+        const positions = this.#isObserved ? POSITIONS[getSetting('position')].slice() : ['top', 'bottom']
 
         while (positions.length && !coords) {
             const position = positions.shift()
