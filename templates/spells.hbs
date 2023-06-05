@@ -6,6 +6,15 @@
         <div class="header">
             {{#if (eq @index 0)}}
             {{localize 'PF2E.SpellCantripLabel'}}
+            {{else if (eq @index 12)}}
+            {{localize 'PF2E.Focus.Spells'}}
+            <div class="pips" data-action="toggle-pips">
+                {{#times @root.focusPool.max}}
+                <div class="pip">
+                    <i class="{{#if (gt @root.focusPool.value this)}}fas fa-dot-circle{{else}}far fa-circle{{/if}}"></i>
+                </div>
+                {{/times}}
+            </div>
             {{else}}
             {{localize (concat 'PF2E.SpellLevel' @index)}}
             {{/if}}
@@ -30,16 +39,7 @@
                     <div class="actions">
                         {{#unless spell.isCantrip}}
 
-                        {{#if spell.isFocus}}
-                        <div class="pips" data-action="toggle-pips">
-                            {{#times spell.uses.max}}
-                            <div class="pip">
-                                <i class="{{#if (gt spell.uses.value this)}}fas fa-dot-circle{{else}}far fa-circle{{/if}}"></i>
-                            </div>
-                            {{/times}}
-                        </div>
-
-                        {{else if (or spell.isSpontaneous spell.isInnate spell.isCharge)}}
+                        {{#if (or spell.isSpontaneous spell.isInnate spell.isCharge)}}
                         <div class="uses">
                             <input type="number" value="{{spell.uses.value}}" data-input-path="{{spell.inputPath}}"
                                 data-entry-id="{{#if spell.isInnate}}{{spell.itemId}}{{else}}{{spell.entryId}}{{/if}}" placeholder="0"

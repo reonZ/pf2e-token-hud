@@ -2,7 +2,17 @@
     .sidebar.spells {
         .entry {
             .header {
+                position: relative;
                 text-align: center;
+
+                .pips {
+                    position: absolute;
+                    top: 0;
+                    right: 3px;
+                    display: flex;
+                    font-size: 0.86em;
+                    height: 100%;
+                }
             }
 
             .spell {

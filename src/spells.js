@@ -3,15 +3,17 @@ import { showItemSummary } from './popup.js'
 import { addNameTooltipListeners, getItemFromEvent } from './shared.js'
 
 export async function getSpellsData(actor) {
-    const focusPool = actor.system.resources.focus?.value ?? 0
+    const focusPool = actor.system.resources.focus ?? { value: 0, max: 0 }
     const entries = actor.spellcasting.regular
     const showTradition = getSetting('tradition')
     const spells = []
+    const focuses = []
 
     for (const entry of entries) {
         const entryId = entry.id
         const tradition = showTradition && entry.statistic.label[0]
         const data = await entry.getSheetData()
+        const isFocus = data.isFocusPool
         const isCharge = entry.system?.prepared?.value === 'charge'
         const isStaff = getProperty(entry, 'flags.pf2e-staves.staveID') !== undefined
         const charges = { value: getProperty(entry, 'flags.pf2e-staves.charges') ?? 0 }
@@ -20,6 +22,7 @@ export async function getSpellsData(actor) {
             if (!slot.active.length || slot.uses?.max === 0) continue
 
             const slotSpells = []
+            const isCantrip = slot.isCantrip
             const actives = slot.active.filter(x => x && x.uses?.max !== 0)
 
             for (let slotId = 0; slotId < actives.length; slotId++) {
@@ -42,13 +45,13 @@ export async function getSpellsData(actor) {
                     isCharge,
                     isVirtual: virtual,
                     isInnate: data.isInnate,
-                    isCantrip: slot.isCantrip,
-                    isFocus: data.isFocusPool,
+                    isCantrip: isCantrip,
+                    isFocus,
                     isPrepared: data.isPrepared,
                     isSpontaneous: data.isSpontaneous || data.isFlexible,
                     slotLevel: slot.level,
                     uses: uses ?? (isCharge ? charges : slot.uses),
-                    expended: expended ?? (data.isFocusPool && !slot.isCantrip ? focusPool <= 0 : false),
+                    expended: expended ?? (isFocus && !isCantrip ? focusPool.value <= 0 : false),
                     action: spell.system.time.value,
                     type: isCharge
                         ? isStaff
@@ -60,24 +63,19 @@ export async function getSpellsData(actor) {
                         ? 'PF2E.PreparationTypeSpontaneous'
                         : data.isFlexible
                         ? 'PF2E.SpellFlexibleLabel'
-                        : data.isFocusPool
+                        : isFocus
                         ? 'PF2E.SpellFocusLabel'
                         : 'PF2E.SpellPreparedLabel',
-                    order: isCharge
-                        ? 0
-                        : data.isPrepared
-                        ? 1
-                        : data.isFocusPool
-                        ? 2
-                        : data.isInnate
-                        ? 3
-                        : data.isSpontaneous
-                        ? 4
-                        : 5,
+                    order: isCharge ? 0 : data.isPrepared ? 1 : isFocus ? 2 : data.isInnate ? 3 : data.isSpontaneous ? 4 : 5,
                 })
             }
 
             if (slotSpells.length) {
+                if (isFocus && !isCantrip) {
+                    focuses.push(...slotSpells)
+                    continue
+                }
+
                 spells[slot.level] ??= []
                 spells[slot.level].push(...slotSpells)
             }
@@ -89,6 +87,11 @@ export async function getSpellsData(actor) {
             ? (a, b) => (a.order === b.order ? a.name.localeCompare(b.name) : a.order - b.order)
             : (a, b) => a.name.localeCompare(b.name)
         spells.forEach(entry => entry.sort(sort))
+    }
+
+    if (focuses.length) {
+        focuses.sort((a, b) => a.name.localeCompare(b.name))
+        spells[12] = focuses
     }
 
     const ritualData = await actor.spellcasting.ritual?.getSheetData()
@@ -103,7 +106,7 @@ export async function getSpellsData(actor) {
         }))
     )
 
-    if (spells.length || rituals?.length) return { spells, rituals, doubled: getSetting('spells-columns') }
+    if (spells.length || rituals?.length) return { spells, rituals, focusPool, doubled: getSetting('spells-columns') }
 }
 
 export function addSpellsListeners(el, actor) {

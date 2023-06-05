@@ -1,5 +1,14 @@
 #pf2e-token-hud .sidebar.spells .entry .header {
+  position: relative;
   text-align: center;
+}
+#pf2e-token-hud .sidebar.spells .entry .header .pips {
+  position: absolute;
+  top: 0;
+  right: 3px;
+  display: flex;
+  font-size: 0.86em;
+  height: 100%;
 }
 #pf2e-token-hud .sidebar.spells .entry .spell {
   display: flex;
