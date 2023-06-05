@@ -70,9 +70,6 @@ export class HUD extends Application {
             )
                 return
 
-            const isParty = token.actor.system.details.alliance === 'party'
-            const isObserver = (this.#isObserved =
-                token.isOwner || (getSetting('observer') && (token.observer || (isParty && getSetting('party')))))
             const transform = token.localTransform
             const document = token.document
             if (transform.tx !== document.x || transform.ty !== document.y) return
@@ -82,19 +79,7 @@ export class HUD extends Application {
 
             if (hover && !game.keyboard.downKeys.has('ControlLeft')) {
                 this.#setToken(token)
-
-                const holdingSetting = getSetting('holding')
-                const holding = isHolding()
-                if (holdingSetting !== 'none' && !holding && (holdingSetting === 'all' || isObserver)) return
-
-                if (!this.#closing) {
-                    return this.render(
-                        null,
-                        null,
-                        holdingSetting === 'none' || (holdingSetting === 'owned' && !isObserver && !holding)
-                    )
-                }
-
+                if (!this.#closing) return this.render(null, null, getSetting('holding') === 'none' || !isHolding())
                 clearTimeout(this.#closing)
                 this.#closing = null
                 this.render()
@@ -362,6 +347,7 @@ export class HUD extends Application {
         this.#hover = false
         this.#lock = false
         this.#softLock = false
+        this.#isObserved = false
 
         if (this.#delay !== null) {
             clearTimeout(this.#delay)
@@ -422,7 +408,18 @@ export class HUD extends Application {
     }
 
     render(force, options, useDelay) {
-        if (!this.#token?.actor) return
+        const token = this.#token
+        const actor = token?.actor
+        if (!actor) return
+
+        const holding = isHolding()
+        const holdingSetting = getSetting('holding')
+        const isParty = actor.system.details.alliance === 'party'
+
+        if (game.user.isGM && holdingSetting === 'owned' && !holding) this.#isObserved = false
+        else this.#isObserved = token.isOwner || (getSetting('observer') && (token.observer || (isParty && getSetting('party'))))
+
+        if (holdingSetting !== 'none' && !holding && (holdingSetting === 'all' || this.#isObserved)) return
 
         if (!useDelay) return super.render(true)
 
