@@ -1,7 +1,7 @@
 import { getSetting, templatePath } from './module.js'
 import { getActionIcon, toggleWeaponTrait } from './pf2e.js'
-import { popup } from './popup.js'
-import { addNameTooltipListeners, getItemFromEvent, getItemSummary } from './shared.js'
+import { popup, showItemSummary } from './popup.js'
+import { addNameTooltipListeners, getItemFromEvent } from './shared.js'
 import { actionsUUIDS } from './skills.js'
 
 const SECTIONS_TYPES = {
@@ -113,8 +113,7 @@ export function addActionsListeners(el, actor) {
 
     action('action-description', async event => {
         const action = $(event.currentTarget).closest('.action')
-        const description = await getItemSummary(action, actor)
-        if (description) popup(action.find('.name').html().trim(), description)
+        showItemSummary(action, actor)
     })
 
     action('hero-action-description', async event => {

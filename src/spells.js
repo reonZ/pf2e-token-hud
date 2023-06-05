@@ -1,6 +1,6 @@
 import { getSetting, MODULE_ID } from './module.js'
-import { popup } from './popup.js'
-import { addNameTooltipListeners, getItemSummary } from './shared.js'
+import { showItemSummary } from './popup.js'
+import { addNameTooltipListeners } from './shared.js'
 
 export async function getSpellsData(actor) {
     const focusPool = actor.system.resources.focus?.value ?? 0
@@ -112,8 +112,7 @@ export function addSpellsListeners(el, actor) {
     el.find('[data-action=spell-description]').on('click', async event => {
         event.preventDefault()
         const spell = $(event.currentTarget).closest('.spell')
-        const description = await getItemSummary(spell, actor)
-        if (description) popup(spell.find('.name').html().trim(), description)
+        showItemSummary(spell, actor)
     })
 
     // IS OWNER

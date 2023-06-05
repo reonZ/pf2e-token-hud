@@ -1,6 +1,6 @@
 import { getSetting, localize, modifier } from './module.js'
 import { unownedItemToMessage } from './pf2e.js'
-import { popup } from './popup.js'
+import { popup, showItemSummary } from './popup.js'
 import { getItemSummary } from './shared.js'
 
 const MODULE_ID = 'pf2e-token-hud'
@@ -371,8 +371,7 @@ export function addSkillsListeners(el, actor) {
     el.find('[data-action=action-description]').on('click', async event => {
         event.preventDefault()
         const action = $(event.currentTarget).closest('.action')
-        const description = await getItemSummary(action, actor)
-        if (description) popup(action.find('.name').children().html().trim(), description)
+        showItemSummary(action, actor, action.find('.name').children().html())
     })
 
     // IS OWNER

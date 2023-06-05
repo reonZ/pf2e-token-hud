@@ -1,4 +1,5 @@
 import { IdentifyItemPopup } from './pf2e.js'
+import { showItemSummary } from './popup.js'
 import { addNameTooltipListeners, deleteItem, editItem, getItemFromEvent } from './shared.js'
 
 const ITEMS_TYPES = {
@@ -32,6 +33,12 @@ export function addItemsListeners(el, actor) {
     const item = el.find('.item')
 
     addNameTooltipListeners(item)
+
+    item.on('click', async event => {
+        event.preventDefault()
+        const item = $(event.currentTarget).closest('.item')
+        showItemSummary(item, actor)
+    })
 
     // IS OWNER
     if (!actor.isOwner) return

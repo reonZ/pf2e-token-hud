@@ -1,4 +1,5 @@
-import { localize, MODULE_ID, templatePath } from './module.js'
+import { localize, MODULE_ID } from './module.js'
+import { getItemSummary } from './shared.js'
 
 export async function popup(title, content) {
     const hud = $(`#${MODULE_ID}`)
@@ -25,4 +26,10 @@ export async function popup(title, content) {
     popup.querySelector('[data-action=close-popup]').addEventListener('click', () => popup.remove())
 
     hud.append(popup)
+}
+
+export async function showItemSummary(el, actor, title) {
+    title ??= el.find('.name').html()
+    const description = await getItemSummary(el, actor)
+    if (description) popup(title.trim(), description)
 }
