@@ -125,6 +125,10 @@
             "observer": {
                 "name": "Tooltip on Observe",
                 "hint": "When enabled, an uneditable version of the regular tooltip will be shown for tokens to which you have the 'observer' permission. Also, most of the features 'owned only' will now extend to 'observed' as well."
+            },
+            "chat": {
+                "name": "Disable Chat Card Hover",
+                "hint": "Will prevent the tooltip to show up when hovering a chat card owned by a token."
             }
         },
         "spells": {

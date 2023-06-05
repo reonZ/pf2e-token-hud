@@ -41,6 +41,8 @@ export function registerSettings() {
 
     register('see-status', Boolean, false)
 
+    register('chat', Boolean, true)
+
     register('show-death', String, 'always', {
         choices: {
             none: path('show-death', 'choices.none'),

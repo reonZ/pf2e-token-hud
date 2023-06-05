@@ -28,7 +28,6 @@
         <div class="header"> {{localize "PF2E.StrikesLabel"}}</div>
         {{#each strikes as |strike|}}
         {{#if (ne strike.visible false)}}
-        {{log strike}}
         <div class="strike details" data-index="{{strike.index}}">
             {{#if @root.isCharacter}}
             <a class="name" data-action="strike-description">{{strike.label}}</a>

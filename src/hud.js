@@ -59,7 +59,7 @@ export class HUD extends Application {
         this.#hoverToken = (token, hover) => {
             const isOwner = token.isOwner
             const isObserver = isOwner || (token.observer && getSetting('observer'))
-            const hoverSidebar = $(window.document).find(':hover').filter('#sidebar').length
+            const hoverSidebar = getSetting('chat') && $(window.document).find(':hover').filter('#sidebar').length
 
             if (
                 hoverSidebar ||
