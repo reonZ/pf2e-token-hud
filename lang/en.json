@@ -104,9 +104,14 @@
                 "name": "Two Columns Spells",
                 "hint": "Will split the spells sidebar into 2 columns."
             },
-            "no-death": {
-                "name": "Remove Death Line",
-                "hint": "If enabled, the whole dying and wounded line will be removed from the main tooltip."
+            "show-death": {
+                "name": "Show Death Line",
+                "hint": "Select if the dying and wounded line is displayed in the main tooltip.",
+                "choices": {
+                    "none": "Never Show",
+                    "always": "Always Show",
+                    "only": "Only when needed"
+                }
             },
             "holding": {
                 "name": "Use Hold Keybind",

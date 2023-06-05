@@ -37,7 +37,13 @@ export function registerSettings() {
         },
     })
 
-    register('no-death', Boolean, false)
+    register('show-death', String, 'always', {
+        choices: {
+            none: path('show-death', 'choices.none'),
+            always: path('show-death', 'choices.always'),
+            only: path('show-death', 'choices.only'),
+        },
+    })
 
     register('see-status', Boolean, false)
 

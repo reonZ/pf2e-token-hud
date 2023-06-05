@@ -306,6 +306,8 @@ export class HUD extends Application {
             .join('')
         if (speed.details) otherSpeeds += `<li>${game.i18n.localize('PF2E.DetailsHeading')}: ${speed.details}</li>`
 
+        const showDeath = getSetting('show-death')
+
         return {
             distance,
             status,
@@ -326,7 +328,7 @@ export class HUD extends Application {
             },
             level: actor.level,
             isCharacter,
-            showDeathLine: isCharacter && !getSetting('no-death'),
+            showDeathLine: isCharacter && (showDeath === 'always' || dying.value || wounded.value),
             hasCover: this.hasCover,
             saves: {
                 fortitude: saves.fortitude.mod,
