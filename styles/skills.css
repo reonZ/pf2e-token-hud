@@ -19,7 +19,6 @@
 #pf2e-token-hud .sidebar.skills .skill .header .modifier,
 #pf2e-token-hud .sidebar.skills .lore .modifier {
   color: var(--primary);
-  cursor: pointer;
 }
 #pf2e-token-hud .sidebar.skills .skill .header .rank,
 #pf2e-token-hud .sidebar.skills .lore .rank {

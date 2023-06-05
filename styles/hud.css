@@ -23,6 +23,12 @@
 #pf2e-token-hud a.active {
   text-shadow: 0 0 8px var(--color-shadow-primary);
 }
+#pf2e-token-hud .pips {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  cursor: pointer;
+}
 #pf2e-token-hud input,
 #pf2e-token-hud select {
   color: var(--color);
@@ -284,12 +290,6 @@
     width: 3ch;
   }
 }
-#pf2e-token-hud .inner .group .section .pips {
-  display: flex;
-  align-items: center;
-  gap: 1px;
-  cursor: pointer;
-}
 #pf2e-token-hud .inner .group .section .pips i {
   font-size: 0.86em;
   margin: 0;
@@ -300,6 +300,19 @@
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+}
+#pf2e-token-hud.observer a:not(.observable):not(.name):not(.content-link) {
+  text-shadow: none;
+  cursor: default;
+}
+#pf2e-token-hud.observer .pips {
+  cursor: default;
+}
+#pf2e-token-hud.observer .sidebar .variants .variant {
+  cursor: default;
+}
+#pf2e-token-hud.observer .sidebar .variants .variant:hover {
+  box-shadow: none;
 }
 
 .crb-hover .tooltipster-box .tooltipster-content .hover-content.info {

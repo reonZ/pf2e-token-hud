@@ -100,6 +100,12 @@
                                 margin-inline: -1px;
                             }
                         }
+
+                        &.disabled {
+                            select {
+                                color: #d9d9d9;
+                            }
+                        }
                     }
 
                     .versatiles {
@@ -116,6 +122,13 @@
 
                                 &:hover {
                                     box-shadow: inset 0 0 4px white;
+                                }
+                            }
+
+                            &.disabled {
+                                &.selected {
+                                    background: #c76868;
+                                    color: #ebebeb;
                                 }
                             }
                         }

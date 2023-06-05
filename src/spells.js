@@ -109,6 +109,16 @@ export async function getSpellsData(actor) {
 export function addSpellsListeners(el, actor) {
     addNameTooltipListeners(el.find('.spell'))
 
+    el.find('[data-action=spell-description]').on('click', async event => {
+        event.preventDefault()
+        const spell = $(event.currentTarget).closest('.spell')
+        const description = await getItemSummary(spell, actor)
+        if (description) popup(spell.find('.name').html().trim(), description)
+    })
+
+    // IS OWNER
+    if (!actor.isOwner) return
+
     el.find('[data-action=toggle-pips]').on('click contextmenu', async event => {
         event.preventDefault()
         const change = event.type === 'click' ? 1 : -1
@@ -134,13 +144,6 @@ export function addSpellsListeners(el, actor) {
         if (!spell) return
 
         collection.entry.cast(spell, { slot: slotId, level: slotLevel })
-    })
-
-    el.find('[data-action=spell-description]').on('click', async event => {
-        event.preventDefault()
-        const spell = $(event.currentTarget).closest('.spell')
-        const description = await getItemSummary(spell, actor)
-        if (description) popup(spell.find('.name').html().trim(), description)
     })
 
     el.find('[data-input-path]').on('change', async event => {

@@ -6,7 +6,8 @@
         <div class="toggle" data-item-id="{{toggle.itemId}}" data-domain="{{toggle.domain}}" data-option="{{toggle.option}}"
             data-scope="{{toggle.scope}}">
             <label>
-                <input type="checkbox" data-action="toggle-roll-option" {{disabled (not toggle.enabled)}} {{checked toggle.checked}} />
+                <input type="checkbox" data-action="toggle-roll-option" {{disabled (or (not toggle.enabled) (not @root.isOwner))}} {{checked
+                    toggle.checked}} />
                 <div class="name {{#if (not (or toggle.checked toggle.enabled))}}unchecked-disabled{{/if}}">{{localize toggle.label}}</div>
             </label>
             {{#if toggle.suboptions}}
@@ -33,7 +34,8 @@
             {{#if strike.ready}}
             <div class="variants">
                 {{#each strike.variants as |variant|}}
-                <div class="variant {{#if (eq strike.quantity 0)}}disabled{{/if}}" data-action="strike-attack" data-index="{{@index}}">
+                <div class="variant {{#if (or (eq strike.quantity 0) (not @root.isOwner))}}disabled{{/if}}" data-action="strike-attack"
+                    data-index="{{@index}}">
                     {{variant.label}}
                 </div>
                 {{/each}}
@@ -42,14 +44,16 @@
             </div>
             <div class="variants">
                 {{/unless}}
-                <div class="variant" data-action="strike-damage" title="{{strike.damageFormula}}">
+                <div class="variant {{#unless @root.isOwner}}disabled{{/unless}}" data-action="strike-damage"
+                    title="{{strike.damageFormula}}">
                     {{#if @root.isCharacter}}
                     {{localize "PF2E.DamageLabel"}}
                     {{else}}
                     {{strike.damageFormula}}
                     {{/if}}
                 </div>
-                <div class="variant" data-action="strike-critical" title="{{strike.criticalFormula}}">
+                <div class="variant {{#unless @root.isOwner}}disabled{{/unless}}" data-action="strike-critical"
+                    title="{{strike.criticalFormula}}">
                     {{localize "PF2E.CriticalDamageLabel"}}
                 </div>
                 {{/if}}
@@ -59,8 +63,8 @@
             {{#if (and @root.isCharacter strike.auxiliaryActions.length)}}
             <div class="variants">
                 {{#if (and strike.ready strike.ammunition)}}
-                <div class="variant">
-                    <select class="ammos" data-action="strike-ammo">
+                <div class="variant {{#unless @root.isOwner}}disabled{{/unless}}">
+                    <select class="ammos" data-action="strike-ammo" {{disabled (not @root.isOwner)}}>
                         {{#select strike.ammunition.selected.id}}
                         <option value="">{{localize "PF2E.NoAmmoLabel"}}</option>
                         {{#each strike.ammunition.compatible as |ammo|}}
@@ -72,11 +76,11 @@
                 {{/if}}
 
                 {{#each strike.auxiliaryActions as |action|}}
-                <div class="variant" data-action="strike-auxiliary" data-index="{{@index}}">
+                <div class="variant {{#unless @root.isOwner}}disabled{{/unless}}" data-action="strike-auxiliary" data-index="{{@index}}">
                     <span class="activity-icon">{{action.glyph}}</span>
                     {{action.label}}
                     {{#if action.options}}
-                    <select class="modular">
+                    <select class="modular" {{disabled (not @root.isOwner)}}>
                         {{#each action.options as |option|}}
                         <option value="{{option.value}}" {{#if option.selected}} selected{{/if}}>
                             {{option.label}} {{#if option.selected}}&#x2714;{{/if}}
@@ -90,7 +94,8 @@
                 {{#if (and strike.versatileOptions.length strike.ready)}}
                 <div class="versatiles">
                     {{#each strike.versatileOptions as |option|}}
-                    <div class="variant {{#if option.selected}}selected{{/if}}" data-action="toggle-versatile" data-value="{{option.value}}"
+                    <div class="variant {{#if option.selected}}selected{{/if}} {{#unless @root.isOwner}}disabled{{/unless}}"
+                        data-action="toggle-versatile" data-value="{{option.value}}"
                         title="{{localize (lookup @root.damageTypes [value])}}">
                         <i class="fa-solid fa-{{option.glyph}} fa-fw"></i>
                     </div>
@@ -109,6 +114,7 @@
     <div class="section">
         <div class="header">
             {{localize 'pf2e-hero-actions.templates.heroActions.label'}}
+            {{#if @root.isOwner}}
             <div class="menu">
                 {{#if heroActions.draw}}
                 <a data-action="draw-hero-action">+{{heroActions.draw}}</a>
@@ -116,17 +122,20 @@
                 <a data-action="trade-hero-action"><i class="fa-solid fa-handshake"></i></a>
                 {{/if}}
             </div>
+            {{/if}}
         </div>
         {{#each heroActions.actions as |action|}}
         <div class="action" data-uuid="{{action.uuid}}">
             <div class="icon"><img src="systems/pf2e/icons/actions/Passive.webp"></div>
             <a class="name" data-action="hero-action-description">{{action.name}}</a>
+            {{#if @root.isOwner}}
             {{#if ../heroActions.discard}}
             <a data-action="discard-hero-action"><i class="fa-solid fa-trash"></i></a>
             {{else}}
             <a data-action="use-hero-action"><i class="fa-solid fa-play"></i></a>
             {{/if}}
             <a class="chat" data-action="hero-action-chat"><i class="fa-solid fa-message"></i></a>
+            {{/if}}
         </div>
         {{/each}}
     </div>
@@ -140,7 +149,9 @@
         <div class="action" data-item-id="{{action.id}}">
             <div class="icon"><img src="{{action.img}}"></div>
             <a class="name" data-action="action-description">{{action.name}}</a>
+            {{#if @root.isOwner}}
             <a class="chat" data-action="action-chat"><i class="fa-solid fa-message"></i></a>
+            {{/if}}
         </div>
         {{/each}}
     </div>

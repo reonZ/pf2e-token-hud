@@ -25,8 +25,10 @@
                     <div class="trained">(T)</div>
                     {{/if}}
                     {{#if action.uuid}}
-                    <a data-action="action-description"><i class="fa-regular fa-circle-question"></i></a>
+                    <a class="observable" data-action="action-description"><i class="fa-regular fa-circle-question"></i></a>
+                    {{#if @root.isOwner}}
                     <a class="chat" data-action="action-chat"><i class="fa-solid fa-message"></i></a>
+                    {{/if}}
                     {{/if}}
                 </div>
             </div>

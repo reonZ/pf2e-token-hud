@@ -368,6 +368,16 @@ function getSkill(slug, actor) {
 }
 
 export function addSkillsListeners(el, actor) {
+    el.find('[data-action=action-description]').on('click', async event => {
+        event.preventDefault()
+        const action = $(event.currentTarget).closest('.action')
+        const description = await getItemSummary(action, actor)
+        if (description) popup(action.find('.name').children().html().trim(), description)
+    })
+
+    // IS OWNER
+    if (!actor.isOwner) return
+
     el.find('[data-action=roll-skill]').on('click', event => {
         event.preventDefault()
         const { slug } = event.currentTarget.dataset
@@ -380,13 +390,6 @@ export function addSkillsListeners(el, actor) {
         const { skillSlug, slug } = target.closest('.action').data()
         const variant = event.type === 'contextmenu' ? await createVariantDialog(skillSlug) : undefined
         if (variant !== null) rollAction(event, actor, skillSlug, slug, target.data(), variant)
-    })
-
-    el.find('[data-action=action-description]').on('click', async event => {
-        event.preventDefault()
-        const action = $(event.currentTarget).closest('.action')
-        const description = await getItemSummary(action, actor)
-        if (description) popup(action.find('.name').children().html().trim(), description)
     })
 
     el.find('[data-action=action-chat]').on('click', async event => {

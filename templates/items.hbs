@@ -3,7 +3,8 @@
     <div class="category">
         <div class="header">{{localize category.label}}</div>
         {{#each category.items as |item|}}
-        <div class="item" data-item-id="{{item.id}}" data-uuid="{{item.uuid}}" data-item-type="{{item.type}}" draggable="true">
+        <div class="item" data-item-id="{{item.id}}" data-uuid="{{item.uuid}}" data-item-type="{{item.type}}" {{#if
+            @root.isOwner}}draggable="true" {{/if}}>
             <div class="item-img">
                 <img src="{{item.img}}" draggable="false">
             </div>
@@ -12,7 +13,11 @@
                 <div class="extras">
                     <div class="infos">
                         <div class="quantity">
+                            {{#if @root.isOwner}}
                             <input type="number" value="{{item.quantity}}" min="0">
+                            {{else}}
+                            <span>{{item.quantity}}</span>
+                            {{/if}}
                         </div>
                         <div class="bulk"><i class="fa-regular fa-scale-balanced"></i> <span>{{item.bulk}}</span></div>
                         {{#if item.isTemporary}}
@@ -59,11 +64,12 @@
                         </a>
                         {{/if}}
 
+                        {{#if @root.isOwner}}
                         {{#if (or @root.isGM item.isIdentified)}}
                         <a data-action="edit-item"><i class="fa-solid fa-pen-to-square"></i></a>
                         {{/if}}
-
                         <a data-action="delete-item"><i class="fa-solid fa-trash"></i></a>
+                        {{/if}}
                     </div>
 
                 </div>

@@ -82,6 +82,9 @@
 #pf2e-token-hud .sidebar.actions .section .strike .variants .variant select.ammos {
   margin-inline: -1px;
 }
+#pf2e-token-hud .sidebar.actions .section .strike .variants .variant.disabled select {
+  color: #d9d9d9;
+}
 #pf2e-token-hud .sidebar.actions .section .strike .variants .versatiles {
   display: flex;
   gap: 1px;
@@ -96,6 +99,10 @@
 }
 #pf2e-token-hud .sidebar.actions .section .strike .variants .versatiles .variant.selected:hover {
   box-shadow: inset 0 0 4px white;
+}
+#pf2e-token-hud .sidebar.actions .section .strike .variants .versatiles .variant.disabled.selected {
+  background: #c76868;
+  color: #ebebeb;
 }
 #pf2e-token-hud .sidebar.actions .section .action {
   display: flex;

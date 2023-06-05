@@ -37,6 +37,10 @@ export function registerSettings() {
         },
     })
 
+    register('observer', Boolean, true)
+
+    register('see-status', Boolean, false)
+
     register('show-death', String, 'always', {
         choices: {
             none: path('show-death', 'choices.none'),
@@ -44,8 +48,6 @@ export function registerSettings() {
             only: path('show-death', 'choices.only'),
         },
     })
-
-    register('see-status', Boolean, false)
 
     // distance
 

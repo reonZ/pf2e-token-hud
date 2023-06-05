@@ -57,6 +57,8 @@ export class HUD extends Application {
         this.forceClose = () => this.close({ force: true })
 
         this.#hoverToken = (token, hover) => {
+            const isOwner = token.isOwner
+            const isObserver = isOwner || (token.observer && getSetting('observer'))
             const hoverSidebar = $(window.document).find(':hover').filter('#sidebar').length
 
             if (
@@ -81,13 +83,13 @@ export class HUD extends Application {
 
                 const holdingSetting = getSetting('holding')
                 const holding = isHolding()
-                if (holdingSetting !== 'none' && !holding && (holdingSetting === 'all' || token.isOwner)) return
+                if (holdingSetting !== 'none' && !holding && (holdingSetting === 'all' || isObserver)) return
 
                 if (!this.#closing) {
                     return this.render(
                         null,
                         null,
-                        holdingSetting === 'none' || (holdingSetting === 'owned' && !token.isOwner && !holding)
+                        holdingSetting === 'none' || (holdingSetting === 'owned' && !isObserver && !holding)
                     )
                 }
 
@@ -194,6 +196,7 @@ export class HUD extends Application {
 
         let distance = null
         const isOwner = token.isOwner
+        const isObserver = isOwner || (token.observer && getSetting('observer'))
         const showDistance = getSetting('distance')
         const isCharacter = this.isCharacter
         const { attributes, saves, heroPoints, system, alignment } = actor
@@ -213,7 +216,7 @@ export class HUD extends Application {
         } = attributes
         const useStamina = game.settings.get('pf2e', 'staminaVariant')
 
-        if (showDistance === 'all' || (showDistance === 'self' && isOwner)) {
+        if (showDistance === 'all' || (showDistance === 'self' && isObserver)) {
             const unitSplit = getSetting('unit').split(',')
             const multiplier = Number(unitSplit[0]?.trim()) || 1
             const unit = unitSplit[1]?.trim() || game.system.gridUnits
@@ -239,7 +242,7 @@ export class HUD extends Application {
         }
 
         let status
-        if (!isOwner || getSetting('see-status')) {
+        if (!isObserver || getSetting('see-status')) {
             const statuses = getSetting('status')
                 .split(',')
                 .map(x => x.trim())
@@ -258,7 +261,7 @@ export class HUD extends Application {
             }
         }
 
-        if (!isOwner) {
+        if (!isObserver) {
             return {
                 status,
                 distance,
@@ -312,6 +315,7 @@ export class HUD extends Application {
             distance,
             status,
             isOwner,
+            isObserver,
             tokenId: token.id,
             name: token.document.name,
             hp,
@@ -452,7 +456,7 @@ export class HUD extends Application {
 
         let coords
 
-        const positions = token.isOwner ? POSITIONS[getSetting('position')].slice() : ['top', 'bottom']
+        const positions = token.observer ? POSITIONS[getSetting('position')].slice() : ['top', 'bottom']
 
         while (positions.length && !coords) {
             const position = positions.shift()
@@ -497,6 +501,7 @@ export class HUD extends Application {
         const actor = token?.actor
         if (!actor) return
 
+        const isOwner = token.isOwner
         actor.apps[MODULE_ID] = this
 
         html.on('mousedown', () => this.bringToTop())
@@ -526,6 +531,26 @@ export class HUD extends Application {
                 { once: true }
             )
         })
+
+        const infos = html.find('[data-action=show-info]')
+        infos.tooltipster({
+            position: ['top', 'bottom', 'left', 'right'],
+            theme: 'crb-hover',
+            arrow: false,
+            animationDuration: 0,
+            contentAsHTML: true,
+            trigger: 'click',
+        })
+
+        const infosToLeave = isOwner ? infos.filter(':not(.speeds)') : infos
+        infosToLeave.on('mouseleave', event => {
+            $(event.currentTarget).tooltipster('hide')
+        })
+
+        html.find('.inner .footer [data-type]').on('click', this.#openSidebar.bind(this))
+
+        // IS OWNER
+        if (!isOwner) return
 
         html.find('input').on('change', async event => {
             const target = event.currentTarget
@@ -589,18 +614,6 @@ export class HUD extends Application {
             useResolve(actor)
         })
 
-        const infos = html.find('[data-action=show-info]')
-        infos.tooltipster({
-            position: ['top', 'bottom', 'left', 'right'],
-            theme: 'crb-hover',
-            arrow: false,
-            animationDuration: 0,
-            contentAsHTML: true,
-            trigger: 'click',
-        })
-        infos.filter(':not(.speeds)').on('mouseleave', event => {
-            $(event.currentTarget).tooltipster('hide')
-        })
         infos
             .filter('.speeds')
             .tooltipster('option', 'interactive', true)
@@ -617,8 +630,6 @@ export class HUD extends Application {
                 if (html.find('.sidebar').length) return
                 this.#lock = false
             })
-
-        html.find('.inner .footer [data-type]').on('click', this.#openSidebar.bind(this))
     }
 
     async #openSidebar(type) {
@@ -644,6 +655,7 @@ export class HUD extends Application {
 
         data.isGM = game.user.isGM
         data.isCharacter = this.isCharacter
+        data.isOwner = actor.isOwner
 
         this.#lock = true
 

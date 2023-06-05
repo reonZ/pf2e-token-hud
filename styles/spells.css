@@ -50,10 +50,6 @@
   width: 4ch;
 }
 #pf2e-token-hud .sidebar.spells .entry .spell .details .extras .actions .pips {
-  display: flex;
-  align-items: center;
-  gap: 1px;
-  cursor: pointer;
   margin-right: 3px;
 }
 #pf2e-token-hud .sidebar.spells .entry .spell .details .extras .actions .pips .pip {

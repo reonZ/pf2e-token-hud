@@ -1,7 +1,7 @@
 <div class="extras">
     <div class="row">
         {{> roll action='roll-initiative' label='PF2E.InitiativeLabel'}}
-        <select name="system.attributes.initiative.statistic">
+        <select name="system.attributes.initiative.statistic" {{disabled (not isOwner)}}>
             {{selectOptions initiative.skills selected=initiative.selected nameAttr="slug" labelAttr="label"}}
         </select>
     </div>

@@ -14,6 +14,9 @@ export async function getExtrasData(actor) {
 }
 
 export function addExtrasListeners(el, actor) {
+    // IS OWNER
+    if (!actor.isOwner) return
+
     el.find('input[name], select[name]').on('change', async event => {
         const target = event.currentTarget
         const value = target.type === 'number' ? target.valueAsNumber : target.value

@@ -7,7 +7,12 @@ export async function popup(title, content) {
     hud.find('.popup').remove()
 
     const tmp = document.createElement('div')
-    tmp.innerHTML = await renderTemplate(templatePath('popup'), { title, close: localize('popup.close') })
+    tmp.innerHTML = `<div class="popup">
+    <div class="header">
+        <div class="title">${title}</div>
+        <a class="observable" data-action="close-popup"><i class="fas fa-times"></i> ${localize('popup.close')}</a>
+    </div>
+</div>`
 
     const popup = tmp.firstElementChild
     if (typeof content === 'string') {

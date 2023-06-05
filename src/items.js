@@ -33,6 +33,9 @@ export function addItemsListeners(el, actor) {
 
     addNameTooltipListeners(item)
 
+    // IS OWNER
+    if (!actor.isOwner) return
+
     item.on('dragstart', event => {
         const target = event.target.closest('.item')
         const { itemType, uuid } = target.dataset

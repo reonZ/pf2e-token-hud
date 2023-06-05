@@ -111,11 +111,6 @@ export function addActionsListeners(el, actor) {
         return $(event.currentTarget).closest('.action').data().uuid
     }
 
-    action('action-chat', event => {
-        const item = getItemFromEvent(event, actor)
-        item?.toMessage(event, { create: true })
-    })
-
     action('action-description', async event => {
         const action = $(event.currentTarget).closest('.action')
         const description = await getItemSummary(action, actor)
@@ -125,6 +120,14 @@ export function addActionsListeners(el, actor) {
     action('hero-action-description', async event => {
         const { description, name } = (await getHeroActionDescription(getUuid(event))) ?? {}
         if (description) popup(name, description)
+    })
+
+    // IS OWNER
+    if (!actor.isOwner) return
+
+    action('action-chat', event => {
+        const item = getItemFromEvent(event, actor)
+        item?.toMessage(event, { create: true })
     })
 
     action('hero-action-chat', async event => {

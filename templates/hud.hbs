@@ -1,19 +1,19 @@
-<div id="pf2e-token-hud" data-token-id="{{tokenId}}">
+<div id="pf2e-token-hud" {{#unless isOwner}}class="observer" {{/unless}} data-token-id="{{tokenId}}">
     {{#if tokenId}}
 
     {{#if distance}}
-    <div class="distance {{#if isOwner}}free{{/if}}">
+    <div class="distance {{#if isObserver}}free{{/if}}">
         {{{distance.icon}}} <div class="range">{{distance.range}} {{distance.unit}}</div>
     </div>
     {{/if}}
 
     {{#if status}}
-    <div class="status {{#if isOwner}}free{{/if}}" style="--hue: {{status.hue}};">
+    <div class="status {{#if isObserver}}free{{/if}}" style="--hue: {{status.hue}};">
         {{status.value}}
     </div>
     {{/if}}
 
-    {{#if isOwner}}
+    {{#if isObserver}}
     <div class="inner">
         <div class="header">{{name}}</div>
 
@@ -41,15 +41,15 @@
         <div class="group">
             <div class="section">
                 <i class="fa-solid fa-heart-half-stroke"></i>
+                {{#if isOwner}}
                 <input type="number" name="system.attributes.hp.temp" value="{{hp.temp}}" min="0">
+                {{else}}
+                <span>{{hp.temp}}</span>
+                {{/if}}
             </div>
             <div class="section">
                 <i class="fa-solid fa-heart"></i>
-                <div class="numbers">
-                    <input type="number" name="system.attributes.hp.value" value="{{hp.value}}" min="0" max="{{hp.max}}">
-                    /
-                    <span>{{hp.max}}</span>
-                </div>
+                {{> numbers name="system.attributes.hp.value" value=hp.value max=hp.max}}
             </div>
         </div>
         {{/if}}
@@ -58,19 +58,11 @@
         <div class="group">
             <div class="section">
                 <a data-action="use-resolve"><i class="fa-solid fa-circle-r"></i></a>
-                <div class="numbers">
-                    <input type="number" name="system.attributes.resolve.value" value="{{resolve.value}}" min="0" max="{{resolve.max}}">
-                    /
-                    <span>{{resolve.max}}</span>
-                </div>
+                {{> numbers name="system.attributes.resolve.value" value=resolve.value max=resolve.max}}
             </div>
             <div class="section">
                 <i class="fa-solid fa-heart-pulse"></i>
-                <div class="numbers">
-                    <input type="number" name="system.attributes.sp.value" value="{{sp.value}}" min="0" max="{{sp.max}}">
-                    /
-                    <span>{{sp.max}}</span>
-                </div>
+                {{> numbers name="system.attributes.sp.value" value=sp.value max=sp.max}}
             </div>
         </div>
         {{/if}}
@@ -80,9 +72,11 @@
                 <i class="fa-regular fa-helmet-battle"></i> {{ac}}
                 <a data-action="take-cover">
                     {{#if hasCover}}
-                    <i class="fa-solid fa-eye-slash"></i>
+                    <i class="fa-solid fa-block-brick"></i>
+                    {{!-- <i class="fa-solid fa-eye-slash"></i> --}}
                     {{else}}
-                    <i class="fa-duotone fa-eye-slash"></i>
+                    <i class="fa-light fa-block-brick"></i>
+                    {{!-- <i class="fa-duotone fa-eye-slash"></i> --}}
                     {{/if}}
                 </a>
             </div>
@@ -97,13 +91,8 @@
                     <i class="fa-regular fa-shield"></i>
                     {{/if}}
                 </a>
-                {{!-- {{#if shield.ac}}+{{/if}}{{shield.ac}} --}}
                 ({{shield.hardness}})
-                <div class="numbers">
-                    <input type="number" name="shield.value" value="{{shield.hp.value}}" min="0" max="{{shield.hp.max}}">
-                    /
-                    <span>{{shield.hp.max}}</span>
-                </div>
+                {{> numbers name="shield.value" value=shield.hp.value max=shield.hp.max}}
             </div>
             {{/if}}
         </div>
@@ -143,16 +132,16 @@
 
         <hr>
 
-        <div class="footer">
-            <a data-type="actions"><i class="fa-solid fa-sword"></i></a>
-            <a {{#if hasItems}} data-type="items" {{else}} class="disabled" {{/if}}>
+        <div class="footer observable">
+            <a class="observable" data-type="actions"><i class="fa-solid fa-sword"></i></a>
+            <a class="observable {{#unless hasItems}}disabled{{/unless}}" {{#if hasItems}}data-type="items" {{/if}}>
                 <i class="fa-solid fa-backpack"></i>
             </a>
-            <a {{#if hasSpells}} data-type="spells" {{else}} class="disabled" {{/if}}>
+            <a class="observable {{#unless hasSpells}}disabled{{/unless}}" {{#if hasSpells}} data-type="spells" {{/if}}>
                 <i class="fa-solid fa-wand-magic-sparkles"></i>
             </a>
-            <a data-type="skills"><i class="fa-solid fa-hand"></i></a>
-            <a data-type="extras"><i class="fa-solid fa-gears"></i></a>
+            <a class="observable" data-type="skills"><i class="fa-solid fa-hand"></i></a>
+            <a class="observable" data-type="extras"><i class="fa-solid fa-gears"></i></a>
         </div>
     </div>
     {{/if}}
@@ -172,5 +161,17 @@
 <div class="section info {{#unless tooltip includeZero=true}}disabled{{/unless}} {{#if class}}{{class}}{{/if}}" data-action="show-info"
     {{#if tooltip includeZero=true}} title="<div class='hover-content info'><ul>{{tooltip}}</ul></div>" {{/if}}>
     <i class="{{icon}}"></i>{{value}}
+</div>
+{{/inline}}
+
+{{#*inline 'numbers'}}
+<div class="numbers">
+    {{#if @root.isOwner}}
+    <input type="number" name="{{name}}" value="{{value}}" min="0" max="{{max}}">
+    {{else}}
+    <span>{{value}}</span>
+    {{/if}}
+    /
+    <span>{{max}}</span>
 </div>
 {{/inline}}

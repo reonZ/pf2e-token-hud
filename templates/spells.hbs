@@ -41,7 +41,7 @@
                         <div class="uses">
                             <input type="number" value="{{spell.uses.value}}" data-input-path="{{spell.inputPath}}"
                                 data-entry-id="{{#if spell.isInnate}}{{spell.itemId}}{{else}}{{spell.entryId}}{{/if}}" placeholder="0"
-                                min="0" max="{{spell.uses.max}}" {{#if spell.isCharge}}disabled{{/if}}>
+                                min="0" max="{{spell.uses.max}}" {{disabled (or spell.isCharge (not @root.isOwner))}}>
                             {{#if spell.uses.max}}
                             <input type="text" value="/  {{spell.uses.max}}" disabled>
                             {{!-- {{else if spell.isCharge}}
@@ -49,7 +49,7 @@
                             {{/if}}
                         </div>
 
-                        {{else if spell.isPrepared}}
+                        {{else if (and spell.isPrepared @root.isOwner)}}
                         <a data-action="toggle-prepared">
                             <i class="fas fa-fw {{#if spell.expended}}fa-plus-square{{else}}fa-minus-square{{/if}}"></i>
                         </a>
@@ -58,9 +58,11 @@
 
                         {{/unless}}
 
+                        {{#if @root.isOwner}}
                         <a {{#if spell.expended}}class="disabled" {{else}}data-action="cast-spell" {{/if}}>
                             <i class="fa-duotone fa-play"></i>
                         </a>
+                        {{/if}}
                     </div>
                 </div>
             </div>
@@ -87,9 +89,11 @@
                     <div class="type">{{localize 'PF2E.LevelN' level=ritual.level}}</div>
                     <div class="actions">
                         <span>{{ritual.time}}</span>
+                        {{#if @root.isOwner}}
                         <a data-action="cast-spell">
                             <i class="fa-duotone fa-play"></i>
                         </a>
+                        {{/if}}
                     </div>
                 </div>
             </div>

@@ -29,6 +29,13 @@
         }
     }
 
+    .pips {
+        display: flex;
+        align-items: center;
+        gap: 1px;
+        cursor: pointer;
+    }
+
     input,
     select {
         color: var(--color);
@@ -339,11 +346,6 @@
                 }
 
                 .pips {
-                    display: flex;
-                    align-items: center;
-                    gap: 1px;
-                    cursor: pointer;
-
                     i {
                         font-size: 0.86em;
                         margin: 0;
@@ -358,6 +360,29 @@
             display: flex;
             align-items: center;
             justify-content: space-evenly;
+        }
+    }
+
+    &.observer {
+        a:not(.observable):not(.name):not(.content-link) {
+            text-shadow: none;
+            cursor: default;
+        }
+
+        .pips {
+            cursor: default;
+        }
+
+        .sidebar {
+            .variants {
+                .variant {
+                    cursor: default;
+
+                    &:hover {
+                        box-shadow: none;
+                    }
+                }
+            }
         }
     }
 }
