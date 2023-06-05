@@ -1,3 +1,18 @@
+# 1.5.0
+
+-   added traits to `NPC` strike attacks
+-   added a way to show strike descriptions for `Characters` by clicking on their name
+-   added a way to show equipment descriptions by clicking on their name
+-   added a way to send equipment descriptions to chat by clicking on their image
+-   added a way to send spell descriptions to chat by clicking on their image (formerly it would open the description popup)
+-   added `Tooltip on Observe` setting (enabled by default) which generates a uneditable version of the regular tooltip for tokens to which the user has `observe` permission
+-   added `Disable Chat Card Hover` setting (enabled by default) which prevent the tooltip from showing up when hovering over a chat card owned by a token
+-   changed the way to show spell descriptions by clicking on their name (formerly required to click on their image)
+-   changed so that most of the features `owned only` will now also extend to `observed` when the `Tooltip on Observe` is enabled
+-   changed the `Take Cover` icon to a wall
+-   changed `Remove Death Line` setting into `Show Death Line` multi choice with an option to only show the line when the actor has any wounded or dying
+-   fixed issue with firefox displaying name tooltips even though they were not too big for their container
+
 # 1.4.0
 
 -   added `Health Status on Owned` setting allowing the display of the health status on the regular tooltip instead of just on the non-owned token one

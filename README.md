@@ -10,6 +10,7 @@ Starting to work on some bullet points for the future readme:
 -   equipment items are actually draggable so you can give them to another actor the usual way (this module doesn't prevent the system restriction though, for that you would have to use another module \*_cough_\*)
 -   the holding keybind can either be used before hovering over a token or during
 -   using the holding keybind while hovering over a non-owned token while having the setting set to `Owned Only` will short-circuit the delay regardless
+-   you can select the speed to be displayed in the tooltip by opening the speeds tooltip and selecting one (this is a per user choice)
 
 # CHANGELOG
 
