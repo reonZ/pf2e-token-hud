@@ -279,11 +279,12 @@ export class HUD extends Application {
 
         const languages = actor.system.traits?.languages?.value
             .map(x => game.i18n.localize(CONFIG.PF2E.languages[x]))
+            .filter(Boolean)
             .sort(sort)
             .map(toInfo)
             .join('')
 
-        const senses = isCharacter ? traits.senses.map(x => x.label) : traits.senses.value.split(',')
+        const senses = isCharacter ? traits.senses.map(x => x.label) : traits.senses.value.split(',').filter(Boolean)
 
         function toIWR(category, header) {
             if (!category.length) return ''
