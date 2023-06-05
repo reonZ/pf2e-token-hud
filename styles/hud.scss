@@ -405,6 +405,12 @@
                     }
                 }
             }
+
+            .item-img {
+                &.hover {
+                    cursor: default;
+                }
+            }
         }
     }
 }

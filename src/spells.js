@@ -1,6 +1,6 @@
 import { getSetting, MODULE_ID } from './module.js'
 import { showItemSummary } from './popup.js'
-import { addNameTooltipListeners } from './shared.js'
+import { addNameTooltipListeners, getItemFromEvent } from './shared.js'
 
 export async function getSpellsData(actor) {
     const focusPool = actor.system.resources.focus?.value ?? 0
@@ -117,6 +117,11 @@ export function addSpellsListeners(el, actor) {
 
     // IS OWNER
     if (!actor.isOwner) return
+
+    el.find('[data-action=spell-chat]').on('click', async event => {
+        const item = getItemFromEvent(event, actor)
+        item?.toMessage(event, { create: true })
+    })
 
     el.find('[data-action=toggle-pips]').on('click contextmenu', async event => {
         event.preventDefault()

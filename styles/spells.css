@@ -9,23 +9,6 @@
 #pf2e-token-hud .sidebar.spells .entry .spell > * {
   z-index: 1;
 }
-#pf2e-token-hud .sidebar.spells .entry .spell .item-img {
-  cursor: pointer;
-}
-#pf2e-token-hud .sidebar.spells .entry .spell .item-img i {
-  display: none;
-  position: absolute;
-  inset: 0;
-  align-items: center;
-  justify-content: center;
-  background: #c9c3b8;
-  border: 1px solid #363636;
-  border-radius: 4px;
-  font-size: 2em;
-}
-#pf2e-token-hud .sidebar.spells .entry .spell .item-img:hover i {
-  display: flex;
-}
 #pf2e-token-hud .sidebar.spells .entry .spell .details .extras .type {
   white-space: nowrap;
   font-size: 0.9em;

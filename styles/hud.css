@@ -331,6 +331,9 @@
 #pf2e-token-hud.observer .sidebar .variants .variant:hover {
   box-shadow: none;
 }
+#pf2e-token-hud.observer .sidebar .item-img.hover {
+  cursor: default;
+}
 
 .crb-hover .tooltipster-box .tooltipster-content .hover-content.info {
   white-space: nowrap;

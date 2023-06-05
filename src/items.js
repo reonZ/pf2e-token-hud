@@ -40,13 +40,13 @@ export function addItemsListeners(el, actor) {
         showItemSummary(item, actor)
     })
 
+    // IS OWNER
+    if (!actor.isOwner) return
+
     item.find('[data-action=item-chat]').on('click', async event => {
         const item = getItemFromEvent(event, actor)
         item?.toMessage(event, { create: true })
     })
-
-    // IS OWNER
-    if (!actor.isOwner) return
 
     item.on('dragstart', event => {
         const target = event.target.closest('.item')

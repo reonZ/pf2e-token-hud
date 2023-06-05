@@ -14,12 +14,14 @@
         <div class="spell{{#if spell.expended}} expended{{/if}}{{#if spell.isVirtual}} virtual{{/if}}" data-entry-id="{{spell.entryId}}"
             data-slot-id="{{spell.slotId}}" data-expended="{{spell.expended}}" data-slot-level="{{spell.slotLevel}}"
             data-item-id="{{spell.itemId}}" data-cast-level="{{spell.castLevel}}">
-            <div class="item-img" data-action="spell-description">
+            <div class="item-img hover" data-action="spell-chat">
                 <img src="{{spell.img}}">
-                <i class="fa-solid fa-circle-question"></i>
+                {{#if @root.isOwner}}
+                <i class="fa-solid fa-message"></i>
+                {{/if}}
             </div>
             <div class="details">
-                <div class="name">{{spell.name}}</div>
+                <a class="name" data-action="spell-description">{{spell.name}}</a>
                 <div class="extras">
                     <div class="type">
                         {{#if spell.tradition}}{{spell.tradition}}| {{/if}}
