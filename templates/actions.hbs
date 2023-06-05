@@ -94,6 +94,11 @@
                         {{/select}}
                     </select>
                 </div>
+                {{#if (gt strike.item.ammo.uses.max 1)}}
+                <span class="magazine">
+                    <i class="fa-brands fa-stack-overflow"></i>{{strike.item.ammo.uses.value}}
+                </span>
+                {{/if}}
                 {{/if}}
 
                 {{#each strike.auxiliaryActions as |action|}}

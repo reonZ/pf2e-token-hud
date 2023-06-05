@@ -122,15 +122,19 @@
             gap: 1px 2px;
             font-size: 0.85em;
 
-            .variant {
-                cursor: pointer;
+            .variant,
+            .magazine {
                 height: calc(var(--font-size) * 1.28);
-                background: #424242;
                 border-radius: 2px;
                 border: 1px solid rgba(0, 0, 0, 0.5);
-                box-shadow: inset 0 0 0 1px rgb(255 255 255 / 10%);
                 color: var(--text-light);
                 padding-inline: 1px;
+            }
+
+            .variant {
+                cursor: pointer;
+                background: #424242;
+                box-shadow: inset 0 0 0 1px rgb(255 255 255 / 10%);
 
                 &.disabled {
                     box-shadow: none;
