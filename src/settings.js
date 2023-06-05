@@ -1,6 +1,8 @@
 import { enableModule, localize, MODULE_ID } from './module.js'
 
 export function registerSettings() {
+    const isGM = game.data.users.find(x => x._id === game.data.userId).role >= CONST.USER_ROLES.GAMEMASTER
+
     /**
      * GM
      */
@@ -31,11 +33,12 @@ export function registerSettings() {
         },
     })
 
-    register('holding', String, 'none', {
+    register('use-holding', String, 'none', {
+        hint: path('use-holding', isGM ? 'choices.gm.hint' : 'choices.player.hint'),
         choices: {
-            none: path('holding', 'choices.none'),
-            owned: path('holding', 'choices.owned'),
-            all: path('holding', 'choices.all'),
+            none: path('use-holding', 'choices.none'),
+            half: path('use-holding', isGM ? 'choices.gm.half' : 'choices.player.half'),
+            all: path('use-holding', isGM ? 'choices.gm.all' : 'choices.player.all'),
         },
     })
 

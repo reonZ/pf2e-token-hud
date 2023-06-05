@@ -79,7 +79,7 @@ export class HUD extends Application {
 
             if (hover && !game.keyboard.downKeys.has('ControlLeft')) {
                 this.#setToken(token)
-                if (!this.#closing) return this.render(null, null, getSetting('holding') === 'none' || !isHolding())
+                if (!this.#closing) return this.render(null, null, getSetting('use-holding') === 'none' || !isHolding())
                 clearTimeout(this.#closing)
                 this.#closing = null
                 this.render()
@@ -413,10 +413,10 @@ export class HUD extends Application {
         if (!actor) return
 
         const holding = isHolding()
-        const holdingSetting = getSetting('holding')
+        const holdingSetting = getSetting('use-holding')
         const isParty = actor.system.details.alliance === 'party'
 
-        if (game.user.isGM && holdingSetting === 'owned' && !holding) this.#isObserved = false
+        if (game.user.isGM && holdingSetting === 'half' && !holding) this.#isObserved = false
         else this.#isObserved = token.isOwner || (getSetting('observer') && (token.observer || (isParty && getSetting('party'))))
 
         if (holdingSetting !== 'none' && !holding && (holdingSetting === 'all' || this.#isObserved)) return

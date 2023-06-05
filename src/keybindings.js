@@ -6,7 +6,7 @@ export function registerKeybindings() {
     register('hold', {
         onDown: () => {
             holding = true
-            if (getSetting('holding') !== 'none') getHud().render()
+            if (getSetting('use-holding') !== 'none') getHud().render()
         },
         onUp: () => {
             holding = false
