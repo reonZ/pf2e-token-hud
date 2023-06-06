@@ -235,8 +235,8 @@
 }
 #pf2e-token-hud .distance:not(.free):not(:last-child) {
   margin: auto;
-  top: calc(var(--border-width) + var(--inner-padding));
   border-radius: 4px 4px 0 0;
+  pointer-events: none;
 }
 #pf2e-token-hud .status {
   color: hsl(var(--hue), 75%, 40%);
@@ -253,7 +253,7 @@
 }
 #pf2e-token-hud .status:not(.free) {
   min-width: 7em;
-  top: var(--inner-padding);
+  pointer-events: none;
 }
 #pf2e-token-hud .inner {
   max-width: 17em;

@@ -25,6 +25,15 @@ export function registerSettings() {
         },
     })
 
+    register('small-position', String, 'top', {
+        choices: {
+            left: path('position', 'choices.left'),
+            right: path('position', 'choices.right'),
+            top: path('position', 'choices.top'),
+            bottom: path('position', 'choices.bottom'),
+        },
+    })
+
     register('delay', Number, 250, {
         range: {
             min: 0,

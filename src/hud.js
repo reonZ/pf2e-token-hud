@@ -476,7 +476,9 @@ export class HUD extends Application {
 
         let coords
 
-        const positions = this.#isObserved ? POSITIONS[getSetting('position')].slice() : ['top', 'bottom']
+        const positions = this.#isObserved
+            ? POSITIONS[getSetting('position')].slice()
+            : POSITIONS[getSetting('small-position')].slice()
 
         while (positions.length && !coords) {
             const position = positions.shift()
@@ -527,6 +529,7 @@ export class HUD extends Application {
         html.on('mousedown', () => this.bringToTop())
 
         html.on('mouseenter', () => {
+            if (!html.find('.inner').length) return
             this.#hover = true
             this.#softLock = true
         })

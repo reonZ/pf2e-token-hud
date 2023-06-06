@@ -282,8 +282,9 @@
 
         &:not(.free):not(:last-child) {
             margin: auto;
-            top: calc(var(--border-width) + var(--inner-padding));
+            // top: calc(var(--border-width) + var(--inner-padding));
             border-radius: 4px 4px 0 0;
+            pointer-events: none;
         }
     }
 
@@ -303,7 +304,8 @@
 
         &:not(.free) {
             min-width: 7em;
-            top: var(--inner-padding);
+            pointer-events: none;
+            // top: var(--inner-padding);
         }
     }
 

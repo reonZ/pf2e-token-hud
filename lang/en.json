@@ -24,7 +24,7 @@
                 "hint": "Should the module be enabled on this client."
             },
             "position": {
-                "name": "Preferred Position",
+                "name": "Tooltip Position",
                 "hint": "Which side of the token would you prefer the main tooltip to show, if not possible, the module will try first on the opposite side, otherwise on one of the remaining two.",
                 "choices": {
                     "left": "Left",
@@ -32,6 +32,10 @@
                     "top": "Top",
                     "bottom": "Bottom"
                 }
+            },
+            "small-position": {
+                "name": "Small Tooltip Position",
+                "hint": "Select a preferred side for the small version of the tooltip, same logic applies than for the regular one."
             },
             "delay": {
                 "name": "Tooltip Delay",
