@@ -144,12 +144,16 @@
             },
             "saves": {
                 "name": "Show Saves",
-                "hint": "Should the fortitude, reflex and will saves  be displayed in the tooltip",
+                "hint": "Should the fortitude, reflex and will saves be displayed in the tooltip.",
                 "choices": {
                     "none": "Disabed",
                     "bonus": "Show Bonus",
                     "dc": "Show DC"
                 }
+            },
+            "others": {
+                "name": "Perception, Stealth, Athletics",
+                "hint": "Should the perception, stealth and athletics bonus/DC be shown in the tooltip."
             }
         },
         "spells": {

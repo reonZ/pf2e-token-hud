@@ -58,6 +58,14 @@ export function registerSettings() {
         },
     })
 
+    register('others', String, 'none', {
+        choices: {
+            none: path('saves', 'choices.none'),
+            bonus: path('saves', 'choices.bonus'),
+            dc: path('saves', 'choices.dc'),
+        },
+    })
+
     register('show-death', String, 'always', {
         choices: {
             none: path('show-death', 'choices.none'),

@@ -363,7 +363,7 @@ export async function getSkillsData(actor) {
     return { skills, lores, doubled: getSetting('skills-columns') }
 }
 
-function getSkill(slug, actor) {
+export function getSkill(slug, actor) {
     return slug === 'perception' ? actor.perception : actor.skills[slug]
 }
 

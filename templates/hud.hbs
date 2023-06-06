@@ -107,6 +107,16 @@
         </div>
         {{/if}}
 
+        {{#if others}}
+        <div class="group">
+            {{#each others as |other|}}
+            <div class="section">
+                <a data-action="roll-other" data-slug="{{other.slug}}"><i class="{{other.icon}}"></i>{{other.label}}</a>
+            </div>
+            {{/each}}
+        </div>
+        {{/if}}
+
         {{#if showDeathLine}}
         <div class="group">
             <div class="section">

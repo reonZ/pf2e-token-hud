@@ -3,7 +3,7 @@ import { addExtrasListeners, getExtrasData } from './extras.js'
 import { addItemsListeners, getItemsData } from './items.js'
 import { isHolding } from './keybindings.js'
 import { getFlag, getSetting, localize, modifier, MODULE_ID, setFlag, templatePath } from './module.js'
-import { addSkillsListeners, getSkillsData } from './skills.js'
+import { addSkillsListeners, getSkill, getSkillsData } from './skills.js'
 import { addSpellsListeners, getSpellsData } from './spells.js'
 
 const COVER_UUID = 'Compendium.pf2e.other-effects.I9lfZUiCwMiGogVi'
@@ -42,6 +42,12 @@ const SAVES = {
     fortitude: 'fa-solid fa-hand-fist',
     reflex: 'fa-solid fa-person-running',
     will: 'fa-solid fa-brain',
+}
+
+const SKILLS = {
+    perception: 'fa-solid fa-eye',
+    stealth: 'fa-duotone fa-eye-slash',
+    athletics: 'fa-solid fa-dumbbell',
 }
 
 export class HUD extends Application {
@@ -188,10 +194,8 @@ export class HUD extends Application {
         if (!actor) return {}
 
         let distance = null
-        const isOwner = token.isOwner
-        const isObserver = this.#isObserved
-        const showDistance = getSetting('distance')
         const savesSetting = getSetting('saves')
+        const othersSetting = getSetting('others')
         const isCharacter = this.isCharacter
         const { attributes, saves, heroPoints, system, alignment } = actor
         const { traits } = system
@@ -209,6 +213,8 @@ export class HUD extends Application {
             immunities,
         } = attributes
         const useStamina = game.settings.get('pf2e', 'staminaVariant')
+        const isObserver = this.#isObserved
+        const showDistance = getSetting('distance')
 
         if (showDistance === 'all' || (showDistance === 'self' && isObserver)) {
             const unitSplit = getSetting('unit').split(',')
@@ -306,10 +312,16 @@ export class HUD extends Application {
 
         const showDeath = getSetting('show-death')
 
+        function getStatistic(stat, type, icons) {
+            const slug = stat.slug
+            const label = type === 'bonus' ? modifier(stat.mod) : stat.dc.value
+            return { slug, label, icon: icons[slug] }
+        }
+
         return {
             distance,
             status,
-            isOwner,
+            isOwner: token.isOwner,
             isObserver,
             tokenId: token.id,
             name: token.document.name,
@@ -331,11 +343,10 @@ export class HUD extends Application {
             hasCover: this.hasCover,
             saves:
                 savesSetting !== 'none' &&
-                ['fortitude', 'reflex', 'will'].map(slug => {
-                    const save = saves[slug]
-                    const label = savesSetting === 'bonus' ? modifier(save.mod) : save.dc.value
-                    return { slug, label, icon: SAVES[slug] }
-                }),
+                ['fortitude', 'reflex', 'will'].map(slug => getStatistic(saves[slug], savesSetting, SAVES)),
+            others:
+                othersSetting !== 'none' &&
+                ['perception', 'stealth', 'athletics'].map(slug => getStatistic(getSkill(slug, actor), othersSetting, SKILLS)),
             speeds: {
                 main: mainSpeed,
                 others: otherSpeeds,
@@ -600,6 +611,16 @@ export class HUD extends Application {
             event.preventDefault()
             const save = event.currentTarget.dataset.save
             actor.saves[save].roll({ event })
+        })
+
+        html.find('[data-action=roll-other]').on('click', event => {
+            event.preventDefault()
+            const slug = event.currentTarget.dataset.slug
+            if (slug !== 'athletics') {
+                const { ctrlKey, metaKey, shiftKey } = event
+                event = new MouseEvent('click', { ctrlKey: !ctrlKey, metaKey, shiftKey })
+            }
+            getSkill(slug, actor).roll({ event })
         })
 
         html.find('[data-action=recovery-check]').on('click', event => {
