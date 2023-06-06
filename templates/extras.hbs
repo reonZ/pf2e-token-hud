@@ -20,17 +20,17 @@
     <hr>
     {{/if}}
 
-    <div class="row">
-        {{> roll action='roll-aid' cost='reaction' label='PF2E.Actions.Aid.Title'}}
+    <div class="row" data-uuid="Compendium.pf2e.actionspf2e.HCl3pzVefiv9ZKQW">
+        {{> roll action='roll-aid' cost='reaction' label='PF2E.Actions.Aid.Title' actions=true}}
     </div>
 
-    <div class="row">
-        {{> roll action='roll-escape' cost=1 label='PF2E.Actions.Escape.Title'}}
+    <div class="row" data-uuid="Compendium.pf2e.actionspf2e.SkZAQRkLLkmBQNB9">
+        {{> roll action='roll-escape' cost=1 label='PF2E.Actions.Escape.Title' actions=true}}
     </div>
 </div>
 
 {{#*inline 'roll'}}
-<a data-action="{{action}}">
+<a class="name" data-action="{{action}}">
     {{#if cost}}
     {{localize label}}
     {{{actionGlyph cost}}}
@@ -42,4 +42,14 @@
     <i class="fa-solid fa-dice-d20"></i>
     {{/if}}
 </a>
+{{#if actions}}
+<div class="actions">
+    <a class="observable" data-action="action-description">
+        <i class="fa-regular fa-circle-question"></i>
+    </a>
+    {{#if @root.isOwner}}
+    <a class="chat" data-action="action-chat"><i class="fa-solid fa-message"></i></a>
+    {{/if}}
+</div>
+{{/if}}
 {{/inline}}

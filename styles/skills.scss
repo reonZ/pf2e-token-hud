@@ -1,11 +1,5 @@
 #pf2e-token-hud {
     .sidebar.skills {
-        --color-rank-0: #424242;
-        --color-rank-1: #171f69;
-        --color-rank-2: #3c005e;
-        --color-rank-3: #664400;
-        --color-rank-4: #5e0000;
-
         .header {
             font-weight: bold;
         }
@@ -26,26 +20,6 @@
                 line-height: 1.1;
                 font-size: 0.9em;
                 padding-inline: 2px;
-
-                &.\30 {
-                    color: var(--color-rank-0);
-                }
-
-                &.\31 {
-                    color: var(--color-rank-1);
-                }
-
-                &.\32 {
-                    color: var(--color-rank-2);
-                }
-
-                &.\33 {
-                    color: var(--color-rank-3);
-                }
-
-                &.\34 {
-                    color: var(--color-rank-4);
-                }
             }
         }
 

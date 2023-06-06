@@ -1,3 +1,5 @@
+import { unownedItemToMessage } from './pf2e.js'
+import { showItemSummary } from './popup.js'
 import { createVariantDialog, getSkillLabel, SKILLS_SLUGS } from './skills.js'
 
 export async function getExtrasData(actor) {
@@ -14,8 +16,21 @@ export async function getExtrasData(actor) {
 }
 
 export function addExtrasListeners(el, actor) {
+    el.find('[data-action=action-description]').on('click', event => {
+        event.preventDefault()
+        const action = $(event.currentTarget).closest('.row')
+        showItemSummary(action, actor)
+    })
+
     // IS OWNER
     if (!actor.isOwner) return
+
+    el.find('[data-action=action-chat]').on('click', async event => {
+        event.preventDefault()
+        const { uuid } = event.currentTarget.closest('.row').dataset
+        const item = await fromUuid(uuid)
+        if (item) unownedItemToMessage(event, item, actor, { create: true })
+    })
 
     el.find('input[name], select[name]').on('change', async event => {
         const target = event.currentTarget

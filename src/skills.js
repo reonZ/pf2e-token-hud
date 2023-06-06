@@ -368,7 +368,7 @@ export function getSkill(slug, actor) {
 }
 
 export function addSkillsListeners(el, actor) {
-    el.find('[data-action=action-description]').on('click', async event => {
+    el.find('[data-action=action-description]').on('click', event => {
         event.preventDefault()
         const action = $(event.currentTarget).closest('.action')
         showItemSummary(action, actor, action.find('.name').children().html())

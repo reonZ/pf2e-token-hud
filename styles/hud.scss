@@ -8,6 +8,12 @@
     --font-size: 14px;
     --outer-box-shadow: 0 0 20px var(--color-shadow-dark);
 
+    --color-rank-0: #424242;
+    --color-rank-1: #171f69;
+    --color-rank-2: #3c005e;
+    --color-rank-3: #664400;
+    --color-rank-4: #5e0000;
+
     z-index: 90;
     position: absolute;
     padding: var(--outer-padding);
@@ -39,6 +45,28 @@
     input,
     select {
         color: var(--color);
+    }
+
+    .rank {
+        &.\30 {
+            color: var(--color-rank-0);
+        }
+
+        &.\31 {
+            color: var(--color-rank-1);
+        }
+
+        &.\32 {
+            color: var(--color-rank-2);
+        }
+
+        &.\33 {
+            color: var(--color-rank-3);
+        }
+
+        &.\34 {
+            color: var(--color-rank-4);
+        }
     }
 
     .sidebar,
@@ -330,7 +358,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 1em;
+            gap: 0.9em;
             min-height: 1.86em;
 
             .section {

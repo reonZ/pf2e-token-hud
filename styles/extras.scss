@@ -21,7 +21,7 @@
                 height: 100%;
             }
 
-            > a {
+            > a[data-action] {
                 display: flex;
                 align-items: center;
                 gap: 4px;
@@ -32,6 +32,13 @@
                     line-height: 0.5;
                     display: inline-block;
                 }
+            }
+
+            .actions {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-size: 0.9em;
             }
         }
     }
