@@ -388,7 +388,7 @@ export function addSkillsListeners(el, actor) {
         const target = $(event.currentTarget)
         const { skillSlug, slug } = target.closest('.action').data()
         const variant = event.type === 'contextmenu' ? await createVariantDialog(skillSlug) : undefined
-        if (variant !== null) rollAction(event, actor, skillSlug, slug, target.data(), variant)
+        if (variant !== null) rollAction(event, actor, skillSlug, slug, target.data(), variant?.selected)
     })
 
     el.find('[data-action=action-chat]').on('click', async event => {
@@ -399,8 +399,8 @@ export function addSkillsListeners(el, actor) {
     })
 }
 
-export async function createVariantDialog(base) {
-    let content = '<p style="text-align: center; margin-block: 0 8px;">'
+export async function createVariantDialog(base, dc) {
+    let content = '<p style="display: flex; align-items: center; justify-content: space-between;">'
     content += `<strong>${localize('skills.variant.label')}</strong> <select>`
 
     for (const slug of SKILLS_SLUGS) {
@@ -411,10 +411,16 @@ export async function createVariantDialog(base) {
 
     content += '</select></p>'
 
+    if (dc) {
+        content += '<p style="display: flex; align-items: center; justify-content: space-between;">'
+        content += `<strong>${localize('skills.variant.dc')}</strong>`
+        content += `<input type="number" value="${dc}" min="0" style="width: 4ch;"></p>`
+    }
+
     return Dialog.prompt({
         title: localize('skills.variant.title'),
         label: localize('skills.variant.button'),
-        callback: html => html.find('select').val(),
+        callback: html => ({ selected: html.find('select').val(), dc: html.find('input').val() }),
         rejectClose: false,
         content,
         options: { width: 280 },

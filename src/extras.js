@@ -61,9 +61,16 @@ export function addExtrasListeners(el, actor) {
     action(
         'roll-aid',
         async event => {
-            const statistic = await createVariantDialog()
+            const variant = await createVariantDialog(null, 20)
             const note = { text: '@UUID[Compendium.pf2e.other-effects.AHMUpMbaVkZ5A1KX]' }
-            if (statistic !== null) game.pf2e.actions.get('aid').use({ event, actors: [actor], statistic, notes: [note] })
+            if (variant !== null)
+                game.pf2e.actions.get('aid').use({
+                    event,
+                    actors: [actor],
+                    statistic: variant?.selected,
+                    difficultyClass: { value: variant?.dc },
+                    notes: [note],
+                })
         },
         'click contextmenu'
     )
@@ -71,8 +78,8 @@ export function addExtrasListeners(el, actor) {
     action(
         'roll-escape',
         async event => {
-            const statistic = event.type === 'contextmenu' ? await createVariantDialog() : undefined
-            if (statistic !== null) game.pf2e.actions.get('escape').use({ event, actors: [actor], statistic })
+            const variant = event.type === 'contextmenu' ? await createVariantDialog() : undefined
+            if (variant !== null) game.pf2e.actions.get('escape').use({ event, actors: [actor], statistic: variant?.selected })
         },
         'click contextmenu'
     )

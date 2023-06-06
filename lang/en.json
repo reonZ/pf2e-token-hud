@@ -204,7 +204,8 @@
             },
             "variant": {
                 "title": "Variant Skill",
-                "label": "Select a variant skill",
+                "label": "Variant skill",
+                "dc": "Difficulty Class",
                 "button": "Select"
             }
         },
