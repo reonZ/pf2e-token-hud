@@ -8,6 +8,11 @@
             {{localize 'PF2E.SpellCantripLabel'}}
             {{else if (eq @index 12)}}
             {{localize 'PF2E.Focus.Spells'}}
+            {{else}}
+            {{localize (concat 'PF2E.SpellLevel' @index)}}
+            {{/if}}
+
+            {{#if (or (eq @index 12) (and (eq @index 0) @root.hasFocusCantrips))}}
             <div class="pips" data-action="toggle-pips">
                 {{#times @root.focusPool.max}}
                 <div class="pip">
@@ -15,8 +20,6 @@
                 </div>
                 {{/times}}
             </div>
-            {{else}}
-            {{localize (concat 'PF2E.SpellLevel' @index)}}
             {{/if}}
         </div>
         {{#each entry as |spell|}}

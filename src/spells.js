@@ -8,6 +8,7 @@ export async function getSpellsData(actor) {
     const showTradition = getSetting('tradition')
     const spells = []
     const focuses = []
+    let hasFocusCantrips = false
 
     for (const entry of entries) {
         const entryId = entry.id
@@ -71,9 +72,12 @@ export async function getSpellsData(actor) {
             }
 
             if (slotSpells.length) {
-                if (isFocus && !isCantrip) {
-                    focuses.push(...slotSpells)
-                    continue
+                if (isFocus) {
+                    if (isCantrip) hasFocusCantrips = true
+                    else {
+                        focuses.push(...slotSpells)
+                        continue
+                    }
                 }
 
                 spells[slot.level] ??= []
@@ -92,6 +96,7 @@ export async function getSpellsData(actor) {
     if (focuses.length) {
         focuses.sort((a, b) => a.name.localeCompare(b.name))
         spells[12] = focuses
+        hasFocusCantrips = false
     }
 
     const ritualData = await actor.spellcasting.ritual?.getSheetData()
@@ -106,7 +111,8 @@ export async function getSpellsData(actor) {
         }))
     )
 
-    if (spells.length || rituals?.length) return { spells, rituals, focusPool, doubled: getSetting('spells-columns') }
+    if (spells.length || rituals?.length)
+        return { spells, rituals, focusPool, hasFocusCantrips, doubled: getSetting('spells-columns') }
 }
 
 export function addSpellsListeners(el, actor) {
