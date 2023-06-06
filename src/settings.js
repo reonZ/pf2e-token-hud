@@ -48,6 +48,16 @@ export function registerSettings() {
 
     register('chat', Boolean, true)
 
+    // tooltip
+
+    register('saves', String, 'bonus', {
+        choices: {
+            none: path('saves', 'choices.none'),
+            bonus: path('saves', 'choices.bonus'),
+            dc: path('saves', 'choices.dc'),
+        },
+    })
+
     register('show-death', String, 'always', {
         choices: {
             none: path('show-death', 'choices.none'),
@@ -113,6 +123,7 @@ export function renderSettingsConfig(_, html) {
         beforeGroup('enabled', 'client.header', 'h2')
     }
 
+    beforeGroup('saves', 'client.tooltip')
     beforeGroup('distance', 'client.distance')
     beforeGroup('height', 'client.sidebar')
     beforeGroup('actions', 'client.actions')

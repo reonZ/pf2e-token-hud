@@ -2,7 +2,7 @@ import { addActionsListeners, getActionsData, getActionsOptions } from './action
 import { addExtrasListeners, getExtrasData } from './extras.js'
 import { addItemsListeners, getItemsData } from './items.js'
 import { isHolding } from './keybindings.js'
-import { getFlag, getSetting, localize, MODULE_ID, setFlag, templatePath } from './module.js'
+import { getFlag, getSetting, localize, modifier, MODULE_ID, setFlag, templatePath } from './module.js'
 import { addSkillsListeners, getSkillsData } from './skills.js'
 import { addSpellsListeners, getSpellsData } from './spells.js'
 
@@ -36,6 +36,12 @@ const SIDEBARS = {
     spells: { getData: getSpellsData, addListeners: addSpellsListeners },
     skills: { getData: getSkillsData, addListeners: addSkillsListeners },
     extras: { getData: getExtrasData, addListeners: addExtrasListeners },
+}
+
+const SAVES = {
+    fortitude: 'fa-solid fa-hand-fist',
+    reflex: 'fa-solid fa-person-running',
+    will: 'fa-solid fa-brain',
 }
 
 export class HUD extends Application {
@@ -185,6 +191,7 @@ export class HUD extends Application {
         const isOwner = token.isOwner
         const isObserver = this.#isObserved
         const showDistance = getSetting('distance')
+        const savesSetting = getSetting('saves')
         const isCharacter = this.isCharacter
         const { attributes, saves, heroPoints, system, alignment } = actor
         const { traits } = system
@@ -322,11 +329,13 @@ export class HUD extends Application {
             isCharacter,
             showDeathLine: isCharacter && (showDeath === 'always' || dying.value || wounded.value),
             hasCover: this.hasCover,
-            saves: {
-                fortitude: saves.fortitude.mod,
-                reflex: saves.reflex.mod,
-                will: saves.will.mod,
-            },
+            saves:
+                savesSetting !== 'none' &&
+                ['fortitude', 'reflex', 'will'].map(slug => {
+                    const save = saves[slug]
+                    const label = savesSetting === 'bonus' ? modifier(save.mod) : save.dc.value
+                    return { slug, label, icon: SAVES[slug] }
+                }),
             speeds: {
                 main: mainSpeed,
                 others: otherSpeeds,

@@ -8,7 +8,8 @@
                 "sidebar": "Sidebar",
                 "actions": "Actions",
                 "spells": "Spells",
-                "skills": "Skills"
+                "skills": "Skills",
+                "tooltip": "Tooltip"
             }
         },
         "keybinds": {
@@ -140,6 +141,15 @@
             "party": {
                 "name": "Party as Observed",
                 "hint": "Consider actors in the 'Party' alliance to be observed by players."
+            },
+            "saves": {
+                "name": "Show Saves",
+                "hint": "Should the fortitude, reflex and will saves  be displayed in the tooltip",
+                "choices": {
+                    "none": "Disabed",
+                    "bonus": "Show Bonus",
+                    "dc": "Show DC"
+                }
             }
         },
         "spells": {

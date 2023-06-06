@@ -97,17 +97,15 @@
             {{/if}}
         </div>
 
+        {{#if saves}}
         <div class="group">
+            {{#each saves as |save|}}
             <div class="section">
-                <a data-action="roll-save" data-save="fortitude"><i class="fa-solid fa-hand-fist"></i>+{{saves.fortitude}}</a>
+                <a data-action="roll-save" data-save="{{save.slug}}"><i class="{{save.icon}}"></i>{{save.label}}</a>
             </div>
-            <div class="section">
-                <a data-action="roll-save" data-save="reflex"><i class="fa-solid fa-person-running"></i>+{{saves.reflex}}</a>
-            </div>
-            <div class="section">
-                <a data-action="roll-save" data-save="will"><i class="fa-solid fa-brain"></i>+{{saves.will}}</a>
-            </div>
+            {{/each}}
         </div>
+        {{/if}}
 
         {{#if showDeathLine}}
         <div class="group">
