@@ -27,6 +27,34 @@
     <div class="row" data-uuid="Compendium.pf2e.actionspf2e.SkZAQRkLLkmBQNB9">
         {{> roll action='roll-escape' cost=1 label='PF2E.Actions.Escape.Title' actions=true}}
     </div>
+
+
+    {{#if isOwner}}
+    {{#if macros.length}}
+    <hr>
+    {{#each macros as |macro|}}
+    <div class="macro" data-uuid="{{macro.uuid}}">
+        <div class="item-img">
+            <img src="{{macro.img}}">
+        </div>
+        <div class="details">
+            <div class="name">{{macro.name}}</div>
+            <div class="extras">
+                <div class="actions">
+                    <a data-action="use-macro"><i class="fa-duotone fa-play"></i></a>
+                    <a data-action="edit-macro"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <a data-action="delete-macro"><i class="fa-solid fa-trash"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+    {{else}}
+    <div class="no-macro">
+        {{noMacro}}
+    </div>
+    {{/if}}
+    {{/if}}
 </div>
 
 {{#*inline 'roll'}}

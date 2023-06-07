@@ -5,7 +5,7 @@ export async function popup(title, content) {
     const hud = $(`#${MODULE_ID}`)
     if (!hud.length) return
 
-    hud.find('.popup').remove()
+    hud.find('> .popup').remove()
 
     const tmp = document.createElement('div')
     tmp.innerHTML = `<div class="popup">

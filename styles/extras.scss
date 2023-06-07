@@ -41,5 +41,24 @@
                 font-size: 0.9em;
             }
         }
+
+        .macro {
+            display: flex;
+            height: var(--item-height);
+            margin-top: 2px;
+
+            .details {
+                .extras {
+                    justify-content: flex-end;
+                }
+            }
+        }
+
+        .no-macro {
+            text-align: center;
+            padding-block: 4px;
+            color: var(--color-text-dark-4);
+            border: 1px dashed var(--color-text-dark-6);
+        }
     }
 }

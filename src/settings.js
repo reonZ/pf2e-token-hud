@@ -75,6 +75,8 @@ export function registerSettings() {
         },
     })
 
+    register('ranks', Boolean, false)
+
     register('show-death', String, 'always', {
         choices: {
             none: path('show-death', 'choices.none'),

@@ -158,6 +158,10 @@
             "others": {
                 "name": "Perception, Stealth, Athletics",
                 "hint": "Should the perception, stealth and athletics bonus/DC be shown in the tooltip."
+            },
+            "ranks": {
+                "name": "Display Ranks",
+                "hint": "When enabled, a little rank indicator will be added to the saves and others in the main tooltip."
             }
         },
         "spells": {
@@ -166,7 +170,8 @@
             "staff": "Staff"
         },
         "extras": {
-            "empty": "Nothing to see here, maybe some day."
+            "empty": "Nothing to see here, maybe some day.",
+            "no-macro": "Drop Macros Here"
         },
         "actions": {
             "empty": "{name} doesn't have anything to do, how boring."

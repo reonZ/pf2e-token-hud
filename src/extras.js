@@ -1,5 +1,7 @@
+import { getFlag, localize, setFlag } from './module.js'
 import { unownedItemToMessage } from './pf2e.js'
 import { showItemSummary } from './popup.js'
+import { addNameTooltipListeners } from './shared.js'
 import { createVariantDialog, getSkillLabel, SKILLS_SLUGS } from './skills.js'
 
 export async function getExtrasData(actor) {
@@ -7,6 +9,12 @@ export async function getExtrasData(actor) {
     const { initiative } = attributes
 
     return {
+        noMacro: localize('extras.no-macro'),
+        macros:
+            actor.isOwner &&
+            getFlag(actor, `macros.${game.user.id}`)
+                ?.map(uuid => fromUuidSync(uuid))
+                .filter(Boolean),
         initiative: {
             selected: initiative.statistic,
             skills: SKILLS_SLUGS.map(slug => ({ slug, label: getSkillLabel(slug) })),
@@ -15,9 +23,15 @@ export async function getExtrasData(actor) {
     }
 }
 
-export function addExtrasListeners(el, actor) {
-    el.find('[data-action=action-description]').on('click', event => {
-        event.preventDefault()
+export function addExtrasListeners(el, actor, token) {
+    function action(action, callback, type = 'click') {
+        el.find(`[data-action=${action}]`).on(type, event => {
+            event.preventDefault()
+            callback(event)
+        })
+    }
+
+    action('action-description', event => {
         const action = $(event.currentTarget).closest('.row')
         showItemSummary(action, actor)
     })
@@ -25,8 +39,49 @@ export function addExtrasListeners(el, actor) {
     // IS OWNER
     if (!actor.isOwner) return
 
-    el.find('[data-action=action-chat]').on('click', async event => {
-        event.preventDefault()
+    addNameTooltipListeners(el.find('.macro'))
+
+    async function getMacro(event) {
+        const { uuid } = event.currentTarget.closest('.macro').dataset
+        return fromUuid(uuid)
+    }
+
+    action('delete-macro', event => {
+        const flag = `macros.${game.user.id}`
+        const macros = getFlag(actor, flag)?.slice()
+        if (!macros?.length) return
+
+        const { uuid } = event.currentTarget.closest('.macro').dataset
+        const index = macros.indexOf(uuid)
+        if (index === -1) return
+
+        macros.splice(index, 1)
+        setFlag(actor, flag, macros)
+    })
+
+    action('edit-macro', async event => {
+        const macro = await getMacro(event)
+        macro?.sheet.render(true)
+    })
+
+    action('use-macro', async event => {
+        const macro = await getMacro(event)
+        macro?.execute({ actor, token })
+    })
+
+    el.on('drop', event => {
+        const { type, uuid } = TextEditor.getDragEventData(event.originalEvent) ?? {}
+        if (type !== 'Macro' || !fromUuidSync(uuid)) return
+
+        const flag = `macros.${game.user.id}`
+        const macros = getFlag(actor, flag)?.slice() ?? []
+        if (macros.includes(uuid)) return
+
+        macros.push(uuid)
+        setFlag(actor, flag, macros)
+    })
+
+    action('action-chat', async event => {
         const { uuid } = event.currentTarget.closest('.row').dataset
         const item = await fromUuid(uuid)
         if (item) unownedItemToMessage(event, item, actor, { create: true })
@@ -37,13 +92,6 @@ export function addExtrasListeners(el, actor) {
         const value = target.type === 'number' ? target.valueAsNumber : target.value
         await actor.update({ [target.name]: value })
     })
-
-    function action(action, callback, type = 'click') {
-        el.find(`[data-action=${action}]`).on(type, event => {
-            event.preventDefault()
-            callback(event)
-        })
-    }
 
     action('roll-initiative', async event => {
         await actor.initiative.roll({ event })

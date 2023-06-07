@@ -686,10 +686,11 @@ export class HUD extends Application {
             return
         }
 
-        const actor = this.actor
+        const token = this.#token
+        const actor = token.actor
         const { getData, addListeners, getOptions } = SIDEBARS[type]
-        const data = await getData(actor)
-        const { classList = [] } = (getOptions && (await getOptions(actor))) || {}
+        const data = await getData(actor, token)
+        const { classList = [] } = (getOptions && (await getOptions(actor, token))) || {}
         if (!data) return ui.notifications.warn(localize(`${type}.empty`, { name: this.#token.name }))
 
         data.isGM = game.user.isGM
@@ -724,7 +725,7 @@ export class HUD extends Application {
         sidebar.style.left = `${left}px`
         sidebar.style.top = `${top}px`
 
-        addListeners($(sidebar), actor)
+        addListeners($(sidebar), actor, token)
 
         return sidebar
     }
