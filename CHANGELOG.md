@@ -1,3 +1,13 @@
+# 1.8.0
+
+-   added tooltips for all the main tooltip icons (got bullied by shark, had no choice)
+-   added `Disable Icons Tooltips` setting to disable the showing of the icons tooltips in the main tooltip
+-   added a `ITT Macros` context menu option for actors to add/remove macros directly from the actors directory sidebar, it is mostly useful for GMs so they can setup macros on NPCs before dragging them on the board, instead of having to do it for each instance or having to copy/paste tokens every time
+-   only prevent the fade out of the tooltip (when the extras sidebar is opened) if the user is the owner of the token
+-   moved `Recall Knowledge` from the skills sidebar to the extras, the result is inspired by the work done in the `PF2e Workbench`
+-   fixed actions toggles being squeezed when setting a max height for sidebars
+-   fixed the main tooltip ranks position
+
 # 1.7.0
 
 -   added the option to select the DC for the `Aid` action
