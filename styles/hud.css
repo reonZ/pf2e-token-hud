@@ -276,6 +276,7 @@
   pointer-events: none;
 }
 #pf2e-token-hud .inner {
+  min-width: 14em;
   max-width: 17em;
 }
 #pf2e-token-hud .inner hr {
@@ -299,6 +300,7 @@
 #pf2e-token-hud .inner .group .section {
   display: flex;
   align-items: center;
+  position: relative;
 }
 #pf2e-token-hud .inner .group .section.info {
   cursor: help;
@@ -334,6 +336,9 @@
   font-size: 0.86em;
   margin: 0;
   margin-top: 1px;
+}
+#pf2e-token-hud .inner .group .section sup {
+  position: absolute;
 }
 #pf2e-token-hud .inner .footer {
   font-size: 1.1em;

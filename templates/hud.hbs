@@ -102,6 +102,9 @@
             {{#each saves as |save|}}
             <div class="section">
                 <a data-action="roll-save" data-save="{{save.slug}}"><i class="{{save.icon}}"></i>{{save.label}}</a>
+                {{#if save.rank}}
+                <sup>{{save.rank}}</sup>
+                {{/if}}
             </div>
             {{/each}}
         </div>
@@ -112,6 +115,9 @@
             {{#each others as |other|}}
             <div class="section">
                 <a data-action="roll-other" data-slug="{{other.slug}}"><i class="{{other.icon}}"></i>{{other.label}}</a>
+                {{#if other.rank}}
+                <sup>{{other.rank}}</sup>
+                {{/if}}
             </div>
             {{/each}}
         </div>

@@ -338,6 +338,7 @@
     }
 
     .inner {
+        min-width: 14em;
         max-width: 17em;
 
         hr {
@@ -364,6 +365,7 @@
             .section {
                 display: flex;
                 align-items: center;
+                position: relative;
 
                 &.info {
                     cursor: help;
@@ -407,6 +409,10 @@
                         margin: 0;
                         margin-top: 1px;
                     }
+                }
+
+                sup {
+                    position: absolute;
                 }
             }
         }

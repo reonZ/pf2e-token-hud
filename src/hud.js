@@ -50,6 +50,8 @@ const SKILLS = {
     athletics: 'fa-solid fa-dumbbell',
 }
 
+const RANKS = ['U', 'T', 'E', 'M', 'L']
+
 export class HUD extends Application {
     #token = null
     #lastToken = null
@@ -311,11 +313,12 @@ export class HUD extends Application {
         if (speed.details) otherSpeeds += `<li>${game.i18n.localize('PF2E.DetailsHeading')}: ${speed.details}</li>`
 
         const showDeath = getSetting('show-death')
+        const showRanks = getSetting('ranks')
 
         function getStatistic(stat, type, icons) {
             const slug = stat.slug
             const label = type === 'bonus' ? modifier(stat.mod) : stat.dc.value
-            return { slug, label, icon: icons[slug] }
+            return { slug, label, icon: icons[slug], rank: showRanks && RANKS[stat.rank] }
         }
 
         return {
@@ -409,7 +412,7 @@ export class HUD extends Application {
         let scrollTop
 
         if (this.#lastToken === this.#token) {
-            const sidebar = this.element.find('.sidebar')[0]
+            const sidebar = this.element.find('> .sidebar')[0]
             if (sidebar) {
                 sidebarType = sidebar.dataset.type
                 scrollTop = sidebar.scrollTop
@@ -542,6 +545,8 @@ export class HUD extends Application {
         })
 
         html.on('dragover', () => {
+            if (html.find('> .sidebar.extras').length && !html.find('.popup').length) return
+
             html.css('opacity', 0.1)
             html.css('pointerEvents', 'none')
 
@@ -660,7 +665,7 @@ export class HUD extends Application {
                 })
             })
             .tooltipster('option', 'functionAfter', () => {
-                if (html.find('.sidebar').length) return
+                if (html.find('> .sidebar').length) return
                 this.#lock = false
             })
     }
@@ -669,7 +674,7 @@ export class HUD extends Application {
         type = typeof type === 'string' ? type : type.currentTarget.dataset.type
 
         let element = this.element
-        let sidebar = element.find('.sidebar')
+        let sidebar = element.find('> .sidebar')
         const action = sidebar[0]?.dataset.type
 
         sidebar.remove()
