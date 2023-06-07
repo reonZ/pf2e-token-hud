@@ -546,7 +546,7 @@ export class HUD extends Application {
         })
 
         html.on('dragover', () => {
-            if (html.find('> .sidebar.extras').length && !html.find('.popup').length) return
+            if (token.isOwner && html.find('> .sidebar.extras').length && !html.find('.popup').length) return
 
             html.css('opacity', 0.1)
             html.css('pointerEvents', 'none')
