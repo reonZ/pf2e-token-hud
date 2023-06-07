@@ -1,3 +1,17 @@
+# 1.7.0
+
+-   added the option to select the DC for the `Aid` action
+-   added description and send-to-chat icons for the actions in the extras sidebar
+-   added `Show Saves` setting (default: `Show Bonus`) to choose between displaying the saves bonus modifiers or DCs in the tooltip, can also be removed entirely
+-   added `Perception, Stealth, Athletics` setting (default: `Disabled`) to choose between displaying the bonus modifiers or DCs of those skills in the main tooltip, you can click on them to roll their respective basic rolls (the `perception` and `stealth` will be blind by default)
+-   added `Display Ranks` which let you see the ranks (one letter superscript) of the different saves and others in the main tooltip
+-   added `Small Tooltip Position` which allows you to select your preferred side to display the small tooltip
+-   you can now add macros to the extras sidebar by dropping them directly onto it, those macros are on a per user basis and will automatically be executed with the `Actor` and `Token` the tooltip is related to as arguments
+-   renamed `Preferred Position` to `Tooltip Position` to make it distinct from `Small Tooltip Position`
+-   the small tooltip will now disappear when hovered over, making navigating between cluttered tokens smoother (since there is nothing to interact with)
+-   if a character has focus cantrips but no focus spells (like psychics), the module will display the focus pips in the cantrip header
+-   the `Use Hold Keybind` setting will now show different options and descriptions to GM and players to make it less confusing, the setting has been reset to `Disabled` because of that
+
 # 1.6.0
 
 -   added magazines icon for strikes that use them
