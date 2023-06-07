@@ -123,6 +123,7 @@ export class HUD extends Application {
                     return
                 }
                 if (target.closest('.app') || target.closest('.tooltipster-base')) return
+                if (el.querySelector('.sidebar.extras') && target.closest('#hotbar')) return
                 if (popup) return popup.remove()
                 this.forceClose()
             } else if (this.#delay) {
