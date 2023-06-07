@@ -21,26 +21,26 @@
 
         <div class="group">
             {{#if isCharacter}}
-            <div class="section">
+            <div class="section" data-tooltip="PF2E.HeroPointsLabel">
                 <i class="fa-solid fa-circle-h"></i>
                 {{> pips max=hero.max value=hero.value action="toggle-hero"}}
             </div>
             {{/if}}
 
             <div class="section">
-                {{{alignment.icon}}}
+                <i class="{{alignment.icon}}" data-tooltip="PF2E.Alignment"></i>
                 {{alignment.value}}
             </div>
 
             <div class="section">
-                <i class="fa-solid fa-user-graduate"></i>{{level}}
+                <i class="fa-solid fa-user-graduate" data-tooltip="PF2E.CharacterLevelLabel"></i>{{level}}
             </div>
         </div>
 
         {{#if hp.max}}
         <div class="group">
             <div class="section">
-                <i class="fa-solid fa-heart-half-stroke"></i>
+                <i class="fa-solid fa-heart-half-stroke" data-tooltip="PF2E.TempHitPointsShortLabel"></i>
                 {{#if isOwner}}
                 <input type="number" name="system.attributes.hp.temp" value="{{hp.temp}}" min="0">
                 {{else}}
@@ -48,7 +48,7 @@
                 {{/if}}
             </div>
             <div class="section">
-                <i class="fa-solid fa-heart"></i>
+                <i class="fa-solid fa-heart" data-tooltip="PF2E.HitPointsShortLabel"></i>
                 {{> numbers name="system.attributes.hp.value" value=hp.value max=hp.max}}
             </div>
         </div>
@@ -57,11 +57,11 @@
         {{#if sp.max}}
         <div class="group">
             <div class="section">
-                <a data-action="use-resolve"><i class="fa-solid fa-circle-r"></i></a>
+                <a data-action="use-resolve"><i class="fa-solid fa-circle-r" data-tooltip="PF2E.ResolvePointsShortLabel"></i></a>
                 {{> numbers name="system.attributes.resolve.value" value=resolve.value max=resolve.max}}
             </div>
             <div class="section">
-                <i class="fa-solid fa-heart-pulse"></i>
+                <i class="fa-solid fa-heart-pulse" data-tooltip="PF2E.StaminaPointsShortLabel"></i>
                 {{> numbers name="system.attributes.sp.value" value=sp.value max=sp.max}}
             </div>
         </div>
@@ -69,20 +69,18 @@
 
         <div class="group">
             <div class="section">
-                <i class="fa-regular fa-helmet-battle"></i> {{ac}}
-                <a data-action="take-cover">
+                <i class="fa-regular fa-helmet-battle" data-tooltip="PF2E.ArmorClassLabel"></i> {{ac}}
+                <a data-action="take-cover" data-tooltip="PF2E.Actions.TakeCover.Title">
                     {{#if hasCover}}
                     <i class="fa-solid fa-block-brick"></i>
-                    {{!-- <i class="fa-solid fa-eye-slash"></i> --}}
                     {{else}}
                     <i class="fa-light fa-block-brick"></i>
-                    {{!-- <i class="fa-duotone fa-eye-slash"></i> --}}
                     {{/if}}
                 </a>
             </div>
             {{#if shield}}
             <div class="section">
-                <a data-action="raise-shield">
+                <a data-action="raise-shield" data-tooltip="PF2E.Actions.RaiseAShield.SingleActionTitle">
                     {{#if shield.broken}}
                     <i class="fa-regular fa-shield-slash"></i>
                     {{else if shield.raised}}
@@ -101,7 +99,9 @@
         <div class="group">
             {{#each saves as |save|}}
             <div class="section">
-                <a data-action="roll-save" data-save="{{save.slug}}"><i class="{{save.icon}}"></i>{{save.label}}</a>
+                <a data-action="roll-save" data-save="{{save.slug}}">
+                    <i class="{{save.icon}}" data-tooltip="{{save.label}}"></i>{{save.value}}
+                </a>
                 {{#if save.rank}}
                 <sup>{{save.rank}}</sup>
                 {{/if}}
@@ -114,7 +114,9 @@
         <div class="group">
             {{#each others as |other|}}
             <div class="section">
-                <a data-action="roll-other" data-slug="{{other.slug}}"><i class="{{other.icon}}"></i>{{other.label}}</a>
+                <a data-action="roll-other" data-slug="{{other.slug}}">
+                    <i class="{{other.icon}}" data-tooltip="{{other.label}}"></i>{{other.value}}
+                </a>
                 {{#if other.rank}}
                 <sup>{{other.rank}}</sup>
                 {{/if}}
@@ -126,11 +128,11 @@
         {{#if showDeathLine}}
         <div class="group">
             <div class="section">
-                <a data-action="recovery-check"><i class="fa-solid fa-skull"></i></a>
-                {{> pips max=dying.max value=dying.value action="toggle-dying"}}
+                <a data-action="recovery-check"><i class="fa-solid fa-skull" data-tooltip="PF2E.Check.Specific.Recovery"></i></a>
+                {{> pips max=dying.max value=dying.value action="toggle-dying" tooltip="PF2E.ConditionTypeDying"}}
             </div>
 
-            <div class="section">
+            <div class="section" data-tooltip="PF2E.ConditionTypeWounded">
                 <i class="fa-solid fa-tombstone"></i>
                 {{> pips max=wounded.max value=wounded.value action="toggle-wounded"}}
             </div>
@@ -138,24 +140,24 @@
         {{/if}}
 
         <div class="group">
-            {{> info tooltip=speeds.others icon=speeds.main.icon value=speeds.main.value class='speeds'}}
-            {{> info tooltip=languages icon='fa-solid fa-language'}}
-            {{> info tooltip=senses icon='fa-solid fa-signal-stream'}}
-            {{> info tooltip=iwr icon='fa-solid fa-solid fa-ankh'}}
+            {{> info content=speeds.others icon=speeds.main.icon value=speeds.main.value tooltip="PF2E.Speed" class='speeds'}}
+            {{> info content=languages icon='fa-solid fa-language' tooltip="PF2E.Languages"}}
+            {{> info content=senses icon='fa-solid fa-signal-stream' tooltip="PF2E.Senses"}}
+            {{> info content=iwr icon='fa-solid fa-solid fa-ankh' tooltip="IWR"}}
         </div>
 
         <hr>
 
         <div class="footer observable">
-            <a class="observable" data-type="actions"><i class="fa-solid fa-sword"></i></a>
+            <a class="observable" data-type="actions"><i class="fa-solid fa-sword" data-tooltip="{{titles.actions}}"></i></a>
             <a class="observable {{#unless hasItems}}disabled{{/unless}}" {{#if hasItems}}data-type="items" {{/if}}>
-                <i class="fa-solid fa-backpack"></i>
+                <i class="fa-solid fa-backpack" data-tooltip="{{titles.items}}"></i>
             </a>
             <a class="observable {{#unless hasSpells}}disabled{{/unless}}" {{#if hasSpells}} data-type="spells" {{/if}}>
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                <i class="fa-solid fa-wand-magic-sparkles" data-tooltip="{{titles.spells}}"></i>
             </a>
-            <a class="observable" data-type="skills"><i class="fa-solid fa-hand"></i></a>
-            <a class="observable" data-type="extras"><i class="fa-solid fa-gears"></i></a>
+            <a class="observable" data-type="skills"><i class="fa-solid fa-hand" data-tooltip="{{titles.skills}}"></i></a>
+            <a class="observable" data-type="extras"><i class="fa-solid fa-gears" data-tooltip="{{titles.extras}}"></i></a>
         </div>
     </div>
     {{/if}}
@@ -164,7 +166,7 @@
 </div>
 
 {{#*inline "pips"}}
-<div class="pips" data-action="{{action}}">
+<div class="pips" data-action="{{action}}" data-tooltip="{{tooltip}}">
     {{#times max}}
     <i class="{{#if (gt ../value this)}}fas fa-dot-circle{{else}}far fa-circle{{/if}}"></i>
     {{/times}}
@@ -172,9 +174,9 @@
 {{/inline}}
 
 {{#*inline "info"}}
-<div class="section info {{#unless tooltip includeZero=true}}disabled{{/unless}} {{#if class}}{{class}}{{/if}}" data-action="show-info"
-    {{#if tooltip includeZero=true}} title="<div class='hover-content info'><ul>{{tooltip}}</ul></div>" {{/if}}>
-    <i class="{{icon}}"></i>{{value}}
+<div class="section info {{#unless content includeZero=true}}disabled{{/unless}} {{#if class}}{{class}}{{/if}}" data-action="show-info"
+    {{#if content includeZero=true}} title="<div class='hover-content info'><ul>{{content}}</ul></div>" {{/if}}>
+    <i class="{{icon}}" data-tooltip="{{tooltip}}"></i>{{value}}
 </div>
 {{/inline}}
 

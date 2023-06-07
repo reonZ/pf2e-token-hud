@@ -1,5 +1,11 @@
 {
     "pf2e-token-hud": {
+        "actor": {
+            "macros": {
+                "contextmenu": "ITT Macros",
+                "title": "ITT Macros"
+            }
+        },
         "menu": {
             "gm": {},
             "client": {
@@ -162,24 +168,32 @@
             "ranks": {
                 "name": "Display Ranks",
                 "hint": "When enabled, a little rank indicator will be added to the saves and others in the main tooltip."
+            },
+            "tooltips": {
+                "name": "Disable Icons Tooltips",
+                "hint": "Disable all the icons tooltips in the main tooltip  from being shown."
             }
         },
         "spells": {
+            "title": "Spells",
             "empty": "{name} doesn't have any spells, magic is evil anyways.",
             "charges": "Charges",
             "staff": "Staff"
         },
         "extras": {
+            "title": "Extras",
             "empty": "Nothing to see here, maybe some day.",
             "no-macro": "Drop Macros Here"
         },
         "actions": {
+            "title": "Actions",
             "empty": "{name} doesn't have anything to do, how boring."
         },
         "popup": {
             "close": "Close"
         },
         "skills": {
+            "title": "Skills",
             "actions": {
                 "earnIncome": "Earn Income",
                 "treatWounds": "Treat Wounds",
@@ -215,6 +229,7 @@
             }
         },
         "items": {
+            "title": "Equipment",
             "empty": "{name} has empty pockets, sadly."
         },
         "deleteItem": {

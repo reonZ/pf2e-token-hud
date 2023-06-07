@@ -85,6 +85,8 @@ export function registerSettings() {
         },
     })
 
+    register('tooltips', Boolean, false)
+
     // distance
 
     register('distance', String, 'all', {

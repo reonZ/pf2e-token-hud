@@ -1,7 +1,7 @@
 import { getFlag, localize, setFlag } from './module.js'
 import { unownedItemToMessage } from './pf2e.js'
 import { showItemSummary } from './popup.js'
-import { addNameTooltipListeners } from './shared.js'
+import { addNameTooltipListeners, deleteMacro, getMacros, onDroppedMacro } from './shared.js'
 import { createVariantDialog, getSkillLabel, SKILLS_SLUGS } from './skills.js'
 
 export async function getExtrasData(actor) {
@@ -10,11 +10,7 @@ export async function getExtrasData(actor) {
 
     return {
         noMacro: localize('extras.no-macro'),
-        macros:
-            actor.isOwner &&
-            getFlag(actor, `macros.${game.user.id}`)
-                ?.map(uuid => fromUuidSync(uuid))
-                .filter(Boolean),
+        macros: getMacros(actor),
         initiative: {
             selected: initiative.statistic,
             skills: SKILLS_SLUGS.map(slug => ({ slug, label: getSkillLabel(slug) })),
@@ -46,18 +42,7 @@ export function addExtrasListeners(el, actor, token) {
         return fromUuid(uuid)
     }
 
-    action('delete-macro', event => {
-        const flag = `macros.${game.user.id}`
-        const macros = getFlag(actor, flag)?.slice()
-        if (!macros?.length) return
-
-        const { uuid } = event.currentTarget.closest('.macro').dataset
-        const index = macros.indexOf(uuid)
-        if (index === -1) return
-
-        macros.splice(index, 1)
-        setFlag(actor, flag, macros)
-    })
+    action('delete-macro', event => deleteMacro(event, actor))
 
     action('edit-macro', async event => {
         const macro = await getMacro(event)
@@ -69,17 +54,7 @@ export function addExtrasListeners(el, actor, token) {
         macro?.execute({ actor, token })
     })
 
-    el.on('drop', event => {
-        const { type, uuid } = TextEditor.getDragEventData(event.originalEvent) ?? {}
-        if (type !== 'Macro' || !fromUuidSync(uuid)) return
-
-        const flag = `macros.${game.user.id}`
-        const macros = getFlag(actor, flag)?.slice() ?? []
-        if (macros.includes(uuid)) return
-
-        macros.push(uuid)
-        setFlag(actor, flag, macros)
-    })
+    el.on('drop', event => onDroppedMacro(event, actor))
 
     action('action-chat', async event => {
         const { uuid } = event.currentTarget.closest('.row').dataset

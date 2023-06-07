@@ -17,9 +17,9 @@ const POSITIONS = {
 }
 
 const ALIGNMENTS = {
-    G: '<i class="fa-solid fa-face-smile-halo"></i>',
-    N: '<i class="fa-solid fa-face-meh"></i>',
-    E: '<i class="fa-solid fa-face-angry-horns"></i>',
+    G: 'fa-solid fa-face-smile-halo',
+    N: 'fa-solid fa-face-meh',
+    E: 'fa-solid fa-face-angry-horns',
 }
 
 const SPEEDS = [
@@ -187,7 +187,7 @@ export class HUD extends Application {
 
     #setToken(token) {
         if (token === this.#token) return
-        if (this.#token) delete this.#token.actor.apps?.[MODULE_ID]
+        if (this.#token) delete this.#token.actor.apps[this.appId]
         this.#token = token
     }
 
@@ -318,11 +318,18 @@ export class HUD extends Application {
 
         function getStatistic(stat, type, icons) {
             const slug = stat.slug
-            const label = type === 'bonus' ? modifier(stat.mod) : stat.dc.value
-            return { slug, label, icon: icons[slug], rank: showRanks && RANKS[stat.rank] }
+            const value = type === 'bonus' ? modifier(stat.mod) : stat.dc.value
+            return { slug, value, label: stat.label, icon: icons[slug], rank: showRanks && RANKS[stat.rank] }
         }
 
         return {
+            titles: {
+                actions: `${MODULE_ID}.actions.title`,
+                items: `${MODULE_ID}.items.title`,
+                spells: `${MODULE_ID}.spells.title`,
+                skills: `${MODULE_ID}.skills.title`,
+                extras: `${MODULE_ID}.extras.title`,
+            },
             distance,
             status,
             isOwner: token.isOwner,
@@ -528,7 +535,11 @@ export class HUD extends Application {
         if (!actor) return
 
         const isOwner = token.isOwner
-        actor.apps[MODULE_ID] = this
+        actor.apps[this.appId] = this
+
+        if (getSetting('tooltips')) {
+            html.find('.inner [data-tooltip]').attr('data-tooltip', '')
+        }
 
         html.on('mousedown', () => this.bringToTop())
 
