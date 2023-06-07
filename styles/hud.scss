@@ -8,12 +8,6 @@
     --font-size: 14px;
     --outer-box-shadow: 0 0 20px var(--color-shadow-dark);
 
-    --color-rank-0: #424242;
-    --color-rank-1: #171f69;
-    --color-rank-2: #3c005e;
-    --color-rank-3: #664400;
-    --color-rank-4: #5e0000;
-
     z-index: 90;
     position: absolute;
     padding: var(--outer-padding);
@@ -45,28 +39,6 @@
     input,
     select {
         color: var(--color);
-    }
-
-    .rank {
-        &.\30 {
-            color: var(--color-rank-0);
-        }
-
-        &.\31 {
-            color: var(--color-rank-1);
-        }
-
-        &.\32 {
-            color: var(--color-rank-2);
-        }
-
-        &.\33 {
-            color: var(--color-rank-3);
-        }
-
-        &.\34 {
-            color: var(--color-rank-4);
-        }
     }
 
     .sidebar,
@@ -413,6 +385,11 @@
 
                 sup {
                     position: absolute;
+                    top: 0px;
+                    right: -1px;
+                    transform: translateX(100%);
+                    font-size: 0.7em;
+                    font-weight: bold;
                 }
             }
         }
@@ -450,6 +427,83 @@
                 &.hover {
                     cursor: default;
                 }
+            }
+        }
+    }
+}
+
+.pf2e-token-hud,
+#pf2e-token-hud {
+    --color-rank-0: #424242;
+    --color-rank-1: #171f69;
+    --color-rank-2: #3c005e;
+    --color-rank-3: #664400;
+    --color-rank-4: #5e0000;
+
+    .rank {
+        &.\30 {
+            color: var(--color-rank-0);
+        }
+
+        &.\31 {
+            color: var(--color-rank-1);
+        }
+
+        &.\32 {
+            color: var(--color-rank-2);
+        }
+
+        &.\33 {
+            color: var(--color-rank-3);
+        }
+
+        &.\34 {
+            color: var(--color-rank-4);
+        }
+    }
+
+    .result {
+        &.\31 {
+            color: red;
+        }
+
+        &.\32 0 {
+            color: green;
+        }
+    }
+}
+
+.pf2e-token-hud {
+    &.chat {
+        .rk {
+            --height: 1.8em;
+
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(4, auto);
+            grid-template-rows: repeat(9, var(--height));
+            padding-inline: 8px;
+            background: repeating-linear-gradient(#ddd 0 var(--height), transparent var(--height) calc(var(--height) * 2));
+            align-items: center;
+            font-size: 1.1em;
+
+            :nth-child(-n + 4) {
+                z-index: 1;
+                color: var(--text-dark);
+            }
+
+            :not(:nth-child(4n + 1)) {
+                text-align: center;
+            }
+
+            &::before {
+                content: '';
+                position: absolute;
+                background: #0000002e;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: var(--height);
             }
         }
     }

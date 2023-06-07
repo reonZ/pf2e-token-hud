@@ -112,7 +112,7 @@ const SKILLS = [
     {
         slug: 'arcana',
         actions: [
-            'recall-knowledge',
+            // 'recall-knowledge',
             { slug: 'borrow-arcane-spell', trained: true },
             'decipher-writing',
             'identify-magic',
@@ -155,7 +155,7 @@ const SKILLS = [
     {
         slug: 'crafting',
         actions: [
-            'recall-knowledge',
+            // 'recall-knowledge',
             { slug: 'repair', type: 1 },
             { slug: 'craft', type: 1, trained: true },
             { slug: 'crafting-goods', trained: true },
@@ -206,7 +206,7 @@ const SKILLS = [
         slug: 'nature',
         actions: [
             { slug: 'command-an-animal', cost: '1', type: 2 }, //
-            'recall-knowledge',
+            // 'recall-knowledge',
             'identify-magic',
             'learn-spell',
         ],
@@ -214,7 +214,7 @@ const SKILLS = [
     {
         slug: 'occultism',
         actions: [
-            'recall-knowledge', //
+            // 'recall-knowledge', //
             'decipher-writing',
             'identify-magic',
             'learn-spell',
@@ -235,7 +235,7 @@ const SKILLS = [
     {
         slug: 'religion',
         actions: [
-            'recall-knowledge', //
+            // 'recall-knowledge', //
             'decipher-writing',
             'identify-magic',
             'learn-spell',
@@ -244,7 +244,7 @@ const SKILLS = [
     {
         slug: 'society',
         actions: [
-            'recall-knowledge', //
+            // 'recall-knowledge', //
             { slug: 'subsist', type: 2 },
             { slug: 'create-forgery', type: 2, trained: true },
             'decipher-writing',

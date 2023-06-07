@@ -187,7 +187,10 @@
         },
         "actions": {
             "title": "Actions",
-            "empty": "{name} doesn't have anything to do, how boring."
+            "empty": "{name} doesn't have anything to do, how boring.",
+            "recall-knowledge": {
+                "result": "Result"
+            }
         },
         "popup": {
             "close": "Close"

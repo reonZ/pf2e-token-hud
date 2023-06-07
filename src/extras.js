@@ -1,3 +1,4 @@
+import { rollRecallKnowledges } from './actions/recall-knowledge.js'
 import { getFlag, localize, setFlag } from './module.js'
 import { unownedItemToMessage } from './pf2e.js'
 import { showItemSummary } from './popup.js'
@@ -79,6 +80,10 @@ export function addExtrasListeners(el, actor, token) {
 
     action('rest-for-the-night', event => {
         game.pf2e.actions.restForTheNight({ actors: [actor] })
+    })
+
+    action('roll-recall-knowledge', event => {
+        rollRecallKnowledges(actor)
     })
 
     action(
