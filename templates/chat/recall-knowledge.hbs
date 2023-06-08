@@ -63,9 +63,9 @@
         {{#each loresDCs as |dcs|}}
         <span>
             {{#if @index}}
-            {{@root.i18n 'unspecific'}}
-            {{else}}
             {{@root.i18n 'specific'}}
+            {{else}}
+            {{@root.i18n 'unspecific'}}
             {{/if}}
         </span>
         {{#each dcs as |dc|}}
