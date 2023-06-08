@@ -1,7 +1,6 @@
-import { getSetting, localize, modifier } from './module.js'
-import { unownedItemToMessage } from './pf2e.js'
-import { popup, showItemSummary } from './popup.js'
-import { getItemSummary } from './shared.js'
+import { getSetting, localize, modifier } from '../module.js'
+import { unownedItemToMessage } from '../pf2e.js'
+import { showItemSummary } from '../popup.js'
 
 const MODULE_ID = 'pf2e-token-hud'
 

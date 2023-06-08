@@ -1,7 +1,7 @@
-import { getSetting, templatePath } from './module.js'
-import { getActionIcon, toggleWeaponTrait } from './pf2e.js'
-import { popup, showItemSummary } from './popup.js'
-import { addNameTooltipListeners, getItemFromEvent } from './shared.js'
+import { getSetting, templatePath } from '../module.js'
+import { getActionIcon, toggleWeaponTrait } from '../pf2e.js'
+import { popup, showItemSummary } from '../popup.js'
+import { addNameTooltipListeners, getItemFromEvent } from '../shared.js'
 import { actionsUUIDS } from './skills.js'
 
 const SECTIONS_TYPES = {

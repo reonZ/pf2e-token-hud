@@ -1,5 +1,5 @@
 import { registerKeybindings } from './keybindings.js'
-import { enableModule, getSetting, localize, MODULE_ID, setFlag } from './module.js'
+import { enableModule, getSetting, localize, MODULE_ID } from './module.js'
 import { registerSettings, renderSettingsConfig } from './settings.js'
 import { deleteMacro, getMacros, onDroppedMacro } from './shared.js'
 

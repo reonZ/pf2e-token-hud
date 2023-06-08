@@ -1,8 +1,8 @@
-import { rollRecallKnowledges } from './actions/recall-knowledge.js'
-import { getFlag, localize, setFlag } from './module.js'
-import { unownedItemToMessage } from './pf2e.js'
-import { showItemSummary } from './popup.js'
-import { addNameTooltipListeners, deleteMacro, getMacros, onDroppedMacro } from './shared.js'
+import { rollRecallKnowledges } from '../actions/recall-knowledge.js'
+import { localize } from '../module.js'
+import { unownedItemToMessage } from '../pf2e.js'
+import { showItemSummary } from '../popup.js'
+import { addNameTooltipListeners, deleteMacro, getMacros, onDroppedMacro } from '../shared.js'
 import { createVariantDialog, getSkillLabel, SKILLS_SLUGS } from './skills.js'
 
 export async function getExtrasData(actor) {

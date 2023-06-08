@@ -1,6 +1,6 @@
-import { IdentifyItemPopup } from './pf2e.js'
-import { showItemSummary } from './popup.js'
-import { addNameTooltipListeners, deleteItem, editItem, getItemFromEvent } from './shared.js'
+import { IdentifyItemPopup } from '../pf2e.js'
+import { showItemSummary } from '../popup.js'
+import { addNameTooltipListeners, deleteItem, editItem, getItemFromEvent } from '../shared.js'
 
 const ITEMS_TYPES = {
     weapon: { order: 0, label: 'PF2E.InventoryWeaponsHeader' },

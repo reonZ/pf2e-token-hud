@@ -1,6 +1,6 @@
-import { getSetting, MODULE_ID } from './module.js'
-import { showItemSummary } from './popup.js'
-import { addNameTooltipListeners, getItemFromEvent } from './shared.js'
+import { getSetting, MODULE_ID } from '../module.js'
+import { showItemSummary } from '../popup.js'
+import { addNameTooltipListeners, getItemFromEvent } from '../shared.js'
 
 export async function getSpellsData(actor) {
     const focusPool = actor.system.resources.focus ?? { value: 0, max: 0 }
