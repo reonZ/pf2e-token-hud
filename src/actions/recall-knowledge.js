@@ -5,10 +5,12 @@ import { getUniqueTarget, RANKS } from '../shared.js'
 const SKILLS = ['arcana', 'crafting', 'medicine', 'nature', 'occultism', 'religion', 'society']
 
 const SUCCESS = {
-    0: { icon: '<i class="fa-solid fa-circle-xmark"></i>', name: 'criticalFailure' },
+    // 0: { icon: '<i class="fa-solid fa-circle-xmark"></i>', name: 'criticalFailure' },
+    0: { icon: '<i class="fa-solid fa-xmark-large"></i><i class="fa-solid fa-xmark-large"></i>', name: 'criticalFailure' },
     1: { icon: '<i class="fa-solid fa-xmark-large"></i>', name: 'failure' },
     2: { icon: '<i class="fa-solid fa-check"></i>', name: 'success' },
-    3: { icon: '<i class="fa-solid fa-circle-check"></i>', name: 'criticalSuccess' },
+    3: { icon: '<i class="fa-solid fa-check"></i><i class="fa-solid fa-check"></i>', name: 'criticalSuccess' },
+    // 3: { icon: '<i class="fa-solid fa-circle-check"></i>', name: 'criticalSuccess' },
 }
 
 export async function rollRecallKnowledges(actor) {
