@@ -1,5 +1,7 @@
 import { getFlag, localize, setFlag } from './module.js'
 
+export const RANKS = ['U', 'T', 'E', 'M', 'L']
+
 export async function getItemSummary(el, actor) {
     const dataset = el.data()
     const item = dataset.itemId ? actor.items.get(dataset.itemId) : await fromUuid(dataset.uuid)
@@ -104,4 +106,10 @@ export function deleteMacro(event, actor) {
 
     macros.splice(index, 1)
     setFlag(actor, flag, macros)
+}
+
+export function getUniqueTarget(condition = () => true) {
+    const targets = game.user.targets
+    const target = targets.size === 1 ? targets.first() : null
+    return target && condition(target) ? target : null
 }

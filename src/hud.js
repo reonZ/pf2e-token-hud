@@ -1,8 +1,9 @@
+import { isHolding } from './keybindings.js'
+import { getFlag, getSetting, localize, modifier, MODULE_ID, setFlag, templatePath } from './module.js'
+import { getUniqueTarget, RANKS } from './shared.js'
 import { addActionsListeners, getActionsData, getActionsOptions } from './sidebars/actions.js'
 import { addExtrasListeners, getExtrasData } from './sidebars/extras.js'
 import { addItemsListeners, getItemsData } from './sidebars/items.js'
-import { isHolding } from './keybindings.js'
-import { getFlag, getSetting, localize, modifier, MODULE_ID, setFlag, templatePath } from './module.js'
 import { addSkillsListeners, getSkill, getSkillsData } from './sidebars/skills.js'
 import { addSpellsListeners, getSpellsData } from './sidebars/spells.js'
 
@@ -49,8 +50,6 @@ const SKILLS = {
     stealth: 'fa-duotone fa-eye-slash',
     athletics: 'fa-solid fa-dumbbell',
 }
-
-const RANKS = ['U', 'T', 'E', 'M', 'L']
 
 export class HUD extends Application {
     #token = null
@@ -230,8 +229,7 @@ export class HUD extends Application {
             let target = selected.length === 1 ? selected[0] : null
 
             if (!target || target === token) {
-                const targets = game.user.targets
-                target = targets.size === 1 ? targets.first() : null
+                target = getUniqueTarget()
                 isTarget = true
             }
 

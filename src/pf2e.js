@@ -348,10 +348,7 @@ function adjustDegreeByDieValue(dieResult, degree) {
     return degree
 }
 
-export function calculateDegreeOfSuccess(roll, dc) {
-    const rollTotal = roll.total
-    const dieResult = roll.dice[0].total
-
+export function calculateDegreeOfSuccess(rollTotal, dieResult, dc) {
     if (rollTotal - dc >= 10) {
         return adjustDegreeByDieValue(dieResult, DegreeOfSuccess.CRITICAL_SUCCESS)
     } else if (dc - rollTotal >= 10) {
@@ -360,5 +357,5 @@ export function calculateDegreeOfSuccess(roll, dc) {
         return adjustDegreeByDieValue(dieResult, DegreeOfSuccess.SUCCESS)
     }
 
-    return adjustDegreeByDieValue(DegreeOfSuccess.FAILURE)
+    return adjustDegreeByDieValue(dieResult, DegreeOfSuccess.FAILURE)
 }

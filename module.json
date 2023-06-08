@@ -9,9 +9,7 @@
             "discord": "Idle#3251"
         }
     ],
-    "esmodules": [
-        "scripts/main.js"
-    ],
+    "esmodules": ["scripts/main.js"],
     "compatibility": {
         "minimum": "10.291",
         "verified": "10"
@@ -25,6 +23,7 @@
     "changelog": "https://github.com/reonZ/pf2e-token-hud/blob/master/CHANGELOG.md",
     "bugs": "https://github.com/reonZ/pf2e-token-hud/issues",
     "styles": [
+        "styles/global.css",
         "styles/hud.css",
         "styles/actions.css",
         "styles/items.css",

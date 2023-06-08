@@ -274,7 +274,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.9em;
+  gap: 1em;
   min-height: 1.86em;
 }
 #pf2e-token-hud .inner .group .section {
@@ -346,79 +346,4 @@
 }
 #pf2e-token-hud.observer .sidebar .item-img.hover {
   cursor: default;
-}
-
-.pf2e-token-hud,
-#pf2e-token-hud {
-  --color-rank-0: #424242;
-  --color-rank-1: #171f69;
-  --color-rank-2: #3c005e;
-  --color-rank-3: #664400;
-  --color-rank-4: #5e0000;
-}
-.pf2e-token-hud .rank.\30 ,
-#pf2e-token-hud .rank.\30  {
-  color: var(--color-rank-0);
-}
-.pf2e-token-hud .rank.\31 ,
-#pf2e-token-hud .rank.\31  {
-  color: var(--color-rank-1);
-}
-.pf2e-token-hud .rank.\32 ,
-#pf2e-token-hud .rank.\32  {
-  color: var(--color-rank-2);
-}
-.pf2e-token-hud .rank.\33 ,
-#pf2e-token-hud .rank.\33  {
-  color: var(--color-rank-3);
-}
-.pf2e-token-hud .rank.\34 ,
-#pf2e-token-hud .rank.\34  {
-  color: var(--color-rank-4);
-}
-.pf2e-token-hud .result.\31 ,
-#pf2e-token-hud .result.\31  {
-  color: red;
-}
-.pf2e-token-hud .result.\32 0,
-#pf2e-token-hud .result.\32 0 {
-  color: green;
-}
-
-.pf2e-token-hud.chat .rk {
-  --row: 8;
-  --height: 1.8em;
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(4, auto);
-  grid-template-rows: repeat(var(--rows), var(--height));
-  padding-inline: 8px;
-  background: repeating-linear-gradient(#ddd 0 var(--height), transparent var(--height) calc(var(--height) * 2));
-  align-items: center;
-  font-size: 1.1em;
-}
-.pf2e-token-hud.chat .rk :nth-child(-n+4) {
-  z-index: 1;
-  color: var(--text-dark);
-}
-.pf2e-token-hud.chat .rk :not(:nth-child(4n+1)) {
-  text-align: center;
-}
-.pf2e-token-hud.chat .rk::before {
-  content: "";
-  position: absolute;
-  background: rgba(0, 0, 0, 0.1803921569);
-  top: 0;
-  left: 0;
-  right: 0;
-  height: var(--height);
-}
-
-.crb-hover .tooltipster-box .tooltipster-content .hover-content.info {
-  white-space: nowrap;
-  min-width: 100px;
-  line-height: 1.2;
-}
-.crb-hover .tooltipster-box .tooltipster-content .hover-content.info li ul {
-  padding-left: 1em;
 }

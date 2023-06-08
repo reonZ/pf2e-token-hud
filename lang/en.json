@@ -189,7 +189,18 @@
             "title": "Actions",
             "empty": "{name} doesn't have anything to do, how boring.",
             "recall-knowledge": {
-                "result": "Result"
+                "result": "Result",
+                "modifier": "Mod.",
+                "target": "Target",
+                "first": "1st",
+                "second": "2nd",
+                "third": "3rd",
+                "fourth": "4th",
+                "fifth": "5th",
+                "sixth": "6th",
+                "dc": "DC",
+                "unspecific": "Unspecific",
+                "specific": "Specific"
             }
         },
         "popup": {

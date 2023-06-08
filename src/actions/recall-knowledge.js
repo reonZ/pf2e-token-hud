@@ -1,31 +1,84 @@
-import { localize, modifier, MODULE_ID } from '../module.js'
+import { localize, modifier, MODULE_ID, templatePath } from '../module.js'
+import { calculateDegreeOfSuccess } from '../pf2e.js'
+import { getUniqueTarget, RANKS } from '../shared.js'
 
 const SKILLS = ['arcana', 'crafting', 'medicine', 'nature', 'occultism', 'religion', 'society']
+const SUCCESS_ICON = '<i class="fa-solid fa-check"></i>'
+const FAILURE_ICON = '<i class="fa-solid fa-xmark-large"></i>'
 
 export async function rollRecallKnowledges(actor) {
     const roll = await new Roll('1d20').evaluate({ async: true })
     const result = roll.total
-    const die = roll.dice[0].total
-    const skills = [...SKILLS.map(slug => actor.skills[slug]), ...Object.values(actor.skills).filter(skill => skill.lore)]
+    const dieResult = roll.dice[0].total
+    const dieSuccess = dieResult === 1 ? '0' : dieResult === 20 ? '3' : ''
+    const lores = Object.values(actor.skills).filter(skill => skill.lore)
+    const target = getUniqueTarget(target => target.actor?.identificationDCs)
 
-    let flavor = `<div class="${MODULE_ID} chat">`
-
-    flavor += chatHeader(result, die)
-
-    flavor += `<div class="rk" style="--rows: ${skills.length}">`
-    flavor += `<strong>${game.i18n.localize('PF2E.RecallKnowledge.Skill')}</strong>`
-    flavor += `<strong>${game.i18n.localize('PF2E.ProficiencyLabel')}</strong>`
-    flavor += `<strong>${game.i18n.localize('PF2E.ModifierTitle')}</strong>`
-    flavor += `<strong>${localize('actions.recall-knowledge.result')}</strong>`
-    for (const { label, rank, mod } of skills) {
-        flavor += `<span>${label}</span>`
-        flavor += `<span class="rank ${rank}">${game.i18n.localize(`PF2E.ProficiencyLevel${rank}`)}</span>`
-        flavor += `<span>${modifier(mod)}</span>`
-        flavor += `<span class="result ${die}">${result + mod}</span>`
+    let data = {
+        dieSuccess,
+        dieResult,
+        target,
+        i18n: str => localize(`actions.recall-knowledge.${str}`),
     }
-    flavor += '</div>'
 
-    flavor += '</div>'
+    if (target) {
+        const { standard, skills, lore } = target.actor.identificationDCs
+
+        let skillsDCs = standard.progression.slice()
+        skillsDCs.length = 4
+        skillsDCs = [...skillsDCs]
+
+        const loresDCs = lore.map(({ progression }) => {
+            let dcs = progression
+            dcs.length = 6
+            return [...dcs]
+        })
+
+        data.skillsDCs = skillsDCs
+        data.skills = skills.map(slug => {
+            const { mod, label, rank } = actor.skills[slug]
+            const total = result + mod
+
+            return {
+                label,
+                mod,
+                rank,
+                rankLabel: RANKS[rank],
+                total,
+                checks: skillsDCs.map(dc => {
+                    if (!dc) return `-`
+                    const success = calculateDegreeOfSuccess(total, dieResult, dc)
+                    return {
+                        success,
+                        icon:
+                            success === 3
+                                ? SUCCESS_ICON + SUCCESS_ICON
+                                : success === 2
+                                ? SUCCESS_ICON
+                                : success === 1
+                                ? FAILURE_ICON
+                                : FAILURE_ICON + FAILURE_ICON,
+                    }
+                }),
+            }
+        })
+        data.loresDCs = loresDCs
+        data.lores = lores.map(({ label, rank, mod }) => ({
+            label,
+            rank,
+            mod,
+            modifier: modifier(mod),
+        }))
+    } else {
+        data.skills = [...SKILLS.map(slug => actor.skills[slug]), ...lores].map(({ label, rank, mod }) => ({
+            label,
+            rank,
+            mod,
+            modifier: modifier(mod),
+        }))
+    }
+
+    const flavor = await renderTemplate(templatePath('chat/recall-knowledge'), data)
 
     ChatMessage.create({
         flavor,
@@ -33,25 +86,4 @@ export async function rollRecallKnowledges(actor) {
         rollMode: CONST.DICE_ROLL_MODES.BLIND,
         type: CONST.CHAT_MESSAGE_TYPES.ROLL,
     })
-}
-
-function chatHeader(result, die) {
-    let content = `<h4 class="action">
-    <span class="pf2-icon larger">A</span>
-    <strong>${game.i18n.localize('PF2E.RecallKnowledge.Label')}</strong>
-    <p class="compact-text">(${game.i18n.localize('PF2E.Roll.Roll')}: <span class="result ${die}">${result}</span>)</p>
-</h4>`
-
-    content += `<div class="tags">
-    <span class="tag" data-slug="concentrate" data-description="PF2E.TraitDescriptionConcentrate">
-        ${game.i18n.localize('PF2E.TraitConcentrate')}
-    </span>
-    <span class="tag" data-slug="secret" data-description="PF2E.TraitDescriptionSecret">
-        ${game.i18n.localize('PF2E.TraitSecret')}
-    </span>
-</div>`
-
-    content += '<hr>'
-
-    return content
 }
