@@ -3,8 +3,13 @@ import { calculateDegreeOfSuccess } from '../pf2e.js'
 import { getUniqueTarget, RANKS } from '../shared.js'
 
 const SKILLS = ['arcana', 'crafting', 'medicine', 'nature', 'occultism', 'religion', 'society']
-const SUCCESS_ICON = '<i class="fa-solid fa-check"></i>'
-const FAILURE_ICON = '<i class="fa-solid fa-xmark-large"></i>'
+
+const SUCCESS = {
+    0: { icon: '<i class="fa-solid fa-circle-xmark"></i>', name: 'criticalFailure' },
+    1: { icon: '<i class="fa-solid fa-xmark-large"></i>', name: 'failure' },
+    2: { icon: '<i class="fa-solid fa-check"></i>', name: 'success' },
+    3: { icon: '<i class="fa-solid fa-circle-check"></i>', name: 'criticalSuccess' },
+}
 
 export async function rollRecallKnowledges(actor) {
     const roll = await new Roll('1d20').evaluate({ async: true })
@@ -50,14 +55,8 @@ export async function rollRecallKnowledges(actor) {
                     const success = calculateDegreeOfSuccess(total, dieResult, dc)
                     return {
                         success,
-                        icon:
-                            success === 3
-                                ? SUCCESS_ICON + SUCCESS_ICON
-                                : success === 2
-                                ? SUCCESS_ICON
-                                : success === 1
-                                ? FAILURE_ICON
-                                : FAILURE_ICON + FAILURE_ICON,
+                        icon: SUCCESS[success].icon,
+                        title: SUCCESS[success].name,
                     }
                 }),
             }

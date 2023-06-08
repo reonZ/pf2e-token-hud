@@ -43,7 +43,7 @@
         <span class="name rank {{skill.rank}}">{{skill.label}}<sup>{{skill.rankLabel}}</sup></span>
         <span class="success {{@root.dieSuccess}}">{{skill.total}}</span>
         {{#each skill.checks as |check|}}
-        <span class="success {{check.success}}">{{{check.icon}}}</span>
+        <span class="success {{check.success}}" data-tooltip="PF2E.Check.Result.Degree.Check.{{check.title}}">{{{check.icon}}}</span>
         {{/each}}
         {{/each}}
     </div>
