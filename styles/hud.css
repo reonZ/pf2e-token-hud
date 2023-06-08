@@ -386,11 +386,12 @@
 }
 
 .pf2e-token-hud.chat .rk {
+  --row: 8;
   --height: 1.8em;
   position: relative;
   display: grid;
   grid-template-columns: repeat(4, auto);
-  grid-template-rows: repeat(9, var(--height));
+  grid-template-rows: repeat(var(--rows), var(--height));
   padding-inline: 8px;
   background: repeating-linear-gradient(#ddd 0 var(--height), transparent var(--height) calc(var(--height) * 2));
   align-items: center;

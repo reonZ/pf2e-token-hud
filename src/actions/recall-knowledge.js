@@ -3,22 +3,21 @@ import { localize, modifier, MODULE_ID } from '../module.js'
 const SKILLS = ['arcana', 'crafting', 'medicine', 'nature', 'occultism', 'religion', 'society']
 
 export async function rollRecallKnowledges(actor) {
-    const skills = SKILLS.map(slug => actor.skills[slug])
-    const lores = Object.values(actor.skills).filter(skill => skill.lore)
     const roll = await new Roll('1d20').evaluate({ async: true })
     const result = roll.total
     const die = roll.dice[0].total
+    const skills = [...SKILLS.map(slug => actor.skills[slug]), ...Object.values(actor.skills).filter(skill => skill.lore)]
 
     let flavor = `<div class="${MODULE_ID} chat">`
 
     flavor += chatHeader(result, die)
 
-    flavor += `<div class="rk">`
+    flavor += `<div class="rk" style="--rows: ${skills.length}">`
     flavor += `<strong>${game.i18n.localize('PF2E.RecallKnowledge.Skill')}</strong>`
     flavor += `<strong>${game.i18n.localize('PF2E.ProficiencyLabel')}</strong>`
     flavor += `<strong>${game.i18n.localize('PF2E.ModifierTitle')}</strong>`
     flavor += `<strong>${localize('actions.recall-knowledge.result')}</strong>`
-    for (const { label, rank, mod } of [...skills, ...lores]) {
+    for (const { label, rank, mod } of skills) {
         flavor += `<span>${label}</span>`
         flavor += `<span class="rank ${rank}">${game.i18n.localize(`PF2E.ProficiencyLevel${rank}`)}</span>`
         flavor += `<span>${modifier(mod)}</span>`
