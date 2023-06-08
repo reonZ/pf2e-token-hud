@@ -1,3 +1,7 @@
+# 1.9.1
+
+-   fixed the mix up with `unspecific` and `specific` lores
+
 # 1.9.0
 
 -   added a target version of `Recall Knowledge`, same principal and look as the `PF2e Workbench` module
