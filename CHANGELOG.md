@@ -1,3 +1,8 @@
+# 1.9.0
+
+-   added a target version of `Recall Knowledge`, same principal and look as the `PF2e Workbench` module
+-   fixed `Recall Knowledge` number of rows being static in the chat message
+
 # 1.8.0
 
 -   added tooltips for all the main tooltip icons (got bullied by shark, had no choice)
