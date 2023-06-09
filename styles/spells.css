@@ -10,11 +10,6 @@
   font-size: 0.86em;
   height: 100%;
 }
-#pf2e-token-hud .sidebar.spells .entry .spell {
-  display: flex;
-  height: var(--item-height);
-  margin-top: 2px;
-}
 #pf2e-token-hud .sidebar.spells .entry .spell > * {
   z-index: 1;
 }

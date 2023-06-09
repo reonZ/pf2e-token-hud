@@ -69,6 +69,11 @@
   border-right: 0;
   height: 1.4em;
 }
+#pf2e-token-hud .sidebar .item-box {
+  display: flex;
+  height: var(--item-height);
+  margin-top: 2px;
+}
 #pf2e-token-hud .sidebar .item-img {
   position: relative;
   height: 100%;

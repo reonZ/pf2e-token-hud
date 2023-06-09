@@ -10,10 +10,6 @@
             }
 
             .item {
-                display: flex;
-                height: var(--item-height);
-                margin-top: 2px;
-
                 .details {
                     .name {
                         &.uncommon {

@@ -23,9 +23,9 @@
             {{/if}}
         </div>
         {{#each entry as |spell|}}
-        <div class="spell{{#if spell.expended}} expended{{/if}}{{#if spell.isVirtual}} virtual{{/if}}" data-entry-id="{{spell.entryId}}"
-            data-slot-id="{{spell.slotId}}" data-expended="{{spell.expended}}" data-slot-level="{{spell.slotLevel}}"
-            data-item-id="{{spell.itemId}}" data-cast-level="{{spell.castLevel}}">
+        <div class="spell item-box{{#if spell.expended}} expended{{/if}}{{#if spell.isVirtual}} virtual{{/if}}"
+            data-entry-id="{{spell.entryId}}" data-slot-id="{{spell.slotId}}" data-expended="{{spell.expended}}"
+            data-slot-level="{{spell.slotLevel}}" data-item-id="{{spell.itemId}}" data-cast-level="{{spell.castLevel}}">
             <div class="item-img hover" data-action="spell-chat">
                 <img src="{{spell.img}}">
                 {{#if @root.isOwner}}
@@ -82,7 +82,7 @@
     <div class="entry">
         <div class="header">{{localize 'PF2E.SpellRitualLabel'}}</div>
         {{#each rituals as |ritual|}}
-        <div class="spell" data-slot-level="{{ritual.level}}" data-slot-id="{{ritual.slotId}}" data-entry-id="rituals"
+        <div class="spell item-box" data-slot-level="{{ritual.level}}" data-slot-id="{{ritual.slotId}}" data-entry-id="rituals"
             data-item-id="{{ritual.itemId}}">
             <div class="item-img" data-action="show-description">
                 <img src="{{ritual.img}}">

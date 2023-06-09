@@ -4,11 +4,6 @@
 #pf2e-token-hud .sidebar.items .category .header {
   text-align: center;
 }
-#pf2e-token-hud .sidebar.items .category .item {
-  display: flex;
-  height: var(--item-height);
-  margin-top: 2px;
-}
 #pf2e-token-hud .sidebar.items .category .item .details .name.uncommon {
   color: #98513d;
 }

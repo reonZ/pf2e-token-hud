@@ -33,11 +33,6 @@
   gap: 6px;
   font-size: 0.9em;
 }
-#pf2e-token-hud .sidebar.extras .macro {
-  display: flex;
-  height: var(--item-height);
-  margin-top: 2px;
-}
 #pf2e-token-hud .sidebar.extras .macro .details .extras {
   justify-content: flex-end;
 }

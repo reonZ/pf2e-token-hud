@@ -43,10 +43,6 @@
         }
 
         .macro {
-            display: flex;
-            height: var(--item-height);
-            margin-top: 2px;
-
             .details {
                 .extras {
                     justify-content: flex-end;

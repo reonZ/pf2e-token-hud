@@ -16,10 +16,6 @@
             }
 
             .spell {
-                display: flex;
-                height: var(--item-height);
-                margin-top: 2px;
-
                 > * {
                     z-index: 1;
                 }

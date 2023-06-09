@@ -81,6 +81,12 @@
             height: 1.4em;
         }
 
+        .item-box {
+            display: flex;
+            height: var(--item-height);
+            margin-top: 2px;
+        }
+
         .item-img {
             position: relative;
             height: 100%;
