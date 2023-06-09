@@ -107,13 +107,21 @@
                 "name": "Show Spell Tradition",
                 "hint": "This will add the first letter of the tradition before the the spellcasting category."
             },
-            "skills-columns": {
-                "name": "Two Columns Skills",
-                "hint": "Will split the skills sidebar into 2 columns."
+            "actions-columns": {
+                "name": "Two Columns Actions",
+                "hint": "This feature is not optimized in any way, it just splits the actions sidebar into 2 columns. The result is pretty terrible if the actor has toggles."
+            },
+            "items-columns": {
+                "name": "Two Columns Equipment",
+                "hint": "This feature is not optimized in any way, it just splits the equipment sidebar into 2 columns. This is also not pretty to see."
             },
             "spells-columns": {
                 "name": "Two Columns Spells",
-                "hint": "Will split the spells sidebar into 2 columns."
+                "hint": "This feature is not optimized in any way, it just splits the spells sidebar into 2 columns."
+            },
+            "skills-columns": {
+                "name": "Two Columns Skills",
+                "hint": "This feature is not optimized in any way, it just splits the skills sidebar into 2 columns."
             },
             "show-death": {
                 "name": "Show Death Line",

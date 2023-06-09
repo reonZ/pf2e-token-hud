@@ -81,7 +81,14 @@ export async function getActionsData(actor) {
     if (sorting === 'split') sections.sort((a, b) => SECTIONS_TYPES[a.type].order - SECTIONS_TYPES[b.type].order)
 
     if (toggles.length || strikes.length || sections.length || heroActions?.length)
-        return { toggles, strikes, sections, heroActions, damageTypes: CONFIG.PF2E.damageTypes }
+        return {
+            toggles,
+            strikes,
+            sections,
+            heroActions,
+            damageTypes: CONFIG.PF2E.damageTypes,
+            doubled: getSetting('actions-columns'),
+        }
 }
 
 export function getActionsOptions(actor) {

@@ -105,6 +105,10 @@ export function registerSettings() {
 
     register('scrollbar', Boolean, true)
 
+    register('actions-columns', Boolean, false)
+
+    register('items-columns', Boolean, false)
+
     register('spells-columns', Boolean, false)
 
     register('skills-columns', Boolean, false)

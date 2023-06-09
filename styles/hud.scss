@@ -70,7 +70,8 @@
             min-width: calc(var(--min-width) * 2);
             max-width: calc(var(--max-width) * 2);
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            // grid-template-columns: 1fr 1fr;
+            grid-template-columns: 50% 50%;
         }
 
         .header {

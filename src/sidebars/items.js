@@ -1,3 +1,4 @@
+import { getSetting } from '../module.js'
 import { IdentifyItemPopup } from '../pf2e.js'
 import { showItemSummary } from '../popup.js'
 import { addNameTooltipListeners, deleteItem, editItem, getItemFromEvent } from '../shared.js'
@@ -20,6 +21,7 @@ export async function getItemsData(actor) {
     }
 
     return {
+        doubled: getSetting('items-columns'),
         categories: Object.entries(categories)
             .map(([type, items]) => {
                 items.sort((a, b) => a.name.localeCompare(b.name))
