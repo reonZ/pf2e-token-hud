@@ -712,7 +712,7 @@ export class HUD extends Application {
         element = element[0]
 
         const tmp = document.createElement('div')
-        tmp.innerHTML = await renderTemplate(templatePath(type), data)
+        tmp.innerHTML = await renderTemplate(templatePath(`sidebars/${type}`), data)
 
         sidebar = tmp.firstElementChild
         sidebar.classList.add('sidebar', ...classList)
