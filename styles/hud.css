@@ -135,6 +135,8 @@
   flex: 1;
   height: 100%;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 #pf2e-token-hud .sidebar .details > * {
   padding-inline: var(--inline-padding);

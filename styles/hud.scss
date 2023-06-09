@@ -160,6 +160,8 @@
             flex: 1;
             height: 100%;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
 
             > * {
                 padding-inline: var(--inline-padding);
