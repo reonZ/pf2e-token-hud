@@ -201,6 +201,10 @@
                 "dc": "DC",
                 "unspecific": "Unspecific",
                 "specific": "Specific"
+            },
+            "treat-wounds": {
+                "title": "{name} - Treat Wounds",
+                "no-proficiency": "{name} doesn't have the required proficiency to treat wounds."
             }
         },
         "popup": {

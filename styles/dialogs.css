@@ -33,3 +33,7 @@
 .app.window-app.dialog .pf2e-token-hud.variant p input {
   width: 4ch;
 }
+.app.window-app.dialog .pf2e-token-hud.treat-wounds p {
+  display: flex;
+  align-items: center;
+}

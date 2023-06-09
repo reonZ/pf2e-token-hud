@@ -1,4 +1,4 @@
-import { getSetting, localize, modifier, templatePath } from '../module.js'
+import { getSetting, hasFeat, localize, modifier, templatePath } from '../module.js'
 import { unownedItemToMessage } from '../pf2e.js'
 import { showItemSummary } from '../popup.js'
 
@@ -9,6 +9,7 @@ const CROWBAR_UUIDS = new Set([
     'Compendium.pf2e.equipment-srd.4kz3vhkKPUuXBpxk',
 ])
 const BON_MOT_UUID = 'Compendium.pf2e.feats-srd.0GF2j54roPFIDmXf'
+const NATURAL_MEDICINE_UUID = 'Compendium.pf2e.feats-srd.WC4xLBGmBsdOdHWu'
 
 const LABELS = {
     initiative: 'PF2E.InitiativeLabel',
@@ -178,7 +179,7 @@ const SKILLS = [
                 slug: 'bonMot',
                 cost: '1',
                 type: 1,
-                condition: actor => actor.itemTypes.feat.some(feat => feat.getFlag('core', 'sourceId') === BON_MOT_UUID),
+                condition: actor => hasFeat(actor, BON_MOT_UUID),
             },
             { slug: 'gatherInformation', type: 1 },
             { slug: 'makeAnImpression', type: 1 },
@@ -208,6 +209,7 @@ const SKILLS = [
             // 'recall-knowledge',
             'identify-magic',
             'learn-spell',
+            { slug: 'treatWounds', type: 1, trained: true, condition: actor => hasFeat(actor, NATURAL_MEDICINE_UUID) },
         ],
     },
     {

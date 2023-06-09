@@ -30,6 +30,10 @@ export function localize(...args) {
     return game.i18n[useFormat ? 'format' : 'localize'](keys.join('.'), data)
 }
 
+export function hasFeat(actor, uuid) {
+    return actor.itemTypes.feat.some(feat => feat.sourceId === uuid)
+}
+
 export function templatePath(template) {
     return `modules/${MODULE_ID}/templates/${template}.hbs`
 }

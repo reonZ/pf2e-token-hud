@@ -1,0 +1,20 @@
+<div class="pf2e-token-hud treat-wounds">
+    <p>
+        <strong>{{localize 'PF2E.SkillLabel'}}: </strong>
+        {{#if (gt skills.length 1)}}
+        <select name="skill">
+            {{selectOptions skills selected='medicine' nameAttr="slug" labelAttr="label"}}
+        </select>
+        {{else}}
+        <span>{{skills.[0].label}}</span>
+        {{/if}}
+        (<span class="rank {{skills.[0].rank}}">{{localize (concat 'PF2E.ProficiencyLevel' skills.[0].rank)}}</span>)
+    </p>
+
+    {{#if risky}}
+    <p>
+        <strong>{{localize 'PF2E.Actions.TreatWounds.Feats.RiskySurgery'}}: </strong>
+        <input type="checkbox" name="risky">
+    </p>
+    {{/if}}
+</div>
