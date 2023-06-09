@@ -1,0 +1,120 @@
+.chat-message.message .pf2e-token-hud .rk {
+  --nb-rows: 1;
+  --row-height: 1.8em;
+  position: relative;
+  padding-inline: 8px;
+  display: grid;
+  -moz-column-gap: 6px;
+       column-gap: 6px;
+  font-size: 1.1em;
+  align-items: center;
+  background: repeating-linear-gradient(#ddd 0 var(--row-height), transparent var(--row-height) calc(var(--row-height) * 2));
+  grid-template-columns: repeat(4, auto);
+  grid-template-rows: repeat(var(--nb-rows), var(--row-height));
+}
+.chat-message.message .pf2e-token-hud .rk .header {
+  z-index: 1;
+  color: var(--text-dark);
+  font-weight: bold;
+}
+.chat-message.message .pf2e-token-hud .rk :not(:nth-child(4n+1)) {
+  text-align: center;
+}
+.chat-message.message .pf2e-token-hud .rk .name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.chat-message.message .pf2e-token-hud .rk::before {
+  content: "";
+  position: absolute;
+  background: rgba(0, 0, 0, 0.1803921569);
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--row-height);
+}
+.chat-message.message .pf2e-token-hud .rk-skills {
+  --nb-rows: 1;
+  --row-height: 1.8em;
+  position: relative;
+  padding-inline: 8px;
+  display: grid;
+  -moz-column-gap: 6px;
+       column-gap: 6px;
+  font-size: 1.1em;
+  align-items: center;
+  background: repeating-linear-gradient(#ddd 0 var(--row-height), transparent var(--row-height) calc(var(--row-height) * 2));
+  grid-template-columns: repeat(6, auto);
+  grid-template-rows: repeat(var(--nb-rows), var(--row-height));
+}
+.chat-message.message .pf2e-token-hud .rk-skills .header {
+  z-index: 1;
+  color: var(--text-dark);
+  font-weight: bold;
+}
+.chat-message.message .pf2e-token-hud .rk-skills :not(:nth-child(6n+1)) {
+  text-align: center;
+}
+.chat-message.message .pf2e-token-hud .rk-skills .name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.chat-message.message .pf2e-token-hud .rk-skills sup {
+  padding-left: 2px;
+}
+.chat-message.message .pf2e-token-hud .rk-lores {
+  --nb-rows: 1;
+  --row-height: 1.8em;
+  position: relative;
+  padding-inline: 8px;
+  display: grid;
+  -moz-column-gap: 6px;
+       column-gap: 6px;
+  font-size: 1.1em;
+  align-items: center;
+  background: repeating-linear-gradient(#ddd 0 var(--row-height), transparent var(--row-height) calc(var(--row-height) * 2));
+  grid-template-columns: repeat(7, auto);
+  grid-template-rows: repeat(var(--nb-rows), var(--row-height));
+}
+.chat-message.message .pf2e-token-hud .rk-lores .header {
+  z-index: 1;
+  color: var(--text-dark);
+  font-weight: bold;
+}
+.chat-message.message .pf2e-token-hud .rk-lores :not(:nth-child(7n+1)) {
+  text-align: center;
+}
+.chat-message.message .pf2e-token-hud .rk-lores .name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.chat-message.message .pf2e-token-hud .rk-lores-rolls {
+  --nb-rows: 1;
+  --row-height: 1.8em;
+  position: relative;
+  padding-inline: 8px;
+  display: grid;
+  -moz-column-gap: 6px;
+       column-gap: 6px;
+  font-size: 1.1em;
+  align-items: center;
+  background: repeating-linear-gradient(#ddd 0 var(--row-height), transparent var(--row-height) calc(var(--row-height) * 2));
+  grid-template-columns: repeat(4, auto);
+  grid-template-rows: repeat(var(--nb-rows), var(--row-height));
+}
+.chat-message.message .pf2e-token-hud .rk-lores-rolls .header {
+  z-index: 1;
+  color: var(--text-dark);
+  font-weight: bold;
+}
+.chat-message.message .pf2e-token-hud .rk-lores-rolls :not(:nth-child(4n+1)) {
+  text-align: center;
+}
+.chat-message.message .pf2e-token-hud .rk-lores-rolls .name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
