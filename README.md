@@ -1,10 +1,11 @@
 # FoundryVTT PF2e Interactive Token Tooltip
 
-This module will generate an interactive token tooltip to access all the most used `Character` and `Npc` features.
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/K3K6M2V13)
+
+### This module will generate an interactive token tooltip to access all the most used `Character` and `Npc` features.
 
 Starting to work on some bullet points for the future readme:
 
--   the module is made for chromium-based browsers, i tried to make it as compatible as possible with firefox but there are some things that will not work as well or straight up not work on it (nothing that will make the module unusable, mostly quality of life things)
 -   you can hold `ctrl` & `shift` while click most of the action across the tooltip just like you would in the regular actor sheet
 -   you can `right click` any skill action (and similar in the extras sidebar) to use a variant skill for the action
 -   you can drag anything over any popup of the tooltip and they will all fade out to make it possible to add effects and other items on tokens that are hidden by them (this is also true if you start dragging something from inside the tooltip sidebars or description popup)
