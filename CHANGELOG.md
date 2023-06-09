@@ -1,3 +1,8 @@
+# 1.9.2
+
+-   fixed part of the lores table showing in the `Recall Knowledge` target chat message event without lore skills
+-   lot of code cleaning
+
 # 1.9.1
 
 -   fixed the mix up with `unspecific` and `specific` lores
