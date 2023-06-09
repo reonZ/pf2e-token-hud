@@ -10,47 +10,47 @@
 
 This tooltip will be shown if you are the owner of the currently hovered over token or if the `Tooltip on Observe` is enabled and you have `observer` permission for this token (there is also the GM setting `Party as Observer` that would affect this showing).
 
-1. Hero Points - Alignment - Level
+1. Hero Points, Alignment and Level
 
     - you can add/remove hero points by left/right clicking on the pips
 
-2. Temp HP - HP
+2. Temp HP and HP
 
-3. Resolve Points - Stamina
+3. Resolve Points and Stamina
 
     - this line only appears if the stamina variant rule is enabled in this world
     - you can click on the resolve icon to use the actions `Take a Breather` and `Steel Your Resolve` is available
 
-4. Armor Class - Shield
+4. Armor Class and Shield
 
     - you can use the `Take Cover` action or remove cover by clicking on the wall
     - you can use the `Raise Shield` action by clicking on the shield
 
-5. Fortitude - Reflex - Will
+5. Fortitude, Reflex and Will
 
     - this line can be removed
     - you can display their DC instead of their bonus modifier
     - you can display their proficiency rank (U, T, E, M, L)
 
-6. Perception - Stealth - Athletics
+6. Perception, Stealth and Athletics
 
     - same as for the saves
 
-7. Dying - Wounded
+7. Dying and Wounded
 
     - you can add/remove dying/wounded by left/right clicking on the pips
     - clicking on the skull when having dying will roll a `Recovery Check`
     - this line can be removed
     - you can decide to only show this line when the actor has any dying/wounded
 
-8. Speeds - Languages - Senses - IWR
+8. Speeds, Languages, Senses and IWR
 
     - clicking on them will reveal their list
     - you can select any speed from within the list that you want to be displayed in the tooltip (this is a per user option)
     - will be greyed out when the actor doesn't have any listed
     - IWR stands for `Immunities`, `Weaknesses` and `Resistances`
 
-9. Actions - Equipment - Spells - Skills - Extras
+9. Actions, Equipment, Spells, Skills and Extras
 
     - those will open their respective sidebar containing an abundance of information about the actor
     - a first screening is done to see if any should be greyed out
