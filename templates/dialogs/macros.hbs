@@ -1,0 +1,15 @@
+<div class="pf2e-token-hud macros">
+    {{#if macros.length}}
+    {{#each macros as |macro|}}
+    <div class="macro" data-uuid="{{macro.uuid}}">
+        <img src="{{macro.img}}">
+        <span>{{macro.name}}</span>
+        <a data-action="delete-macro"><i class="fa-solid fa-trash"></i></a>
+    </div>
+    {{/each}}
+    {{else}}
+    <div class="no-macro">
+        {{noMacro}}
+    </div>
+    {{/if}}
+</div>

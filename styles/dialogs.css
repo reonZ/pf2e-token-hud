@@ -1,0 +1,35 @@
+.app.window-app.dialog .pf2e-token-hud {
+  margin-bottom: 1em;
+}
+.app.window-app.dialog .pf2e-token-hud .hidden {
+  display: none;
+}
+.app.window-app.dialog .pf2e-token-hud.resolve p input {
+  margin-right: 6px;
+}
+.app.window-app.dialog .pf2e-token-hud.macros {
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.app.window-app.dialog .pf2e-token-hud.macros .macro {
+  display: flex;
+  align-items: center;
+  height: 2em;
+  gap: 4px;
+}
+.app.window-app.dialog .pf2e-token-hud.macros .macro img {
+  height: 100%;
+}
+.app.window-app.dialog .pf2e-token-hud.macros .macro span {
+  flex: 1;
+}
+.app.window-app.dialog .pf2e-token-hud.variant p {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.app.window-app.dialog .pf2e-token-hud.variant p input {
+  width: 4ch;
+}

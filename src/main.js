@@ -1,5 +1,5 @@
 import { registerKeybindings } from './keybindings.js'
-import { enableModule, getSetting, localize, MODULE_ID } from './module.js'
+import { enableModule, getSetting, localize, MODULE_ID, templatePath } from './module.js'
 import { registerSettings, renderSettingsConfig } from './settings.js'
 import { deleteMacro, getMacros, onDroppedMacro } from './shared.js'
 
@@ -30,9 +30,9 @@ Hooks.on('getActorDirectoryEntryContext', (_, data) => {
 })
 
 class DataDialog extends Dialog {
-    getData(options = {}) {
+    async getData(options = {}) {
         const data = super.getData(options)
-        if (typeof data.content === 'function') data.content = data.content()
+        if (typeof data.content === 'function') data.content = await data.content()
         return data
     }
 }
@@ -44,22 +44,12 @@ function openMacrosDialog(actorId) {
     const dialog = new DataDialog(
         {
             title: `${actor.name} - ${localize('actor.macros.title')}`,
-            content: () => {
+            content: async () => {
                 const macros = getMacros(actor) ?? []
-                let content = '<div style="min-height: 250px; display: flex; flex-direction: column; gap: 4px;">'
-                if (macros.length) {
-                    for (const macro of macros) {
-                        content += `<div class="macro" style="display: flex; align-items: center; height: 2em; gap: 4px;" data-uuid="${macro.uuid}">`
-                        content += `<img src="${macro.img}" style="height: 100%;"><span style="flex: 1;">${macro.name}</span>`
-                        content += `<a data-action="delete-macro"><i class="fa-solid fa-trash"></i></a></div>`
-                    }
-                } else {
-                    content += '<div style="text-align: center; padding-block: 4px; '
-                    content += 'color: var(--color-text-dark-4); border: 1px dashed var(--color-text-dark-6);">'
-                    content += `${localize('extras.no-macro')}</div>`
-                }
-                content += '</div>'
-                return content
+                return renderTemplate(templatePath('dialogs/macros'), {
+                    macros,
+                    noMacro: localize('extras.no-macro'),
+                })
             },
             buttons: {},
             render: html => {

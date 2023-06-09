@@ -1,4 +1,4 @@
-import { getSetting, localize, modifier } from '../module.js'
+import { getSetting, localize, modifier, templatePath } from '../module.js'
 import { unownedItemToMessage } from '../pf2e.js'
 import { showItemSummary } from '../popup.js'
 
@@ -399,22 +399,14 @@ export function addSkillsListeners(el, actor) {
 }
 
 export async function createVariantDialog(base, dc) {
-    let content = '<p style="display: flex; align-items: center; justify-content: space-between;">'
-    content += `<strong>${localize('skills.variant.label')}</strong> <select>`
+    const skills = SKILLS_SLUGS.map(slug => ({ slug, label: getSkillLabel(slug) }))
 
-    for (const slug of SKILLS_SLUGS) {
-        const selected = slug === base ? 'selected' : ''
-        const label = getSkillLabel(slug)
-        content += `<option value="${slug}" ${selected}>${label}</option>`
-    }
-
-    content += '</select></p>'
-
-    if (dc) {
-        content += '<p style="display: flex; align-items: center; justify-content: space-between;">'
-        content += `<strong>${localize('skills.variant.dc')}</strong>`
-        content += `<input type="number" value="${dc}" min="0" style="width: 4ch;"></p>`
-    }
+    const content = await renderTemplate(templatePath('dialogs/variant'), {
+        i18n: str => localize(`skills.variant.${str}`),
+        dc,
+        skills,
+        selected: base,
+    })
 
     return Dialog.prompt({
         title: localize('skills.variant.title'),

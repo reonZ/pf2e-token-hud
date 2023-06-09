@@ -754,7 +754,7 @@ function postionFromTargetX(el, target) {
     return x
 }
 
-function useResolve(actor) {
+async function useResolve(actor) {
     function toChat(content) {
         ChatMessage.create({
             user: game.user.id,
@@ -772,18 +772,10 @@ function useResolve(actor) {
     if (resolve.value < 1) return ui.notifications.warn(noResolve)
 
     const hasSteel = actor.itemTypes.feat.find(item => item.sourceId === RESOLVE_UUID)
-
-    let content = '<p><input type="radio" name="pick" value="breather" style="margin-right: 6px;'
-    if (!hasSteel) content += ' display: none;'
-    content += '" checked><span>'
-    if (hasSteel) content += `<strong>${localize('hud.resolve.breather.label')}:</strong> `
-    content += `${localize('hud.resolve.breather.msg')}</span></p>`
-
-    if (hasSteel) {
-        content += '<p><input type="radio" name="pick" value="steel" style="margin-right: 6px;">'
-        content += `<span><strong>${game.i18n.localize('PF2E.Actions.SteelYourResolve.Title')}:</strong> `
-        content += `${localize('hud.resolve.steel.msg')}</span></p>`
-    }
+    const content = await renderTemplate(templatePath('dialogs/resolve'), {
+        hasSteel,
+        i18n: str => localize(`hud.resolve.${str}`),
+    })
 
     new Dialog({
         title: localize('hud.resolve.title'),

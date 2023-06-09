@@ -37,6 +37,13 @@
             color: green;
         }
     }
+
+    .no-macro {
+        text-align: center;
+        padding-block: 4px;
+        color: var(--color-text-dark-4);
+        border: 1px dashed var(--color-text-dark-6);
+    }
 }
 
 .crb-hover .tooltipster-box .tooltipster-content .hover-content.info {

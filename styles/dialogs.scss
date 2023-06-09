@@ -1,0 +1,51 @@
+.app.window-app.dialog {
+    .pf2e-token-hud {
+        margin-bottom: 1em;
+
+        .hidden {
+            display: none;
+        }
+
+        &.resolve {
+            p {
+                input {
+                    margin-right: 6px;
+                }
+            }
+        }
+
+        &.macros {
+            min-height: 250px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+
+            .macro {
+                display: flex;
+                align-items: center;
+                height: 2em;
+                gap: 4px;
+
+                img {
+                    height: 100%;
+                }
+
+                span {
+                    flex: 1;
+                }
+            }
+        }
+
+        &.variant {
+            p {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                input {
+                    width: 4ch;
+                }
+            }
+        }
+    }
+}
