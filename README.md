@@ -67,6 +67,8 @@ This tooltip will be shown if you are the owner of the currently hovered over to
     - This gives a textual representation of the current state of wellness of the hovered over token
     - can be disabled for owned/observed tokens
 
+# WORK IN PROGRESS
+
 # bullet points for the readme:
 
 -   you can hold `ctrl` & `shift` while click most of the action across the tooltip just like you would in the regular actor sheet
