@@ -28,8 +28,8 @@ This tooltip will be shown if you are the owner of the currently hovered over to
 5. Fortitude - Reflex - Will
 
     - this line can be removed
-    - you can display thir DC instead of their bonus modifier
-    - you can display thir proficiency rank (U, T, E, M, L)
+    - you can display their DC instead of their bonus modifier
+    - you can display their proficiency rank (U, T, E, M, L)
 
 6. Perception - Stealth - Athletics
 
