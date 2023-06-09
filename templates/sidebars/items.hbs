@@ -42,7 +42,7 @@
                             {{#if (eq carryType 'dropped')}}
                             <i class="fa-solid fa-grip-lines greyed"></i>
                             {{else if (eq carryType 'stowed')}}
-                            <i class="fa-solid fa-box greyed"></i>
+                            <i class="fa-solid fa-box greyed" data-tooltip="{{item.container.name}}"></i>
                             {{else if (eq carryType 'held')}}
                             <i class="fa-solid fa-hand-back-fist held">
                                 <i class="fa-solid fa-{{item.handsHeld}}"></i>
