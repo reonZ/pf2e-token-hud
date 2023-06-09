@@ -19,6 +19,7 @@ This tooltip will be shown if you are the owner of the currently hovered over to
 3. Resolve Points - Stamina
 
     - this line only appears if the stamina variant rule is enabled in this world
+    - you can click on the resolve icon to use the actions `Take a Breather` and `Steel Your Resolve` is available
 
 4. Armor Class - Shield
 
