@@ -1,3 +1,11 @@
+# 1.10.0
+
+-   added tooltip containing the name of the container for stowed equipment, you need to hover over the little cardbox to see it
+-   added `Two Columns Actions` and `Two Columns Equipment` settings (disabled by default), honestly don't use them, it looks terrible
+-   fixed two columns layout with overflowed names (as if it could really be fixed)
+-   fixed some layout issues that were preventing long names in equipment and spells to be properly cut and wouldn't trigger the hover tooltip
+-   did the first part of the README
+
 # 1.9.2
 
 -   fixed part of the lores table showing in the `Recall Knowledge` target chat message event without lore skills
