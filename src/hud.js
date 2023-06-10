@@ -217,6 +217,7 @@ export class HUD extends Application {
         const useStamina = game.settings.get('pf2e', 'staminaVariant')
         const isObserver = this.#isObserved
         const showDistance = getSetting('distance')
+        const fontSize = getSetting('scale')
 
         if (showDistance === 'all' || (showDistance === 'self' && isObserver)) {
             const unitSplit = getSetting('unit').split(',')
@@ -266,6 +267,7 @@ export class HUD extends Application {
             return {
                 status,
                 distance,
+                fontSize,
                 tokenId: token.id,
             }
         }
@@ -328,6 +330,7 @@ export class HUD extends Application {
                 skills: `${MODULE_ID}.skills.title`,
                 extras: `${MODULE_ID}.extras.title`,
             },
+            fontSize,
             distance,
             status,
             isOwner: token.isOwner,

@@ -42,6 +42,14 @@ export function registerSettings() {
         },
     })
 
+    register('scale', Number, 14, {
+        range: {
+            min: 10,
+            max: 30,
+            step: 1,
+        },
+    })
+
     register('use-holding', String, 'none', {
         hint: path('use-holding', isGM ? 'choices.gm.hint' : 'choices.player.hint'),
         choices: {

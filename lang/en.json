@@ -180,6 +180,10 @@
             "tooltips": {
                 "name": "Disable Icons Tooltips",
                 "hint": "Disable all the icons tooltips in the main tooltip  from being shown."
+            },
+            "scale": {
+                "name": "Scale by Font",
+                "hint": "You can scale the entirety of the tooltip and its attached sidebars/popup by changing its font size. The module was designed to be using a 14px font size by default."
             }
         },
         "spells": {
