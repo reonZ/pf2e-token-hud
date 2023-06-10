@@ -176,7 +176,7 @@ When enabled by the GM, the module will consider any token actor in the `Party` 
 
 ## Enabled
 
-This enable/disable the module on this client, it leaves no footprint as if the module wasn't even there.
+This enable/disable the module on this client.
 
 ## Tooltip Position
 
