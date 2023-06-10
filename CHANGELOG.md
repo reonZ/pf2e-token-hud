@@ -2,7 +2,7 @@
 
 -   added `Scale by Font`, changing the font size will scale the entirety of the tooltip and its attached sidebars/popup
 -   fixed not being able to remove/edit a macro when said macro was never cached in the browser
--   finished the REAME yoohoo!
+-   finished the README yeah!
 
 # 1.10.0
 
