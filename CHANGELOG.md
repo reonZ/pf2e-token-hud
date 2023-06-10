@@ -1,3 +1,9 @@
+# 1.11.0
+
+-   added `Scale by Font`, changing the font size will scale the entirety of the tooltip and its attached sidebars/popup
+-   fixed not being able to remove/edit a macro when said macro was never cached in the browser
+-   finished the REAME yoohoo!
+
 # 1.10.0
 
 -   added tooltip containing the name of the container for stowed equipment, you need to hover over the little cardbox to see it
