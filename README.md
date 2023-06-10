@@ -10,6 +10,8 @@
 
 This tooltip will be shown if you are the owner of the currently hovered over token or if the `Tooltip on Observe` is enabled and you have `observer` permission for this token (there is also the GM setting `Party as Observer` that would affect this showing).
 
+NOTE: if you drag anything over the tooltip, the sidebars or the popup (dragged from inside any of them or from anywhere in the foundry), everything will fade out and you will be able to interact with the tokens beneath them, the only exception for that is when the extras sidebar is opened, so that you can drag & drop macros in it.
+
 1. Hero Points, Alignment and Level
 
     - you can add/remove hero points by left/right clicking on the pips
@@ -68,17 +70,219 @@ This tooltip will be shown if you are the owner of the currently hovered over to
     - This gives a textual representation of the current state of wellness of the hovered over token
     - can be disabled for owned/observed tokens
 
-# WORK IN PROGRESS
+# Actions, Equipment, Spells and Skills
 
-# bullet points for the readme:
+![](./readme/sidebars.webp)
 
--   you can hold `ctrl` & `shift` while click most of the action across the tooltip just like you would in the regular actor sheet
--   you can `right click` any skill action (and similar in the extras sidebar) to use a variant skill for the action
--   you can drag anything over any popup of the tooltip and they will all fade out to make it possible to add effects and other items on tokens that are hidden by them (this is also true if you start dragging something from inside the tooltip sidebars or description popup)
--   equipment items are actually draggable so you can give them to another actor the usual way (this module doesn't prevent the system restriction though, for that you would have to use another module \*_cough_\*)
--   the holding keybind can either be used before hovering over a token or during
--   `Use Hold Keybind` have different options and descriptions for the GM and players
--   macros added are on per user basis and will be executed with the `Actor` and `Token` the tooltip is related to as arguments
+1. Roll Option toggles
+
+2. Strikes
+
+    - just like in the actor's sheet, you can use the `shift` and `ctrl` keys to open/not open the modifiers window and roll blind
+    - you can click on a `Character` strike name to see its description
+    - `NPC` strikes will instead display their tags below the name which are clickable to see their desription
+    - you can use
+
+3. Hero Action
+
+    - those will only show up if you have the `PF2e Hero Actions` module active
+    - you can find all the functionalities of the module itself
+
+4. Actions
+
+    - list of the actors action
+    - they can be either split by types or into a single group sorted by type/name
+
+5. Equipment
+    - you can click on the name of an item to see its description
+    - you can click on an item's image to send its description to chat
+    - you can drag an item out of the equipment sidebar which will have the same effect as if you were to drag an item out of the actor's sheet (e.g. giving it to another actor)
+    - items are split by categories (weapons, armors, consumables, equipment, treasure and containers)
+    - all items will be in their respective category regardless of the fact that they me be inside a container
+6. Stowed Items
+
+    - if an item is inside a container, it will have the cardbox icon, hovering over the icon will display the name of the container
+
+7. Spells
+
+    - spells are split into level tables instead of by spellcasting entry
+    - focus and ritual spells have their own table at the bottom
+    - if the actor has focus cantrips but no focus spells (e.g. psychic class), the focus pips will instead be displayed in the cantrip table
+    - spell/spellcasting resources are displayed inside each spell row for convenience and can be interacted with
+    - you can click the name of a spell to see its description
+    - you can click the spell's image to send its description to chat
+
+8. Skills
+
+    - clicking on a skill's bonus modifier will make a roll
+    - a list of skill actions have been added per skill and can be clicked on to make an skill action roll
+    - right clicking on a skill action will allow you to use a variant skill for the action (e.g. making a `seek` roll using `arcana` instead of `perception`)
+    - just like in the actor's sheet, you can use the `shift` and `ctrl` keys to open/not open the modifiers window and roll blind respectively
+    - skill actions that require the actor to be trained to be used will be marked with a `(T)` you can also decide to not show those if the actor isn't trained in the associated skill
+
+9. Skill Action Variants
+    - some action skills have variants, in that case, the action itself isn't clickable by instead you have to click on one of its variant
+
+# Extras
+
+![](./readme/extras.webp)
+
+1. Initiative
+
+2. Utilities
+
+    - `Daily Preparation` will only appear if the `PF2e Dailies` is active
+
+3. Actions
+
+    - those are custom made actions that are special enough to not be in the skills sidebar
+
+4. Drop Macros Here
+
+    - if you drop a macro in the extras sidebar, it will be added for this actor (this is a per user feature)
+    - you can actually drop macros anywhere inside the sidebar and not just in the little box
+
+5. Macros
+    - you can execute, edit and delete added macros
+    - macros will be executed with the `Actor` and `Token` the tooltip is related to as arguments
+
+# Small Tooltip
+
+![](./readme/small.webp)
+
+An alternate version of the tooltip that only displays the distance and the health status of the token actor.
+
+There are multiple ways/reasons for this version of the tooltip to appear instead of the regular one:
+
+-   one being if you are not owner or have observer permission over the token depending on the settings.
+
+-   Another one is if a GM select the `Hold to show fully` option for the `Use Hold Key` setting and not holding the key
+
+# World Settings
+
+## Health Status
+
+The GM can add multiple states that will be used to textually represente the wellness of a token actor
+
+The max HP (plus stamina) will be divided by the number of states and the appropriate one will be displayed to the users
+
+Leaving this field empty will disable the feature for everybody
+
+## Party as Observer
+
+When enabled by the GM, the module will consider any token actor in the `Party` alliance to be observable, this is useful if you don't want your players to share visions (which the regular `observer` forces) but still want them to be able to look at other player's tooltip
+
+# Client Settings
+
+## Enabled
+
+This enable/disable the module on this client, it leaves no footprint as if the module wasn't even there.
+
+## Tooltip Position
+
+Let you select your preferred position for the tooltip to appear around the hovered token. If the tooltip cannot fit there, it will first try to appear on the opposite side, otherwise, in one of the remaining two.
+
+## Small Tooltip Position
+
+Same as above, it lets you select your preferred position for the small tooltip.
+
+## Tooltip Delay
+
+The delay in milliseconds before the tooltip show on screen, this is bypassed when holding the `Hold to Display` keybind
+
+## Scale by Font
+
+This let you upscale or downscale the tooltip and all its attached sidebars/popup based on the font size, there are still a few little things that will no scale like foundry core tooltips but globally, this setting should be usable if needed.
+
+## Use Hold Keybind
+
+This setting will show different options and description to GMs and players.
+
+For GMs, it offer the option to only show tooltips when the key is held or instead show the small tooltip until the key is held.
+
+For players, it offers the option to only show tooltips when the key is held or to show owned/observed token tooltips when the key is held and still see small tooltips without.
+
+NOTE: you don't have to hold the key before hovering over a token, hitting the key during an hover will also work and will turn a small token into a regular token when appropriate.
+
+## Tooltip on Observe
+
+When enabled and hovering over a token the player has the `observer` permission (or in party if the option is enabled), the module will generate an uneditable version of the full tooltip.
+
+This does nothing to the GM because they have `owner` and therefore `obersver` permission over everything.
+
+## Health Status on Owned
+
+When enabled, the health status will also be displayed on the regular tooltip instead of just on the small one.
+
+## Disable Chat Card Hover
+
+When hovering over a chat card that has been generated by a token actor, foundry will trigger the `hoverToken` event which this module is reliant on to display the tooltips, because of that, navigating the chat can become annoying and ddisplay tooltips constantly, this setting disable that behavior.
+
+## Show Saves
+
+Select if you want to see the saves DCs or bonus modifiers or remove the entire line alltogether
+
+## Perception, Stealth, Ahtletics
+
+Does the same as above
+
+## Display Ranks
+
+You can decide to see the ranks of the saves and perception lines for convenience, because of the lack of real estate in those parts, the rank will only be composed of the first letter and in superscript.
+
+## Show Death Line
+
+Lets you decide if you want to see the dying/wounded line all the time or only when the actor actually as any, you can also hide the line all the time.
+
+## Disable Icon Tooltips
+
+When hovering over any of the main tooltip icons, its name will be shown, this setting prevent it from happening (after a while, you won't need to be reminded of what they do).
+
+## Distance to Token
+
+Show the distance on all tokens or owned/observed tokens only, can also be disabled.
+
+## Distance Unit
+
+Lets you indicate what unit should be used for the distance, what is its ratio compared to a foot and how many decimals should be displayed. All those are set in a single field separated by commas
+
+> 0.3, m, 2
+
+This would convert feet into meters and display 2 decimals
+
+## Sidebar Max Height
+
+Allows you to set a maximum height for the sidebars, this accept any css value that would be valid for a height property (e.g. `300px`, `50%`).
+
+## Sidebar Scrollbar
+
+When disabled, the scrollbar of the sidebars will be hidden, i am looking at you firefox users and your ginormous scrollbars.
+
+## Two Columns X
+
+Those settings will split the different sidebars in two, the result is not always desirable (especially the actions sidebar).
+
+## Actions Sorting
+
+Will sort the actions either split by categories or in a single table sorted by name or type.
+
+## Strikes & Damages System Colors
+
+Will reproduce the system coloring of the strikes attack & damage buttons, this make them more distinguishable.
+
+## Sort Spells by Type
+
+When enabled, it will sort the spells in a single table by type before sorting them by name.
+
+## Show Spell Tradition
+
+When enabled, the first letter of the spell tradition (arcane, occult, divine, primal) will be displayed in the spell row.
+
+## Hide Untrained Skill Actions
+
+When enabled, all skill action that require the character to be trained will be hidden from the sidebar if the actor is in fact untrained
+
+This does nothing on NPCs
 
 # CHANGELOG
 
