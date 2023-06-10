@@ -78,7 +78,11 @@ export function getMacros(actor) {
     return (
         actor.isOwner &&
         getFlag(actor, `macros.${game.user.id}`)
-            ?.map(uuid => fromUuidSync(uuid))
+            ?.map(uuid => {
+                const macro = fromUuidSync(uuid)
+                if (!macro) return null
+                return { img: macro.img, name: macro.name, uuid }
+            })
             .filter(Boolean)
     )
 }
