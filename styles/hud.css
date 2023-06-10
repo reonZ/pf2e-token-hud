@@ -189,6 +189,9 @@
   transform: translate(-50%, -50%);
   z-index: 10;
   max-width: 700px;
+  max-height: calc(100vh - var(--outer-padding) * 2);
+  display: flex;
+  flex-direction: column;
 }
 #pf2e-token-hud .popup .header {
   position: relative;
@@ -205,6 +208,9 @@
   background: rgba(0, 0, 0, 0.7803921569);
   inset: calc(-1 * var(--inner-padding) - 1px);
   border-radius: var(--inner-border-radius) var(--inner-border-radius) 0 0;
+}
+#pf2e-token-hud .popup .description {
+  overflow-y: auto;
 }
 #pf2e-token-hud .distance,
 #pf2e-token-hud .status {
