@@ -164,7 +164,7 @@
                 "name": "Show Saves",
                 "hint": "Should the fortitude, reflex and will saves be displayed in the tooltip.",
                 "choices": {
-                    "none": "Disabed",
+                    "none": "Disabled",
                     "bonus": "Show Bonus",
                     "dc": "Show DC"
                 }
