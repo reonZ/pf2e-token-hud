@@ -254,10 +254,20 @@ export class HUD extends Application {
                 const current = hp.value + (useStamina ? sp.value : 0)
                 const ratio = current / max
                 const pick = Math.ceil(ratio * statuses.length)
+                let hpString = current.toString() + "/" + max.toString();
 
-                status = {
-                    hue: ratio * ratio * 122 + 3,
-                    value: pick === 0 ? game.i18n.localize('EFFECT.StatusDead') : statuses.at(pick - 1),
+                if (isCharacter) {
+                    status = {
+                        hue: ratio * ratio * 122 + 3,
+                        value: pick === 0 ? game.i18n.localize('EFFECT.StatusDead') : hpString,
+                    }
+                }
+                else
+                {
+                    status = {
+                        hue: ratio * ratio * 122 + 3,
+                        value: pick === 0 ? game.i18n.localize('EFFECT.StatusDead') : statuses.at(pick - 1),
+                    }
                 }
             }
         }

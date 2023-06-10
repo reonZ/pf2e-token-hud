@@ -1,0 +1,29 @@
+let fe;
+if(!j||m("see-status")){
+    let g=m("status").split(",").map(I=>I.trim()).filter(Boolean);
+    if(g.length){
+        let I=S.max+(V?k.max:0),
+        M=(S.value+(V?k.value:0))/I,
+        B=Math.ceil(M*g.length),
+        hs=(S.value).toString()+"/"+I.toString();
+
+        if(r){
+            fe={
+            hue:M*M*122+3,
+            value:B===0?game.i18n.localize("EFFECT.StatusDead"):hs        
+            }
+        }
+        else
+        {
+            fe={
+            hue:M*M*122+3,
+            value:B===0?game.i18n.localize("EFFECT.StatusDead"):g.at(B-1)
+            }
+        }
+    }
+}
+
+if(!j)return{status:fe,distance:t,tokenId:e.id}
+
+
+//r = isCharacter

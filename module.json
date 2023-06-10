@@ -1,12 +1,15 @@
 {
-    "id": "pf2e-token-hud",
-    "title": "PF2e Interactive Token Tooltip",
+    "id": "pf2e-token-hud-adapted",
+    "title": "PF2e Interactive Token Tooltip (Adapted)",
     "author": "Idle",
     "description": "",
     "authors": [
         {
             "name": "Idle",
             "discord": "Idle#3251"
+        },
+        {
+            "name": "Artjuice"
         }
     ],
     "esmodules": [
@@ -16,14 +19,14 @@
         "minimum": "10.291",
         "verified": "10"
     },
-    "version": "1.10.0",
+    "version": "1.10.1",
     "manifestPlusVersion": "1.2.0",
-    "url": "https://github.com/reonZ/pf2e-token-hud",
-    "readme": "https://github.com/reonZ/pf2e-token-hud/blob/master/README.md",
-    "manifest": "https://raw.githubusercontent.com/reonZ/pf2e-token-hud/master/module.json",
-    "download": "https://github.com/reonZ/pf2e-token-hud/releases/download/1.10.0/module.zip",
-    "changelog": "https://github.com/reonZ/pf2e-token-hud/blob/master/CHANGELOG.md",
-    "bugs": "https://github.com/reonZ/pf2e-token-hud/issues",
+    "url": "https://github.com/piper93/pf2e-token-hud-adapted",
+    "readme": "https://github.com/piper93/pf2e-token-hud-adapted/blob/master/README.md",
+    "manifest": "https://raw.githubusercontent.com/piper93/pf2e-token-hud-adapted/master/module.json",
+    "download": "https://github.com/piper93/pf2e-token-hud-adapted/releases/download/1.10.1/module.zip",
+    "changelog": "https://github.com/piper93/pf2e-token-hud-adapted/blob/master/CHANGELOG.md",
+    "bugs": "https://github.com/piper93/pf2e-token-hud-adapted/issues",
     "styles": [
         "styles/global.css",
         "styles/chat.css",
