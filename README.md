@@ -81,7 +81,7 @@ NOTE: if you drag anything over the tooltip, the sidebars or the popup (dragged 
     - just like in the actor's sheet, you can use the `shift` and `ctrl` keys to open/not open the modifiers window and roll blind
     - you can click on a `Character` strike name to see its description
     - `NPC` strikes will instead display their tags below the name which are clickable to see their desription
-    - you can hover over the strike and dmaage buttons to see their formula.
+    - you can hover over the strike and damage buttons to see their formula.
 
 3. Hero Action
 
