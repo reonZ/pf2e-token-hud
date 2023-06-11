@@ -1,3 +1,6 @@
+#pf2e-token-hud .sidebar.spells.doubled {
+  min-width: calc(var(--max-width) * 2);
+}
 #pf2e-token-hud .sidebar.spells .entry .header {
   position: relative;
   text-align: center;

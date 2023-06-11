@@ -1,5 +1,9 @@
 #pf2e-token-hud {
     .sidebar.spells {
+        &.doubled {
+            min-width: calc(var(--max-width) * 2);
+        }
+
         .entry {
             .header {
                 position: relative;
