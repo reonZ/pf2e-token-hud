@@ -60,7 +60,7 @@
                     {{variant.label}}
                 </div>
                 {{/each}}
-                {{#if strike.item.dealsDamage }}
+                {{#if strike.item.dealsDamage}}
                 {{#unless @root.isCharacter}}
             </div>
             <div class="variants">
@@ -81,9 +81,10 @@
             </div>
             {{/if}}
 
-            {{#if (and @root.isCharacter strike.auxiliaryActions.length)}}
+            {{#if (and @root.isCharacter strike.ready)}}
+            {{log strike}}
             <div class="variants">
-                {{#if (and strike.ready strike.ammunition)}}
+                {{#if strike.ammunition}}
                 <div class="variant {{#unless @root.isOwner}}disabled{{/unless}}">
                     <select class="ammos" data-action="strike-ammo" {{disabled (not @root.isOwner)}}>
                         {{#select strike.ammunition.selected.id}}
@@ -117,7 +118,7 @@
                 </div>
                 {{/each}}
 
-                {{#if (and strike.versatileOptions.length strike.ready)}}
+                {{#if (and strike.versatileOptions.length strike.item.dealsDamage)}}
                 <div class="versatiles">
                     {{#each strike.versatileOptions as |option|}}
                     <div class="variant {{#if option.selected}}selected{{/if}} {{#unless @root.isOwner}}disabled{{/unless}}"
