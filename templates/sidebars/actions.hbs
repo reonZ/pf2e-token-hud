@@ -81,10 +81,9 @@
             </div>
             {{/if}}
 
-            {{#if (and @root.isCharacter strike.ready)}}
-            {{log strike}}
+            {{#if @root.isCharacter}}
             <div class="variants">
-                {{#if strike.ammunition}}
+                {{#if (and strike.ammunition strike.ready)}}
                 <div class="variant {{#unless @root.isOwner}}disabled{{/unless}}">
                     <select class="ammos" data-action="strike-ammo" {{disabled (not @root.isOwner)}}>
                         {{#select strike.ammunition.selected.id}}
@@ -118,7 +117,7 @@
                 </div>
                 {{/each}}
 
-                {{#if (and strike.versatileOptions.length strike.item.dealsDamage)}}
+                {{#if (and strike.versatileOptions.length strike.item.dealsDamage strike.ready)}}
                 <div class="versatiles">
                     {{#each strike.versatileOptions as |option|}}
                     <div class="variant {{#if option.selected}}selected{{/if}} {{#unless @root.isOwner}}disabled{{/unless}}"
