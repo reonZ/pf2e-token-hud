@@ -72,14 +72,16 @@ export class HUD extends Application {
 
         this.#hoverToken = (token, hover) => {
             const hoverSidebar = getSetting('chat') && $(window.document).find(':hover').filter('#sidebar').length
+            const actor = token.actor
 
             if (
+                !actor ||
                 hoverSidebar ||
                 this.mousedown ||
                 this.#lock ||
                 this.#softLock ||
                 !(token instanceof Token) ||
-                !token.actor?.isOfType('character', 'npc')
+                actor.isOfType('loot')
             )
                 return
 
@@ -250,7 +252,7 @@ export class HUD extends Application {
                 .map(x => x.trim())
                 .filter(Boolean)
 
-            if (statuses.length) {
+            if (statuses.length && hp.max) {
                 const max = hp.max + (useStamina ? sp.max : 0)
                 const current = hp.value + (useStamina ? sp.value : 0)
                 const ratio = current / max
@@ -263,14 +265,21 @@ export class HUD extends Application {
             }
         }
 
-        if (!isObserver) {
-            return {
-                status,
-                distance,
-                fontSize,
-                tokenId: token.id,
-            }
+        const sharedData = {
+            status,
+            distance,
+            fontSize,
+            tokenId: token.id,
+            type: actor.isOfType('creature') ? 'creature' : '',
         }
+
+        if (
+            !isObserver ||
+            (actor.isOfType('familiar') && !actor.master) ||
+            actor.isOfType('vehicle') || // TODO in the meantime
+            actor.isOfType('hazard') // TODO add isowner
+        )
+            return sharedData
 
         function toInfo(str) {
             return `<li>${str.trim()}</li>`
@@ -287,7 +296,7 @@ export class HUD extends Application {
             .map(toInfo)
             .join('')
 
-        const senses = isCharacter ? traits.senses.map(x => x.label) : traits.senses.value.split(',').filter(Boolean)
+        const senses = isCharacter ? traits.senses.map(x => x.label) : traits.senses.value?.split(',').filter(Boolean)
 
         function toIWR(category, header) {
             if (!category.length) return ''
@@ -323,6 +332,7 @@ export class HUD extends Application {
         }
 
         return {
+            ...sharedData,
             titles: {
                 actions: `${MODULE_ID}.actions.title`,
                 items: `${MODULE_ID}.items.title`,
@@ -330,12 +340,8 @@ export class HUD extends Application {
                 skills: `${MODULE_ID}.skills.title`,
                 extras: `${MODULE_ID}.extras.title`,
             },
-            fontSize,
-            distance,
-            status,
             isOwner: token.isOwner,
             isObserver,
-            tokenId: token.id,
             name: token.document.name,
             hp,
             sp: useStamina ? sp : { max: 0 },
@@ -367,7 +373,7 @@ export class HUD extends Application {
                 toIWR(immunities, 'PF2E.ImmunitiesLabel') +
                 toIWR(weaknesses, 'PF2E.WeaknessesLabel') +
                 toIWR(resistances, 'PF2E.ResistancesLabel'),
-            senses: senses.map(toInfo).join(''),
+            senses: senses?.map(toInfo).join(''),
             languages,
             hasSpells: actor.spellcasting.some(x => x.category !== 'items'),
             hasItems: actor.inventory.size,
@@ -449,6 +455,9 @@ export class HUD extends Application {
         const isParty = actor.system.details.alliance === 'party'
 
         if (game.user.isGM && holdingSetting === 'half' && !holding) this.#isObserved = false
+        // TODO in the mean time
+        else if (actor.isOfType('hazard') || actor.isOfType('vehicle')) this.#isObserved = false
+        else if (actor.isOfType('familiar') && !actor.master) this.#isObserved = false
         else this.#isObserved = token.isOwner || (getSetting('observer') && (token.observer || (isParty && getSetting('party'))))
 
         if (holdingSetting !== 'none' && !holding && (holdingSetting === 'all' || this.#isObserved)) return

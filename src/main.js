@@ -3,9 +3,13 @@ import { enableModule, getSetting, localize, MODULE_ID, templatePath } from './m
 import { registerSettings, renderSettingsConfig } from './settings.js'
 import { deleteMacro, getMacros, onDroppedMacro } from './shared.js'
 
-Hooks.once('setup', () => {
+Hooks.once('init', async () => {
     registerSettings()
     registerKeybindings()
+
+    await loadTemplates({
+        creature: templatePath('tooltips/creature'),
+    })
 })
 
 Hooks.once('ready', () => {

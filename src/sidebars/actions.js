@@ -38,14 +38,16 @@ export async function getActionsData(actor) {
         }
     }
 
-    const strikes = await Promise.all(
-        actor.system.actions.map(async (strike, index) => ({
-            ...strike,
-            index,
-            damageFormula: await strike.damage?.({ getFormula: true }),
-            criticalFormula: await strike.critical?.({ getFormula: true }),
-        }))
-    )
+    const strikes =
+        actor.system.actions &&
+        (await Promise.all(
+            actor.system.actions.map(async (strike, index) => ({
+                ...strike,
+                index,
+                damageFormula: await strike.damage?.({ getFormula: true }),
+                criticalFormula: await strike.critical?.({ getFormula: true }),
+            }))
+        ))
 
     let sections = {}
 
@@ -80,7 +82,7 @@ export async function getActionsData(actor) {
 
     if (sorting === 'split') sections.sort((a, b) => SECTIONS_TYPES[a.type].order - SECTIONS_TYPES[b.type].order)
 
-    if (toggles.length || strikes.length || sections.length || heroActions?.length)
+    if (toggles.length || strikes?.length || sections.length || heroActions?.length)
         return {
             toggles,
             strikes,

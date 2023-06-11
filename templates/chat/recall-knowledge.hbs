@@ -105,7 +105,13 @@
 {{#*inline 'skillsRows'}}
 {{#each skills as |skill|}}
 <span class="name">{{skill.label}}</span>
-<span class="rank {{skill.rank}}">{{localize (concat 'PF2E.ProficiencyLevel' skill.rank)}}</span>
+<span class="rank {{skill.rank}}">
+    {{#if skill.rank includeZero=true}}
+    {{localize (concat 'PF2E.ProficiencyLevel' skill.rank)}}
+    {{else}}
+    '-'
+    {{/if}}
+</span>
 <span>{{skill.modifier}}</span>
 <span class="success {{dieSuccess}}">{{add @root.dieResult skill.mod}}</span>
 {{/each}}

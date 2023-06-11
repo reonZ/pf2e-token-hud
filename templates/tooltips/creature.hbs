@@ -1,0 +1,140 @@
+<div class="group">
+    {{#if isCharacter}}
+    <div class="section" data-tooltip="PF2E.HeroPointsLabel">
+        <i class="fa-solid fa-circle-h"></i>
+        {{> pips max=hero.max value=hero.value action="toggle-hero"}}
+    </div>
+    {{/if}}
+
+    <div class="section">
+        <i class="{{alignment.icon}}" data-tooltip="PF2E.Alignment"></i>
+        {{alignment.value}}
+    </div>
+
+    <div class="section">
+        <i class="fa-solid fa-user-graduate" data-tooltip="PF2E.CharacterLevelLabel"></i>{{level}}
+    </div>
+</div>
+
+{{#if hp.max}}
+<div class="group">
+    <div class="section">
+        <i class="fa-solid fa-heart-half-stroke" data-tooltip="PF2E.TempHitPointsShortLabel"></i>
+        {{#if isOwner}}
+        <input type="number" name="system.attributes.hp.temp" value="{{hp.temp}}" min="0">
+        {{else}}
+        <span>{{hp.temp}}</span>
+        {{/if}}
+    </div>
+    <div class="section">
+        <i class="fa-solid fa-heart" data-tooltip="PF2E.HitPointsShortLabel"></i>
+        {{> numbers name="system.attributes.hp.value" value=hp.value max=hp.max}}
+    </div>
+</div>
+{{/if}}
+
+{{#if sp.max}}
+<div class="group">
+    <div class="section">
+        <a data-action="use-resolve"><i class="fa-solid fa-circle-r" data-tooltip="PF2E.ResolvePointsShortLabel"></i></a>
+        {{> numbers name="system.attributes.resolve.value" value=resolve.value max=resolve.max}}
+    </div>
+    <div class="section">
+        <i class="fa-solid fa-heart-pulse" data-tooltip="PF2E.StaminaPointsShortLabel"></i>
+        {{> numbers name="system.attributes.sp.value" value=sp.value max=sp.max}}
+    </div>
+</div>
+{{/if}}
+
+<div class="group">
+    <div class="section">
+        <i class="fa-regular fa-helmet-battle" data-tooltip="PF2E.ArmorClassLabel"></i> {{ac}}
+        <a data-action="take-cover" data-tooltip="PF2E.Actions.TakeCover.Title">
+            {{#if hasCover}}
+            <i class="fa-solid fa-block-brick"></i>
+            {{else}}
+            <i class="fa-light fa-block-brick"></i>
+            {{/if}}
+        </a>
+    </div>
+    {{#if shield}}
+    <div class="section">
+        <a data-action="raise-shield" data-tooltip="PF2E.Actions.RaiseAShield.SingleActionTitle">
+            {{#if shield.broken}}
+            <i class="fa-regular fa-shield-slash"></i>
+            {{else if shield.raised}}
+            <i class="fa-solid fa-shield"></i>
+            {{else}}
+            <i class="fa-regular fa-shield"></i>
+            {{/if}}
+        </a>
+        ({{shield.hardness}})
+        {{> numbers name="shield.value" value=shield.hp.value max=shield.hp.max}}
+    </div>
+    {{/if}}
+</div>
+
+{{#if saves}}
+<div class="group">
+    {{#each saves as |save|}}
+    <div class="section">
+        <a data-action="roll-save" data-save="{{save.slug}}">
+            <i class="{{save.icon}}" data-tooltip="{{save.label}}"></i>{{save.value}}
+        </a>
+        {{#if save.rank}}
+        <sup>{{save.rank}}</sup>
+        {{/if}}
+    </div>
+    {{/each}}
+</div>
+{{/if}}
+
+{{#if others}}
+<div class="group">
+    {{#each others as |other|}}
+    <div class="section">
+        <a data-action="roll-other" data-slug="{{other.slug}}">
+            <i class="{{other.icon}}" data-tooltip="{{other.label}}"></i>{{other.value}}
+        </a>
+        {{#if other.rank}}
+        <sup>{{other.rank}}</sup>
+        {{/if}}
+    </div>
+    {{/each}}
+</div>
+{{/if}}
+
+{{#if showDeathLine}}
+<div class="group">
+    <div class="section">
+        <a data-action="recovery-check"><i class="fa-solid fa-skull" data-tooltip="PF2E.Check.Specific.Recovery"></i></a>
+        {{> pips max=dying.max value=dying.value action="toggle-dying" tooltip="PF2E.ConditionTypeDying"}}
+    </div>
+
+    <div class="section" data-tooltip="PF2E.ConditionTypeWounded">
+        <i class="fa-solid fa-tombstone"></i>
+        {{> pips max=wounded.max value=wounded.value action="toggle-wounded"}}
+    </div>
+</div>
+{{/if}}
+
+<div class="group">
+    {{> info content=speeds.others icon=speeds.main.icon value=speeds.main.value tooltip="PF2E.Speed" class='speeds'}}
+    {{> info content=languages icon='fa-solid fa-language' tooltip="PF2E.Languages"}}
+    {{> info content=senses icon='fa-solid fa-signal-stream' tooltip="PF2E.Senses"}}
+    {{> info content=iwr icon='fa-solid fa-solid fa-ankh' tooltip="IWR"}}
+</div>
+
+<hr>
+
+<div class="footer observable">
+    <a class="observable" data-type="actions"><i class="fa-solid fa-sword" data-tooltip="{{titles.actions}}"></i></a>
+    <a class="observable {{#unless hasItems}}disabled{{/unless}}" {{#if hasItems}}data-type="items" {{/if}}>
+        <i class="fa-solid fa-backpack" data-tooltip="{{titles.items}}"></i>
+    </a>
+    <a class="observable {{#unless hasSpells}}disabled{{/unless}}" {{#if hasSpells}} data-type="spells" {{/if}}>
+        <i class="fa-solid fa-wand-magic-sparkles" data-tooltip="{{titles.spells}}"></i>
+    </a>
+    <a class="observable" data-type="skills"><i class="fa-solid fa-hand" data-tooltip="{{titles.skills}}"></i></a>
+    <a class="observable" data-type="extras"><i class="fa-solid fa-gears" data-tooltip="{{titles.extras}}"></i></a>
+</div>

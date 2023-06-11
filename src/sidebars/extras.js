@@ -12,7 +12,7 @@ export async function getExtrasData(actor) {
     return {
         noMacro: localize('extras.no-macro'),
         macros: getMacros(actor),
-        initiative: {
+        initiative: initiative && {
             selected: initiative.statistic,
             skills: SKILLS_SLUGS.map(slug => ({ slug, label: getSkillLabel(slug) })),
         },
