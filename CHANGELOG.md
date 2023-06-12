@@ -1,3 +1,13 @@
+# 1.12.0
+
+-   added a different tooltip for hazards
+-   added `Hazard Max Width` setting which let you set the max width for the hazard sidebar
+-   added a different tooltip for vehicles
+-   made the base tooltip compatible with familiars
+-   two columns spells will now have its width set to max to avoid overflown rows preventing the use of spells
+-   pf2e specific inline links (such as DC checks) are now properly working in the popup
+-   fixed some strike versatiles/auxiliaries not showing up in the actions sidebar
+
 # 1.11.0
 
 -   added `Scale by Font`, changing the font size will scale the entirety of the tooltip and its attached sidebars/popup
