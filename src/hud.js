@@ -262,14 +262,9 @@ export class HUD extends Application {
             type: actor.isOfType('creature') ? 'creature' : actor.type,
         }
 
-        if (
-            !isObserver ||
-            (actor.isOfType('familiar') && !actor.master) ||
-            actor.isOfType('vehicle') // TODO in the meantime
-        )
-            return sharedData
+        if (!isObserver || (actor.isOfType('familiar') && !actor.master)) return sharedData
 
-        const { level, saves, isOwner } = actor
+        const { level, saves, isOwner, system } = actor
         const { resistances, weaknesses, immunities } = attributes
 
         sharedData = {
@@ -298,8 +293,7 @@ export class HUD extends Application {
         }
 
         if (actor.isOfType('hazard')) {
-            const { hardness } = attributes
-            const { emitsSound, stealth } = attributes
+            const { hardness, emitsSound, stealth } = attributes
 
             return {
                 ...sharedData,
@@ -322,8 +316,42 @@ export class HUD extends Application {
             }
         }
 
+        sharedData = {
+            ...sharedData,
+            sidebarTitles: {
+                actions: `${MODULE_ID}.actions.title`,
+                items: `${MODULE_ID}.items.title`,
+                spells: `${MODULE_ID}.spells.title`,
+                skills: `${MODULE_ID}.skills.title`,
+                extras: `${MODULE_ID}.extras.title`,
+            },
+            hasItems: actor.inventory.size,
+        }
+
+        if (actor.isOfType('vehicle')) {
+            const { hardness, collisionDC, collisionDamage } = attributes
+            const { details } = system
+            const { crew, passengers, pilotingCheck, speed } = details
+
+            return {
+                ...sharedData,
+                hardness,
+                crew,
+                passengers,
+                pilotingCheck,
+                speed,
+                collisionDC: collisionDC.value,
+                collisionDamage: collisionDamage.value,
+                immunities: toIWR(immunities),
+                weaknesses: toIWR(weaknesses),
+                resistances: toIWR(resistances),
+                fortitude: getStatistic(saves.fortitude, savesSetting, SAVES),
+                hasActions: actor.itemTypes.action.length,
+            }
+        }
+
         const showDeath = getSetting('show-death')
-        const { alignment, heroPoints, system } = actor
+        const { alignment, heroPoints } = actor
         const { traits } = system
         const { wounded, dying, shield, resolve, speed } = attributes
 
@@ -361,13 +389,6 @@ export class HUD extends Application {
 
         return {
             ...sharedData,
-            titles: {
-                actions: `${MODULE_ID}.actions.title`,
-                items: `${MODULE_ID}.items.title`,
-                spells: `${MODULE_ID}.spells.title`,
-                skills: `${MODULE_ID}.skills.title`,
-                extras: `${MODULE_ID}.extras.title`,
-            },
             sp: useStamina ? sp : { max: 0 },
             hero: heroPoints,
             dying,
@@ -398,7 +419,6 @@ export class HUD extends Application {
             senses: senses?.map(toInfo).join(''),
             languages,
             hasSpells: actor.spellcasting.some(x => x.category !== 'items'),
-            hasItems: actor.inventory.size,
         }
     }
 
@@ -477,8 +497,6 @@ export class HUD extends Application {
         const isParty = actor.system.details.alliance === 'party'
 
         if (game.user.isGM && holdingSetting === 'half' && !holding) this.#isObserved = false
-        // TODO in the mean time
-        else if (actor.isOfType('vehicle')) this.#isObserved = false
         else if (actor.isOfType('familiar') && !actor.master) this.#isObserved = false
         else this.#isObserved = token.isOwner || (getSetting('observer') && (token.observer || (isParty && getSetting('party'))))
 
@@ -567,6 +585,8 @@ export class HUD extends Application {
         if (!actor) return
 
         const isOwner = token.isOwner
+        const ChatMessagePF2e = CONFIG.ChatMessage.documentClass
+
         actor.apps[this.appId] = this
 
         if (getSetting('tooltips')) {
@@ -637,6 +657,30 @@ export class HUD extends Application {
 
         // IS OWNER
         if (!isOwner) return
+
+        html.find('[data-action=collision-dc]').on('click', event => {
+            event.preventDefault()
+            const dc = actor.system.attributes.collisionDC.value || 15
+            ChatMessagePF2e.create({
+                content: `@Check[type:reflex|dc:${dc}]`,
+                speaker: ChatMessagePF2e.getSpeaker({ actor }),
+            })
+        })
+
+        html.find('[data-action=collision-damage]').on('click', async event => {
+            event.preventDefault()
+            let formula = (actor.system.attributes.collisionDamage.value || '1d6').trim()
+            if (!isNaN(Number(formula.at(-1)))) formula += '[bludgeoning]'
+            const DamageRoll = CONFIG.Dice.rolls.find(R => R.name === 'DamageRoll')
+            const roll = await new DamageRoll(formula).evaluate({ async: true })
+            ChatMessagePF2e.create({
+                flavor: `<strong>${game.i18n.localize('PF2E.vehicle.collisionDamageLabel')}</strong>`,
+                speaker: ChatMessagePF2e.getSpeaker({ actor }),
+                type: CONST.CHAT_MESSAGE_TYPES.ROLL,
+                sound: 'sounds/dice.wav',
+                rolls: [roll],
+            })
+        })
 
         html.find('input').on('change', async event => {
             const target = event.currentTarget
@@ -736,7 +780,7 @@ export class HUD extends Application {
         const action = sidebar[0]?.dataset.type
 
         sidebar.remove()
-        element.find('.inner .footer [data-type]').removeClass('active')
+        element.find('.inner .footer [data-type], [data-action=open-sidebar]').removeClass('active')
 
         if (action === type) {
             this.#lock = false
@@ -756,7 +800,7 @@ export class HUD extends Application {
 
         this.#lock = true
 
-        element.find(`.inner .footer [data-type=${type}]`).addClass('active')
+        element.find(`.inner .footer [data-type=${type}], [data-action=open-sidebar][data-type=${type}]`).addClass('active')
         element = element[0]
 
         const tmp = document.createElement('div')

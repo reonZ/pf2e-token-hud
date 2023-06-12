@@ -358,6 +358,9 @@
 #pf2e-token-hud .inner.hazard .group .section.details {
   margin-left: calc(var(--group-gap) * -1);
 }
+#pf2e-token-hud .inner.vehicle {
+  min-width: 12em;
+}
 #pf2e-token-hud.observer a:not(.observable):not(.name):not(.content-link) {
   text-shadow: none;
   cursor: default;

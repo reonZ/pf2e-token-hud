@@ -128,13 +128,13 @@
 <hr>
 
 <div class="footer observable">
-    <a class="observable" data-type="actions"><i class="fa-solid fa-sword" data-tooltip="{{titles.actions}}"></i></a>
+    <a class="observable" data-type="actions"><i class="fa-solid fa-sword" data-tooltip="{{sidebarTitles.actions}}"></i></a>
     <a class="observable {{#unless hasItems}}disabled{{/unless}}" {{#if hasItems}}data-type="items" {{/if}}>
-        <i class="fa-solid fa-backpack" data-tooltip="{{titles.items}}"></i>
+        <i class="fa-solid fa-backpack" data-tooltip="{{sidebarTitles.items}}"></i>
     </a>
     <a class="observable {{#unless hasSpells}}disabled{{/unless}}" {{#if hasSpells}} data-type="spells" {{/if}}>
-        <i class="fa-solid fa-wand-magic-sparkles" data-tooltip="{{titles.spells}}"></i>
+        <i class="fa-solid fa-wand-magic-sparkles" data-tooltip="{{sidebarTitles.spells}}"></i>
     </a>
-    <a class="observable" data-type="skills"><i class="fa-solid fa-hand" data-tooltip="{{titles.skills}}"></i></a>
-    <a class="observable" data-type="extras"><i class="fa-solid fa-gears" data-tooltip="{{titles.extras}}"></i></a>
+    <a class="observable" data-type="skills"><i class="fa-solid fa-hand" data-tooltip="{{sidebarTitles.skills}}"></i></a>
+    <a class="observable" data-type="extras"><i class="fa-solid fa-gears" data-tooltip="{{sidebarTitles.extras}}"></i></a>
 </div>

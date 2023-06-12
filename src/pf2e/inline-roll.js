@@ -106,7 +106,6 @@ export function listenInlineRoll($html, foundryDoc) {
             if (!(target instanceof HTMLElement)) return
             const parent = target?.parentElement
             const document = documentFromDOM(target)
-            console.log(document)
             if (parent) repostAction(parent, document)
             event.stopPropagation()
         })

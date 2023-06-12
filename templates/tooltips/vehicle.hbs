@@ -1,0 +1,70 @@
+<div class="group">
+    <div class="section">
+        <i class="fa-solid fa-user-graduate" data-tooltip="PF2E.CharacterLevelLabel"></i>{{level}}
+    </div>
+
+    <div class="section">
+        <i class="fa-solid fa-heart" data-tooltip="PF2E.HitPointsShortLabel"></i>
+        {{> numbers name="system.attributes.hp.value" value=hp.value max=hp.max}}
+    </div>
+</div>
+
+<div class="group">
+    <div class="section">
+        <i class="fa-regular fa-helmet-battle" data-tooltip="PF2E.ArmorClassLabel"></i>
+        {{ac}}
+    </div>
+
+    <div class="section">
+        <i class="fa-duotone fa-turtle" data-tooltip="PF2E.HardnessLabel"></i>
+        <span>{{hardness}}</span>
+    </div>
+
+    <div class="section">
+        {{#with fortitude}}
+        <a data-action="roll-save" data-save="{{slug}}">
+            <i class="{{icon}}" data-tooltip="{{label}}"></i>{{value}}
+        </a>
+        {{/with}}
+    </div>
+</div>
+
+<div class="group">
+    {{> info content=pilotingCheck icon='fa-solid fa-compass-drafting' tooltip="PF2E.vehicle.PilotingCheckLabel"}}
+    {{> info content=speed icon='fa-solid fa-gauge-max' tooltip="PF2E.Speed"}}
+    {{> info content=crew icon='fa-solid fa-user-pilot' tooltip="PF2E.vehicle.CrewLabel"}}
+    {{> info content=passengers icon='fa-solid fa-users' tooltip="PF2E.vehicle.PassengersLabel"}}
+</div>
+
+<div class="group">
+    <div class="section">
+        <a data-action="collision-dc">
+            <i class="fa-solid fa-shield-slash" data-tooltip="PF2E.vehicle.collisionDCLabel"></i>
+            <span>{{collisionDC}}</span>
+        </a>
+    </div>
+
+    <div class="section">
+        <a data-action="collision-damage">
+            <i class="fa-solid fa-hammer-crash" data-tooltip="PF2E.vehicle.collisionDamageLabel"></i>
+            <span>{{collisionDamage}}</span>
+        </a>
+    </div>
+</div>
+
+
+<div class="group">
+    {{> info content=immunities icon='fa-solid fa-solid fa-ankh' tooltip="PF2E.ImmunitiesLabel"}}
+    {{> info content=weaknesses icon='fa-solid fa-heart-crack' tooltip="PF2E.WeaknessesLabel"}}
+    {{> info content=resistances icon='fa-solid fa-shield-virus' tooltip="PF2E.ResistancesLabel"}}
+    {{#if hasActions}}
+    <a class="observable" data-action="open-sidebar" data-type="actions">
+        <i class="fa-solid fa-sword" data-tooltip="{{sidebarTitles.actions}}"></i>
+    </a>
+    {{/if}}
+    {{#if hasItems}}
+    <a class="observable" data-action="open-sidebar" data-type="items">
+        <i class="fa-solid fa-backpack" data-tooltip="{{sidebarTitles.items}}"></i>
+    </a>
+    {{/if}}
+</div>
