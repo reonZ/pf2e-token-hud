@@ -1,5 +1,5 @@
 import { getSetting, hasFeat, localize, modifier, templatePath } from '../module.js'
-import { unownedItemToMessage } from '../pf2e.js'
+import { unownedItemToMessage } from '../pf2e/item.js'
 import { showItemSummary } from '../popup.js'
 
 const MODULE_ID = 'pf2e-token-hud'

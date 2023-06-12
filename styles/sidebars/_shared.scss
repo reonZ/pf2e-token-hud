@@ -1,0 +1,42 @@
+@mixin action {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 2px;
+    height: 1.4em;
+    padding-inline: var(--inline-padding);
+
+    &:hover {
+        --hover-background: rgb(0 0 0 / 5%);
+
+        background-color: var(--hover-background);
+
+        .icon {
+            img {
+                background-color: var(--hover-background);
+            }
+        }
+    }
+
+    .icon {
+        height: 100%;
+
+        img {
+            height: 100%;
+            border: 0;
+            mix-blend-mode: color-burn;
+        }
+    }
+
+    .name {
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .chat {
+        margin-top: 2px;
+        font-size: 0.9em;
+    }
+}

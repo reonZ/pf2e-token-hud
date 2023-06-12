@@ -14,6 +14,15 @@
     color: var(--color);
     font-size: var(--font-size);
 
+    hr {
+        margin-block: var(--inner-padding);
+        width: 100%;
+
+        &:last-child {
+            display: none;
+        }
+    }
+
     a {
         &.disabled {
             color: var(--color-disabled);
@@ -329,10 +338,6 @@
         min-width: 14em;
         max-width: 17em;
 
-        hr {
-            margin-block: var(--inner-padding);
-        }
-
         i {
             margin-inline: 3px;
         }
@@ -344,10 +349,12 @@
         }
 
         .group {
+            --group-gap: 1em;
+
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 1em;
+            gap: var(--group-gap);
             min-height: 1.86em;
 
             .section {
@@ -415,6 +422,18 @@
             display: flex;
             align-items: center;
             justify-content: space-evenly;
+        }
+
+        &.hazard {
+            min-width: 12em;
+
+            .group {
+                .section {
+                    &.details {
+                        margin-left: calc(var(--group-gap) * -1);
+                    }
+                }
+            }
         }
     }
 

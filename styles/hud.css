@@ -13,6 +13,13 @@
   color: var(--color);
   font-size: var(--font-size);
 }
+#pf2e-token-hud hr {
+  margin-block: var(--inner-padding);
+  width: 100%;
+}
+#pf2e-token-hud hr:last-child {
+  display: none;
+}
 #pf2e-token-hud a.disabled {
   color: var(--color-disabled);
   cursor: default;
@@ -275,9 +282,6 @@
   min-width: 14em;
   max-width: 17em;
 }
-#pf2e-token-hud .inner hr {
-  margin-block: var(--inner-padding);
-}
 #pf2e-token-hud .inner i {
   margin-inline: 3px;
 }
@@ -287,10 +291,11 @@
   text-transform: uppercase;
 }
 #pf2e-token-hud .inner .group {
+  --group-gap: 1em;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1em;
+  gap: var(--group-gap);
   min-height: 1.86em;
 }
 #pf2e-token-hud .inner .group .section {
@@ -346,6 +351,12 @@
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+}
+#pf2e-token-hud .inner.hazard {
+  min-width: 12em;
+}
+#pf2e-token-hud .inner.hazard .group .section.details {
+  margin-left: calc(var(--group-gap) * -1);
 }
 #pf2e-token-hud.observer a:not(.observable):not(.name):not(.content-link) {
   text-shadow: none;

@@ -1,5 +1,5 @@
-import { localize, modifier, MODULE_ID, templatePath } from '../module.js'
-import { calculateDegreeOfSuccess } from '../pf2e.js'
+import { localize, modifier, templatePath } from '../module.js'
+import { calculateDegreeOfSuccess } from '../pf2e/success.js'
 import { getUniqueTarget, RANKS } from '../shared.js'
 
 const SKILLS = ['arcana', 'crafting', 'medicine', 'nature', 'occultism', 'religion', 'society']

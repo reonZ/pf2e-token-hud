@@ -1,5 +1,5 @@
 import { getSetting } from '../module.js'
-import { IdentifyItemPopup } from '../pf2e.js'
+import { IdentifyItemPopup } from '../pf2e/identify.js'
 import { showItemSummary } from '../popup.js'
 import { addNameTooltipListeners, deleteItem, editItem, getItemFromEvent } from '../shared.js'
 

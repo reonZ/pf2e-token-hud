@@ -1,5 +1,6 @@
 import { getSetting, templatePath } from '../module.js'
-import { getActionIcon, toggleWeaponTrait } from '../pf2e.js'
+import { getActionIcon } from '../pf2e/misc.js'
+import { toggleWeaponTrait } from '../pf2e/weapon.js'
 import { popup, showItemSummary } from '../popup.js'
 import { addNameTooltipListeners, getItemFromEvent } from '../shared.js'
 import { actionsUUIDS } from './skills.js'
@@ -127,7 +128,7 @@ export function addActionsListeners(el, actor) {
 
     action('hero-action-description', async event => {
         const { description, name } = (await getHeroActionDescription(getUuid(event))) ?? {}
-        if (description) popup(name, description)
+        if (description) popup(name, description, actor)
     })
 
     action('strike-description', async event => {
@@ -139,7 +140,7 @@ export function addActionsListeners(el, actor) {
         // this one is a copy of the system template, there is nothing to generate it
         description.innerHTML = await renderTemplate(templatePath('strike-description'), strike)
 
-        popup(strike.label, description)
+        popup(strike.label, description, actor)
     })
 
     action('trait-description', event => {
@@ -151,7 +152,7 @@ export function addActionsListeners(el, actor) {
         if (!trait) return
 
         const description = game.i18n.localize(trait.description)
-        if (description) popup(game.i18n.localize(trait.label), description)
+        if (description) popup(game.i18n.localize(trait.label), description, actor)
     })
 
     // IS OWNER

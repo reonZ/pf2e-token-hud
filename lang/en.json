@@ -184,6 +184,10 @@
             "scale": {
                 "name": "Scale by Font",
                 "hint": "You can scale the entirety of the tooltip and its attached sidebars/popup by changing its font size. The module was designed to be using a 14px font size by default."
+            },
+            "hazard-width": {
+                "name": "Hazard Max Width",
+                "hint": "This let you set the max width (in 'em') the hazard sidebar can take"
             }
         },
         "spells": {
@@ -218,6 +222,9 @@
                 "title": "{name} - Treat Wounds",
                 "no-proficiency": "{name} doesn't have the required proficiency to treat wounds."
             }
+        },
+        "hazard": {
+            "empty": "{name} isn't really hazardeous."
         },
         "popup": {
             "close": "Close"

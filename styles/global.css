@@ -5,6 +5,10 @@
   --color-rank-2: #3c005e;
   --color-rank-3: #664400;
   --color-rank-4: #5e0000;
+  --color-rarity-common: #323232;
+  --color-rarity-uncommon: #98513d;
+  --color-rarity-rare: #002664;
+  --color-rarity-unique: #54166e;
 }
 .pf2e-token-hud .rank.\30 ,
 #pf2e-token-hud .rank.\30  {
@@ -25,6 +29,22 @@
 .pf2e-token-hud .rank.\34 ,
 #pf2e-token-hud .rank.\34  {
   color: var(--color-rank-4);
+}
+.pf2e-token-hud .rarity.common,
+#pf2e-token-hud .rarity.common {
+  color: var(--color-rarity-common);
+}
+.pf2e-token-hud .rarity.uncommon,
+#pf2e-token-hud .rarity.uncommon {
+  color: var(--color-rarity-uncommon);
+}
+.pf2e-token-hud .rarity.rare,
+#pf2e-token-hud .rarity.rare {
+  color: var(--color-rarity-rare);
+}
+.pf2e-token-hud .rarity.unique,
+#pf2e-token-hud .rarity.unique {
+  color: var(--color-rarity-unique);
 }
 .pf2e-token-hud .success.\30 ,
 #pf2e-token-hud .success.\30  {
@@ -49,4 +69,7 @@
 }
 .crb-hover .tooltipster-box .tooltipster-content .hover-content.info li ul {
   padding-left: 1em;
+}
+.crb-hover .tooltipster-box .tooltipster-content .hover-content.info.stealth .content-link {
+  color: var(--text-dark);
 }

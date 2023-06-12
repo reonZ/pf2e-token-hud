@@ -9,6 +9,8 @@ Hooks.once('init', async () => {
 
     await loadTemplates({
         creature: templatePath('tooltips/creature'),
+        hazard: templatePath('tooltips/hazard'),
+        vehicle: templatePath('tooltips/vehicle'),
     })
 })
 

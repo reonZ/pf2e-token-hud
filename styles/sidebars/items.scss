@@ -11,20 +11,6 @@
 
             .item {
                 .details {
-                    .name {
-                        &.uncommon {
-                            color: #98513d;
-                        }
-
-                        &.rare {
-                            color: #002664;
-                        }
-
-                        &.unique {
-                            color: #54166e;
-                        }
-                    }
-
                     .extras {
                         .infos {
                             height: 100%;

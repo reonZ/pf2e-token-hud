@@ -6,6 +6,11 @@
     --color-rank-3: #664400;
     --color-rank-4: #5e0000;
 
+    --color-rarity-common: #323232;
+    --color-rarity-uncommon: #98513d;
+    --color-rarity-rare: #002664;
+    --color-rarity-unique: #54166e;
+
     .rank {
         &.\30 {
             color: var(--color-rank-0);
@@ -25,6 +30,24 @@
 
         &.\34 {
             color: var(--color-rank-4);
+        }
+    }
+
+    .rarity {
+        &.common {
+            color: var(--color-rarity-common);
+        }
+
+        &.uncommon {
+            color: var(--color-rarity-uncommon);
+        }
+
+        &.rare {
+            color: var(--color-rarity-rare);
+        }
+
+        &.unique {
+            color: var(--color-rarity-unique);
         }
     }
 
@@ -53,5 +76,11 @@
 
     li ul {
         padding-left: 1em;
+    }
+
+    &.stealth {
+        .content-link {
+            color: var(--text-dark);
+        }
     }
 }

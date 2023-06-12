@@ -1,8 +1,9 @@
 import { isHolding } from './keybindings.js'
-import { getFlag, getSetting, localize, modifier, MODULE_ID, setFlag, templatePath } from './module.js'
+import { enrichHTML, getFlag, getSetting, localize, modifier, MODULE_ID, setFlag, templatePath } from './module.js'
 import { getUniqueTarget, RANKS } from './shared.js'
 import { addActionsListeners, getActionsData, getActionsOptions } from './sidebars/actions.js'
 import { addExtrasListeners, getExtrasData } from './sidebars/extras.js'
+import { addHazardListeners, getHazardData } from './sidebars/hazard.js'
 import { addItemsListeners, getItemsData } from './sidebars/items.js'
 import { addSkillsListeners, getSkill, getSkillsData } from './sidebars/skills.js'
 import { addSpellsListeners, getSpellsData } from './sidebars/spells.js'
@@ -37,18 +38,19 @@ const SIDEBARS = {
     spells: { getData: getSpellsData, addListeners: addSpellsListeners },
     skills: { getData: getSkillsData, addListeners: addSkillsListeners },
     extras: { getData: getExtrasData, addListeners: addExtrasListeners },
+    hazard: { getData: getHazardData, addListeners: addHazardListeners },
 }
 
 const SAVES = {
-    fortitude: 'fa-solid fa-hand-fist',
-    reflex: 'fa-solid fa-person-running',
-    will: 'fa-solid fa-brain',
+    fortitude: { icon: 'fa-solid fa-hand-fist', label: 'PF2E.SavesFortitude' },
+    reflex: { icon: 'fa-solid fa-person-running', label: 'PF2E.SavesReflex' },
+    will: { icon: 'fa-solid fa-brain', label: 'PF2E.SavesWill' },
 }
 
 const SKILLS = {
-    perception: 'fa-solid fa-eye',
-    stealth: 'fa-duotone fa-eye-slash',
-    athletics: 'fa-solid fa-dumbbell',
+    perception: { icon: 'fa-solid fa-eye', label: 'PF2E.PerceptionLabel' },
+    stealth: { icon: 'fa-duotone fa-eye-slash', label: 'PF2E.SkillStealth' },
+    athletics: { icon: 'fa-solid fa-dumbbell', label: 'PF2E.SkillAthletics' },
 }
 
 export class HUD extends Application {
@@ -192,7 +194,7 @@ export class HUD extends Application {
         this.#token = token
     }
 
-    getData() {
+    async getData() {
         const token = this.#token
         const actor = this.#token?.actor
         if (!actor) return {}
@@ -201,21 +203,8 @@ export class HUD extends Application {
         const savesSetting = getSetting('saves')
         const othersSetting = getSetting('others')
         const isCharacter = this.isCharacter
-        const { attributes, saves, heroPoints, system, alignment } = actor
-        const { traits } = system
-        const {
-            hp,
-            sp = { max: 0, value: 0 },
-            resolve,
-            ac,
-            shield,
-            speed,
-            dying,
-            wounded,
-            resistances,
-            weaknesses,
-            immunities,
-        } = attributes
+        const { attributes } = actor
+        const { hp, sp = { max: 0, value: 0 }, ac } = attributes
         const useStamina = game.settings.get('pf2e', 'staminaVariant')
         const isObserver = this.#isObserved
         const showDistance = getSetting('distance')
@@ -265,21 +254,78 @@ export class HUD extends Application {
             }
         }
 
-        const sharedData = {
+        let sharedData = {
             status,
             distance,
             fontSize,
             tokenId: token.id,
-            type: actor.isOfType('creature') ? 'creature' : '',
+            type: actor.isOfType('creature') ? 'creature' : actor.type,
         }
 
         if (
             !isObserver ||
             (actor.isOfType('familiar') && !actor.master) ||
-            actor.isOfType('vehicle') || // TODO in the meantime
-            actor.isOfType('hazard') // TODO add isowner
+            actor.isOfType('vehicle') // TODO in the meantime
         )
             return sharedData
+
+        const { level, saves, isOwner } = actor
+        const { resistances, weaknesses, immunities } = attributes
+
+        sharedData = {
+            ...sharedData,
+            isOwner,
+            isObserver,
+            name: token.document.name,
+            hp,
+            ac: ac.value,
+            level,
+        }
+
+        const showRanks = getSetting('ranks')
+
+        function getStatistic(stat, type, stats) {
+            const slug = stat.slug
+            const value = type === 'bonus' ? modifier(stat.mod) : stat.dc.value
+            return { slug, value, label: stats[slug].label, icon: stats[slug].icon, rank: showRanks && RANKS[stat.rank] }
+        }
+
+        function toIWR(category, header) {
+            if (!category.length) return ''
+            const rows = category.map(x => toInfo(x.label.replace('-', ' ').titleCase())).join('')
+            if (!header) return rows
+            return `<li>${game.i18n.localize(header)}<ul>` + rows + '</ul></li>'
+        }
+
+        if (actor.isOfType('hazard')) {
+            const { hardness } = attributes
+            const { emitsSound, stealth } = attributes
+
+            return {
+                ...sharedData,
+                hardness,
+                emitsSound: emitsSound.toString().capitalize(),
+                immunities: toIWR(immunities),
+                weaknesses: toIWR(weaknesses),
+                resistances: toIWR(resistances),
+                stealth: {
+                    value: stealth.value,
+                    details: await enrichHTML(stealth.details, actor),
+                },
+                saves:
+                    savesSetting !== 'none' &&
+                    ['fortitude', 'reflex', 'will'].map(slug => {
+                        const save = saves[slug]
+                        if (!save) return { slug, label: SAVES[slug].label, icon: SAVES[slug].icon }
+                        return getStatistic(save, savesSetting, SAVES)
+                    }),
+            }
+        }
+
+        const showDeath = getSetting('show-death')
+        const { alignment, heroPoints, system } = actor
+        const { traits } = system
+        const { wounded, dying, shield, resolve, speed } = attributes
 
         function toInfo(str) {
             return `<li>${str.trim()}</li>`
@@ -289,7 +335,7 @@ export class HUD extends Application {
             return a.localeCompare(b)
         }
 
-        const languages = actor.system.traits?.languages?.value
+        const languages = traits?.languages?.value
             .map(x => game.i18n.localize(CONFIG.PF2E.languages[x]))
             .filter(Boolean)
             .sort(sort)
@@ -297,15 +343,6 @@ export class HUD extends Application {
             .join('')
 
         const senses = isCharacter ? traits.senses.map(x => x.label) : traits.senses.value?.split(',').filter(Boolean)
-
-        function toIWR(category, header) {
-            if (!category.length) return ''
-            return (
-                `<li>${game.i18n.localize(header)}<ul>` +
-                category.map(x => toInfo(x.label.replace('-', ' ').titleCase())).join('') +
-                '</ul></li>'
-            )
-        }
 
         const speeds = SPEEDS.map(({ type, icon }, index) => ({
             index,
@@ -322,15 +359,6 @@ export class HUD extends Application {
             .join('')
         if (speed.details) otherSpeeds += `<li>${game.i18n.localize('PF2E.DetailsHeading')}: ${speed.details}</li>`
 
-        const showDeath = getSetting('show-death')
-        const showRanks = getSetting('ranks')
-
-        function getStatistic(stat, type, icons) {
-            const slug = stat.slug
-            const value = type === 'bonus' ? modifier(stat.mod) : stat.dc.value
-            return { slug, value, label: stat.label, icon: icons[slug], rank: showRanks && RANKS[stat.rank] }
-        }
-
         return {
             ...sharedData,
             titles: {
@@ -340,12 +368,7 @@ export class HUD extends Application {
                 skills: `${MODULE_ID}.skills.title`,
                 extras: `${MODULE_ID}.extras.title`,
             },
-            isOwner: token.isOwner,
-            isObserver,
-            name: token.document.name,
-            hp,
             sp: useStamina ? sp : { max: 0 },
-            ac: ac.value,
             hero: heroPoints,
             dying,
             wounded,
@@ -355,7 +378,6 @@ export class HUD extends Application {
                 value: alignment,
                 icon: ALIGNMENTS[alignment.at(-1)],
             },
-            level: actor.level,
             isCharacter,
             showDeathLine: isCharacter && (showDeath === 'always' || dying.value || wounded.value),
             hasCover: this.hasCover,
@@ -456,7 +478,7 @@ export class HUD extends Application {
 
         if (game.user.isGM && holdingSetting === 'half' && !holding) this.#isObserved = false
         // TODO in the mean time
-        else if (actor.isOfType('hazard') || actor.isOfType('vehicle')) this.#isObserved = false
+        else if (actor.isOfType('vehicle')) this.#isObserved = false
         else if (actor.isOfType('familiar') && !actor.master) this.#isObserved = false
         else this.#isObserved = token.isOwner || (getSetting('observer') && (token.observer || (isParty && getSetting('party'))))
 
@@ -592,12 +614,26 @@ export class HUD extends Application {
             trigger: 'click',
         })
 
-        const infosToLeave = isOwner ? infos.filter(':not(.speeds)') : infos
+        infos
+            .filter('.stealth')
+            .tooltipster('option', 'interactive', true)
+            .tooltipster('option', 'functionReady', (tooltipster, { origin, tooltip }) => {
+                this.#lock = true
+                $(tooltip)
+                    .find('.content-link')
+                    .on('click', () => setTimeout(() => tooltipster.close()))
+            })
+            .tooltipster('option', 'functionAfter', () => {
+                if (html.find('> .sidebar').length) return
+                this.#lock = false
+            })
+
+        const infosToLeave = isOwner ? infos.filter(':not(.speeds):not(.stealth)') : infos
         infosToLeave.on('mouseleave', event => {
             $(event.currentTarget).tooltipster('hide')
         })
 
-        html.find('.inner .footer [data-type]').on('click', this.#openSidebar.bind(this))
+        html.find('.inner .footer [data-type], [data-action=open-sidebar]').on('click', this.#openSidebar.bind(this))
 
         // IS OWNER
         if (!isOwner) return

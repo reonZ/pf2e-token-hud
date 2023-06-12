@@ -1,0 +1,68 @@
+<div class="group">
+    <div class="section">
+        <i class="fa-solid fa-user-graduate" data-tooltip="PF2E.CharacterLevelLabel"></i>{{level}}
+    </div>
+
+    <div class="section">
+        <i class="fa-solid fa-heart" data-tooltip="PF2E.HitPointsShortLabel"></i>
+        {{> numbers name="system.attributes.hp.value" value=hp.value max=hp.max}}
+    </div>
+
+    {{#if hp.details}}
+    {{> info content=hp.details icon='fa-solid fa-circle-info' class="details"}}
+    {{/if}}
+</div>
+
+<div class="group">
+    <div class="section">
+        <i class="fa-regular fa-helmet-battle" data-tooltip="PF2E.ArmorClassLabel"></i>
+        {{ac}}
+    </div>
+
+    <div class="section">
+        <i class="fa-duotone fa-turtle" data-tooltip="PF2E.HardnessLabel"></i>
+        <span>{{hardness}}</span>
+    </div>
+
+    <div class="section">
+        {{#if stealth.details}}
+        {{> info content=stealth.details icon='fa-solid fa-eye-slash' tooltip="PF2E.Check.DC.Specific.stealth" class="stealth"
+        infoClass=true}}
+        {{else}}
+        <i class="fa-duotone fa-eye-slash" data-tooltip="PF2E.Check.DC.Specific.stealth"></i>
+        {{/if}}
+        {{add stealth.value 10}}
+    </div>
+</div>
+
+{{#if (or saves.[0].value saves.[1].value saves.[2].value)}}
+<div class="group">
+    {{#each saves as |save|}}
+    <div class="section">
+        {{#if save.value}}
+        <a data-action="roll-save" data-save="{{save.slug}}">
+            <i class="{{save.icon}}" data-tooltip="{{save.label}}"></i>{{save.value}}
+        </a>
+        {{else}}
+        <i class="{{save.icon}}" data-tooltip="{{save.label}}"></i>N/A
+        {{/if}}
+    </div>
+    {{/each}}
+</div>
+{{/if}}
+
+<div class="group">
+    <div class="section">
+        <i class="fa-solid fa-volume" data-tooltip="PF2E.Actor.Hazard.EmitsSound.Title"></i>
+        <span>{{localize (concat 'PF2E.Actor.Hazard.EmitsSound.' emitsSound)}}</span>
+    </div>
+</div>
+
+<div class="group">
+    {{> info content=immunities icon='fa-solid fa-solid fa-ankh' tooltip="PF2E.ImmunitiesLabel"}}
+    {{> info content=weaknesses icon='fa-solid fa-heart-crack' tooltip="PF2E.WeaknessesLabel"}}
+    {{> info content=resistances icon='fa-solid fa-shield-virus' tooltip="PF2E.ResistancesLabel"}}
+    <a class="observable" data-action="open-sidebar" data-type="hazard">
+        <i class="fa-solid fa-road-spikes"></i>
+    </a>
+</div>

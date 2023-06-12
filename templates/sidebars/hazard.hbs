@@ -1,0 +1,61 @@
+<div class="hazard" style="--max-width: {{maxWidth}}em;">
+
+    <div class="tags">
+        <div class="tag {{rarity.value}}">{{localize rarity.label}}</div>
+        {{#if isComplex}}
+        <div class="tag">{{localize 'PF2E.TraitComplex'}}</div>
+        {{/if}}
+        {{#each traits as |trait|}}
+        <div class="tag">{{localize trait}}</div>
+        {{/each}}
+    </div>
+
+    {{#if isComplex}}
+    <a class="initiative" data-action="roll-initiative">
+        <i class="fa-solid fa-dice-d20"></i>{{localize 'PF2E.InitiativeLabel'}} ({{stealth}})
+    </a>
+    {{/if}}
+
+    {{#if description}}
+    <div class="section">
+        <div class="header">{{localize 'PF2E.HazardDescriptionLabel'}}</div>
+        <div class="content">{{{description}}}</div>
+    </div>
+    {{/if}}
+
+    {{#if disable}}
+    <div class="section">
+        <div class="header">{{localize 'PF2E.HazardDisableLabel'}}</div>
+        <div class="content">{{{disable}}}</div>
+    </div>
+    {{/if}}
+
+    {{#if routine}}
+    <div class="section">
+        <div class="header">{{localize 'PF2E.HazardRoutineLabel'}}</div>
+        <div class="content">{{{routine}}}</div>
+    </div>
+    {{/if}}
+
+    {{#if reset}}
+    <div class="section">
+        <div class="header">{{localize 'PF2E.HazardResetLabel'}}</div>
+        <div class="content">{{{reset}}}</div>
+    </div>
+    {{/if}}
+
+    {{#if actions.length}}
+    <div class="section">
+        <div class="header">{{localize 'PF2E.ActionsActionsHeader'}}</div>
+        {{#each actions as |action|}}
+        <div class="action" data-item-id="{{action.id}}">
+            <div class="icon"><img src="{{action.img}}"></div>
+            <a class="name" data-action="action-description">{{action.name}}</a>
+            {{#if @root.isOwner}}
+            <a class="chat" data-action="action-chat"><i class="fa-solid fa-message"></i></a>
+            {{/if}}
+        </div>
+        {{/each}}
+    </div>
+    {{/if}}
+</div>
