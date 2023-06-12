@@ -82,6 +82,11 @@ function repostAction(target, document = null) {
     })
 }
 
+/**
+ * Significant rework has been done here
+ * flat check has been completely redone
+ * actions & checks use the actor directly instead of selections
+ */
 export function listenInlineRoll($html, actor) {
     const html = $html instanceof HTMLElement ? $html : $html[0]
 
