@@ -1,7 +1,8 @@
 import { calculateDC } from './dc.js'
 import { htmlClosest, htmlQueryAll } from './dom.js'
-import { getSelectedOrOwnActors, sluggify } from './misc.js'
+import { sluggify } from './misc.js'
 import { eventToRollParams } from './scripts.js'
+import { calculateDegreeOfSuccess } from './success.js'
 
 const inlineSelector = ['action', 'check', 'effect-area'].map(keyword => `[data-pf2-${keyword}]`).join(',')
 
@@ -81,32 +82,20 @@ function repostAction(target, document = null) {
     })
 }
 
-export function listenInlineRoll($html, foundryDoc) {
+export function listenInlineRoll($html, actor) {
     const html = $html instanceof HTMLElement ? $html : $html[0]
 
     const links = htmlQueryAll(html, inlineSelector).filter(l => l.nodeName === 'SPAN')
-    injectRepostElement(links, foundryDoc)
+    injectRepostElement(links, actor)
 
-    flavorDamageRolls(html, foundryDoc instanceof Actor ? foundryDoc : null)
-
-    const documentFromDOM = html => {
-        if (foundryDoc instanceof ChatMessage) return foundryDoc.actor ?? foundryDoc.journalEntry ?? null
-        if (foundryDoc instanceof Actor || foundryDoc instanceof JournalEntry || foundryDoc instanceof JournalEntryPage) {
-            return foundryDoc
-        }
-
-        const sheet = ui.windows[Number(html.closest('.app.sheet')?.dataset.appid)]
-
-        return sheet.document instanceof Actor || sheet.document instanceof JournalEntry ? sheet.document : null
-    }
+    flavorDamageRolls(html, actor)
 
     htmlQueryAll(html, 'i[data-pf2-repost]').forEach(btn =>
         btn.addEventListener('click', event => {
             const target = event.target
             if (!(target instanceof HTMLElement)) return
             const parent = target?.parentElement
-            const document = documentFromDOM(target)
-            if (parent) repostAction(parent, document)
+            if (parent) repostAction(parent, actor)
             event.stopPropagation()
         })
     )
@@ -124,19 +113,15 @@ export function listenInlineRoll($html, foundryDoc) {
                 variant: pf2Variant,
                 difficultyClass: pf2Dc ? { scope: 'check', value: Number(pf2Dc) || 0, visibility } : undefined,
                 skill: pf2Skill,
+                actors: [actor],
             })
         } else {
             console.warn(`PF2e System | Skip executing unknown action '${pf2Action}'`)
         }
     })
 
-    $links.filter('[data-pf2-check]').on('click', event => {
+    $links.filter('[data-pf2-check]').on('click', async event => {
         const { pf2Check, pf2Dc, pf2Traits, pf2Label, pf2Adjustment } = event.currentTarget.dataset
-        const actors = getSelectedOrOwnActors()
-        if (actors.length === 0) {
-            ui.notifications.error(game.i18n.localize('PF2E.UI.errorTargetToken'))
-            return
-        }
         const parsedTraits = pf2Traits
             ?.split(',')
             .map(trait => trait.trim())
@@ -144,54 +129,45 @@ export function listenInlineRoll($html, foundryDoc) {
         const eventRollParams = eventToRollParams(event)
 
         switch (pf2Check) {
-            // case "flat": {
-            //     for (const actor of actors) {
-            //         const flatCheck = new Statistic(actor, {
-            //             label: "",
-            //             slug: "flat-check",
-            //             modifiers: [],
-            //             check: { type: "flat-check" },
-            //             domains: ["flat-check"],
-            //         });
-            //         if (flatCheck) {
-            //             const dc = Number.isInteger(Number(pf2Dc))
-            //                 ? { label: pf2Label, value: Number(pf2Dc) }
-            //                 : null;
-            //             flatCheck.check.roll({
-            //                 ...eventRollParams,
-            //                 extraRollOptions: parsedTraits,
-            //                 dc,
-            //             });
-            //         } else {
-            //             console.warn(`PF2e System | Skip rolling flat check for "${actor}"`);
-            //         }
-            //     }
-            //     break;
-            // }
+            case 'flat': {
+                const dc = Number.isInteger(Number(pf2Dc)) ? { label: pf2Label, value: Number(pf2Dc) } : null
+                const roll = await new Roll('1d20').evaluate({ async: true })
+                const rollTotal = roll.total
+                const dieResult = roll.dice[0].total
+                const success = calculateDegreeOfSuccess(rollTotal, dieResult, dc.value)
+                const degree = {
+                    value: success,
+                    unadjusted: success,
+                    adjustment: null,
+                    dieResult,
+                    rollTotal,
+                    dc,
+                }
+                const flavor = (await game.pf2e.Check.createResultFlavor({ degree })).outerHTML
+                roll.toMessage({ flavor })
+                break
+            }
             default: {
-                for (const actor of actors) {
-                    const statistic = actor.getStatistic(pf2Check ?? '')
-                    if (statistic) {
-                        const dcValue = (() => {
-                            const adjustment = Number(pf2Adjustment) || 0
-                            if (pf2Dc === '@self.level') {
-                                return calculateDC(actor.level) + adjustment
-                            }
-                            return Number(pf2Dc) + adjustment
-                        })()
+                const statistic = actor.getStatistic(pf2Check ?? '')
+                if (statistic) {
+                    const dcValue = (() => {
+                        const adjustment = Number(pf2Adjustment) || 0
+                        if (pf2Dc === '@self.level') {
+                            return calculateDC(actor.level) + adjustment
+                        }
+                        return Number(pf2Dc) + adjustment
+                    })()
 
-                        const dc = Number.isInteger(dcValue) ? { label: pf2Label, value: dcValue } : null
-                        const maybeOrigin = documentFromDOM(event.currentTarget)
+                    const dc = Number.isInteger(dcValue) ? { label: pf2Label, value: dcValue } : null
 
-                        statistic.check.roll({
-                            ...eventRollParams,
-                            extraRollOptions: parsedTraits,
-                            origin: maybeOrigin instanceof Actor ? maybeOrigin : null,
-                            dc,
-                        })
-                    } else {
-                        console.warn(`PF2e System | Skip rolling unknown statistic ${pf2Check}`)
-                    }
+                    statistic.check.roll({
+                        ...eventRollParams,
+                        extraRollOptions: parsedTraits,
+                        origin: actor,
+                        dc,
+                    })
+                } else {
+                    console.warn(`PF2e System | Skip rolling unknown statistic ${pf2Check}`)
                 }
             }
         }
@@ -231,7 +207,7 @@ export function listenInlineRoll($html, foundryDoc) {
             }
 
             const templateDoc = new CONFIG.MeasuredTemplate.documentClass(templateData, { parent: canvas.scene })
-            await new CONFIG.MeasuredTemplate.documentClass(templateDoc).drawPreview()
+            await new CONFIG.MeasuredTemplate.objectClass(templateDoc).drawPreview()
         } else {
             console.warn(`PF2e System | Could not create template'`)
         }
