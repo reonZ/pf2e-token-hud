@@ -6,13 +6,13 @@ import { calculateDegreeOfSuccess } from './success.js'
 
 const inlineSelector = ['action', 'check', 'effect-area'].map(keyword => `[data-pf2-${keyword}]`).join(',')
 
-function injectRepostElement(links, foundryDoc) {
+function injectRepostElement(links, actor) {
     for (const link of links) {
-        if (!foundryDoc || foundryDoc.isOwner) link.classList.add('with-repost')
+        if (!actor || actor.isOwner) link.classList.add('with-repost')
 
         const repostButtons = htmlQueryAll(link, 'i[data-pf2-repost]')
         if (repostButtons.length > 0) {
-            if (foundryDoc && !foundryDoc.isOwner) {
+            if (actor && !actor.isOwner) {
                 for (const button of repostButtons) {
                     button.remove()
                 }
@@ -21,7 +21,7 @@ function injectRepostElement(links, foundryDoc) {
             continue
         }
 
-        if (foundryDoc && !foundryDoc.isOwner) continue
+        if (actor && !actor.isOwner) continue
 
         const newButton = document.createElement('i')
         const icon = link.parentElement?.dataset?.pf2Checkgroup !== undefined ? 'fa-comment-alt-dots' : 'fa-comment-alt'
@@ -46,12 +46,12 @@ function makeRepostHtml(target, defaultVisibility) {
     return `<span data-visibility="${showDC}">${flavor}</span> ${target.outerHTML}`.trim()
 }
 
-function repostAction(target, document = null) {
+function repostAction(target, actor = null) {
     if (!['pf2Action', 'pf2Check', 'pf2EffectArea'].some(d => d in target.dataset)) {
         return
     }
 
-    const defaultVisibility = document?.hasPlayerOwner ? 'all' : 'gm'
+    const defaultVisibility = actor?.hasPlayerOwner ? 'all' : 'gm'
     const content = (() => {
         if (target.parentElement?.dataset?.pf2Checkgroup !== undefined) {
             const content = htmlQueryAll(target.parentElement, inlineSelector)
@@ -66,14 +66,15 @@ function repostAction(target, document = null) {
 
     const ChatMessagePF2e = CONFIG.ChatMessage.documentClass
     const speaker =
-        document instanceof Actor
+        actor instanceof Actor
             ? ChatMessagePF2e.getSpeaker({
-                  actor: document,
-                  token: document.token ?? document.getActiveTokens(false, true).shift(),
+                  actor: actor,
+                  token: actor.token ?? actor.getActiveTokens(false, true).shift(),
               })
             : ChatMessagePF2e.getSpeaker()
 
-    const flags = document instanceof JournalEntry ? { pf2e: { journalEntry: document.uuid } } : {}
+    const message = game.messages.get(htmlClosest(target, '[data-message-id]')?.dataset.messageId ?? '')
+    const flags = message?.flags.pf2e.origin ? { pf2e: { origin: deepClone(message.flags.pf2e.origin) } } : {}
 
     ChatMessagePF2e.create({
         speaker,

@@ -108,3 +108,7 @@ export function getSelectedOrOwnActors(types, useOwnCharacter = true) {
 
     return actors
 }
+
+export function tupleHasValue(array, value) {
+    return array.includes(value)
+}
