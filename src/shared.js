@@ -1,17 +1,19 @@
 import { getFlag, localize, setFlag } from './module.js'
+import { listenInlineRoll } from './pf2e/inline-roll.js'
 
 export const RANKS = ['U', 'T', 'E', 'M', 'L']
 
 export async function getItemSummary(el, actor) {
     const dataset = el.data()
     const item = dataset.itemId ? actor.items.get(dataset.itemId) : await fromUuid(dataset.uuid)
-    const data = await item?.getChatData({}, dataset)
+    const data = await item?.getChatData({ secrets: actor.isOwner }, dataset)
     if (!data) return
 
     const description = document.createElement('div')
     description.classList.add('description')
 
     await actor.sheet.itemRenderer.renderItemSummary(description, item, data)
+    listenInlineRoll(description, actor)
 
     return description
 }

@@ -49,3 +49,10 @@ export function getFlag(doc, flag) {
 export function setFlag(doc, flag, value) {
     return doc.setFlag(MODULE_ID, flag, value)
 }
+
+export async function enrichHTML(str, actor, { isOwner = actor.isOwner, rollData = actor.getRollData() } = {}) {
+    str = str?.trim()
+    if (!str) return ''
+    const enriched = await TextEditor.enrichHTML(str, { async: true, secrets: isOwner, rollData })
+    return enriched
+}

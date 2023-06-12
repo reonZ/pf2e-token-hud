@@ -1,7 +1,7 @@
-import { localize, MODULE_ID } from './module.js'
+import { enrichHTML, localize, MODULE_ID } from './module.js'
 import { getItemSummary } from './shared.js'
 
-export async function popup(title, content) {
+export async function popup(title, content, actor) {
     const hud = $(`#${MODULE_ID}`)
     if (!hud.length) return
 
@@ -17,7 +17,7 @@ export async function popup(title, content) {
 
     const popup = tmp.firstElementChild
     if (typeof content === 'string') {
-        content = await TextEditor.enrichHTML(content, { async: true })
+        content = await enrichHTML(content, actor)
         popup.insertAdjacentHTML('beforeend', content)
     } else {
         popup.append(content)
@@ -31,5 +31,5 @@ export async function popup(title, content) {
 export async function showItemSummary(el, actor, title) {
     title ??= el.find('.name').html()
     const description = await getItemSummary(el, actor)
-    if (description) popup(title.trim(), description)
+    if (description) popup(title.trim(), description, actor)
 }
