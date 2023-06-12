@@ -1,3 +1,14 @@
+# 1.13.0
+
+-   pf2e inline flat checks are now working
+-   pf2e inline links (such as DC checks) will now always be rolled as if the hovered over token was selected, overriding the selection altogether
+-   moved `Hazard Max Width` setting to the sidebar section of the settings
+-   fixed settings registration being too early to use localization for the pre-defined health statuses
+-   fixed forgotten icons from an old version displayed in ritual spells
+-   fixed not being able to send ritual spells to chat
+-   fixed not being able to open ritual spells description popup
+-   fixed pf2e inline template links creation
+
 # 1.12.0
 
 -   added a different tooltip for hazards
