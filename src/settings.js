@@ -95,14 +95,6 @@ export function registerSettings() {
 
     register('tooltips', Boolean, false)
 
-    register('hazard-width', Number, 32, {
-        range: {
-            min: 14,
-            max: 50,
-            step: 1,
-        },
-    })
-
     // distance
 
     register('distance', String, 'all', {
@@ -120,6 +112,14 @@ export function registerSettings() {
     register('height', String, '')
 
     register('scrollbar', Boolean, true)
+
+    register('hazard-width', Number, 32, {
+        range: {
+            min: 14,
+            max: 50,
+            step: 1,
+        },
+    })
 
     register('actions-columns', Boolean, false)
 

@@ -5,7 +5,7 @@ import { addActionsListeners, getActionsData, getActionsOptions } from './sideba
 import { addExtrasListeners, getExtrasData } from './sidebars/extras.js'
 import { addHazardListeners, getHazardData } from './sidebars/hazard.js'
 import { addItemsListeners, getItemsData } from './sidebars/items.js'
-import { addSkillsListeners, getSkill, getSkillsData } from './sidebars/skills.js'
+import { addSkillsListeners, getSkillsData } from './sidebars/skills.js'
 import { addSpellsListeners, getSpellsData } from './sidebars/spells.js'
 
 const COVER_UUID = 'Compendium.pf2e.other-effects.I9lfZUiCwMiGogVi'
@@ -407,7 +407,7 @@ export class HUD extends Application {
                 ['fortitude', 'reflex', 'will'].map(slug => getStatistic(saves[slug], savesSetting, SAVES)),
             others:
                 othersSetting !== 'none' &&
-                ['perception', 'stealth', 'athletics'].map(slug => getStatistic(getSkill(slug, actor), othersSetting, SKILLS)),
+                ['perception', 'stealth', 'athletics'].map(slug => getStatistic(actor.getStatistic(slug), othersSetting, SKILLS)),
             speeds: {
                 main: mainSpeed,
                 others: otherSpeeds,
@@ -730,7 +730,7 @@ export class HUD extends Application {
                 const { ctrlKey, metaKey, shiftKey } = event
                 event = new MouseEvent('click', { ctrlKey: !ctrlKey, metaKey, shiftKey })
             }
-            getSkill(slug, actor).roll({ event })
+            actor.getStatistic(slug)?.roll({ event })
         })
 
         html.find('[data-action=recovery-check]').on('click', event => {

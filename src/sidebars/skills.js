@@ -337,7 +337,7 @@ export async function getSkillsData(actor) {
 
     for (let i = 0; i < SKILLS.length; i++) {
         const { slug, actions } = SKILLS[i]
-        const { label, rank, mod } = getSkill(slug, actor)
+        const { label, rank, mod } = actor.getStatistic(slug)
 
         skills[i] = {
             slug,
@@ -364,10 +364,6 @@ export async function getSkillsData(actor) {
     return { skills, lores, doubled: getSetting('skills-columns') }
 }
 
-export function getSkill(slug, actor) {
-    return slug === 'perception' ? actor.perception : actor.skills[slug]
-}
-
 export function addSkillsListeners(el, actor) {
     el.find('[data-action=action-description]').on('click', event => {
         event.preventDefault()
@@ -381,7 +377,7 @@ export function addSkillsListeners(el, actor) {
     el.find('[data-action=roll-skill]').on('click', event => {
         event.preventDefault()
         const { slug } = event.currentTarget.dataset
-        getSkill(slug, actor).roll({ event })
+        actor.getStatistic(slug)?.roll({ event })
     })
 
     el.find('[data-action=roll-action]').on('click contextmenu', async event => {
@@ -448,7 +444,7 @@ function rollAction(event, actor, skillSlug, slug, { variant, map }, skill) {
         action.custom(actor, options)
         return
     } else if (!type) {
-        getSkill(skill, actor).roll(options)
+        actor.getStatistic(skill)?.roll(options)
         return
     }
 
