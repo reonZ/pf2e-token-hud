@@ -2,7 +2,7 @@
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/K3K6M2V13)
 
-### This module will generate an interactive token tooltip to access all the most used `Character` and `Npc` features.
+### This module will generate an interactive token tooltip to access all the most used features in PF2e actors sheets.
 
 # Main Tooltip
 
