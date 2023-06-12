@@ -158,6 +158,46 @@ There are multiple ways/reasons for this version of the tooltip to appear instea
 
 -   Another one is if a GM select the `Hold to show fully` option for the `Use Hold Key` setting and not holding the key
 
+# Hazard Tooltip
+
+![](./readme/hazard.webp)
+
+1. Level and HP
+
+2. Armor Class, Hardness and Stealth DC
+
+    - if more Stealth DC details exist in the sheet, the icon will be dark and clickable
+
+3. Saves
+
+    - respect the regular tooltip settings
+
+4. Emits Sound
+
+5. Immunities, Weaknesses, Resistances and Hazard sidebar
+    - the hazard sidebar contains all the remaining details available in the sheet as well as the initiative roll for complex hazards
+
+# Vehicle Tooltip
+
+![](./readme/vehicle.webp)
+
+1. Level and HP
+
+2. Amor Class, Hardness and Fortitude
+
+    - fortitude respects the regular tooltip settings except `Disabled`
+
+3. Piloting Check, Speed, Crew and Passengers
+
+4. Collision DC and Collision Damage
+
+    - clicking on collision DC will send a reflex check link to chat
+    - clicking on collision damage will roll the damage
+
+5. Immunities, Weaknesses, Resistances, Actions and Equipment
+    - actions and equipment respectively appear when containing something
+    - actions and equipment use the regular tooltip sidebars
+
 # World Settings
 
 ## Health Status
