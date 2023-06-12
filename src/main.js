@@ -3,7 +3,7 @@ import { enableModule, getSetting, localize, MODULE_ID, templatePath } from './m
 import { registerSettings, renderSettingsConfig } from './settings.js'
 import { deleteMacro, getMacros, onDroppedMacro } from './shared.js'
 
-Hooks.once('init', async () => {
+Hooks.once('setup', async () => {
     registerSettings()
     registerKeybindings()
 
