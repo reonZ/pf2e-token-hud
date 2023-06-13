@@ -1,3 +1,8 @@
+# 1.14.0
+
+-   hazards now use the actions sidebar instead of listing them at the bottom of the hazard sidebar
+-   hazards now have strikes (didn't know it was a thing when i looked up hazards in the compendium)
+
 # 1.13.0
 
 -   pf2e inline flat checks are now working
