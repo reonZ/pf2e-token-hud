@@ -162,7 +162,7 @@ There are multiple ways/reasons for this version of the tooltip to appear instea
 
 # Hazard Tooltip
 
-![](./readme/hazard.webp)
+![](./readme/hazard2.webp)
 
 1. Level and HP
 
@@ -176,7 +176,9 @@ There are multiple ways/reasons for this version of the tooltip to appear instea
 
 4. Emits Sound
 
-5. Immunities, Weaknesses, Resistances and Hazard sidebar
+5. Immunities, Weaknesses, Resistances, Hazard and Actions
+    - actions only appears if containing anything
+    - actions use the regular tooltip sidebar
     - the hazard sidebar contains all the remaining details available in the sheet as well as the initiative roll for complex hazards
 
 # Vehicle Tooltip
