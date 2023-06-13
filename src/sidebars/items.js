@@ -131,7 +131,7 @@ export function addItemsListeners(el, actor) {
                 .find('[data-carry-type]')
                 .on('click', event => {
                     const { carryType, handsHeld = 0, inSlot } = $(event.currentTarget).data()
-                    actor.adjustCarryType(item, carryType, handsHeld, inSlot)
+                    actor.adjustCarryType?.(item, carryType, handsHeld, inSlot)
                     tooltipster.close()
                 })
 
