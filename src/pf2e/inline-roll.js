@@ -1,6 +1,5 @@
 import { calculateDC } from './dc.js'
 import { htmlClosest, htmlQueryAll } from './dom.js'
-import { sluggify } from './misc.js'
 import { eventToRollParams } from './scripts.js'
 import { calculateDegreeOfSuccess } from './success.js'
 
@@ -110,7 +109,7 @@ export function listenInlineRoll($html, actor) {
     $links.filter('[data-pf2-action]').on('click', event => {
         const $target = $(event.currentTarget)
         const { pf2Action, pf2Glyph, pf2Variant, pf2Dc, pf2ShowDc, pf2Skill } = $target[0]?.dataset ?? {}
-        const action = game.pf2e.actions[pf2Action ? sluggify(pf2Action, { camel: 'dromedary' }) : '']
+        const action = game.pf2e.actions[pf2Action ? game.pf2e.system.sluggify(pf2Action, { camel: 'dromedary' }) : '']
         const visibility = pf2ShowDc ?? 'all'
         if (pf2Action && action) {
             action({
