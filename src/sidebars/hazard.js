@@ -3,11 +3,10 @@ import { listenInlineRoll } from '../pf2e/inline-roll.js'
 import { showItemSummary } from '../popup.js'
 
 export async function getHazardData(actor) {
-    const { system, itemTypes } = actor
+    const { system } = actor
     const { details, traits, attributes } = system
     const { stealth } = attributes
     const { description, disable, routine, reset, isComplex } = details
-    const actions = itemTypes.action
     const rollData = actor.getRollData()
     const isOwner = actor.isOwner
 
@@ -16,7 +15,6 @@ export async function getHazardData(actor) {
     }
 
     return {
-        actions,
         description: await enrich(description),
         disable: await enrich(disable),
         routine: await enrich(routine),

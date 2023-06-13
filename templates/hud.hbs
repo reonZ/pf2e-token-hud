@@ -51,3 +51,11 @@
     <span>{{max}}</span>
 </div>
 {{/inline}}
+
+{{#*inline "sidebar"}}
+{{#if (or hasAny (not hide))}}
+<a class="observable {{#unless hasAny}}disabled{{/unless}}" {{#if hasAny}} data-action="open-sidebar" data-type="{{type}}" {{/if}}>
+    <i class="{{icon}}" data-tooltip="{{lookup sidebarTitles type}}"></i>
+</a>
+{{/if}}
+{{/inline}}
