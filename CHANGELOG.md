@@ -1,3 +1,9 @@
+# 1.15.0
+
+-   compatible with v11
+-   converted all UUIDs to v11 version
+-   fixed vehicles equipment carry type error
+
 # 1.14.0
 
 -   hazards now use the actions sidebar instead of listing them at the bottom of the hazard sidebar
