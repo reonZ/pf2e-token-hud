@@ -57,14 +57,6 @@
     {{> info content=immunities icon='fa-solid fa-solid fa-ankh' tooltip="PF2E.ImmunitiesLabel"}}
     {{> info content=weaknesses icon='fa-solid fa-heart-crack' tooltip="PF2E.WeaknessesLabel"}}
     {{> info content=resistances icon='fa-solid fa-shield-virus' tooltip="PF2E.ResistancesLabel"}}
-    {{#if hasActions}}
-    <a class="observable" data-action="open-sidebar" data-type="actions">
-        <i class="fa-solid fa-sword" data-tooltip="{{sidebarTitles.actions}}"></i>
-    </a>
-    {{/if}}
-    {{#if hasItems}}
-    <a class="observable" data-action="open-sidebar" data-type="items">
-        <i class="fa-solid fa-backpack" data-tooltip="{{sidebarTitles.items}}"></i>
-    </a>
-    {{/if}}
+    {{> sidebar type="actions" icon="fa-solid fa-sword" hasAny=hasActions hide=true}}
+    {{> sidebar type="items" icon="fa-solid fa-backpack" hasAny=hasItems hide=true}}
 </div>

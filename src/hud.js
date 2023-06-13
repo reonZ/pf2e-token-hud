@@ -264,7 +264,7 @@ export class HUD extends Application {
 
         if (!isObserver || (actor.isOfType('familiar') && !actor.master)) return sharedData
 
-        const { level, saves, isOwner, system } = actor
+        const { level, saves, isOwner, system, itemTypes } = actor
         const { resistances, weaknesses, immunities } = attributes
 
         sharedData = {
@@ -275,6 +275,7 @@ export class HUD extends Application {
             hp,
             ac: ac.value,
             level,
+            hasActions: itemTypes.action.length || system.actions?.filter(action => action.visible !== false).length,
         }
 
         const showRanks = getSetting('ranks')
@@ -346,7 +347,6 @@ export class HUD extends Application {
                 weaknesses: toIWR(weaknesses),
                 resistances: toIWR(resistances),
                 fortitude: getStatistic(saves.fortitude, savesSetting, SAVES),
-                hasActions: actor.itemTypes.action.length,
             }
         }
 
@@ -653,7 +653,7 @@ export class HUD extends Application {
             $(event.currentTarget).tooltipster('hide')
         })
 
-        html.find('.inner .footer [data-type], [data-action=open-sidebar]').on('click', this.#openSidebar.bind(this))
+        html.find('[data-action=open-sidebar]').on('click', this.#openSidebar.bind(this))
 
         // IS OWNER
         if (!isOwner) return
@@ -780,7 +780,7 @@ export class HUD extends Application {
         const action = sidebar[0]?.dataset.type
 
         sidebar.remove()
-        element.find('.inner .footer [data-type], [data-action=open-sidebar]').removeClass('active')
+        element.find('[data-action=open-sidebar]').removeClass('active')
 
         if (action === type) {
             this.#lock = false
@@ -800,7 +800,7 @@ export class HUD extends Application {
 
         this.#lock = true
 
-        element.find(`.inner .footer [data-type=${type}], [data-action=open-sidebar][data-type=${type}]`).addClass('active')
+        element.find(`[data-action=open-sidebar][data-type=${type}]`).addClass('active')
         element = element[0]
 
         const tmp = document.createElement('div')
