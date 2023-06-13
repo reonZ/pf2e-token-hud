@@ -1,7 +1,7 @@
 import { hasFeat, localize, templatePath } from '../module.js'
 
-const NATURAL_MEDICINE = 'Compendium.pf2e.feats-srd.WC4xLBGmBsdOdHWu'
-const RISKY_SURGERY = 'Compendium.pf2e.feats-srd.bkZgWFSFV4cAf5Ot'
+const NATURAL_MEDICINE = 'Compendium.pf2e.feats-srd.Item.WC4xLBGmBsdOdHWu'
+const RISKY_SURGERY = 'Compendium.pf2e.feats-srd.Item.bkZgWFSFV4cAf5Ot'
 
 const DC_LIST = [15, 20, 30, 40]
 

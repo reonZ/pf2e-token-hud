@@ -90,7 +90,7 @@ export function addExtrasListeners(el, actor, token) {
         'roll-aid',
         async event => {
             const variant = await createVariantDialog(null, 20)
-            const note = { text: '@UUID[Compendium.pf2e.other-effects.AHMUpMbaVkZ5A1KX]' }
+            const note = { text: '@UUID[Compendium.pf2e.other-effects.Item.AHMUpMbaVkZ5A1KX]' }
             if (variant !== null)
                 game.pf2e.actions.get('aid').use({
                     event,

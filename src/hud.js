@@ -8,8 +8,8 @@ import { addItemsListeners, getItemsData } from './sidebars/items.js'
 import { addSkillsListeners, getSkillsData } from './sidebars/skills.js'
 import { addSpellsListeners, getSpellsData } from './sidebars/spells.js'
 
-const COVER_UUID = 'Compendium.pf2e.other-effects.I9lfZUiCwMiGogVi'
-const RESOLVE_UUID = 'Compendium.pf2e.feats-srd.jFmdevE4nKevovzo'
+const COVER_UUID = 'Compendium.pf2e.other-effects.Item.I9lfZUiCwMiGogVi'
+const RESOLVE_UUID = 'Compendium.pf2e.feats-srd.Item.jFmdevE4nKevovzo'
 
 const POSITIONS = {
     left: ['left', 'right', 'top', 'bottom'],
