@@ -284,6 +284,10 @@ You can decide to see the ranks of the saves and perception lines for convenienc
 
 Lets you decide if you want to see the dying/wounded line all the time or only when the actor actually as any, you can also hide the line all the time.
 
+## Force Highest Speed
+
+If no speed has been manually selected, this setting will always display the highest speed found on the actor even if the land speed isn't 0.
+
 ## Disable Icon Tooltips
 
 When hovering over any of the main tooltip icons, its name will be shown, this setting prevent it from happening (after a while, you won't need to be reminded of what they do).
