@@ -93,6 +93,8 @@ export function registerSettings() {
         },
     })
 
+    register('force-speed', Boolean, false)
+
     register('tooltips', Boolean, false)
 
     // distance

@@ -188,6 +188,10 @@
             "hazard-width": {
                 "name": "Hazard Max Width",
                 "hint": "This let you set the max width (in 'em') the hazard sidebar can take"
+            },
+            "force-speed": {
+                "name": "Force Highest Speed",
+                "hint": "When enabled, the default speed (when none manually selected) will always be the highest found on the actor instead of only if the land speed is 0."
             }
         },
         "spells": {

@@ -376,11 +376,19 @@ export class HUD extends Application {
             index,
             icon,
             label: game.i18n.localize(CONFIG.PF2E.speedTypes[type] ?? 'PF2E.SpeedTypesLand'),
-            value: (type === 'land' ? speed.total : speed.otherSpeeds.find(s => s.type === type)?.total) || 0,
+            value: (index === 0 ? speed.total : speed.otherSpeeds.find(s => s.type === type)?.total) || 0,
         }))
 
-        const selectedSpeed = getFlag(actor, `speeds.selected.${game.user.id}`) || 0
-        const mainSpeed = speeds.splice(selectedSpeed, 1)[0]
+        const selectedSpeed = getFlag(actor, `speeds.selected.${game.user.id}`)
+        const mainSpeed = (() => {
+            let index = 0
+            if (selectedSpeed !== undefined) index = selectedSpeed
+            else if (getSetting('force-speed') || speeds[0].value === 0) {
+                const base = { index: 0, value: speeds[0].value }
+                index = speeds.reduce((prev, { value }, index) => (value > prev.value ? { index, value } : prev), base).index
+            }
+            return speeds.splice(index, 1)[0]
+        })()
 
         let otherSpeeds = speeds
             .map(({ value, label, index }) => `<a data-index="${index}"><li>${label}: ${value}</li></a>`)
