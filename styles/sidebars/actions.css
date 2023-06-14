@@ -105,6 +105,12 @@
 #pf2e-token-hud .sidebar.actions .section .strike .variants .variant.disabled select {
   color: #d9d9d9;
 }
+#pf2e-token-hud .sidebar.actions .section .strike .variants .variant.damage {
+  max-width: 80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 #pf2e-token-hud .sidebar.actions .section .strike .variants .magazine {
   display: flex;
   align-items: center;

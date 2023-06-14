@@ -131,6 +131,13 @@
                                 color: #d9d9d9;
                             }
                         }
+
+                        &.damage {
+                            max-width: 80%;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                        }
                     }
 
                     .magazine {

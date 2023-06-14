@@ -64,7 +64,7 @@
             </div>
             <div class="variants">
                 {{/unless}}
-                <div class="variant {{#unless @root.isOwner}}disabled{{/unless}}" data-action="strike-damage"
+                <div class="variant damage {{#unless @root.isOwner}}disabled{{/unless}}" data-action="strike-damage"
                     title="{{strike.damageFormula}}">
                     {{#if @root.isCharacter}}
                     {{localize "PF2E.DamageLabel"}}
