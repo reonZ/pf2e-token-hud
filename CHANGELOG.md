@@ -1,3 +1,10 @@
+# 1.16.0
+
+-   default displayed speed will now be the highest found when land speed is 0
+-   added `Force Highest Speed` setting, when enabled the highest speed will always be used as default even if the land speed isn't 0
+-   removed equipment carry icon/menu from vehicles
+-   fixed NPCs strike damage formula overflowing the button
+
 # 1.15.0
 
 -   compatible with v11
