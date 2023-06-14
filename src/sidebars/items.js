@@ -21,6 +21,7 @@ export async function getItemsData(actor) {
     }
 
     return {
+        canCarry: !!actor.adjustCarryType,
         doubled: getSetting('items-columns'),
         categories: Object.entries(categories)
             .map(([type, items]) => {

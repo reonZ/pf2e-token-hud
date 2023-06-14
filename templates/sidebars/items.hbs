@@ -36,7 +36,7 @@
                         </a>
                         {{/if}}
 
-                        {{#if (ne item.type 'treasure')}}
+                        {{#if (and (ne item.type 'treasure') @root.canCarry)}}
                         <a data-action="toggle-item-worn">
                             {{#with item.system.equipped.carryType as |carryType|}}
                             {{#if (eq carryType 'dropped')}}
