@@ -224,6 +224,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 10;
+  min-width: 300px;
   max-width: 700px;
   max-height: calc(100vh - var(--outer-padding) * 2);
   display: flex;
@@ -247,6 +248,7 @@
 }
 #pf2e-token-hud .popup .description {
   overflow-y: auto;
+  overflow-x: hidden;
 }
 #pf2e-token-hud .distance,
 #pf2e-token-hud .status {
