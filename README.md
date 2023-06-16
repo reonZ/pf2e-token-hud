@@ -148,6 +148,15 @@ NOTE: if you drag anything over the tooltip, the sidebars or the popup (dragged 
     - you can execute, edit and delete added macros
     - macros will be executed with the `Actor` and `Token` the tooltip is related to as arguments
 
+# Filter Field
+
+![](./readme/filter.webp)
+
+A filter field (hidden by default) is available at the top of each sidebar, you can make it always be displayed with a setting or use a keybind (`Ctrl + F` by default).
+
+-   actions will not filter the strikes, toggles or `Hero Actions`
+-   extras will only filter the macros
+
 # Small Tooltip
 
 ![](./readme/small.webp)
@@ -307,6 +316,10 @@ This would convert feet into meters and display 2 decimals
 ## Sidebar Max Height
 
 Allows you to set a maximum height for the sidebars, this accept any css value that would be valid for a height property (e.g. `300px`, `50%`).
+
+## Always Show Filter
+
+When enabled, the filter field will always be displayed at the top of sidebars instead of when using the 'Show Filter' keybind, the keybind still scroll to the top and gives focus to the field.
 
 ## Sidebar Scrollbar
 
