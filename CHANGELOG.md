@@ -1,3 +1,8 @@
+# 1.18.1
+
+-   fixed extras tab not opening for actors that never had macros
+-   prevent filter field from appearing in hazard sidebar
+
 # 1.18.0
 
 -   added filter for skills
