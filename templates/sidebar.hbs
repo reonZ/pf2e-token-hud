@@ -1,8 +1,10 @@
 <div class="sidebar {{classes}}" data-type="{{type}}" style="{{style}}">
+    {{#unless (eq type "hazard")}}
     <div class="sidebar-header {{#if showFilter}}show{{/if}}">
         <input type="text" data-action="sidebar-filter" value="{{filter}}" placeholder="{{filterLabel}}">
         <a data-action="sidebar-filter-clear"><i class="fa-solid fa-xmark"></i></a>
     </div>
+    {{/unless}}
     {{#if content}}
     <div class="sidebar-content">{{{content}}}</div>
     {{/if}}
