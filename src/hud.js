@@ -791,7 +791,7 @@ export class HUD extends Application {
         let sidebar = this.sidebar
         if (!sidebar) return
         if (!sidebar.find('.sidebar-header').hasClass('show')) sidebar = await this.#openSidebar(sidebar.data().type, '')
-        sidebar.find('.sidebar-header').find('input').focus()
+        sidebar.find('.sidebar-header').find('input').focus().select()
         sidebar.scrollTop(0)
     }
 

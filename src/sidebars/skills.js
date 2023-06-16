@@ -1,6 +1,7 @@
 import { getSetting, hasFeat, localize, modifier, templatePath } from '../module.js'
 import { unownedItemToMessage } from '../pf2e/item.js'
 import { showItemSummary } from '../popup.js'
+import { filterIn } from '../shared.js'
 
 const MODULE_ID = 'pf2e-token-hud'
 
@@ -330,7 +331,7 @@ export function getSkillLabel(slug) {
     return game.i18n.localize(slug === 'perception' ? 'PF2E.PerceptionLabel' : CONFIG.PF2E.skillList[slug])
 }
 
-export async function getSkillsData(actor) {
+export async function getSkillsData(actor, token, filter) {
     const skills = []
     const noUntrained = !getSetting('untrained')
     const notCharacter = !actor.isOfType('character')
@@ -339,21 +340,41 @@ export async function getSkillsData(actor) {
         const { slug, actions } = SKILLS[i]
         const { label, rank, mod } = actor.getStatistic(slug)
 
+        const name = game.i18n.localize(label)
+        const actionsList = actions
+            .filter(
+                ({ condition, trained }) =>
+                    (noUntrained || notCharacter || !trained || actor.skills[slug].rank >= 1) && (!condition || condition(actor))
+            )
+            .map(action => ({
+                ...action,
+                name: game.i18n.localize(action.label),
+                variants: action.variants?.map(variant => ({
+                    ...variant,
+                    name: game.i18n.localize(variant.label),
+                })),
+            }))
+
+        const passedFilter = filterIn(name, filter)
+        let filteredActions = actionsList
+        if (!passedFilter) {
+            filteredActions = actionsList.filter(
+                ({ name, variants }) => filterIn(name, filter) || variants?.some(variant => filterIn(variant.name, filter))
+            )
+            if (!filteredActions.length) continue
+        }
+
         skills[i] = {
             slug,
-            label,
+            name,
             rank,
             modifier: modifier(mod),
-            actions: actions.filter(
-                action =>
-                    (noUntrained || notCharacter || !action.trained || actor.skills[slug].rank >= 1) &&
-                    (!action.condition || action.condition(actor))
-            ),
+            actions: passedFilter ? actionsList : filteredActions,
         }
     }
 
     const lores = Object.values(actor.skills)
-        .filter(skill => skill.lore)
+        .filter(({ lore, label }) => lore && filterIn(label, filter))
         .map(({ label, rank, mod, slug }) => ({
             slug,
             label,
