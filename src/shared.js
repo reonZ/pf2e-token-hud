@@ -119,3 +119,8 @@ export function getUniqueTarget(condition = () => true) {
     const target = targets.size === 1 ? targets.first() : null
     return target && condition(target) ? target : null
 }
+
+export function filterIn(value, filter) {
+    if (!filter) return true
+    return value.toLowerCase().includes(filter)
+}

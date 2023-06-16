@@ -1,51 +1,53 @@
 #pf2e-token-hud {
     .sidebar.extras {
-        hr {
-            width: 100%;
-            margin: 0;
+        .sidebar-content {
+            hr {
+                width: 100%;
+                margin: 0;
 
-            &:last-child {
-                display: none;
-            }
-        }
-
-        .row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-inline: var(--inline-padding);
-            gap: 20px;
-
-            select {
-                border: 0;
-                height: 100%;
-            }
-
-            > a[data-action] {
-                display: flex;
-                align-items: center;
-                gap: 4px;
-                white-space: nowrap;
-
-                .activity-icon {
-                    font-size: 1.7em;
-                    line-height: 0.5;
-                    display: inline-block;
+                &:last-child {
+                    display: none;
                 }
             }
 
-            .actions {
+            .row {
                 display: flex;
                 align-items: center;
-                gap: 6px;
-                font-size: 0.9em;
-            }
-        }
+                justify-content: space-between;
+                padding-inline: var(--inline-padding);
+                gap: 20px;
 
-        .macro {
-            .details {
-                .extras {
-                    justify-content: flex-end;
+                select {
+                    border: 0;
+                    height: 100%;
+                }
+
+                > a[data-action] {
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    white-space: nowrap;
+
+                    .activity-icon {
+                        font-size: 1.7em;
+                        line-height: 0.5;
+                        display: inline-block;
+                    }
+                }
+
+                .actions {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    font-size: 0.9em;
+                }
+            }
+
+            .macro {
+                .details {
+                    .extras {
+                        justify-content: flex-end;
+                    }
                 }
             }
         }

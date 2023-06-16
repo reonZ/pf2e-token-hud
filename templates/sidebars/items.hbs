@@ -1,85 +1,83 @@
-<div class="items">
-    {{#each categories as |category|}}
-    <div class="category">
-        <div class="header">{{localize category.label}}</div>
-        {{#each category.items as |item|}}
-        <div class="item item-box" data-item-id="{{item.id}}" data-uuid="{{item.uuid}}" data-item-type="{{item.type}}" {{#if
-            @root.isOwner}}draggable="true" {{/if}}>
-            <div class="item-img hover" data-action="item-chat">
-                <img src="{{item.img}}" draggable="false">
-                {{#if @root.isOwner}}
-                <i class="fa-solid fa-message"></i>
-                {{/if}}
-            </div>
-            <div class="details">
-                <a data-action="item-description" class="name rarity {{item.rarity}}">{{item.name}}</a>
+{{#each categories as |category|}}
+<div class="category">
+    <div class="header">{{localize category.label}}</div>
+    {{#each category.items as |item|}}
+    <div class="item item-box" data-item-id="{{item.id}}" data-uuid="{{item.uuid}}" data-item-type="{{item.type}}" {{#if
+        @root.isOwner}}draggable="true" {{/if}}>
+        <div class="item-img hover" data-action="item-chat">
+            <img src="{{item.img}}" draggable="false">
+            {{#if @root.isOwner}}
+            <i class="fa-solid fa-message"></i>
+            {{/if}}
+        </div>
+        <div class="details">
+            <a data-action="item-description" class="name rarity {{item.rarity}}">{{item.name}}</a>
 
-                <div class="extras">
-                    <div class="infos">
-                        <div class="quantity">
-                            {{#if @root.isOwner}}
-                            <input type="number" value="{{item.quantity}}" min="0">
-                            {{else}}
-                            <span>{{item.quantity}}</span>
-                            {{/if}}
-                        </div>
-                        <div class="bulk"><i class="fa-regular fa-scale-balanced"></i> <span>{{item.bulk}}</span></div>
-                        {{#if item.isTemporary}}
-                        <i class="fa-duotone fa-traffic-cone temporary"></i>
-                        {{/if}}
-                    </div>
-
-                    <div class="actions">
-                        {{#if (and @root.isCharacter (not item.isInContainer) item.isIdentified (ne item.isInvested null))}}
-                        <a data-action="toggle-item-invest">
-                            <i class="fa-solid fa-gem {{#unless item.isInvested}}greyed{{/unless}}"></i>
-                        </a>
-                        {{/if}}
-
-                        {{#if (and (ne item.type 'treasure') @root.canCarry)}}
-                        <a data-action="toggle-item-worn">
-                            {{#with item.system.equipped.carryType as |carryType|}}
-                            {{#if (eq carryType 'dropped')}}
-                            <i class="fa-solid fa-grip-lines greyed"></i>
-                            {{else if (eq carryType 'stowed')}}
-                            <i class="fa-solid fa-box greyed" data-tooltip="{{item.container.name}}"></i>
-                            {{else if (eq carryType 'held')}}
-                            <i class="fa-solid fa-hand-back-fist held">
-                                <i class="fa-solid fa-{{item.handsHeld}}"></i>
-                            </i>
-                            {{else}}
-                            <i class="fa-solid fa-shirt worn {{#unless item.isEquipped}}greyed{{/unless}}"></i>
-                            {{/if}}
-                            {{/with}}
-                        </a>
-                        {{/if}}
-
-                        {{#if item.isDamaged}}
-                        <a data-action="repair-item"><i class="fa-solid fa-hammer"></i></a>
-                        {{/if}}
-
-                        {{#if @root.isGM}}
-                        <a data-action="toggle-identified">
-                            {{#if item.isIdentified}}
-                            <i class="fa-regular fa-circle-question"></i>
-                            {{else}}
-                            <i class="fa-solid fa-circle-question"></i>
-                            {{/if}}
-                        </a>
-                        {{/if}}
-
+            <div class="extras">
+                <div class="infos">
+                    <div class="quantity">
                         {{#if @root.isOwner}}
-                        {{#if (or @root.isGM item.isIdentified)}}
-                        <a data-action="edit-item"><i class="fa-solid fa-pen-to-square"></i></a>
-                        {{/if}}
-                        <a data-action="delete-item"><i class="fa-solid fa-trash"></i></a>
+                        <input type="number" value="{{item.quantity}}" min="0">
+                        {{else}}
+                        <span>{{item.quantity}}</span>
                         {{/if}}
                     </div>
-
+                    <div class="bulk"><i class="fa-regular fa-scale-balanced"></i> <span>{{item.bulk}}</span></div>
+                    {{#if item.isTemporary}}
+                    <i class="fa-duotone fa-traffic-cone temporary"></i>
+                    {{/if}}
                 </div>
+
+                <div class="actions">
+                    {{#if (and @root.isCharacter (not item.isInContainer) item.isIdentified (ne item.isInvested null))}}
+                    <a data-action="toggle-item-invest">
+                        <i class="fa-solid fa-gem {{#unless item.isInvested}}greyed{{/unless}}"></i>
+                    </a>
+                    {{/if}}
+
+                    {{#if (and (ne item.type 'treasure') @root.canCarry)}}
+                    <a data-action="toggle-item-worn">
+                        {{#with item.system.equipped.carryType as |carryType|}}
+                        {{#if (eq carryType 'dropped')}}
+                        <i class="fa-solid fa-grip-lines greyed"></i>
+                        {{else if (eq carryType 'stowed')}}
+                        <i class="fa-solid fa-box greyed" data-tooltip="{{item.container.name}}"></i>
+                        {{else if (eq carryType 'held')}}
+                        <i class="fa-solid fa-hand-back-fist held">
+                            <i class="fa-solid fa-{{item.handsHeld}}"></i>
+                        </i>
+                        {{else}}
+                        <i class="fa-solid fa-shirt worn {{#unless item.isEquipped}}greyed{{/unless}}"></i>
+                        {{/if}}
+                        {{/with}}
+                    </a>
+                    {{/if}}
+
+                    {{#if item.isDamaged}}
+                    <a data-action="repair-item"><i class="fa-solid fa-hammer"></i></a>
+                    {{/if}}
+
+                    {{#if @root.isGM}}
+                    <a data-action="toggle-identified">
+                        {{#if item.isIdentified}}
+                        <i class="fa-regular fa-circle-question"></i>
+                        {{else}}
+                        <i class="fa-solid fa-circle-question"></i>
+                        {{/if}}
+                    </a>
+                    {{/if}}
+
+                    {{#if @root.isOwner}}
+                    {{#if (or @root.isGM item.isIdentified)}}
+                    <a data-action="edit-item"><i class="fa-solid fa-pen-to-square"></i></a>
+                    {{/if}}
+                    <a data-action="delete-item"><i class="fa-solid fa-trash"></i></a>
+                    {{/if}}
+                </div>
+
             </div>
         </div>
-        {{/each}}
     </div>
     {{/each}}
 </div>
+{{/each}}

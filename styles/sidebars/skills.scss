@@ -1,89 +1,91 @@
 #pf2e-token-hud {
     .sidebar.skills {
-        .header {
-            font-weight: bold;
-        }
-
-        .skill .header,
-        .lore {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-inline: var(--inline-padding);
-            gap: 20px;
-
-            .modifier {
-                color: var(--primary);
+        .sidebar-content {
+            .header {
+                font-weight: bold;
             }
 
-            .rank {
-                line-height: 1.1;
-                font-size: 0.9em;
-                padding-inline: 2px;
+            .skill .header,
+            .lore {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding-inline: var(--inline-padding);
+                gap: 20px;
+
+                .modifier {
+                    color: var(--primary);
+                }
+
+                .rank {
+                    line-height: 1.1;
+                    font-size: 0.9em;
+                    padding-inline: 2px;
+                }
             }
-        }
 
-        .skill .action .name,
-        .lore {
-            height: 1.3em;
-        }
+            .skill .action .name,
+            .lore {
+                height: 1.3em;
+            }
 
-        .skill,
-        .lores {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .skill {
-            .action {
+            .skill,
+            .lores {
                 display: flex;
                 flex-direction: column;
-                padding-inline: var(--inline-padding);
+                gap: 2px;
+            }
 
-                &:not(:hover) {
-                    .name {
-                        .end {
-                            a {
-                                display: none;
+            .skill {
+                .action {
+                    display: flex;
+                    flex-direction: column;
+                    padding-inline: var(--inline-padding);
+
+                    &:not(:hover) {
+                        .name {
+                            .end {
+                                a {
+                                    display: none;
+                                }
                             }
                         }
                     }
-                }
 
-                .name {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-
-                    .end {
+                    .name {
                         display: flex;
                         align-items: center;
-                        gap: 4px;
+                        justify-content: space-between;
 
-                        .trained {
-                            font-size: 0.7em;
-                            font-weight: bold;
-                        }
+                        .end {
+                            display: flex;
+                            align-items: center;
+                            gap: 4px;
 
-                        a {
-                            i {
-                                margin-top: 2px;
+                            .trained {
+                                font-size: 0.7em;
+                                font-weight: bold;
                             }
 
-                            &.chat {
-                                margin-top: 2px;
-                                font-size: 0.9em;
+                            a {
+                                i {
+                                    margin-top: 2px;
+                                }
+
+                                &.chat {
+                                    margin-top: 2px;
+                                    font-size: 0.9em;
+                                }
                             }
                         }
                     }
                 }
             }
-        }
 
-        .lores {
-            .header {
-                text-align: center;
+            .lores {
+                .header {
+                    text-align: center;
+                }
             }
         }
     }

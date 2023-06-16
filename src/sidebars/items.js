@@ -1,7 +1,7 @@
 import { getSetting } from '../module.js'
 import { IdentifyItemPopup } from '../pf2e/identify.js'
 import { showItemSummary } from '../popup.js'
-import { addNameTooltipListeners, deleteItem, editItem, getItemFromEvent } from '../shared.js'
+import { addNameTooltipListeners, deleteItem, editItem, filterIn, getItemFromEvent } from '../shared.js'
 
 const ITEMS_TYPES = {
     weapon: { order: 0, label: 'PF2E.InventoryWeaponsHeader' },
@@ -12,24 +12,30 @@ const ITEMS_TYPES = {
     backpack: { order: 5, label: 'PF2E.InventoryBackpackHeader' },
 }
 
-export async function getItemsData(actor) {
-    const categories = {}
+export async function getItemsData(actor, token, filter) {
+    let categories = {}
 
     for (const item of actor.inventory.contents) {
+        if (!filterIn(item.name, filter)) continue
         categories[item.type] ??= []
         categories[item.type].push(item)
     }
 
-    return {
-        canCarry: !!actor.adjustCarryType,
-        doubled: getSetting('items-columns'),
-        categories: Object.entries(categories)
-            .map(([type, items]) => {
-                items.sort((a, b) => a.name.localeCompare(b.name))
-                return { type, items, label: ITEMS_TYPES[type].label }
-            })
-            .sort((a, b) => ITEMS_TYPES[a.type].order - ITEMS_TYPES[b.type].order),
-    }
+    categories = Object.entries(categories)
+        .map(([type, items]) => {
+            items.sort((a, b) => a.name.localeCompare(b.name))
+            return { type, items, label: ITEMS_TYPES[type].label }
+        })
+        .sort((a, b) => ITEMS_TYPES[a.type].order - ITEMS_TYPES[b.type].order)
+
+    if (categories.length)
+        return {
+            doubled: getSetting('items-columns'),
+            contentData: {
+                canCarry: !!actor.adjustCarryType,
+                categories,
+            },
+        }
 }
 
 export function addItemsListeners(el, actor) {

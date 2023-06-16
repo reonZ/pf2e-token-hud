@@ -1,38 +1,38 @@
-#pf2e-token-hud .sidebar.extras hr {
+#pf2e-token-hud .sidebar.extras .sidebar-content hr {
   width: 100%;
   margin: 0;
 }
-#pf2e-token-hud .sidebar.extras hr:last-child {
+#pf2e-token-hud .sidebar.extras .sidebar-content hr:last-child {
   display: none;
 }
-#pf2e-token-hud .sidebar.extras .row {
+#pf2e-token-hud .sidebar.extras .sidebar-content .row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding-inline: var(--inline-padding);
   gap: 20px;
 }
-#pf2e-token-hud .sidebar.extras .row select {
+#pf2e-token-hud .sidebar.extras .sidebar-content .row select {
   border: 0;
   height: 100%;
 }
-#pf2e-token-hud .sidebar.extras .row > a[data-action] {
+#pf2e-token-hud .sidebar.extras .sidebar-content .row > a[data-action] {
   display: flex;
   align-items: center;
   gap: 4px;
   white-space: nowrap;
 }
-#pf2e-token-hud .sidebar.extras .row > a[data-action] .activity-icon {
+#pf2e-token-hud .sidebar.extras .sidebar-content .row > a[data-action] .activity-icon {
   font-size: 1.7em;
   line-height: 0.5;
   display: inline-block;
 }
-#pf2e-token-hud .sidebar.extras .row .actions {
+#pf2e-token-hud .sidebar.extras .sidebar-content .row .actions {
   display: flex;
   align-items: center;
   gap: 6px;
   font-size: 0.9em;
 }
-#pf2e-token-hud .sidebar.extras .macro .details .extras {
+#pf2e-token-hud .sidebar.extras .sidebar-content .macro .details .extras {
   justify-content: flex-end;
 }

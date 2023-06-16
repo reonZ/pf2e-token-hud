@@ -2,35 +2,37 @@
 
 #pf2e-token-hud {
     .sidebar.hazard {
-        hr {
-            margin: 0;
-        }
-
-        .tags {
-            display: flex;
-            gap: 1px;
-            margin: 0;
-            padding-inline: var(--inline-padding);
-        }
-
-        .initiative {
-            display: flex;
-            align-items: center;
-            gap: 0.2em;
-            padding-inline: var(--inline-padding);
-        }
-
-        .section {
-            .header {
-                text-align: center;
+        .sidebar-content {
+            hr {
+                margin: 0;
             }
 
-            .content {
+            .tags {
+                display: flex;
+                gap: 1px;
+                margin: 0;
                 padding-inline: var(--inline-padding);
             }
 
-            .action {
-                @include shared.action;
+            .initiative {
+                display: flex;
+                align-items: center;
+                gap: 0.2em;
+                padding-inline: var(--inline-padding);
+            }
+
+            .section {
+                .header {
+                    text-align: center;
+                }
+
+                .content {
+                    padding-inline: var(--inline-padding);
+                }
+
+                .action {
+                    @include shared.action;
+                }
             }
         }
     }

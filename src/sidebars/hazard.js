@@ -15,15 +15,17 @@ export async function getHazardData(actor) {
     }
 
     return {
-        description: await enrich(description),
-        disable: await enrich(disable),
-        routine: await enrich(routine),
-        reset: await enrich(reset),
-        isComplex,
-        rarity: { value: traits.rarity, label: CONFIG.PF2E.rarityTraits[traits.rarity] },
-        traits: traits.value.map(trait => CONFIG.PF2E.hazardTraits[trait]),
-        stealth: modifier(stealth.value),
-        maxWidth: getSetting('hazard-width'),
+        contentData: {
+            description: await enrich(description),
+            disable: await enrich(disable),
+            routine: await enrich(routine),
+            reset: await enrich(reset),
+            isComplex,
+            rarity: { value: traits.rarity, label: CONFIG.PF2E.rarityTraits[traits.rarity] },
+            traits: traits.value.map(trait => CONFIG.PF2E.hazardTraits[trait]),
+            stealth: modifier(stealth.value),
+        },
+        style: { ['--max-width']: getSetting('hazard-width') + 'em' },
     }
 }
 

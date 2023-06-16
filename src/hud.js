@@ -1,7 +1,7 @@
 import { isHolding } from './keybindings.js'
 import { enrichHTML, getFlag, getSetting, localize, modifier, MODULE_ID, setFlag, templatePath } from './module.js'
 import { getUniqueTarget, RANKS } from './shared.js'
-import { addActionsListeners, getActionsData, getActionsOptions } from './sidebars/actions.js'
+import { addActionsListeners, getActionsData } from './sidebars/actions.js'
 import { addExtrasListeners, getExtrasData } from './sidebars/extras.js'
 import { addHazardListeners, getHazardData } from './sidebars/hazard.js'
 import { addItemsListeners, getItemsData } from './sidebars/items.js'
@@ -33,7 +33,7 @@ const SPEEDS = [
 ]
 
 const SIDEBARS = {
-    actions: { getData: getActionsData, addListeners: addActionsListeners, getOptions: getActionsOptions },
+    actions: { getData: getActionsData, addListeners: addActionsListeners },
     items: { getData: getItemsData, addListeners: addItemsListeners },
     spells: { getData: getSpellsData, addListeners: addSpellsListeners },
     skills: { getData: getSkillsData, addListeners: addSkillsListeners },
@@ -186,6 +186,10 @@ export class HUD extends Application {
 
     get isCharacter() {
         return this.actor?.isOfType('character')
+    }
+
+    get sidebar() {
+        return this.element.find('> .sidebar')
     }
 
     #setToken(token) {
@@ -475,12 +479,15 @@ export class HUD extends Application {
     async _render(force = false, options = {}) {
         let sidebarType
         let scrollTop
+        let filter
 
         if (this.#lastToken === this.#token) {
             const sidebar = this.element.find('> .sidebar')[0]
             if (sidebar) {
                 sidebarType = sidebar.dataset.type
                 scrollTop = sidebar.scrollTop
+                const filterHeader = sidebar.querySelector('.sidebar-header')
+                if (filterHeader.classList.contains('show')) filter = filterHeader.querySelector(' input').value.trim()
             }
         }
 
@@ -488,7 +495,7 @@ export class HUD extends Application {
         ui.windows[this.appId] = this
 
         if (sidebarType) {
-            const sidebar = await this.#openSidebar(sidebarType)
+            const sidebar = await this.#openSidebar(sidebarType, filter)
             if (scrollTop > 0) sidebar.scrollTop = scrollTop
         }
 
@@ -780,46 +787,70 @@ export class HUD extends Application {
             })
     }
 
-    async #openSidebar(type) {
+    async showFilter() {
+        let sidebar = this.sidebar
+        if (!sidebar) return
+        if (!sidebar.find('.sidebar-header').hasClass('show')) sidebar = await this.#openSidebar(sidebar.data().type, '')
+        sidebar.find('.sidebar-header').find('input').focus()
+        sidebar.scrollTop(0)
+    }
+
+    async #openSidebar(type, filter) {
         type = typeof type === 'string' ? type : type.currentTarget.dataset.type
 
         let element = this.element
-        let sidebar = element.find('> .sidebar')
+        let sidebar = this.sidebar
         const action = sidebar[0]?.dataset.type
 
         sidebar.remove()
         element.find('[data-action=open-sidebar]').removeClass('active')
 
-        if (action === type) {
+        if (action === type && filter === undefined) {
             this.#lock = false
             return
         }
 
         const token = this.#token
         const actor = token.actor
-        const { getData, addListeners, getOptions } = SIDEBARS[type]
-        const data = await getData(actor, token)
-        const { classList = [] } = (getOptions && (await getOptions(actor, token))) || {}
-        if (!data) return ui.notifications.warn(localize(`${type}.empty`, { name: this.#token.name }))
+        const showFilter = filter !== undefined || getSetting('filter')
+        const { getData, addListeners } = SIDEBARS[type]
+        const data = (await getData(actor, token, filter?.toLowerCase())) ?? {}
+        if (!data.contentData && !showFilter) return ui.notifications.warn(localize(`${type}.empty`, { name: this.#token.name }))
 
-        data.isGM = game.user.isGM
-        data.isCharacter = this.isCharacter
-        data.isOwner = actor.isOwner
+        const contentData = {
+            ...(data.contentData ?? {}),
+            isGM: game.user.isGM,
+            isCharacter: this.isCharacter,
+            isOwner: actor.isOwner,
+        }
 
         this.#lock = true
 
         element.find(`[data-action=open-sidebar][data-type=${type}]`).addClass('active')
         element = element[0]
 
+        const classes = data.classes ?? []
+        classes.push(type)
+        if (!getSetting('scrollbar')) classes.push('no-scrollbar')
+        if (data.doubled) classes.push('doubled')
+
+        const style = data.style ?? {}
+        style['--max-height'] = getSetting('height').trim() || '100%'
+
         const tmp = document.createElement('div')
-        tmp.innerHTML = await renderTemplate(templatePath(`sidebars/${type}`), data)
+        tmp.innerHTML = await renderTemplate(templatePath('sidebar'), {
+            classes: classes.join(' '),
+            style: Object.entries(style)
+                .map(([key, value]) => `${key}: ${value}`)
+                .join('; '),
+            type,
+            filter,
+            filterLabel: localize('filter'),
+            showFilter,
+            content: (await renderTemplate(templatePath(`sidebars/${type}`), contentData)).trim(),
+        })
 
         sidebar = tmp.firstElementChild
-        sidebar.classList.add('sidebar', ...classList)
-        if (!getSetting('scrollbar')) sidebar.classList.add('no-scrollbar')
-        if (data.doubled) sidebar.classList.add('doubled')
-        sidebar.dataset.type = type
-        sidebar.style.setProperty('--max-height', getSetting('height').trim() || '100%')
         this.element.append(sidebar)
 
         const rect = sidebar.getBoundingClientRect()
@@ -834,7 +865,16 @@ export class HUD extends Application {
         sidebar.style.left = `${left}px`
         sidebar.style.top = `${top}px`
 
-        addListeners($(sidebar), actor, token)
+        sidebar = $(sidebar)
+        sidebar.find('.sidebar-header [data-action=sidebar-filter-clear]').on('click', event => {
+            event.preventDefault()
+            sidebar.find('.sidebar-header [data-action=sidebar-filter]').val('')
+            this.#openSidebar(type, '')
+        })
+        sidebar.find('.sidebar-header [data-action=sidebar-filter]').on('keydown', event => {
+            if (event.key === 'Enter') this.#openSidebar(type, event.currentTarget.value.trim())
+        })
+        addListeners(sidebar, actor, token)
 
         return sidebar
     }

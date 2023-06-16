@@ -12,6 +12,18 @@ export function registerKeybindings() {
             holding = false
         },
     })
+
+    register('filter', {
+        onDown: () => {
+            getHud().showFilter()
+        },
+        editable: [
+            {
+                key: 'KeyF',
+                modifiers: ['Control'],
+            },
+        ],
+    })
 }
 
 export function isHolding() {

@@ -361,7 +361,13 @@ export async function getSkillsData(actor) {
             modifier: modifier(mod),
         }))
 
-    return { skills, lores, doubled: getSetting('skills-columns') }
+    return {
+        contentData: {
+            skills,
+            lores,
+        },
+        doubled: getSetting('skills-columns'),
+    }
 }
 
 export function addSkillsListeners(el, actor) {

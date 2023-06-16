@@ -1,8 +1,8 @@
 import { getSetting, MODULE_ID } from '../module.js'
 import { showItemSummary } from '../popup.js'
-import { addNameTooltipListeners, getItemFromEvent } from '../shared.js'
+import { addNameTooltipListeners, filterIn, getItemFromEvent } from '../shared.js'
 
-export async function getSpellsData(actor) {
+export async function getSpellsData(actor, token, filter) {
     const focusPool = actor.system.resources.focus ?? { value: 0, max: 0 }
     const entries = actor.spellcasting.regular
     const showTradition = getSetting('tradition')
@@ -28,6 +28,7 @@ export async function getSpellsData(actor) {
 
             for (let slotId = 0; slotId < actives.length; slotId++) {
                 const { spell, expended, virtual, uses, castLevel } = actives[slotId]
+                if (!filterIn(spell.name, filter)) continue
 
                 slotSpells.push({
                     name: spell.name,
@@ -101,18 +102,31 @@ export async function getSpellsData(actor) {
 
     const ritualData = await actor.spellcasting.ritual?.getSheetData()
     const rituals = ritualData?.levels.flatMap((slot, slotId) =>
-        slot.active.map(({ spell }) => ({
-            name: spell.name,
-            img: spell.img,
-            slotId,
-            itemId: spell.id,
-            level: spell.level,
-            time: spell.system.time.value,
-        }))
+        slot.active
+            .map(({ spell }) => {
+                if (!filterIn(spell.name, filter)) return
+                return {
+                    name: spell.name,
+                    img: spell.img,
+                    slotId,
+                    itemId: spell.id,
+                    level: spell.level,
+                    time: spell.system.time.value,
+                }
+            })
+            .filter(Boolean)
     )
 
     if (spells.length || rituals?.length)
-        return { spells, rituals, focusPool, hasFocusCantrips, doubled: getSetting('spells-columns') }
+        return {
+            contentData: {
+                spells,
+                rituals,
+                focusPool,
+                hasFocusCantrips,
+            },
+            doubled: getSetting('spells-columns'),
+        }
 }
 
 export function addSpellsListeners(el, actor) {

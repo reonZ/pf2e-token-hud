@@ -1,25 +1,25 @@
-#pf2e-token-hud .sidebar.hazard hr {
+#pf2e-token-hud .sidebar.hazard .sidebar-content hr {
   margin: 0;
 }
-#pf2e-token-hud .sidebar.hazard .tags {
+#pf2e-token-hud .sidebar.hazard .sidebar-content .tags {
   display: flex;
   gap: 1px;
   margin: 0;
   padding-inline: var(--inline-padding);
 }
-#pf2e-token-hud .sidebar.hazard .initiative {
+#pf2e-token-hud .sidebar.hazard .sidebar-content .initiative {
   display: flex;
   align-items: center;
   gap: 0.2em;
   padding-inline: var(--inline-padding);
 }
-#pf2e-token-hud .sidebar.hazard .section .header {
+#pf2e-token-hud .sidebar.hazard .sidebar-content .section .header {
   text-align: center;
 }
-#pf2e-token-hud .sidebar.hazard .section .content {
+#pf2e-token-hud .sidebar.hazard .sidebar-content .section .content {
   padding-inline: var(--inline-padding);
 }
-#pf2e-token-hud .sidebar.hazard .section .action {
+#pf2e-token-hud .sidebar.hazard .sidebar-content .section .action {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -27,28 +27,28 @@
   height: 1.4em;
   padding-inline: var(--inline-padding);
 }
-#pf2e-token-hud .sidebar.hazard .section .action:hover {
+#pf2e-token-hud .sidebar.hazard .sidebar-content .section .action:hover {
   --hover-background: rgb(0 0 0 / 5%);
   background-color: var(--hover-background);
 }
-#pf2e-token-hud .sidebar.hazard .section .action:hover .icon img {
+#pf2e-token-hud .sidebar.hazard .sidebar-content .section .action:hover .icon img {
   background-color: var(--hover-background);
 }
-#pf2e-token-hud .sidebar.hazard .section .action .icon {
+#pf2e-token-hud .sidebar.hazard .sidebar-content .section .action .icon {
   height: 100%;
 }
-#pf2e-token-hud .sidebar.hazard .section .action .icon img {
+#pf2e-token-hud .sidebar.hazard .sidebar-content .section .action .icon img {
   height: 100%;
   border: 0;
   mix-blend-mode: color-burn;
 }
-#pf2e-token-hud .sidebar.hazard .section .action .name {
+#pf2e-token-hud .sidebar.hazard .sidebar-content .section .action .name {
   flex: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-#pf2e-token-hud .sidebar.hazard .section .action .chat {
+#pf2e-token-hud .sidebar.hazard .sidebar-content .section .action .chat {
   margin-top: 2px;
   font-size: 0.9em;
 }

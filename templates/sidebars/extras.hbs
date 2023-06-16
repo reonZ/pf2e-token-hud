@@ -1,64 +1,63 @@
-<div class="extras">
-    {{#if initiative}}
-    <div class="row">
-        {{> roll action='roll-initiative' label='PF2E.InitiativeLabel'}}
-        <select name="system.attributes.initiative.statistic" {{disabled (not isOwner)}}>
-            {{selectOptions initiative.skills selected=initiative.selected nameAttr="slug" labelAttr="label"}}
-        </select>
-    </div>
-    <hr>
-    {{/if}}
+{{#if initiative}}
+<div class="row">
+    {{> roll action='roll-initiative' label='PF2E.InitiativeLabel'}}
+    <select name="system.attributes.initiative.statistic" {{disabled (not isOwner)}}>
+        {{selectOptions initiative.skills selected=initiative.selected nameAttr="slug" labelAttr="label"}}
+    </select>
+</div>
+<hr>
+{{/if}}
 
-    {{#if isCharacter}}
-    <div class="row">
-        {{> roll action='rest-for-the-night' icon='fa-solid fa-bed' label='PF2E.Actor.Character.Rest.Label'}}
-    </div>
-    {{#if hasDailies}}
-    <div class="row">
-        {{> roll action='prepare-dailies' icon='fa-solid fa-mug-saucer' label='pf2e-dailies.sheet.title'}}
-    </div>
-    {{/if}}
-    <hr>
-    {{/if}}
+{{#if isCharacter}}
+<div class="row">
+    {{> roll action='rest-for-the-night' icon='fa-solid fa-bed' label='PF2E.Actor.Character.Rest.Label'}}
+</div>
+{{#if hasDailies}}
+<div class="row">
+    {{> roll action='prepare-dailies' icon='fa-solid fa-mug-saucer' label='pf2e-dailies.sheet.title'}}
+</div>
+{{/if}}
+<hr>
+{{/if}}
 
-    <div class="row" data-uuid="Compendium.pf2e.actionspf2e.item.HCl3pzVefiv9ZKQW">
-        {{> roll action='roll-aid' cost='reaction' label='PF2E.Actions.Aid.Title' actions=true}}
+<div class="row" data-uuid="Compendium.pf2e.actionspf2e.item.HCl3pzVefiv9ZKQW">
+    {{> roll action='roll-aid' cost='reaction' label='PF2E.Actions.Aid.Title' actions=true}}
+</div>
+
+<div class="row" data-uuid="Compendium.pf2e.actionspf2e.item.SkZAQRkLLkmBQNB9">
+    {{> roll action='roll-escape' cost=1 label='PF2E.Actions.Escape.Title' actions=true}}
+</div>
+
+<div class="row" data-uuid="Compendium.pf2e.actionspf2e.item.1OagaWtBpVXExToo">
+    {{> roll action='roll-recall-knowledge' cost=1 label='PF2E.RecallKnowledge.Label' actions=true}}
+</div>
+
+
+{{#if isOwner}}
+{{#if macros.length}}
+<hr>
+{{#each macros as |macro|}}
+<div class="macro item-box" data-uuid="{{macro.uuid}}">
+    <div class="item-img">
+        <img src="{{macro.img}}">
     </div>
-
-    <div class="row" data-uuid="Compendium.pf2e.actionspf2e.item.SkZAQRkLLkmBQNB9">
-        {{> roll action='roll-escape' cost=1 label='PF2E.Actions.Escape.Title' actions=true}}
-    </div>
-
-    <div class="row" data-uuid="Compendium.pf2e.actionspf2e.item.1OagaWtBpVXExToo">
-        {{> roll action='roll-recall-knowledge' cost=1 label='PF2E.RecallKnowledge.Label' actions=true}}
-    </div>
-
-
-    {{#if isOwner}}
-    {{#if macros.length}}
-    <hr>
-    {{#each macros as |macro|}}
-    <div class="macro item-box" data-uuid="{{macro.uuid}}">
-        <div class="item-img">
-            <img src="{{macro.img}}">
-        </div>
-        <div class="details">
-            <div class="name">{{macro.name}}</div>
-            <div class="extras">
-                <div class="actions">
-                    <a data-action="use-macro"><i class="fa-duotone fa-play"></i></a>
-                    <a data-action="edit-macro"><i class="fa-solid fa-pen-to-square"></i></a>
-                    <a data-action="delete-macro"><i class="fa-solid fa-trash"></i></a>
-                </div>
+    <div class="details">
+        <div class="name">{{macro.name}}</div>
+        <div class="extras">
+            <div class="actions">
+                <a data-action="use-macro"><i class="fa-duotone fa-play"></i></a>
+                <a data-action="edit-macro"><i class="fa-solid fa-pen-to-square"></i></a>
+                <a data-action="delete-macro"><i class="fa-solid fa-trash"></i></a>
             </div>
         </div>
     </div>
-    {{/each}}
-    {{else}}
-    <div class="no-macro">{{noMacro}}</div>
-    {{/if}}
-    {{/if}}
 </div>
+{{/each}}
+{{else}}
+<div class="no-macro">{{noMacro}}</div>
+{{/if}}
+{{/if}}
+
 
 {{#*inline 'roll'}}
 <a class="name" data-action="{{action}}">

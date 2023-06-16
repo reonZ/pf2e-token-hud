@@ -1,54 +1,54 @@
-#pf2e-token-hud .sidebar.items .hover-content {
+#pf2e-token-hud .sidebar.items .sidebar-content .hover-content {
   display: block;
 }
-#pf2e-token-hud .sidebar.items .category .header {
+#pf2e-token-hud .sidebar.items .sidebar-content .category .header {
   text-align: center;
 }
-#pf2e-token-hud .sidebar.items .category .item .details .extras .infos {
+#pf2e-token-hud .sidebar.items .sidebar-content .category .item .details .extras .infos {
   height: 100%;
   display: flex;
   align-items: center;
   gap: 6px;
 }
-#pf2e-token-hud .sidebar.items .category .item .details .extras .infos .quantity {
+#pf2e-token-hud .sidebar.items .sidebar-content .category .item .details .extras .infos .quantity {
   height: 100%;
 }
-#pf2e-token-hud .sidebar.items .category .item .details .extras .infos .quantity input {
+#pf2e-token-hud .sidebar.items .sidebar-content .category .item .details .extras .infos .quantity input {
   width: 4ch;
 }
-#pf2e-token-hud .sidebar.items .category .item .details .extras .infos .bulk {
+#pf2e-token-hud .sidebar.items .sidebar-content .category .item .details .extras .infos .bulk {
   display: flex;
   align-items: center;
   gap: 3px;
   padding-top: 2px;
 }
-#pf2e-token-hud .sidebar.items .category .item .details .extras .infos .bulk i {
+#pf2e-token-hud .sidebar.items .sidebar-content .category .item .details .extras .infos .bulk i {
   font-size: 0.9em;
 }
-#pf2e-token-hud .sidebar.items .category .item .details .extras .infos .bulk span {
+#pf2e-token-hud .sidebar.items .sidebar-content .category .item .details .extras .infos .bulk span {
   font-size: 0.86em;
 }
-#pf2e-token-hud .sidebar.items .category .item .details .extras .infos .container {
+#pf2e-token-hud .sidebar.items .sidebar-content .category .item .details .extras .infos .container {
   margin-top: 1px;
 }
-#pf2e-token-hud .sidebar.items .category .item .details .extras .infos .temporary {
+#pf2e-token-hud .sidebar.items .sidebar-content .category .item .details .extras .infos .temporary {
   font-size: 0.86em;
   margin-top: 2px;
 }
-#pf2e-token-hud .sidebar.items .category .item .details .extras .actions .held {
+#pf2e-token-hud .sidebar.items .sidebar-content .category .item .details .extras .actions .held {
   font-size: 1.3em;
   position: relative;
   margin-top: 3px;
   -webkit-clip-path: polygon(0 0, 100% 0, 100% 87%, 0 87%, 0 0);
           clip-path: polygon(0 0, 100% 0, 100% 87%, 0 87%, 0 0);
 }
-#pf2e-token-hud .sidebar.items .category .item .details .extras .actions .held i {
+#pf2e-token-hud .sidebar.items .sidebar-content .category .item .details .extras .actions .held i {
   position: absolute;
   color: white;
   font-size: 0.5em;
   left: 0.7em;
   top: 0.5em;
 }
-#pf2e-token-hud .sidebar.items .category .item .details .extras .actions .worn {
+#pf2e-token-hud .sidebar.items .sidebar-content .category .item .details .extras .actions .worn {
   font-size: 0.94em;
 }

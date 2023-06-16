@@ -2,21 +2,23 @@ import { rollRecallKnowledges } from '../actions/recall-knowledge.js'
 import { localize } from '../module.js'
 import { unownedItemToMessage } from '../pf2e/item.js'
 import { showItemSummary } from '../popup.js'
-import { addNameTooltipListeners, deleteMacro, getMacros, onDroppedMacro } from '../shared.js'
+import { addNameTooltipListeners, deleteMacro, filterIn, getMacros, onDroppedMacro } from '../shared.js'
 import { createVariantDialog, getSkillLabel, SKILLS_SLUGS } from './skills.js'
 
-export async function getExtrasData(actor) {
+export async function getExtrasData(actor, token, filter) {
     const { attributes } = actor
     const { initiative } = attributes
 
     return {
-        noMacro: localize('extras.no-macro'),
-        macros: getMacros(actor),
-        initiative: initiative && {
-            selected: initiative.statistic,
-            skills: SKILLS_SLUGS.map(slug => ({ slug, label: getSkillLabel(slug) })),
+        contentData: {
+            noMacro: localize('extras.no-macro'),
+            macros: getMacros(actor).filter(macro => filterIn(macro.name, filter)),
+            initiative: initiative && {
+                selected: initiative.statistic,
+                skills: SKILLS_SLUGS.map(slug => ({ slug, label: getSkillLabel(slug) })),
+            },
+            hasDailies: game.modules.get('pf2e-dailies')?.active,
         },
-        hasDailies: game.modules.get('pf2e-dailies')?.active,
     }
 }
 

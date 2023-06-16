@@ -113,6 +113,8 @@ export function registerSettings() {
 
     register('height', String, '')
 
+    register('filter', Boolean, false)
+
     register('scrollbar', Boolean, true)
 
     register('hazard-width', Number, 32, {

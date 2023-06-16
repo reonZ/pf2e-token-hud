@@ -1,5 +1,6 @@
 {
     "pf2e-token-hud": {
+        "filter": "Filter",
         "actor": {
             "macros": {
                 "contextmenu": "ITT Macros",
@@ -22,6 +23,10 @@
             "hold": {
                 "name": "Hold to Display",
                 "hint": "The key that needs to be held to display a token tooltip."
+            },
+            "filter": {
+                "name": "Show Filter",
+                "hint": "When a tooltip sidebar is opened, you can use this keybind to display the filter field, scrolling to the top of the sidebar and giving focus to the field."
             }
         },
         "settings": {
@@ -192,6 +197,10 @@
             "force-speed": {
                 "name": "Force Highest Speed",
                 "hint": "When enabled, the default speed (when none manually selected) will always be the highest found on the actor instead of only if the land speed is 0."
+            },
+            "filter": {
+                "name": "Always Show Filter",
+                "hint": "When enabled, the filter field will always be displayed at the top of sidebars instead of when using the 'Show Filter' keybind, the keybind still scroll to the top and gives focus to the field."
             }
         },
         "spells": {

@@ -1,11 +1,11 @@
-#pf2e-token-hud .sidebar.spells.doubled {
+#pf2e-token-hud .sidebar.spells .sidebar-content.doubled {
   min-width: calc(var(--max-width) * 2);
 }
-#pf2e-token-hud .sidebar.spells .entry .header {
+#pf2e-token-hud .sidebar.spells .sidebar-content .entry .header {
   position: relative;
   text-align: center;
 }
-#pf2e-token-hud .sidebar.spells .entry .header .pips {
+#pf2e-token-hud .sidebar.spells .sidebar-content .entry .header .pips {
   position: absolute;
   top: 0;
   right: 3px;
@@ -13,14 +13,14 @@
   font-size: 0.86em;
   height: 100%;
 }
-#pf2e-token-hud .sidebar.spells .entry .spell > * {
+#pf2e-token-hud .sidebar.spells .sidebar-content .entry .spell > * {
   z-index: 1;
 }
-#pf2e-token-hud .sidebar.spells .entry .spell .details .extras .type {
+#pf2e-token-hud .sidebar.spells .sidebar-content .entry .spell .details .extras .type {
   white-space: nowrap;
   font-size: 0.9em;
 }
-#pf2e-token-hud .sidebar.spells .entry .spell .details .extras .actions {
+#pf2e-token-hud .sidebar.spells .sidebar-content .entry .spell .details .extras .actions {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -28,32 +28,32 @@
   font-size: 0.96em;
   height: 100%;
 }
-#pf2e-token-hud .sidebar.spells .entry .spell .details .extras .actions .uses {
+#pf2e-token-hud .sidebar.spells .sidebar-content .entry .spell .details .extras .actions .uses {
   display: flex;
   align-items: center;
   height: 100%;
 }
-#pf2e-token-hud .sidebar.spells .entry .spell .details .extras .actions .uses input[type=number] {
+#pf2e-token-hud .sidebar.spells .sidebar-content .entry .spell .details .extras .actions .uses input[type=number] {
   width: 2ch;
 }
-#pf2e-token-hud .sidebar.spells .entry .spell .details .extras .actions .uses input[type=text] {
+#pf2e-token-hud .sidebar.spells .sidebar-content .entry .spell .details .extras .actions .uses input[type=text] {
   width: 4ch;
 }
-#pf2e-token-hud .sidebar.spells .entry .spell .details .extras .actions .pips {
+#pf2e-token-hud .sidebar.spells .sidebar-content .entry .spell .details .extras .actions .pips {
   margin-right: 3px;
 }
-#pf2e-token-hud .sidebar.spells .entry .spell .details .extras .actions .pips .pip {
+#pf2e-token-hud .sidebar.spells .sidebar-content .entry .spell .details .extras .actions .pips .pip {
   font-size: 0.9em;
   margin-top: 2px;
 }
-#pf2e-token-hud .sidebar.spells .entry .spell.expended .details .name {
+#pf2e-token-hud .sidebar.spells .sidebar-content .entry .spell.expended .details .name {
   color: var(--color-disabled);
   text-decoration: line-through;
 }
-#pf2e-token-hud .sidebar.spells .entry .spell.virtual {
+#pf2e-token-hud .sidebar.spells .sidebar-content .entry .spell.virtual {
   position: relative;
 }
-#pf2e-token-hud .sidebar.spells .entry .spell.virtual:before {
+#pf2e-token-hud .sidebar.spells .sidebar-content .entry .spell.virtual:before {
   content: "";
   position: absolute;
   height: 100%;
@@ -61,6 +61,6 @@
   background-color: rgba(0, 5, 255, 0.07);
   pointer-events: none;
 }
-#pf2e-token-hud .sidebar.spells .entry .spell .description {
+#pf2e-token-hud .sidebar.spells .sidebar-content .entry .spell .description {
   display: none;
 }

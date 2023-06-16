@@ -2,7 +2,7 @@ import { getSetting, templatePath } from '../module.js'
 import { getActionIcon } from '../pf2e/misc.js'
 import { toggleWeaponTrait } from '../pf2e/weapon.js'
 import { popup, showItemSummary } from '../popup.js'
-import { addNameTooltipListeners, getItemFromEvent } from '../shared.js'
+import { addNameTooltipListeners, filterIn, getItemFromEvent } from '../shared.js'
 import { actionsUUIDS } from './skills.js'
 
 const SECTIONS_TYPES = {
@@ -19,7 +19,7 @@ const TOOLTIPS = {
     arrow: false,
 }
 
-export async function getActionsData(actor) {
+export async function getActionsData(actor, token, filter) {
     const isCharacter = actor.isOfType('character')
     const toggles = actor.synthetics.toggles.slice()
     const sorting = getSetting('actions')
@@ -55,6 +55,7 @@ export async function getActionsData(actor) {
     let sections = {}
 
     for (const action of actions) {
+        if (!filterIn(action.name, filter)) continue
         if (sorting !== 'split') {
             sections.action ??= []
             sections.action.push(action)
@@ -87,17 +88,16 @@ export async function getActionsData(actor) {
 
     if (toggles.length || strikes?.length || sections.length || heroActions?.length)
         return {
-            toggles,
-            strikes,
-            sections,
-            heroActions,
-            damageTypes: CONFIG.PF2E.damageTypes,
+            contentData: {
+                toggles,
+                strikes,
+                sections,
+                heroActions,
+                damageTypes: CONFIG.PF2E.damageTypes,
+            },
             doubled: getSetting('actions-columns'),
+            classes: [getSetting('actions-colors') ? 'attack-damage-system-colors' : ''],
         }
-}
-
-export function getActionsOptions(actor) {
-    if (getSetting('actions-colors')) return { classList: ['attack-damage-system-colors'] }
 }
 
 export function addActionsListeners(el, actor) {
@@ -256,14 +256,14 @@ function getCharacterActions(actor) {
                 const traits = actions.system.traits.value
                 return !traits.includes('downtime') && !traits.includes('exploration')
             })
-            .map(item => {
-                const actionCost = item.actionCost
+            .map(action => {
+                const actionCost = action.actionCost
 
                 return {
-                    id: item.id,
+                    id: action.id,
                     type: actionCost?.type ?? 'free',
                     cost: actionCost,
-                    name: item.name,
+                    name: action.name,
                 }
             })
     )

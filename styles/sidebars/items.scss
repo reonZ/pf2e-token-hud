@@ -1,74 +1,76 @@
 #pf2e-token-hud {
     .sidebar.items {
-        .hover-content {
-            display: block;
-        }
-
-        .category {
-            .header {
-                text-align: center;
+        .sidebar-content {
+            .hover-content {
+                display: block;
             }
 
-            .item {
-                .details {
-                    .extras {
-                        .infos {
-                            height: 100%;
-                            display: flex;
-                            align-items: center;
-                            gap: 6px;
+            .category {
+                .header {
+                    text-align: center;
+                }
 
-                            .quantity {
+                .item {
+                    .details {
+                        .extras {
+                            .infos {
                                 height: 100%;
-
-                                input {
-                                    width: 4ch;
-                                }
-                            }
-
-                            .bulk {
                                 display: flex;
                                 align-items: center;
-                                gap: 3px;
-                                padding-top: 2px;
+                                gap: 6px;
 
-                                i {
-                                    font-size: 0.9em;
+                                .quantity {
+                                    height: 100%;
+
+                                    input {
+                                        width: 4ch;
+                                    }
                                 }
 
-                                span {
+                                .bulk {
+                                    display: flex;
+                                    align-items: center;
+                                    gap: 3px;
+                                    padding-top: 2px;
+
+                                    i {
+                                        font-size: 0.9em;
+                                    }
+
+                                    span {
+                                        font-size: 0.86em;
+                                    }
+                                }
+
+                                .container {
+                                    margin-top: 1px;
+                                }
+
+                                .temporary {
                                     font-size: 0.86em;
+                                    margin-top: 2px;
                                 }
                             }
 
-                            .container {
-                                margin-top: 1px;
-                            }
+                            .actions {
+                                .held {
+                                    font-size: 1.3em;
+                                    position: relative;
+                                    margin-top: 3px;
+                                    clip-path: polygon(0 0, 100% 0, 100% 87%, 0 87%, 0 0);
 
-                            .temporary {
-                                font-size: 0.86em;
-                                margin-top: 2px;
-                            }
-                        }
-
-                        .actions {
-                            .held {
-                                font-size: 1.3em;
-                                position: relative;
-                                margin-top: 3px;
-                                clip-path: polygon(0 0, 100% 0, 100% 87%, 0 87%, 0 0);
-
-                                i {
-                                    position: absolute;
-                                    color: white;
-                                    font-size: 0.5em;
-                                    left: 0.7em;
-                                    top: 0.5em;
+                                    i {
+                                        position: absolute;
+                                        color: white;
+                                        font-size: 0.5em;
+                                        left: 0.7em;
+                                        top: 0.5em;
+                                    }
                                 }
-                            }
 
-                            .worn {
-                                font-size: 0.94em;
+                                .worn {
+                                    font-size: 0.94em;
+                                }
                             }
                         }
                     }
