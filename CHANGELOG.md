@@ -1,3 +1,10 @@
+# 1.18.0
+
+-   added filter for skills
+    -   if a skill passes the filter, all its actions will be displayed
+    -   if a skill action (or any of its variants) passes the filter, the action, its variants and the parent skill will be displayed
+-   When re-using the `Show Filter` keybind, the sidebar will scroll to the top, focus and select the content of the filter field for easier replacement
+
 # 1.17.0
 
 -   added a filter field in the sidebars (hidden by default), filter is triggered by using the `Enter` key
