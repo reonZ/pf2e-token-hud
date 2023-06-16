@@ -1,3 +1,11 @@
+# 1.17.0
+
+-   added a filter field in the sidebars (hidden by default), filter is triggered by using the `Enter` key
+    -   actions will not filter the strikes, toggles or `Hero Actions`
+    -   extras will only filter the macros
+-   added `Show Filter` keybind (default `ctrl + F`) to show the filter field, it will also scroll to the top of the sidebar and give focus to the field
+-   added `Always Show Filter` setting, when enabled the filter field will permanently be shown at the top of the sidebars
+
 # 1.16.0
 
 -   default displayed speed will now be the highest found when land speed is 0

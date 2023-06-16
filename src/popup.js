@@ -1,8 +1,8 @@
-import { enrichHTML, localize, MODULE_ID } from './module.js'
+import { enrichHTML, getHud, localize } from './module.js'
 import { getItemSummary } from './shared.js'
 
 export async function popup(title, content, actor) {
-    const hud = $(`#${MODULE_ID}`)
+    const hud = getHud(true)
     if (!hud.length) return
 
     hud.find('> .popup').remove()
