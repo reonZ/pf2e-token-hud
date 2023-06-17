@@ -63,6 +63,8 @@
 #pf2e-token-hud .sidebar.doubled {
   min-width: calc(var(--min-width) * 2);
   max-width: calc(var(--max-width) * 2);
+}
+#pf2e-token-hud .sidebar.doubled .sidebar-content {
   display: grid;
   grid-template-columns: 50% 50%;
 }

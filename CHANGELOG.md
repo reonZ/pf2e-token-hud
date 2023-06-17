@@ -1,3 +1,7 @@
+# 1.18.2
+
+-   fixed two columns option not working anymore because of the filter field implementation
+
 # 1.18.1
 
 -   fixed extras tab not opening for actors that never had macros

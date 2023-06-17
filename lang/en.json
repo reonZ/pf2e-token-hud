@@ -88,7 +88,7 @@
             },
             "unit": {
                 "name": "Distance Unit",
-                "hint": "An string representing the multiplier, the unit and the number of decimals (all separated by commas) used when displaying the 'Distance To Token'. Example: '0.3, m, 2'. Leaving empty defaults to: '1, ft, 0', "
+                "hint": "A string representing the multiplier, the unit and the number of decimals (all separated by commas) used when displaying the 'Distance To Token'. Example: '0.3, m, 2'. Leaving empty defaults to: '1, ft, 0', "
             },
             "status": {
                 "name": "Health Status",

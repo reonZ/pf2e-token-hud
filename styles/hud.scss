@@ -75,8 +75,11 @@
         &.doubled {
             min-width: calc(var(--min-width) * 2);
             max-width: calc(var(--max-width) * 2);
-            display: grid;
-            grid-template-columns: 50% 50%;
+
+            .sidebar-content {
+                display: grid;
+                grid-template-columns: 50% 50%;
+            }
         }
 
         &.no-scrollbar {
