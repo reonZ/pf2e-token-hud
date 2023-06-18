@@ -273,6 +273,7 @@
   padding: 2px 4px;
   font-weight: bold;
   font-size: 1.1em;
+  pointer-events: none;
 }
 #pf2e-token-hud .distance {
   gap: 6px;
