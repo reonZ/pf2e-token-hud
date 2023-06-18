@@ -1,4 +1,4 @@
-#pf2e-token-hud .sidebar.spells .sidebar-content.doubled {
+#pf2e-token-hud .sidebar.spells.doubled {
   min-width: calc(var(--max-width) * 2);
 }
 #pf2e-token-hud .sidebar.spells .sidebar-content .entry .header {

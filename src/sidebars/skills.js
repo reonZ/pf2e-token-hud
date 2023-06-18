@@ -27,6 +27,7 @@ const LABELS = {
 }
 
 const ACTIONS_UUIDS = {
+    aid: 'Compendium.pf2e.actionspf2e.Item.HCl3pzVefiv9ZKQW',
     'sense-motive': 'Compendium.pf2e.actionspf2e.Item.1xRFPTFtWtGJ9ELw',
     seek: 'Compendium.pf2e.actionspf2e.Item.BlAOM2X92SI6HMtJ',
     balance: 'Compendium.pf2e.actionspf2e.Item.M76ycLAqHoAgbcej',
