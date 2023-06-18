@@ -83,7 +83,7 @@ export class HUD extends Application {
                 this.#lock ||
                 this.#softLock ||
                 !(token instanceof Token) ||
-                actor.isOfType('loot')
+                actor.isOfType('loot', 'party')
             )
                 return
 

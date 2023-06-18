@@ -197,7 +197,13 @@ const SKILLS = [
     {
         slug: 'medicine',
         actions: [
-            { slug: 'administer-first-aid', cost: '2', type: 2, variants: ['stabilize', 'stop-bleeding'] },
+            {
+                slug: 'administer-first-aid',
+                cost: '2',
+                type: 2,
+                variants: ['stabilize', 'stop-bleeding'],
+                rollOption: 'administer-first-aid',
+            },
             { slug: 'treat-disease', type: 2, trained: true },
             { slug: 'treat-poison', cost: '1', type: 2, trained: true },
             { slug: 'treatWounds', type: 1, trained: true },
@@ -449,10 +455,14 @@ function rollAction(event, actor, skillSlug, slug, { variant, map }, skill) {
 
     skill ??= action.noSkill ? undefined : skillSlug
 
+    const rollOptions = action.rollOption ? [`action:${action.rollOption}`] : undefined
+    if (rollOptions && variant) rollOptions.push(`action:${action.rollOption}:${variant}`)
+
     const options = {
         event,
         actors: [actor],
         variant,
+        rollOptions,
         rollMode: action.secret ? 'blindroll' : 'roll',
     }
 
