@@ -1,4 +1,4 @@
-import { getSetting, templatePath } from '../module.js'
+import { enrichHTML, getSetting, templatePath } from '../module.js'
 import { getActionIcon } from '../pf2e/misc.js'
 import { toggleWeaponTrait } from '../pf2e/weapon.js'
 import { popup, showItemSummary } from '../popup.js'
@@ -49,6 +49,7 @@ export async function getActionsData(actor, token, filter) {
                     index,
                     damageFormula: await strike.damage?.({ getFormula: true }),
                     criticalFormula: await strike.critical?.({ getFormula: true }),
+                    description: strike.description ? await enrichHTML(strike.description, actor) : undefined,
                 }))
         ))
 

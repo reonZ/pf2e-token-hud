@@ -95,6 +95,26 @@
                         }
                     }
 
+                    .description {
+                        p {
+                            margin: 0;
+                            line-height: 1.1;
+                        }
+
+                        .inline-roll {
+                            padding: 0 1px;
+                            line-height: 1.2;
+                            border: 0;
+                            box-shadow: inset 0 0 0 1px var(--color-border-dark-tertiary);
+                            height: 1.2em;
+                            display: inline-block;
+
+                            i {
+                                font-size: 0.86em;
+                            }
+                        }
+                    }
+
                     .variants {
                         --modular-bg-color: #6a6a6a;
 

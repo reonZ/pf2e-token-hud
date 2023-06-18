@@ -74,6 +74,21 @@
 #pf2e-token-hud .sidebar.actions .sidebar-content .section .strike .traits .trait.info:hover {
   box-shadow: inset 0 0 8px rgba(147, 34, 34, 0.5882352941);
 }
+#pf2e-token-hud .sidebar.actions .sidebar-content .section .strike .description p {
+  margin: 0;
+  line-height: 1.1;
+}
+#pf2e-token-hud .sidebar.actions .sidebar-content .section .strike .description .inline-roll {
+  padding: 0 1px;
+  line-height: 1.2;
+  border: 0;
+  box-shadow: inset 0 0 0 1px var(--color-border-dark-tertiary);
+  height: 1.2em;
+  display: inline-block;
+}
+#pf2e-token-hud .sidebar.actions .sidebar-content .section .strike .description .inline-roll i {
+  font-size: 0.86em;
+}
 #pf2e-token-hud .sidebar.actions .sidebar-content .section .strike .variants {
   --modular-bg-color: #6a6a6a;
 }

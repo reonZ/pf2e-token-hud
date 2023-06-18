@@ -127,6 +127,12 @@
             {{/if}}
         </div>
         {{/if}}
+
+        {{#if (and (not @root.isCharacter) strike.description)}}
+        <div class="description">
+            {{{strike.description}}}
+        </div>
+        {{/if}}
     </div>
     {{/each}}
 </div>
