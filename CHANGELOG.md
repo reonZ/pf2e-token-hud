@@ -1,3 +1,14 @@
+# 1.19.0
+
+-   remade every part of the module that handled if/when/how the tooltip should be displayed, the tooltip should be more responsive and behave more as one would expect especially when using the `Hold to Display` keybind (v11 kinda broke everything)
+-   added adjustement icon on NPC main tooltip (elite, weak, normal), `left click` will toggle to and from elite while `right click` will toggle to and from weak
+-   added NPCs strike description
+-   manually added `action:administer-first-aid` and its variants for the `Administer First Aid` action skill (system is missing them)
+-   prevent the tooltip from showing up when hovering over the combat tracker
+-   removed `Disable Chat Card Hover` setting, it is no more a behavior
+-   fixed not being able to open description or send to chat actions in the extras sidebar
+-   fixed two columns spells sidebar width (once again)
+
 # 1.18.2
 
 -   fixed two columns option not working anymore because of the filter field implementation
