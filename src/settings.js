@@ -63,7 +63,7 @@ export function registerSettings() {
 
     register('see-status', Boolean, false)
 
-    register('chat', Boolean, true)
+    // register('chat', Boolean, true)
 
     // tooltip
 

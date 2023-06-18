@@ -1,15 +1,12 @@
 import { getHud, getSetting, MODULE_ID } from './module.js'
 
-let holding = false
-
 export function registerKeybindings() {
     register('hold', {
         onDown: () => {
-            holding = true
-            if (getSetting('use-holding') !== 'none') getHud()?.render()
+            if (getSetting('use-holding') !== 'none') getHud()?.setHolding(true)
         },
         onUp: () => {
-            holding = false
+            getHud()?.setHolding(false)
         },
     })
 
@@ -24,10 +21,6 @@ export function registerKeybindings() {
             },
         ],
     })
-}
-
-export function isHolding() {
-    return holding
 }
 
 function path(bind, key) {

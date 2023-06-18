@@ -1,4 +1,3 @@
-import { isHolding } from './keybindings.js'
 import { enrichHTML, getFlag, getSetting, localize, modifier, MODULE_ID, setFlag, templatePath } from './module.js'
 import { getUniqueTarget, RANKS } from './shared.js'
 import { addActionsListeners, getActionsData } from './sidebars/actions.js'
@@ -55,9 +54,11 @@ const SKILLS = {
 
 export class HUD extends Application {
     #token = null
+    #nextToken = null
     #lastToken = null
     #delay = null
     #hover = false
+    #holding = false
     #closing = null
     #mouseevent
     #mousedown = [false, false, false]
@@ -73,36 +74,8 @@ export class HUD extends Application {
         this.forceClose = () => this.close({ force: true })
 
         this.#hoverToken = (token, hover) => {
-            const hoverSidebar = getSetting('chat') && $(window.document).find(':hover').filter('#sidebar').length
-            const actor = token.actor
-
-            if (
-                !actor ||
-                hoverSidebar ||
-                this.mousedown ||
-                this.#lock ||
-                this.#softLock ||
-                !(token instanceof Token) ||
-                actor.isOfType('loot', 'party')
-            )
-                return
-
-            const transform = token.localTransform
-            const document = token.document
-            if (transform.tx !== document.x || transform.ty !== document.y) return
-
-            this.#hover = hover
-            if (hover && this.#token === token && this.rendered) return
-
-            if (hover && !game.keyboard.downKeys.has('ControlLeft')) {
-                this.#setToken(token)
-                if (!this.#closing) return this.render(null, null, getSetting('use-holding') === 'none' || !isHolding())
-                clearTimeout(this.#closing)
-                this.#closing = null
-                this.render()
-            } else {
-                this.close()
-            }
+            if (hover) this.#tokenEnter(token)
+            else this.#tokenLeave(token)
         }
 
         this.#mouseevent = event => {
@@ -129,10 +102,7 @@ export class HUD extends Application {
                 if (el.querySelector('.sidebar.extras') && target.closest('#hotbar')) return
                 if (popup) return popup.remove()
                 this.forceClose()
-            } else if (this.#delay) {
-                clearTimeout(this.#delay)
-                this.#delay = null
-            }
+            } else this.#cancelDelay()
 
             this.#lock = false
         }
@@ -147,6 +117,115 @@ export class HUD extends Application {
         Hooks.on('hoverToken', this.#hoverToken)
         Hooks.on('deleteToken', this.#deleteToken)
         Hooks.on('canvasPan', this.forceClose)
+    }
+
+    setToken(token, isObserved) {
+        if (token !== this.#token) {
+            if (this.#token) delete this.#token.actor.apps[this.appId]
+            this.#token = token
+            const actor = token?.actor
+            if (actor) actor.apps[this.appId] = this
+        }
+        this.#isObserved = isObserved ?? this.#checkIfObserved(token)
+    }
+
+    setHolding(held) {
+        const holding = getSetting('use-holding')
+        if (holding === 'none') return
+
+        this.#holding = held
+
+        if (this.#softLock || this.#lock) return
+
+        if (held) {
+            if (!this.#hover) return
+            const isObserved = this.#checkIfObserved(this.#nextToken)
+            if (holding === 'half' && !game.user.isGM && !isObserved) {
+                this.#cancelDelay()
+                this.render()
+                return
+            }
+            this.setToken(this.#nextToken, isObserved)
+            this.render()
+        } else {
+            if (holding === 'all') this.close()
+            else if (game.user.isGM) {
+                this.setToken(this.#nextToken)
+                this.render()
+            } else if (this.#isObserved) this.close()
+        }
+    }
+
+    #checkIfObserved(token) {
+        const actor = token?.actor
+        if (!actor) return false
+
+        let isObserved
+        const isParty = actor.system.details.alliance === 'party'
+
+        if (game.user.isGM && getSetting('use-holding') === 'half' && !this.#holding) isObserved = false
+        else if (actor.isOfType('familiar') && !actor.master) isObserved = false
+        else isObserved = token.isOwner || (getSetting('observer') && (token.observer || (isParty && getSetting('party'))))
+
+        return isObserved
+    }
+
+    #tokenEnter(token) {
+        if ($(window.document).find(':hover').filter('#combat-popout, #sidebar, #mini-tracker').length) return
+
+        const actor = token.actor
+        if (!actor || actor.isOfType('loot', 'party')) return
+
+        this.#hover = true
+        this.#nextToken = token
+
+        if (this.mousedown || this.#lock || this.#softLock || token === this.#token) return
+
+        const holding = getSetting('use-holding')
+        const isObserved = this.#checkIfObserved(token)
+        if (holding !== 'none' && !this.#holding && (holding === 'all' || isObserved)) return
+
+        this.#cancelClosing(true)
+        this.setToken(token, isObserved)
+
+        if (holding === 'none' || !this.#holding) this.renderWithDelay()
+        else this.render()
+    }
+
+    renderWithDelay() {
+        let delay = getSetting('delay')
+        if (delay) {
+            if (delay < 10) delay = 10
+            this.#delay = setTimeout(() => {
+                this.#delay = null
+                this.render()
+            }, delay)
+        } else this.render()
+    }
+
+    #cancelClosing(close) {
+        if (this.#closing === null) return
+        clearTimeout(this.#closing)
+        this.#closing = null
+        if (close) this.close()
+    }
+
+    #cancelDelay() {
+        if (this.#delay === null) return
+        clearTimeout(this.#delay)
+        this.#delay = null
+    }
+
+    #tokenLeave(token) {
+        this.#hover = false
+
+        if (this.mousedown || this.#lock || this.#softLock) return
+
+        this.#closing = setTimeout(() => {
+            this.#closing = null
+            if (this.#softLock || this.#lock) return
+            this.close()
+        }, 10)
     }
 
     delete() {
@@ -192,12 +271,6 @@ export class HUD extends Application {
         return this.element.find('> .sidebar')
     }
 
-    #setToken(token) {
-        if (token === this.#token) return
-        if (this.#token) delete this.#token.actor.apps[this.appId]
-        this.#token = token
-    }
-
     async getData() {
         const token = this.#token
         const actor = this.#token?.actor
@@ -210,11 +283,10 @@ export class HUD extends Application {
         const { attributes } = actor
         const { hp, sp = { max: 0, value: 0 }, ac } = attributes
         const useStamina = game.settings.get('pf2e', 'staminaVariant')
-        const isObserver = this.#isObserved
         const showDistance = getSetting('distance')
         const fontSize = getSetting('scale')
 
-        if (showDistance === 'all' || (showDistance === 'self' && isObserver)) {
+        if (showDistance === 'all' || (showDistance === 'self' && this.#isObserved)) {
             const unitSplit = getSetting('unit').split(',')
             const multiplier = Number(unitSplit[0]?.trim()) || 1
             const unit = unitSplit[1]?.trim() || game.system.gridUnits
@@ -239,7 +311,7 @@ export class HUD extends Application {
         }
 
         let status
-        if (!isObserver || getSetting('see-status')) {
+        if (!this.#isObserved || getSetting('see-status')) {
             const statuses = getSetting('status')
                 .split(',')
                 .map(x => x.trim())
@@ -266,7 +338,7 @@ export class HUD extends Application {
             type: actor.isOfType('creature') ? 'creature' : actor.type,
         }
 
-        if (!isObserver || (actor.isOfType('familiar') && !actor.master)) return sharedData
+        if (!this.#isObserved || (actor.isOfType('familiar') && !actor.master)) return sharedData
 
         const { level, saves, isOwner, system, itemTypes } = actor
         const { resistances, weaknesses, immunities } = attributes
@@ -274,7 +346,7 @@ export class HUD extends Application {
         sharedData = {
             ...sharedData,
             isOwner,
-            isObserver,
+            isObserver: this.#isObserved,
             name: token.document.name,
             hp,
             ac: ac.value,
@@ -434,17 +506,12 @@ export class HUD extends Application {
         }
     }
 
-    #close(options) {
-        this.#setToken(null)
-        this.#hover = false
+    close(options = {}) {
+        this.setToken(null)
         this.#lock = false
         this.#softLock = false
-        this.#isObserved = false
 
-        if (this.#delay !== null) {
-            clearTimeout(this.#delay)
-            this.#delay = null
-        }
+        this.#cancelDelay()
 
         const states = Application.RENDER_STATES
         if (!options.force && ![states.RENDERED, states.ERROR].includes(this._state)) return
@@ -464,16 +531,6 @@ export class HUD extends Application {
         this._element = null
         this._state = states.CLOSED
         delete ui.windows[this.appId]
-    }
-
-    close(options = {}) {
-        if (options.force) return this.#close(options)
-
-        this.#closing = setTimeout(() => {
-            this.#closing = null
-            if (this.#hover) return
-            this.#close(options)
-        })
     }
 
     async _render(force = false, options = {}) {
@@ -502,26 +559,8 @@ export class HUD extends Application {
         this.#lastToken = this.#token
     }
 
-    render(force, options, useDelay) {
-        const token = this.#token
-        const actor = token?.actor
-        if (!actor) return
-
-        const holding = isHolding()
-        const holdingSetting = getSetting('use-holding')
-        const isParty = actor.system.details.alliance === 'party'
-
-        if (game.user.isGM && holdingSetting === 'half' && !holding) this.#isObserved = false
-        else if (actor.isOfType('familiar') && !actor.master) this.#isObserved = false
-        else this.#isObserved = token.isOwner || (getSetting('observer') && (token.observer || (isParty && getSetting('party'))))
-
-        if (holdingSetting !== 'none' && !holding && (holdingSetting === 'all' || this.#isObserved)) return
-
-        if (!useDelay) return super.render(true)
-
-        const delay = getSetting('delay')
-        if (!delay) super.render(true)
-        else this.#delay = setTimeout(() => super.render(true), delay)
+    render() {
+        if (this.actor) super.render(true)
     }
 
     _injectHTML(html) {
@@ -602,8 +641,6 @@ export class HUD extends Application {
         const isOwner = token.isOwner
         const ChatMessagePF2e = CONFIG.ChatMessage.documentClass
 
-        actor.apps[this.appId] = this
-
         if (getSetting('tooltips')) {
             html.find('.inner [data-tooltip]').attr('data-tooltip', '')
         }
@@ -612,15 +649,18 @@ export class HUD extends Application {
 
         html.on('mouseenter', () => {
             if (!html.find('.inner').length) return
-            this.#hover = true
             this.#softLock = true
         })
 
         html.on('mouseleave', () => {
             this.#softLock = false
             if (this.#lock) return
-            this.#hover = false
-            this.close()
+
+            const current = this.#token
+            if (this.#nextToken !== current && this.#hover) {
+                this.close()
+                this.#tokenEnter(this.#nextToken)
+            } else setTimeout(() => !this.#hover && this.close(), 10)
         })
 
         html.on('dragover', () => {
@@ -656,7 +696,7 @@ export class HUD extends Application {
                 this.#lock = true
                 $(tooltip)
                     .find('.content-link')
-                    .on('click', () => setTimeout(() => tooltipster.close()))
+                    .on('click', () => setTimeout(() => tooltipster.close(), 10))
             })
             .tooltipster('option', 'functionAfter', () => {
                 if (html.find('> .sidebar').length) return
