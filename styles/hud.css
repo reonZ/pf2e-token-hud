@@ -343,6 +343,9 @@
   pointer-events: none;
   color: var(--color-disabled);
 }
+#pf2e-token-hud .inner .group .section .adjustment {
+  font-size: 1.2em;
+}
 #pf2e-token-hud .inner .group .section input[type=number] {
   color: var(--color);
   text-align: center;

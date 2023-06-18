@@ -429,7 +429,7 @@ export class HUD extends Application {
         const showDeath = getSetting('show-death')
         const { alignment, heroPoints } = actor
         const { traits } = system
-        const { wounded, dying, shield, resolve, speed } = attributes
+        const { wounded, dying, shield, resolve, speed, adjustment } = attributes
 
         function toInfo(str) {
             return `<li>${str.trim()}</li>`
@@ -479,6 +479,7 @@ export class HUD extends Application {
             wounded,
             shield,
             resolve,
+            adjustment,
             alignment: {
                 value: alignment,
                 icon: ALIGNMENTS[alignment.at(-1)],
@@ -712,6 +713,12 @@ export class HUD extends Application {
 
         // IS OWNER
         if (!isOwner) return
+
+        html.find('[data-action=toggle-adjustment]').on('click contextmenu', event => {
+            event.preventDefault()
+            const adjustment = event.type === 'click' ? 'elite' : 'weak'
+            actor.applyAdjustment(actor.system.attributes.adjustment === adjustment ? null : adjustment)
+        })
 
         html.find('[data-action=collision-dc]').on('click', event => {
             event.preventDefault()

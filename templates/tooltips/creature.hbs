@@ -4,6 +4,18 @@
         <i class="fa-solid fa-circle-h"></i>
         {{> pips max=hero.max value=hero.value action="toggle-hero"}}
     </div>
+    {{else}}
+    <div class="section">
+        <a class="adjustment" data-action="toggle-adjustment">
+            {{#if (eq adjustment 'elite' )}}
+            <i class="fa-solid fa-alien-8bit" data-tooltip="PF2E.NPC.Adjustment.EliteLabel"></i>
+            {{else if (eq adjustment 'weak' )}}
+            <i class="fa-thin fa-alien-8bit" data-tooltip="PF2E.NPC.Adjustment.WeakLabel"></i>
+            {{else}}
+            <i class="fa-regular fa-alien-8bit" data-tooltip="PF2E.NPC.Adjustment.NormalLabel"></i>
+            {{/if}}
+        </a>
+    </div>
     {{/if}}
 
     <div class="section">
