@@ -320,7 +320,7 @@ export class HUD extends Application {
             if (statuses.length && hp.max) {
                 const max = hp.max + (useStamina ? sp.max : 0)
                 const current = hp.value + (useStamina ? sp.value : 0)
-                const ratio = current / max
+                const ratio = Math.clamped(current / max, 0, 1)
                 const pick = Math.ceil(ratio * statuses.length)
 
                 status = {
