@@ -380,6 +380,8 @@ export async function getSkillsData(actor, token, filter) {
         }
     }
 
+    skills.sort((a, b) => (a.slug === 'perception' ? -1 : b.slug === 'perception' ? 1 : a.name.localeCompare(b.name)))
+
     const lores = Object.values(actor.skills)
         .filter(({ lore, label }) => lore && filterIn(label, filter))
         .map(({ label, rank, mod, slug }) => ({
