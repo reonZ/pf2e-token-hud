@@ -2,6 +2,7 @@
 
 -   forces firefox to respect the events order when moving from a token onto its tooltip while another token is right below it (hate you firefox)
 -   you can now click on the skills names instead of just the modifiers to roll a check
+-   fixed the tooltip not showing up when a sense didn't have a label (`Scent` with an acuity of `Vague` is bugged in the system)
 
 # 1.20.0
 
