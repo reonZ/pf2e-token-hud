@@ -1,7 +1,7 @@
 # 1.20.0
 
 -   skills are now displayed by alphabetical localized order (perception still remains at the top)
--   make sure health status ratio picks a valid string from the list even when the current HP is outside the bounds of 0 and max
+-   make sure health status picks a valid string from the list even when the current HP is outside the bounds of 0 and max
 -   the distance and health status elements no longer have pointer events
 
 # 1.19.0
