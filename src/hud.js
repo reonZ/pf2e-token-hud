@@ -67,6 +67,8 @@ export class HUD extends Application {
     #hoverToken = null
     #deleteToken = null
     #isObserved = false
+    #entering = null
+    #leaving = null
 
     constructor() {
         super()
@@ -74,8 +76,19 @@ export class HUD extends Application {
         this.forceClose = () => this.close({ force: true })
 
         this.#hoverToken = (token, hover) => {
-            if (hover) this.#tokenEnter(token)
-            else this.#tokenLeave(token)
+            if (hover) {
+                if (window.chrome) this.#tokenEnter(token)
+                else {
+                    if (this.#entering) clearTimeout(this.#entering)
+                    this.#entering = setTimeout(() => this.#tokenEnter(token), 10)
+                }
+            } else {
+                if (window.chrome) this.#tokenLeave(token)
+                else {
+                    if (this.#leaving) clearTimeout(this.#leaving)
+                    this.#leaving = setTimeout(() => this.#tokenLeave(token), 10)
+                }
+            }
         }
 
         this.#mouseevent = event => {
@@ -192,6 +205,18 @@ export class HUD extends Application {
         else this.render()
     }
 
+    #tokenLeave(token) {
+        this.#hover = false
+
+        if (this.mousedown || this.#lock || this.#softLock) return
+
+        this.#closing = setTimeout(() => {
+            this.#closing = null
+            if (this.#softLock || this.#lock) return
+            this.close()
+        }, 10)
+    }
+
     renderWithDelay() {
         let delay = getSetting('delay')
         if (delay) {
@@ -214,18 +239,6 @@ export class HUD extends Application {
         if (this.#delay === null) return
         clearTimeout(this.#delay)
         this.#delay = null
-    }
-
-    #tokenLeave(token) {
-        this.#hover = false
-
-        if (this.mousedown || this.#lock || this.#softLock) return
-
-        this.#closing = setTimeout(() => {
-            this.#closing = null
-            if (this.#softLock || this.#lock) return
-            this.close()
-        }, 10)
     }
 
     delete() {
