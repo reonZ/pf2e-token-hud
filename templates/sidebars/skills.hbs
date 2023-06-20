@@ -2,8 +2,10 @@
 <div class="skill">
     <div class="header">
         <div>
-            <a class="modifier" data-action="roll-skill" data-slug="{{skill.slug}}">{{skill.modifier}}</a>
-            {{skill.name}}
+            <a data-action="roll-skill" data-slug="{{skill.slug}}">
+                <span class="modifier">{{skill.modifier}}</span>
+                {{skill.name}}
+            </a>
         </div>
         {{#if skill.rank includeZero=true}}
         <div class="rank {{skill.rank}}">{{localize (concat 'PF2E.ProficiencyLevel' skill.rank)}}</div>
