@@ -459,7 +459,7 @@ export class HUD extends Application {
             .map(toInfo)
             .join('')
 
-        const senses = isCharacter ? traits.senses.map(x => x.label) : traits.senses.value?.split(',').filter(Boolean)
+        const senses = isCharacter ? traits.senses.map(x => x.label) : traits.senses.value?.split(',')
 
         const speeds = SPEEDS.map(({ type, icon }, index) => ({
             index,
@@ -514,7 +514,7 @@ export class HUD extends Application {
                 toIWR(immunities, 'PF2E.ImmunitiesLabel') +
                 toIWR(weaknesses, 'PF2E.WeaknessesLabel') +
                 toIWR(resistances, 'PF2E.ResistancesLabel'),
-            senses: senses?.map(toInfo).join(''),
+            senses: senses?.filter(Boolean).map(toInfo).join(''),
             languages,
             hasSpells: actor.spellcasting.some(x => x.category !== 'items'),
         }
