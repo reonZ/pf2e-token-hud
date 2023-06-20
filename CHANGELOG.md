@@ -1,3 +1,8 @@
+# 1.21.0
+
+-   forces firefox to respect the events order when moving from a token onto its tooltip while another token is right below it (hate you firefox)
+-   you can now click on the skills names instead of just the modifiers to roll a check
+
 # 1.20.0
 
 -   skills are now displayed by alphabetical localized order (perception still remains at the top)
