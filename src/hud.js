@@ -567,7 +567,7 @@ export class HUD extends Application {
 
         if (sidebarType) {
             const sidebar = await this.#openSidebar(sidebarType, filter)
-            if (scrollTop > 0) sidebar.scrollTop = scrollTop
+            if (scrollTop > 0) sidebar.scrollTop(scrollTop)
         }
 
         this.#lastToken = this.#token
