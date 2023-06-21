@@ -1,3 +1,12 @@
+# 1.22.0
+
+-   added follow the expert at the top of the skills sidebar
+-   fixed sidebars re-render not scrolling back to its position
+-   fixed not being able to open extras sidebar on uneditable tooltips
+-   fixed using `Show Filter` whith no existing sidebar generating an error
+-   fixed first character registration in the filter when using a single key `Show Filter` keybind
+-   changed the default `Show Filter` keybind to `Ctrl + Q`, regular browsers are already using `Ctrl + F` to open the page's search menu
+
 # 1.21.0
 
 -   forces firefox to respect the events order when moving from a token onto its tooltip while another token is right below it (hate you firefox)
