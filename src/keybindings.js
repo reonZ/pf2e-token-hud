@@ -16,7 +16,7 @@ export function registerKeybindings() {
         },
         editable: [
             {
-                key: 'KeyF',
+                key: 'KeyQ',
                 modifiers: ['Control'],
             },
         ],
