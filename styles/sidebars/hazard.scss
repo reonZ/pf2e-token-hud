@@ -1,5 +1,3 @@
-@use 'shared';
-
 #pf2e-token-hud {
     .sidebar.hazard {
         .sidebar-content {
@@ -28,10 +26,6 @@
 
                 .content {
                     padding-inline: var(--inline-padding);
-                }
-
-                .action {
-                    @include shared.action;
                 }
             }
         }

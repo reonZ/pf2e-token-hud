@@ -145,6 +145,14 @@
 #pf2e-token-hud .sidebar .sidebar-content .item-img.hover:hover i {
   display: flex;
 }
+#pf2e-token-hud .sidebar .sidebar-content .action-icon {
+  height: 100%;
+}
+#pf2e-token-hud .sidebar .sidebar-content .action-icon img {
+  height: 100%;
+  border: 0;
+  mix-blend-mode: color-burn;
+}
 #pf2e-token-hud .sidebar .sidebar-content .variants {
   display: flex;
   align-items: center;

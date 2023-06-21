@@ -266,7 +266,9 @@
                 "percussion": "Percussion",
                 "singing": "Singing",
                 "strings": "Strings",
-                "winds": "Winds"
+                "winds": "Winds",
+                "follow": "Follow the Expert",
+                "following": "Is Following an Expert"
             },
             "modifiers": {
                 "crowbar-missing": "No Crowbar"

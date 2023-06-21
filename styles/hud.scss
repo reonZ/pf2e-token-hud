@@ -176,6 +176,16 @@
                 }
             }
 
+            .action-icon {
+                height: 100%;
+
+                img {
+                    height: 100%;
+                    border: 0;
+                    mix-blend-mode: color-burn;
+                }
+            }
+
             .variants {
                 display: flex;
                 align-items: center;

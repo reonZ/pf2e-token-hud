@@ -11,6 +11,7 @@ const CROWBAR_UUIDS = new Set([
 ])
 const BON_MOT_UUID = 'Compendium.pf2e.feats-srd.Item.0GF2j54roPFIDmXf'
 const NATURAL_MEDICINE_UUID = 'Compendium.pf2e.feats-srd.Item.WC4xLBGmBsdOdHWu'
+const FOLLOW_THE_EXPERT_UUID = 'Compendium.pf2e.other-effects.Item.VCSpuc3Tf3XWMkd3'
 
 const LABELS = {
     initiative: 'PF2E.InitiativeLabel',
@@ -32,6 +33,7 @@ const ACTIONS_UUIDS = {
     seek: 'Compendium.pf2e.actionspf2e.Item.BlAOM2X92SI6HMtJ',
     balance: 'Compendium.pf2e.actionspf2e.Item.M76ycLAqHoAgbcej',
     escape: 'Compendium.pf2e.actionspf2e.Item.SkZAQRkLLkmBQNB9',
+    'follow-the-expert': 'Compendium.pf2e.actionspf2e.Item.tfa4Sh7wcxCEqL29',
     'tumble-through': 'Compendium.pf2e.actionspf2e.Item.21WIfSu7Xd7uKqV8',
     'maneuver-in-flight': 'Compendium.pf2e.actionspf2e.Item.Qf1ylAbdVi1rkc8M',
     squeeze: 'Compendium.pf2e.actionspf2e.Item.kMcV8e5EZUxa6evt',
@@ -393,6 +395,7 @@ export async function getSkillsData(actor, token, filter) {
 
     return {
         contentData: {
+            follow: localize(`skills.actions.${isFollowingAnExpert(actor) ? 'following' : 'follow'}`),
             skills,
             lores,
         },
@@ -409,6 +412,17 @@ export function addSkillsListeners(el, actor) {
 
     // IS OWNER
     if (!actor.isOwner) return
+
+    el.find('[data-action=follow-the-expert]').on('click', async event => {
+        event.preventDefault()
+
+        const following = isFollowingAnExpert(actor)
+        if (following) return await following.delete()
+
+        const source = (await fromUuid(FOLLOW_THE_EXPERT_UUID)).toObject()
+        setProperty(source, 'flags.core.sourceId', FOLLOW_THE_EXPERT_UUID)
+        await actor.createEmbeddedDocuments('Item', [source])
+    })
 
     el.find('[data-action=roll-skill]').on('click', event => {
         event.preventDefault()
@@ -430,6 +444,10 @@ export function addSkillsListeners(el, actor) {
         const item = await fromUuid(uuid)
         if (item) unownedItemToMessage(event, item, actor, { create: true })
     })
+}
+
+function isFollowingAnExpert(actor) {
+    return actor.itemTypes.effect.find(effect => effect.sourceId === FOLLOW_THE_EXPERT_UUID)
 }
 
 export async function createVariantDialog(base, dc) {

@@ -61,3 +61,9 @@
 #pf2e-token-hud .sidebar.skills .sidebar-content .lores .header {
   text-align: center;
 }
+#pf2e-token-hud .sidebar.skills .sidebar-content .follow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 1em;
+}

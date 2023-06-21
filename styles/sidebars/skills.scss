@@ -87,6 +87,13 @@
                     text-align: center;
                 }
             }
+
+            .follow {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                height: 1em;
+            }
         }
     }
 }

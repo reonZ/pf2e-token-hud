@@ -1,5 +1,3 @@
-@use 'shared';
-
 #pf2e-token-hud {
     .sidebar.actions {
         .sidebar-content {
@@ -199,7 +197,36 @@
                 }
 
                 .action {
-                    @include shared.action;
+                    display: flex;
+                    align-items: center;
+                    gap: 4px;
+                    margin-top: 2px;
+                    height: 1.4em;
+                    padding-inline: var(--inline-padding);
+
+                    &:hover {
+                        --hover-background: rgb(0 0 0 / 5%);
+
+                        background-color: var(--hover-background);
+
+                        .action-icon {
+                            img {
+                                background-color: var(--hover-background);
+                            }
+                        }
+                    }
+
+                    .name {
+                        flex: 1;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    .chat {
+                        margin-top: 2px;
+                        font-size: 0.9em;
+                    }
                 }
             }
         }
