@@ -152,7 +152,7 @@ NOTE: if you drag anything over the tooltip, the sidebars or the popup (dragged 
 
 ![](./readme/filter.webp)
 
-A filter field (hidden by default) is available at the top of each sidebar, you can make it always be displayed with a setting or use a keybind (`Ctrl + F` by default). Filter doesn't trigger until the `Enter` key is pressed while inside the field.
+A filter field (hidden by default) is available at the top of each sidebar, you can make it always be displayed with a setting or use a keybind (`Ctrl + Q` by default). Filter doesn't trigger until the `Enter` key is pressed while inside the field.
 
 -   actions will not filter the strikes, toggles or `Hero Actions`
 -   you can filter by skills, skill actions or even skill action variants
