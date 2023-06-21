@@ -11,7 +11,7 @@ export function registerKeybindings() {
     })
 
     register('filter', {
-        onDown: () => {
+        onUp: () => {
             getHud()?.showFilter()
         },
         editable: [
