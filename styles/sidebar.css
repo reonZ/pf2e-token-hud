@@ -1,0 +1,195 @@
+#pf2e-token-hud .sidebar {
+  --capped-height: calc(100vh - 2 * var(--outer-padding));
+  --max-height: --capped-height;
+  --min-width: 14em;
+  --max-width: 18.5em;
+  position: fixed;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: min(var(--max-height), var(--capped-height));
+  min-width: var(--min-width);
+  max-width: var(--max-width);
+  display: flex;
+  flex-direction: column;
+}
+#pf2e-token-hud .sidebar.no-scrollbar {
+  scrollbar-width: none;
+}
+#pf2e-token-hud .sidebar.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+#pf2e-token-hud .sidebar .sidebar-header {
+  --input-padding: 3px;
+  --icon-margin: 3px;
+  --icon-size: 1em;
+  position: relative;
+}
+#pf2e-token-hud .sidebar .sidebar-header:not(.show) {
+  display: none;
+}
+#pf2e-token-hud .sidebar .sidebar-header:not(:last-child) {
+  margin-bottom: var(--inline-padding);
+}
+#pf2e-token-hud .sidebar .sidebar-header input {
+  width: 100%;
+  padding-left: var(--input-padding);
+  padding-right: calc(var(--input-padding) + var(--icon-margin) * 2 + var(--icon-size));
+}
+#pf2e-token-hud .sidebar .sidebar-header a {
+  position: absolute;
+  right: var(--icon-margin);
+  top: 0;
+  height: 100%;
+  width: var(--icon-size);
+  font-size: var(--icon-size);
+  display: flex;
+  align-items: center;
+}
+#pf2e-token-hud .sidebar .sidebar-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--inner-padding);
+}
+#pf2e-token-hud .sidebar .sidebar-content .header {
+  background: rgba(96, 88, 86, 0.25);
+  border: 1px solid var(--color-border-light-2);
+  border-left: 0;
+  border-right: 0;
+  height: 1.4em;
+}
+#pf2e-token-hud .sidebar .sidebar-content .item-box {
+  display: flex;
+  height: var(--item-height);
+  margin-top: 2px;
+}
+#pf2e-token-hud .sidebar .sidebar-content .item-img {
+  position: relative;
+  height: 100%;
+  aspect-ratio: 1/1;
+}
+#pf2e-token-hud .sidebar .sidebar-content .item-img img {
+  border: 1px solid #5e5135;
+  border-radius: 4px;
+  height: 100%;
+}
+#pf2e-token-hud .sidebar .sidebar-content .item-img.hover {
+  cursor: pointer;
+}
+#pf2e-token-hud .sidebar .sidebar-content .item-img.hover i {
+  display: none;
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  background: #c9c3b8;
+  border: 1px solid #363636;
+  border-radius: 4px;
+  font-size: 2em;
+}
+#pf2e-token-hud .sidebar .sidebar-content .item-img.hover:hover i {
+  display: flex;
+}
+#pf2e-token-hud .sidebar .sidebar-content .action-icon {
+  height: 100%;
+}
+#pf2e-token-hud .sidebar .sidebar-content .action-icon img {
+  height: 100%;
+  border: 0;
+  mix-blend-mode: color-burn;
+}
+#pf2e-token-hud .sidebar .sidebar-content .variants {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1px 2px;
+  font-size: 0.85em;
+}
+#pf2e-token-hud .sidebar .sidebar-content .variants .variant,
+#pf2e-token-hud .sidebar .sidebar-content .variants .magazine {
+  height: calc(var(--font-size) * 1.28);
+  border-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  color: var(--text-light);
+  padding-inline: 1px;
+}
+#pf2e-token-hud .sidebar .sidebar-content .variants .variant {
+  cursor: pointer;
+  background: #424242;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+#pf2e-token-hud .sidebar .sidebar-content .variants .variant.disabled {
+  box-shadow: none;
+  color: #6c6969;
+  background: #b3b2b2;
+  cursor: not-allowed;
+  border-color: #858585;
+}
+#pf2e-token-hud .sidebar .sidebar-content .variants .variant:not(.disabled):hover {
+  box-shadow: inset 0 0 6px var(--color-shadow-primary);
+}
+#pf2e-token-hud .sidebar .sidebar-content .details {
+  flex: 1;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+#pf2e-token-hud .sidebar .sidebar-content .details > * {
+  padding-inline: var(--inline-padding);
+}
+#pf2e-token-hud .sidebar .sidebar-content .details .name {
+  background-color: rgba(120, 100, 82, 0.1);
+  white-space: nowrap;
+  font-weight: bold;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+#pf2e-token-hud .sidebar .sidebar-content .details .extras {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  height: 50%;
+}
+#pf2e-token-hud .sidebar .sidebar-content .details .extras .actions {
+  margin-top: 1px;
+  font-size: 0.95em;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+#pf2e-token-hud .sidebar .sidebar-content .details .extras .actions a i.greyed {
+  color: rgba(0, 0, 0, 0.5);
+}
+#pf2e-token-hud .sidebar .sidebar-content .details input {
+  border: 0;
+  font-size: 0.9em;
+  text-align: center;
+  height: calc(100% - 2px);
+}
+#pf2e-token-hud .sidebar .sidebar-content .details input[type=number]:disabled {
+  background: none;
+}
+#pf2e-token-hud .sidebar .sidebar-content .details input[type=text] {
+  background: none;
+}
+#pf2e-token-hud .sidebar.doubled {
+  min-width: calc(var(--min-width) * 2);
+  max-width: calc(var(--max-width) * 2);
+}
+#pf2e-token-hud .sidebar.doubled .sidebar-content {
+  display: block;
+  -moz-columns: auto 2;
+       columns: auto 2;
+}
+#pf2e-token-hud .sidebar.doubled .sidebar-content > * {
+  margin-bottom: var(--inner-padding);
+}
+#pf2e-token-hud.observer .sidebar .variants .variant {
+  cursor: default;
+}
+#pf2e-token-hud.observer .sidebar .variants .variant:hover {
+  box-shadow: none;
+}
+#pf2e-token-hud.observer .sidebar .item-img.hover {
+  cursor: default;
+}

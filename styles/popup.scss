@@ -1,0 +1,37 @@
+#pf2e-token-hud {
+    .popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10;
+        min-width: 300px;
+        max-width: 700px;
+        max-height: calc(100vh - var(--outer-padding) * 2);
+        display: flex;
+        flex-direction: column;
+
+        .header {
+            position: relative;
+            display: flex;
+            color: var(--text-light);
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: calc(var(--inner-padding) * 2 + 3px);
+
+            &:before {
+                content: '';
+                z-index: -1;
+                position: absolute;
+                background: #000000c7;
+                inset: calc(-1 * var(--inner-padding) - 1px);
+                border-radius: var(--inner-border-radius) var(--inner-border-radius) 0 0;
+            }
+        }
+
+        .description {
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+    }
+}
