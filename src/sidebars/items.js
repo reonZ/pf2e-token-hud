@@ -28,14 +28,15 @@ export async function getItemsData(actor, token, filter) {
         })
         .sort((a, b) => ITEMS_TYPES[a.type].order - ITEMS_TYPES[b.type].order)
 
-    if (categories.length)
+    if (categories.length) {
         return {
-            doubled: getSetting('items-columns'),
+            doubled: categories.length > 1 && getSetting('items-columns'),
             contentData: {
                 canCarry: !!actor.adjustCarryType,
                 categories,
             },
         }
+    }
 }
 
 export function addItemsListeners(el, actor) {

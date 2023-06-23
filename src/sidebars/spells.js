@@ -117,7 +117,8 @@ export async function getSpellsData(actor, token, filter) {
             .filter(Boolean)
     )
 
-    if (spells.length || rituals?.length)
+    if (spells.length || rituals?.length) {
+        const nb = spells.length + Number((rituals?.length ?? 0) > 0)
         return {
             contentData: {
                 spells,
@@ -125,8 +126,9 @@ export async function getSpellsData(actor, token, filter) {
                 focusPool,
                 hasFocusCantrips,
             },
-            doubled: getSetting('spells-columns'),
+            doubled: nb > 1 && getSetting('spells-columns'),
         }
+    }
 }
 
 export function addSpellsListeners(el, actor) {

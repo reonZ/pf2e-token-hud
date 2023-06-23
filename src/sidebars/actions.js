@@ -87,7 +87,13 @@ export async function getActionsData(actor, token, filter) {
 
     if (sorting === 'split') sections.sort((a, b) => SECTIONS_TYPES[a.type].order - SECTIONS_TYPES[b.type].order)
 
-    if (toggles.length || strikes?.length || sections.length || heroActions?.length)
+    if (toggles.length || strikes?.length || sections.length || heroActions?.actions.length) {
+        const nb =
+            Number(toggles.length > 0) +
+            Number((strikes?.length ?? 0) > 0) +
+            sections.length +
+            Number((heroActions?.actions.length ?? 0) > 0)
+
         return {
             contentData: {
                 toggles,
@@ -96,9 +102,10 @@ export async function getActionsData(actor, token, filter) {
                 heroActions,
                 damageTypes: CONFIG.PF2E.damageTypes,
             },
-            doubled: getSetting('actions-columns'),
+            doubled: nb > 1 && getSetting('actions-columns'),
             classes: [getSetting('actions-colors') ? 'attack-damage-system-colors' : ''],
         }
+    }
 }
 
 export function addActionsListeners(el, actor) {

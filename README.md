@@ -337,7 +337,7 @@ The hazard tooltip has a single sidebar that can contain a lot of description te
 
 ## Two Columns X
 
-Those settings will split the different sidebars in two, the end result can be a little off when the sidebar contains a very little amount of content.
+Those settings will split the different sidebars in two.
 
 ## Actions Sorting
 

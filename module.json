@@ -9,9 +9,7 @@
             "discord": "Idle#3251"
         }
     ],
-    "esmodules": [
-        "scripts/main.js"
-    ],
+    "esmodules": ["scripts/main.js"],
     "compatibility": {
         "minimum": "11.301",
         "verified": "11"
@@ -29,6 +27,9 @@
         "styles/chat.css",
         "styles/dialogs.css",
         "styles/hud.css",
+        "styles/inner.css",
+        "styles/sidebar.css",
+        "styles/popup.css",
         "styles/sidebars/actions.css",
         "styles/sidebars/items.css",
         "styles/sidebars/spells.css",
