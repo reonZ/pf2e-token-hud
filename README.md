@@ -6,15 +6,16 @@
 
 # Main Tooltip
 
-![](./readme/main.webp)
+![](./readme/main2.webp)
 
 This tooltip will be shown if you are the owner of the currently hovered over token or if the `Tooltip on Observe` is enabled and you have `observer` permission for this token (there is also the GM setting `Party as Observer` that would affect this showing).
 
 NOTE: if you drag anything over the tooltip, the sidebars or the popup (dragged from inside any of them or from anywhere in the foundry), everything will fade out and you will be able to interact with the tokens beneath them, the only exception for that is when the extras sidebar is opened, so that you can drag & drop macros in it.
 
-1. Hero Points, Alignment and Level
+1. Hero Points, Alliance and Level
 
     - you can add/remove hero points by left/right clicking on the pips
+    - you can change the alliance by selecting one of the options
 
 2. Temp HP and HP
 

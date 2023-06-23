@@ -73,3 +73,6 @@
 .crb-hover .tooltipster-box .tooltipster-content .hover-content.info.stealth .content-link {
   color: var(--text-dark);
 }
+.crb-hover .tooltipster-box .tooltipster-content .hover-content.alliances {
+  white-space: nowrap;
+}

@@ -19,8 +19,9 @@
     {{/if}}
 
     <div class="section">
-        <i class="{{alignment.icon}}" data-tooltip="PF2E.Alignment"></i>
-        {{alignment.value}}
+        <a data-action="toggle-alliance" title="<div class='hover-content alliances'><ul>{{alliances}}</ul></div>">
+            <i class="{{alliance.icon}}" data-tooltip="{{localize alliance.label}}"></i>
+        </a>
     </div>
 
     <div class="section">

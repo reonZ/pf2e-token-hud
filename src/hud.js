@@ -17,10 +17,10 @@ const POSITIONS = {
     bottom: ['bottom', 'top', 'left', 'right'],
 }
 
-const ALIGNMENTS = {
-    G: 'fa-solid fa-face-smile-halo',
-    N: 'fa-solid fa-face-meh',
-    E: 'fa-solid fa-face-angry-horns',
+const ALLIANCES = {
+    opposition: { icon: 'fa-solid fa-face-angry-horns', label: 'PF2E.Actor.Creature.Alliance.Opposition' },
+    party: { icon: 'fa-solid fa-face-smile-halo', label: 'PF2E.Actor.Creature.Alliance.Party' },
+    neutral: { icon: 'fa-solid fa-face-meh', label: 'PF2E.Actor.Creature.Alliance.Neutral' },
 }
 
 const SPEEDS = [
@@ -440,7 +440,7 @@ export class HUD extends Application {
         }
 
         const showDeath = getSetting('show-death')
-        const { alignment, heroPoints } = actor
+        const { heroPoints, _source } = actor
         const { traits } = system
         const { wounded, dying, shield, resolve, speed, adjustment } = attributes
 
@@ -480,9 +480,27 @@ export class HUD extends Application {
         })()
 
         let otherSpeeds = speeds
-            .map(({ value, label, index }) => `<a data-index="${index}"><li>${label}: ${value}</li></a>`)
+            .map(({ value, label, index }) => `<li><a data-index="${index}">${label}: ${value}</a></li>`)
             .join('')
         if (speed.details) otherSpeeds += `<li>${game.i18n.localize('PF2E.DetailsHeading')}: ${speed.details}</li>`
+
+        const allianceSource = _source.system.details?.alliance
+        const alliance = allianceSource === null ? 'neutral' : allianceSource ?? 'default'
+        const defaultAlliance = actor.hasPlayerOwner ? 'party' : 'opposition'
+        const alliances = [
+            {
+                value: 'default',
+                label: game.i18n.format('PF2E.Actor.Creature.Alliance.Default', {
+                    alliance: game.i18n.localize(ALLIANCES[defaultAlliance].label),
+                }),
+            },
+            { value: 'opposition', label: game.i18n.localize(ALLIANCES.opposition.label) },
+            { value: 'party', label: game.i18n.localize(ALLIANCES.party.label) },
+            { value: 'neutral', label: game.i18n.localize(ALLIANCES.neutral.label) },
+        ]
+            .filter(({ value }) => value !== alliance)
+            .map(({ value, label }) => `<li><a data-alliance="${value}">${label}</a></li>`)
+            .join('')
 
         return {
             ...sharedData,
@@ -493,10 +511,8 @@ export class HUD extends Application {
             shield,
             resolve,
             adjustment,
-            alignment: {
-                value: alignment,
-                icon: ALIGNMENTS[alignment.at(-1)],
-            },
+            alliance: ALLIANCES[alliance === 'default' ? defaultAlliance : alliance],
+            alliances,
             isCharacter,
             showDeathLine: isCharacter && (showDeath === 'always' || dying.value || wounded.value),
             hasCover: this.hasCover,
@@ -647,6 +663,11 @@ export class HUD extends Application {
         return coords
     }
 
+    lock(value) {
+        if (value) this.#lock = true
+        else if (!this.element.find('> .sidebar').length) this.#lock = false
+    }
+
     activateListeners(html) {
         const token = this.#token
         const actor = token?.actor
@@ -707,15 +728,12 @@ export class HUD extends Application {
             .filter('.stealth')
             .tooltipster('option', 'interactive', true)
             .tooltipster('option', 'functionReady', (tooltipster, { origin, tooltip }) => {
-                this.#lock = true
+                this.lock(true)
                 $(tooltip)
                     .find('.content-link')
                     .on('click', () => setTimeout(() => tooltipster.close(), 10))
             })
-            .tooltipster('option', 'functionAfter', () => {
-                if (html.find('> .sidebar').length) return
-                this.#lock = false
-            })
+            .tooltipster('option', 'functionAfter', () => this.lock(false))
 
         const infosToLeave = isOwner ? infos.filter(':not(.speeds):not(.stealth)') : infos
         infosToLeave.on('mouseleave', event => {
@@ -731,6 +749,28 @@ export class HUD extends Application {
             event.preventDefault()
             const adjustment = event.type === 'click' ? 'elite' : 'weak'
             actor.applyAdjustment(actor.system.attributes.adjustment === adjustment ? null : adjustment)
+        })
+
+        html.find('[data-action=toggle-alliance]').tooltipster({
+            position: ['bottom', 'top', 'left', 'right'],
+            theme: 'crb-hover',
+            arrow: false,
+            animationDuration: 0,
+            contentAsHTML: true,
+            trigger: 'click',
+            interactive: true,
+            functionReady: (tooltipster, { origin, tooltip }) => {
+                this.lock(true)
+                tooltip.querySelectorAll('[data-alliance]').forEach(alliance => {
+                    alliance.addEventListener('click', async event => {
+                        event.preventDefault()
+                        const value = alliance.dataset.alliance
+                        if (value === 'default') actor.update({ 'system.details.-=alliance': null })
+                        else actor.update({ 'system.details.alliance': value === 'neutral' ? null : value })
+                    })
+                })
+            },
+            functionAfter: () => this.lock(false),
         })
 
         html.find('[data-action=collision-dc]').on('click', event => {
@@ -833,7 +873,7 @@ export class HUD extends Application {
             .filter('.speeds')
             .tooltipster('option', 'interactive', true)
             .tooltipster('option', 'functionReady', (tooltipster, { origin, tooltip }) => {
-                this.#lock = true
+                this.lock(true)
                 tooltip.querySelectorAll('[data-index]').forEach(speed => {
                     speed.addEventListener('click', async event => {
                         event.preventDefault()
@@ -841,10 +881,7 @@ export class HUD extends Application {
                     })
                 })
             })
-            .tooltipster('option', 'functionAfter', () => {
-                if (html.find('> .sidebar').length) return
-                this.#lock = false
-            })
+            .tooltipster('option', 'functionAfter', () => this.lock(false))
     }
 
     async showFilter() {
@@ -884,7 +921,7 @@ export class HUD extends Application {
             isOwner: actor.isOwner,
         }
 
-        this.#lock = true
+        this.lock(true)
 
         element.find(`[data-action=open-sidebar][data-type=${type}]`).addClass('active')
         element = element[0]
