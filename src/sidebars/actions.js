@@ -88,11 +88,7 @@ export async function getActionsData(actor, token, filter) {
     if (sorting === 'split') sections.sort((a, b) => SECTIONS_TYPES[a.type].order - SECTIONS_TYPES[b.type].order)
 
     if (toggles.length || strikes?.length || sections.length || heroActions?.actions.length) {
-        const nb =
-            Number(toggles.length > 0) +
-            Number((strikes?.length ?? 0) > 0) +
-            sections.length +
-            Number((heroActions?.actions.length ?? 0) > 0)
+        const nb = Number((strikes?.length ?? 0) > 0) + sections.length + Number((heroActions?.actions.length ?? 0) > 0)
 
         return {
             contentData: {

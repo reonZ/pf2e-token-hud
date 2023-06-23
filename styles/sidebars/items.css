@@ -1,6 +1,53 @@
 #pf2e-token-hud .sidebar.items .sidebar-content .hover-content {
   display: block;
 }
+#pf2e-token-hud .sidebar.items .sidebar-content .hud-wealth,
+#pf2e-token-hud .sidebar.items .sidebar-content .hud-bulk {
+  display: flex;
+  align-items: center;
+  padding-inline: var(--inline-padding);
+}
+#pf2e-token-hud .sidebar.items .sidebar-content .hud-wealth {
+  justify-content: space-between;
+  text-transform: uppercase;
+}
+#pf2e-token-hud .sidebar.items .sidebar-content .hud-wealth > * {
+  display: flex;
+  gap: 0.3em;
+}
+#pf2e-token-hud .sidebar.items .sidebar-content .hud-bulk {
+  padding-right: 0;
+  gap: 0.3em;
+}
+#pf2e-token-hud .sidebar.items .sidebar-content .hud-bulk .over-max {
+  color: #890000;
+}
+#pf2e-token-hud .sidebar.items .sidebar-content .hud-bulk .slider {
+  flex: 1;
+  background-color: rgba(0, 0, 0, 0.4509803922);
+  height: 1em;
+  position: relative;
+  border-radius: 2px;
+  display: flex;
+  padding-inline: 3px;
+  justify-content: space-between;
+  align-items: center;
+}
+#pf2e-token-hud .sidebar.items .sidebar-content .hud-bulk .slider .filler {
+  height: 100%;
+  background-color: #4451c9;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 2px;
+  z-index: -1;
+}
+#pf2e-token-hud .sidebar.items .sidebar-content .hud-bulk .slider .left,
+#pf2e-token-hud .sidebar.items .sidebar-content .hud-bulk .slider .right {
+  color: white;
+  font-size: 0.86em;
+  white-space: nowrap;
+}
 #pf2e-token-hud .sidebar.items .sidebar-content .category .header {
   text-align: center;
 }

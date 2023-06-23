@@ -1,3 +1,26 @@
+<div class="hud-wealth">
+    <div class="coins">
+        <i class="fa-solid fa-coins"></i><span>{{wealth.coins}} {{localize 'PF2E.CurrencyAbbreviations.gp'}}</span>
+    </div>
+    <div class="total">
+        <i class="fa-solid fa-sack-dollar"></i><span>{{wealth.total}} {{localize 'PF2E.CurrencyAbbreviations.gp'}}</span>
+    </div>
+</div>
+
+<div class="hud-bulk">
+    {{#if bulk.isEncumbered}}
+    <i class="fa-solid fa-weight-hanging {{#if bulk.isOverMax}}over-max{{/if}}" data-tooltip="PF2E.ConditionTypeEncumbered"></i>
+    {{else}}
+    <i class="fa-regular fa-weight-hanging"></i>
+    {{/if}}
+    <div class="slider">
+        <div class="filler" style="width: {{bulk.maxPercentageInteger}}%;"></div>
+        <div class="left">{{bulk.value}} / {{bulk.encumberedAt}}
+        </div>
+        <div class="right">{{localize "PF2E.BulkMaxLabel"}}: {{bulk.max}}</div>
+    </div>
+</div>
+
 {{#each categories as |category|}}
 <div class="category">
     <div class="header">{{localize category.label}}</div>
@@ -30,7 +53,7 @@
 
                 <div class="actions">
                     {{#if (and @root.isCharacter (not item.isInContainer) item.isIdentified (ne item.isInvested null))}}
-                    <a data-action="toggle-item-invest">
+                    <a data-action="toggle-item-invest" data-tooltip="{{@root.invested}}">
                         <i class="fa-solid fa-gem {{#unless item.isInvested}}greyed{{/unless}}"></i>
                     </a>
                     {{/if}}

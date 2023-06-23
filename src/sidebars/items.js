@@ -13,9 +13,10 @@ const ITEMS_TYPES = {
 }
 
 export async function getItemsData(actor, token, filter) {
+    const { contents, coins, totalWealth, bulk, invested } = actor.inventory
     let categories = {}
 
-    for (const item of actor.inventory.contents) {
+    for (const item of contents) {
         if (!filterIn(item.name, filter)) continue
         categories[item.type] ??= []
         categories[item.type].push(item)
@@ -34,6 +35,9 @@ export async function getItemsData(actor, token, filter) {
             contentData: {
                 canCarry: !!actor.adjustCarryType,
                 categories,
+                bulk,
+                invested: `${game.i18n.localize('PF2E.InvestedLabel')}: ${invested.value} / ${invested.max}`,
+                wealth: { coins: coins.goldValue, total: totalWealth.goldValue },
             },
         }
     }
