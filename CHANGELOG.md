@@ -1,14 +1,14 @@
 # 1.23.0
 
-TODO add possibility to show items in their containers
-TODO add a setting to always show items in their containers
-TODO add equipment details (total invested, encumbrance, wealth)
-
+-   you can now decide to display items inside their own container by clicking the new container dark cardbox, this is a per-container option, which means that you can decide to have items displayed in one container while the others still be displayed in the categories tables (this is also a per-user option)
+-   added `Items in Containers` setting, When enabled, items in containers will always be displayed in their container
 -   removed alignment from the tooltip (icons are recycled for alliance)
 -   added alliance icon to the tooltip, you can click on it to change the alliance on the fly
 -   added `Auto Lock` setting, When enabled, the tooltip will auto lock as soon as you hover over it, it will also auto lock when holding the `Hold to Display` keybind
 -   added `Last Status at 100%` setting, When enabled, the last health status string will only be used for 100% instead of the last division of the health ratio (you probably want to add at least one more string to compensate)
--   two columns sidebar now look nice and cool, you have my permission to use it
+-   added `Bulk` and `Wealth` to the equipment sidebar
+-   added invested details (current and max amount) when hovering over the invest diamond of an equipment
+-   two columns sidebars now look nice and cool, you have my permission to use it
 
 # 1.22.0
 
