@@ -351,6 +351,10 @@ Will sort the actions either split by categories or in a single table sorted by 
 
 Will reproduce the system coloring of the strikes attack & damage buttons, this make them more distinguishable.
 
+## Items in Containers
+
+When enabled, items in containers will always be displayed in their container
+
 ## Sort Spells by Type
 
 When enabled, it will sort the spells in a single table by type before sorting them by name.

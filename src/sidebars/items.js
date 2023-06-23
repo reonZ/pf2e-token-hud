@@ -1,4 +1,4 @@
-import { getSetting } from '../module.js'
+import { getFlag, getSetting, localize, setFlag } from '../module.js'
 import { IdentifyItemPopup } from '../pf2e/identify.js'
 import { showItemSummary } from '../popup.js'
 import { addNameTooltipListeners, deleteItem, editItem, filterIn, getItemFromEvent } from '../shared.js'
@@ -14,17 +14,35 @@ const ITEMS_TYPES = {
 
 export async function getItemsData(actor, token, filter) {
     const { contents, coins, totalWealth, bulk, invested } = actor.inventory
+    const openedContainers = getSetting('containers') || (getFlag(actor, `containers.${game.user.id}`) ?? [])
+    const containers = {}
     let categories = {}
 
     for (const item of contents) {
         if (!filterIn(item.name, filter)) continue
-        categories[item.type] ??= []
-        categories[item.type].push(item)
+
+        const containerId = item.container?.id
+        if (containerId && (openedContainers === true || openedContainers.includes(containerId))) {
+            containers[containerId] ??= []
+            containers[containerId].push(item)
+        } else {
+            categories[item.type] ??= []
+            categories[item.type].push(item)
+        }
     }
 
     categories = Object.entries(categories)
         .map(([type, items]) => {
             items.sort((a, b) => a.name.localeCompare(b.name))
+            if (type === 'backpack') {
+                for (let i = items.length - 1; i >= 0; i--) {
+                    const container = items[i]
+                    const contained = containers[container.id]
+                    if (!contained?.length) continue
+                    contained.sort((a, b) => a.name.localeCompare(b.name))
+                    items.splice(i + 1, 0, ...contained)
+                }
+            }
             return { type, items, label: ITEMS_TYPES[type].label }
         })
         .sort((a, b) => ITEMS_TYPES[a.type].order - ITEMS_TYPES[b.type].order)
@@ -36,7 +54,9 @@ export async function getItemsData(actor, token, filter) {
                 canCarry: !!actor.adjustCarryType,
                 categories,
                 bulk,
-                invested: `${game.i18n.localize('PF2E.InvestedLabel')}: ${invested.value} / ${invested.max}`,
+                containers: openedContainers,
+                i18n: str => localize(`items.${str}`),
+                invested: invested ? `${game.i18n.localize('PF2E.InvestedLabel')}: ${invested.value} / ${invested.max}` : '',
                 wealth: { coins: coins.goldValue, total: totalWealth.goldValue },
             },
         }
@@ -51,7 +71,18 @@ export function addItemsListeners(el, actor) {
     item.find('[data-action=item-description]').on('click', async event => {
         event.preventDefault()
         const item = $(event.currentTarget).closest('.item')
-        showItemSummary(item, actor)
+        await showItemSummary(item, actor)
+    })
+
+    item.find('[data-action=toggle-contains-items]').on('click', async event => {
+        event.preventDefault()
+        const flag = `containers.${game.user.id}`
+        const containerId = event.currentTarget.closest('.item').dataset.itemId
+        const containers = getFlag(actor, flag)?.slice() ?? []
+        const index = containers.indexOf(containerId)
+        if (index === -1) containers.push(containerId)
+        else containers.splice(index, 1)
+        await setFlag(actor, flag, containers)
     })
 
     // IS OWNER

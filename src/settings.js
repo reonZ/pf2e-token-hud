@@ -149,6 +149,10 @@ export function registerSettings() {
 
     register('actions-colors', Boolean, true)
 
+    // items
+
+    register('containers', Boolean, false)
+
     // spells
 
     register('spells', Boolean, false)
@@ -176,6 +180,7 @@ export function renderSettingsConfig(_, html) {
     beforeGroup('distance', 'client.distance')
     beforeGroup('height', 'client.sidebar')
     beforeGroup('actions', 'client.actions')
+    beforeGroup('containers', 'client.items')
     beforeGroup('spells', 'client.spells')
     beforeGroup('untrained', 'client.skills')
 }

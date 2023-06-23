@@ -16,7 +16,8 @@
                 "actions": "Actions",
                 "spells": "Spells",
                 "skills": "Skills",
-                "tooltip": "Tooltip"
+                "tooltip": "Tooltip",
+                "items": "Equipment"
             }
         },
         "keybinds": {
@@ -209,6 +210,10 @@
             "filter": {
                 "name": "Always Show Filter",
                 "hint": "When enabled, the filter field will always be displayed at the top of sidebars instead of when using the 'Show Filter' keybind, the keybind still scroll to the top and gives focus to the field."
+            },
+            "containers": {
+                "name": "Items in Containers",
+                "hint": "When enabled, items in containers will always be displayed in their container."
             }
         },
         "spells": {
@@ -290,7 +295,9 @@
         },
         "items": {
             "title": "Equipment",
-            "empty": "{name} has empty pockets, sadly."
+            "empty": "{name} has empty pockets, sadly.",
+            "inContainer": "Display Items in Container",
+            "outContainer": "Display Items in Categories"
         },
         "deleteItem": {
             "title": "Delete Confirmation",

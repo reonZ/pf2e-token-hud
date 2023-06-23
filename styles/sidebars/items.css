@@ -99,3 +99,7 @@
 #pf2e-token-hud .sidebar.items .sidebar-content .category .item .details .extras .actions .worn {
   font-size: 0.94em;
 }
+#pf2e-token-hud .sidebar.items .sidebar-content .category .item.in-container {
+  margin-left: 8px;
+  font-size: 0.86em;
+}

@@ -1,3 +1,4 @@
+{{#if isCharacter}}
 <div class="hud-wealth">
     <div class="coins">
         <i class="fa-solid fa-coins"></i><span>{{wealth.coins}} {{localize 'PF2E.CurrencyAbbreviations.gp'}}</span>
@@ -20,13 +21,14 @@
         <div class="right">{{localize "PF2E.BulkMaxLabel"}}: {{bulk.max}}</div>
     </div>
 </div>
+{{/if}}
 
 {{#each categories as |category|}}
 <div class="category">
     <div class="header">{{localize category.label}}</div>
     {{#each category.items as |item|}}
-    <div class="item item-box" data-item-id="{{item.id}}" data-uuid="{{item.uuid}}" data-item-type="{{item.type}}" {{#if
-        @root.isOwner}}draggable="true" {{/if}}>
+    <div class="item item-box {{#if (and (eq category.type 'backpack') item.isInContainer)}}in-container{{/if}}" data-item-id="{{item.id}}"
+        data-uuid="{{item.uuid}}" data-item-type="{{item.type}}" {{#if @root.isOwner}}draggable="true" {{/if}}>
         <div class="item-img hover" data-action="item-chat">
             <img src="{{item.img}}" draggable="false">
             {{#if @root.isOwner}}
@@ -55,6 +57,16 @@
                     {{#if (and @root.isCharacter (not item.isInContainer) item.isIdentified (ne item.isInvested null))}}
                     <a data-action="toggle-item-invest" data-tooltip="{{@root.invested}}">
                         <i class="fa-solid fa-gem {{#unless item.isInvested}}greyed{{/unless}}"></i>
+                    </a>
+                    {{/if}}
+
+                    {{#if (and (eq item.type 'backpack') (ne @root.containers true))}}
+                    <a data-action="toggle-contains-items">
+                        {{#if (contains @root.containers item.id)}}
+                        <i class="fa-solid fa-box-open" data-tooltip="{{@root.i18n 'outContainer'}}"></i>
+                        {{else}}
+                        <i class="fa-solid fa-box" data-tooltip="{{@root.i18n 'inContainer'}}"></i>
+                        {{/if}}
                     </a>
                     {{/if}}
 
