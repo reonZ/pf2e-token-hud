@@ -59,6 +59,8 @@ export function registerSettings() {
         },
     })
 
+    register('lock', Boolean, false)
+
     register('observer', Boolean, true)
 
     register('see-status', Boolean, false)

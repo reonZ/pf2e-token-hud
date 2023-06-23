@@ -117,7 +117,7 @@ export class HUD extends Application {
                 this.forceClose()
             } else this.#cancelDelay()
 
-            this.#lock = false
+            this.unlock(true)
         }
 
         this.#deleteToken = token => {
@@ -148,7 +148,7 @@ export class HUD extends Application {
 
         this.#holding = held
 
-        if (this.#softLock || this.#lock) return
+        if (this.#softLock || (this.#lock && this.sidebar.length)) return
 
         if (held) {
             if (!this.#hover) return
@@ -538,7 +538,7 @@ export class HUD extends Application {
 
     close(options = {}) {
         this.setToken(null)
-        this.#lock = false
+        this.unlock(true)
         this.#softLock = false
 
         this.#cancelDelay()
@@ -569,7 +569,7 @@ export class HUD extends Application {
         let filter
 
         if (this.#lastToken === this.#token) {
-            const sidebar = this.element.find('> .sidebar')[0]
+            const sidebar = this.sidebar[0]
             if (sidebar) {
                 sidebarType = sidebar.dataset.type
                 scrollTop = sidebar.scrollTop
@@ -587,6 +587,10 @@ export class HUD extends Application {
         }
 
         this.#lastToken = this.#token
+
+        if (getSetting('lock') && getSetting('use-holding') !== 'none' && this.#holding) {
+            this.lock()
+        }
     }
 
     render() {
@@ -663,9 +667,13 @@ export class HUD extends Application {
         return coords
     }
 
-    lock(value) {
-        if (value) this.#lock = true
-        else if (!this.element.find('> .sidebar').length) this.#lock = false
+    lock() {
+        this.#lock = true
+    }
+
+    unlock(force) {
+        if (!force && (this.sidebar.length || getSetting('lock'))) return
+        this.#lock = false
     }
 
     activateListeners(html) {
@@ -684,6 +692,7 @@ export class HUD extends Application {
 
         html.on('mouseenter', () => {
             if (!html.find('.inner').length) return
+            if (getSetting('lock')) this.lock()
             this.#softLock = true
         })
 
@@ -728,12 +737,12 @@ export class HUD extends Application {
             .filter('.stealth')
             .tooltipster('option', 'interactive', true)
             .tooltipster('option', 'functionReady', (tooltipster, { origin, tooltip }) => {
-                this.lock(true)
+                this.lock()
                 $(tooltip)
                     .find('.content-link')
                     .on('click', () => setTimeout(() => tooltipster.close(), 10))
             })
-            .tooltipster('option', 'functionAfter', () => this.lock(false))
+            .tooltipster('option', 'functionAfter', () => this.unlock())
 
         const infosToLeave = isOwner ? infos.filter(':not(.speeds):not(.stealth)') : infos
         infosToLeave.on('mouseleave', event => {
@@ -760,7 +769,7 @@ export class HUD extends Application {
             trigger: 'click',
             interactive: true,
             functionReady: (tooltipster, { origin, tooltip }) => {
-                this.lock(true)
+                this.lock()
                 tooltip.querySelectorAll('[data-alliance]').forEach(alliance => {
                     alliance.addEventListener('click', async event => {
                         event.preventDefault()
@@ -770,7 +779,7 @@ export class HUD extends Application {
                     })
                 })
             },
-            functionAfter: () => this.lock(false),
+            functionAfter: () => this.unlock(),
         })
 
         html.find('[data-action=collision-dc]').on('click', event => {
@@ -873,7 +882,7 @@ export class HUD extends Application {
             .filter('.speeds')
             .tooltipster('option', 'interactive', true)
             .tooltipster('option', 'functionReady', (tooltipster, { origin, tooltip }) => {
-                this.lock(true)
+                this.lock()
                 tooltip.querySelectorAll('[data-index]').forEach(speed => {
                     speed.addEventListener('click', async event => {
                         event.preventDefault()
@@ -881,7 +890,7 @@ export class HUD extends Application {
                     })
                 })
             })
-            .tooltipster('option', 'functionAfter', () => this.lock(false))
+            .tooltipster('option', 'functionAfter', () => this.unlock())
     }
 
     async showFilter() {
@@ -903,7 +912,7 @@ export class HUD extends Application {
         element.find('[data-action=open-sidebar]').removeClass('active')
 
         if (action === type && filter === undefined) {
-            this.#lock = false
+            this.unlock()
             return
         }
 
@@ -921,7 +930,7 @@ export class HUD extends Application {
             isOwner: actor.isOwner,
         }
 
-        this.lock(true)
+        this.lock()
 
         element.find(`[data-action=open-sidebar][data-type=${type}]`).addClass('active')
         element = element[0]

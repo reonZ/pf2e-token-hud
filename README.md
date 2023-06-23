@@ -265,6 +265,10 @@ For players, it offers the option to only show tooltips when the key is held or 
 
 NOTE: you don't have to hold the key before hovering over a token, hitting the key during an hover will also work and will turn a small token into a regular token when appropriate.
 
+## Auto Lock
+
+When enabled, the tooltip will auto lock as soon as you hover over it, it will also auto lock when holding the 'Hold to Display' keybind.
+
 ## Tooltip on Observe
 
 When enabled and hovering over a token the player has the `observer` permission (or in party if the option is enabled), the module will generate an uneditable version of the full tooltip.

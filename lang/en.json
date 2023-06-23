@@ -52,6 +52,10 @@
                 "name": "Tooltip Delay",
                 "hint": "Delay in milliseconds before the main tooltip showing up on screen."
             },
+            "lock": {
+                "name": "Auto Lock",
+                "hint": "When enabled, the tooltip will auto lock as soon as you hover over it, it will also auto lock when holding the 'Hold to Display' keybind."
+            },
             "spells": {
                 "name": "Sort Spells By Type",
                 "hint": "Should the spells be sorted by types before alphabetically in a same table."
