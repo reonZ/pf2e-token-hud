@@ -334,7 +334,14 @@ export class HUD extends Application {
                 const max = hp.max + (useStamina ? sp.max : 0)
                 const current = hp.value + (useStamina ? sp.value : 0)
                 const ratio = Math.clamped(current / max, 0, 1)
-                const pick = Math.ceil(ratio * statuses.length)
+                const pick = (() => {
+                    const length = statuses.length
+                    if (getSetting('last-status')) {
+                        if (ratio === 1) return length
+                        return Math.ceil(ratio * (length - 1))
+                    }
+                    return Math.ceil(ratio * length)
+                })()
 
                 status = {
                     hue: ratio * ratio * 122 + 3,

@@ -9,6 +9,8 @@ export function registerSettings() {
     const statuses = ['first', 'second', 'third', 'fourth'].map(x => localize(`settings.status.statuses.${x}`)).join(', ')
     register('status', String, statuses, { scope: 'world' })
 
+    register('last-status', Boolean, false, { scope: 'world' })
+
     register('party', Boolean, false, { scope: 'world' })
 
     /**

@@ -229,6 +229,10 @@ The max HP (plus stamina) will be divided by the number of states and the approp
 
 Leaving this field empty will disable the feature for everybody
 
+## Last Status at 100%
+
+When enabled, the last health status string will only be used for 100% instead of the last division of the health ratio (you probably want to add at least one more string to compensate)
+
 ## Party as Observer
 
 When enabled by the GM, the module will consider any token actor in the `Party` alliance to be observable, this is useful if you don't want your players to share visions (which the regular `observer` forces) but still want them to be able to look at other player's tooltip

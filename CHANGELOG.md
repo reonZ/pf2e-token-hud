@@ -1,3 +1,15 @@
+# 1.23.0
+
+TODO add possibility to show items in their containers
+TODO add a setting to always show items in their containers
+TODO add equipment details (total invested, encumbrance, wealth)
+
+-   removed alignment from the tooltip (icons are recycled for alliance)
+-   added alliance icon to the tooltip, you can click on it to change the alliance on the fly
+-   added `Auto Lock` setting, When enabled, the tooltip will auto lock as soon as you hover over it, it will also auto lock when holding the `Hold to Display` keybind
+-   added `Last Status at 100%` setting, When enabled, the last health status string will only be used for 100% instead of the last division of the health ratio (you probably want to add at least one more string to compensate)
+-   two columns sidebar now look nice and cool, you have my permission to use it
+
 # 1.22.0
 
 -   added follow the expert at the top of the skills sidebar

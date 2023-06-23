@@ -104,6 +104,10 @@
                     "fourth": "Perfectly Fine"
                 }
             },
+            "last-status": {
+                "name": "Last Status at 100%",
+                "hint": "When enabled, the last health status string will only be used for 100% instead of the last division of the health ratio."
+            },
             "see-status": {
                 "name": "Health Status on Owned",
                 "hint": "When enabled, the health status will also be displayed on the regular tooltip instead of exclusively on non-owned ones."
