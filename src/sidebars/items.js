@@ -21,8 +21,8 @@ export async function getItemsData(actor, token, filter) {
     for (const item of contents) {
         if (!filterIn(item.name, filter)) continue
 
-        const containerId = item.container?.id
-        if (containerId && (openedContainers === true || openedContainers.includes(containerId))) {
+        const containerId = item.system.containerId
+        if (item.type !== 'backpack' && containerId && (openedContainers === true || openedContainers.includes(containerId))) {
             containers[containerId] ??= []
             containers[containerId].push(item)
         } else {
@@ -179,21 +179,26 @@ export function addItemsListeners(el, actor) {
             })
 
             const containers = actor.itemTypes.backpack.filter(
-                container => container.isIdentified && container !== item.container
+                container =>
+                    container.isIdentified && (item.type !== 'backpack' || (container !== item && !container.isInContainer))
             )
+            console.log(item.name, containers)
             if (containers.length) {
                 let rows = ''
                 for (const container of containers) {
-                    rows += '<li><a class="item-control item-location-option" '
-                    rows += `data-action="send-to-container" data-container-id="${container.id}">`
+                    rows += '<li><a class="item-control item-location-option'
+                    if (container === item.container) rows += ' selected'
+                    rows += `" data-action="send-to-container" data-container-id="${container.id}">`
                     rows += `<i class="fas fa-box"></i>${container.name}</a></li>`
                 }
 
                 $content.find('ul').append(rows)
-                $content.find('[data-action=send-to-container]').on('click', async event => {
+                $content.find('[data-action=send-to-container]').on('click', event => {
                     const { containerId } = event.currentTarget.dataset
                     if (!actor.items.has(containerId)) return
-                    await item.update({ 'system.containerId': containerId })
+                    item.update({ 'system.containerId': containerId })
+                    actor.adjustCarryType?.(item, 'stowed')
+                    tooltipster.close()
                 })
             }
 
