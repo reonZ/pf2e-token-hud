@@ -1,3 +1,7 @@
+# 1.24.0
+
+-   added a way to move an equipment to a container, when clicking on the `worn` icon, you will now be offered the option to send the item into one of the actor's containers (filters out the current container the item is in and unidentified ones)
+
 # 1.23.0
 
 -   you can now decide to display items inside their own container by clicking the new container dark cardbox, this is a per-container option, which means that you can decide to have items displayed in one container while the others still be displayed in the categories tables (this is also a per-user option)
