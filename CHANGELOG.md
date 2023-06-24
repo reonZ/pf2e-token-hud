@@ -1,3 +1,11 @@
+# 1.24.1
+
+-   containers inside other containers will still be shown outside to avoid nestings
+-   the container the item is already in is now shown in the `worn` menu and is highlighted as selected
+-   sending a container in another container will now remove the `worn` state
+-   fixed containers being able to be sent to themselves
+-   fixed outer container being able to be sent into containers inside another container, this was completely breaking everything when you would send a container inside a container that was inside this container
+
 # 1.24.0
 
 -   added a way to move an equipment to a container, when clicking on the `worn` icon, you will now be offered the option to send the item into one of the actor's containers (filters out the current container the item is in and unidentified ones)
