@@ -1,6 +1,6 @@
 # 1.24.1
 
--   containers inside other containers will still be shown outside to avoid nestings
+-   containers inside other containers will still be shown outside to avoid nesting
 -   the container the item is already in is now shown in the `worn` menu and is highlighted as selected
 -   sending a container in another container will now remove the `worn` state
 -   fixed containers being able to be sent to themselves
