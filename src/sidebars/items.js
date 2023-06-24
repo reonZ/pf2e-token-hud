@@ -170,13 +170,32 @@ export function addItemsListeners(el, actor) {
             tmp.innerHTML = await renderTemplate('systems/pf2e/templates/actors/partials/carry-type.hbs', { item })
 
             const content = tmp.children[1]
-            $(content)
-                .find('[data-carry-type]')
-                .on('click', event => {
-                    const { carryType, handsHeld = 0, inSlot } = $(event.currentTarget).data()
-                    actor.adjustCarryType?.(item, carryType, handsHeld, inSlot)
-                    tooltipster.close()
+            const $content = $(content)
+
+            $content.find('[data-carry-type]').on('click', event => {
+                const { carryType, handsHeld = 0, inSlot } = $(event.currentTarget).data()
+                actor.adjustCarryType?.(item, carryType, handsHeld, inSlot)
+                tooltipster.close()
+            })
+
+            const containers = actor.itemTypes.backpack.filter(
+                container => container.isIdentified && container !== item.container
+            )
+            if (containers.length) {
+                let rows = ''
+                for (const container of containers) {
+                    rows += '<li><a class="item-control item-location-option" '
+                    rows += `data-action="send-to-container" data-container-id="${container.id}">`
+                    rows += `<i class="fas fa-box"></i>${container.name}</a></li>`
+                }
+
+                $content.find('ul').append(rows)
+                $content.find('[data-action=send-to-container]').on('click', async event => {
+                    const { containerId } = event.currentTarget.dataset
+                    if (!actor.items.has(containerId)) return
+                    await item.update({ 'system.containerId': containerId })
                 })
+            }
 
             tooltipster.content(content)
         },
