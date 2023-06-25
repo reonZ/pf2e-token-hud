@@ -1,3 +1,6 @@
+#pf2e-token-hud .sidebar.actions {
+  --max-width: 20em;
+}
 #pf2e-token-hud .sidebar.actions .sidebar-content .toggles {
   display: flex;
   flex-direction: column;
@@ -128,6 +131,11 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+#pf2e-token-hud .sidebar.actions .sidebar-content .section .strike .variants .alt-usage-icon {
+  border: 0;
+  margin-left: -1px;
+  margin-right: calc(var(--inline-padding) * -1 - 1px);
 }
 #pf2e-token-hud .sidebar.actions .sidebar-content .section .strike .variants .magazine {
   display: flex;

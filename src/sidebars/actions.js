@@ -45,9 +45,19 @@ export async function getActionsData(actor, token, filter) {
             actor.system.actions.map(async (strike, index) => ({
                 ...strike,
                 index,
+                visible: !isCharacter || strike.visible,
                 damageFormula: await strike.damage?.({ getFormula: true }),
                 criticalFormula: await strike.critical?.({ getFormula: true }),
                 description: strike.description ? await enrichHTML(strike.description, actor) : undefined,
+                altUsages:
+                    strike.altUsages &&
+                    (await Promise.all(
+                        strike.altUsages.map(async altUsage => ({
+                            ...altUsage,
+                            damageFormula: await altUsage.damage?.({ getFormula: true }),
+                            criticalFormula: await altUsage.critical?.({ getFormula: true }),
+                        }))
+                    )),
             }))
         ))
 
@@ -117,8 +127,11 @@ export function addActionsListeners(el, actor) {
     }
 
     function getStrike(event) {
-        const { index } = event.currentTarget.closest('.strike').dataset
-        return actor.system.actions[index]
+        const { altUsage } = event.currentTarget.dataset
+        const strikeEl = event.currentTarget.closest('.strike')
+        const strike = actor.system.actions[strikeEl.dataset.index]
+        if (!altUsage) return strike
+        return strike?.altUsages[altUsage]
     }
 
     function getUuid(event) {
@@ -193,18 +206,18 @@ export function addActionsListeners(el, actor) {
         strike?.variants[index].roll({ event })
     })
 
+    action(['strike-damage', 'strike-critical'], event => {
+        const { action } = event.currentTarget.dataset
+        const strike = getStrike(event)
+        strike?.[action === 'strike-damage' ? 'damage' : 'critical']({ event })
+    }).tooltipster(TOOLTIPS)
+
     action(['toggle-roll-option', 'set-suboption'], event => {
         const toggle = event.currentTarget.closest('.toggle')
         const { domain, option, itemId } = toggle.dataset
         const suboption = toggle.querySelector('select')?.value ?? null
         actor.toggleRollOption(domain, option, itemId ?? null, toggle.querySelector('input').checked, suboption)
     })
-
-    action(['strike-damage', 'strike-critical'], event => {
-        const { action } = event.currentTarget.dataset
-        const strike = getStrike(event)
-        strike?.[action === 'strike-damage' ? 'damage' : 'critical']({ event })
-    }).tooltipster(TOOLTIPS)
 
     action('strike-auxiliary', event => {
         if (event.currentTarget !== event.target) return

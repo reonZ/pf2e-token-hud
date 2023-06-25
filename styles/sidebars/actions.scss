@@ -1,5 +1,7 @@
 #pf2e-token-hud {
     .sidebar.actions {
+        --max-width: 20em;
+
         .sidebar-content {
             .toggles {
                 display: flex;
@@ -161,6 +163,12 @@
                                 text-overflow: ellipsis;
                                 white-space: nowrap;
                             }
+                        }
+
+                        .alt-usage-icon {
+                            border: 0;
+                            margin-left: -1px;
+                            margin-right: calc(var(--inline-padding) * -1 - 1px);
                         }
 
                         .magazine {
