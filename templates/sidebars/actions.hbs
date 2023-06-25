@@ -23,7 +23,7 @@
 {{/if}}
 
 {{#if strikes.length}}
-<div class="section">
+<div class="section" data-section="strikes">
     <div class="header"> {{localize "PF2E.StrikesLabel"}}</div>
     {{#each strikes as |strike|}}
     <div class="strike details" data-index="{{strike.index}}">
@@ -139,7 +139,7 @@
 {{/if}}
 
 {{#if heroActions}}
-<div class="section">
+<div class="section" data-section="hero-actions">
     <div class="header">
         {{localize 'pf2e-hero-actions.templates.heroActions.label'}}
         {{#if @root.isOwner}}
@@ -171,7 +171,7 @@
 
 {{#if sections.length}}
 {{#each sections as |section|}}
-<div class="section">
+<div class="section" data-section="{{section.type}}">
     <div class="header">{{localize section.label}}</div>
     {{#each section.actions as |action|}}
     <div class="action" data-item-id="{{action.id}}">

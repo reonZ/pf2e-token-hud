@@ -1,7 +1,7 @@
 {{#if spells.length}}
 {{#each spells as |entry|}}
 {{#if entry includeZero=true}}
-<div class="entry">
+<div class="entry" data-entry="{{#if (eq @index 0)}}cantrip{{else if (eq @index 12)}}focus{{else}}{{@index}}{{/if}}">
     <div class="header">
         {{#if (eq @index 0)}}
         {{localize 'PF2E.SpellCantripLabel'}}
@@ -78,7 +78,7 @@
 {{/if}}
 
 {{#if rituals.length}}
-<div class="entry">
+<div class="entry" data-entry="rituals">
     <div class="header">{{localize 'PF2E.SpellRitualLabel'}}</div>
     {{#each rituals as |ritual|}}
     <div class="spell item-box" data-slot-level="{{ritual.level}}" data-slot-id="{{ritual.slotId}}" data-entry-id="rituals"

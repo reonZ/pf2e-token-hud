@@ -24,7 +24,7 @@
 {{/if}}
 
 {{#each categories as |category|}}
-<div class="category">
+<div class="category" data-category="{{category.type}}">
     <div class="header">{{localize category.label}}</div>
     {{#each category.items as |item|}}
     <div class="item item-box {{#if (and (eq category.type 'backpack') item.isInContainer (ne item.type 'backpack'))}}in-container{{/if}}"
@@ -72,12 +72,12 @@
 
                     {{#if (and (ne item.type 'treasure') @root.canCarry)}}
                     <a data-action="toggle-item-worn">
-                        {{#with item.system.equipped.carryType as |carryType|}}
-                        {{#if (eq carryType 'dropped')}}
+                        {{#with item.system.equipped as |equipped|}}
+                        {{#if (eq equipped.carryType 'dropped')}}
                         <i class="fa-solid fa-grip-lines greyed"></i>
-                        {{else if (eq carryType 'stowed')}}
+                        {{else if (eq equipped.carryType 'stowed')}}
                         <i class="fa-solid fa-box greyed" data-tooltip="{{item.container.name}}"></i>
-                        {{else if (eq carryType 'held')}}
+                        {{else if (and (eq equipped.carryType 'held') (ne equipped.handsHeld 0))}}
                         <i class="fa-solid fa-hand-back-fist held">
                             <i class="fa-solid fa-{{item.handsHeld}}"></i>
                         </i>

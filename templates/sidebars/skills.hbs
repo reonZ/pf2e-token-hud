@@ -4,7 +4,7 @@
 </div>
 
 {{#each skills as |skill|}}
-<div class="skill">
+<div class="skill" data-skill="{{skill.slug}}">
     <div class="header">
         <div>
             <a data-action="roll-skill" data-slug="{{skill.slug}}">

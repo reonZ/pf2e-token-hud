@@ -15,28 +15,28 @@
 {{/if}}
 
 {{#if description}}
-<div class="section">
+<div class="section" data-section="description">
     <div class="header">{{localize 'PF2E.HazardDescriptionLabel'}}</div>
     <div class="content">{{{description}}}</div>
 </div>
 {{/if}}
 
 {{#if disable}}
-<div class="section">
+<div class="section" data-section="disable">
     <div class="header">{{localize 'PF2E.HazardDisableLabel'}}</div>
     <div class="content">{{{disable}}}</div>
 </div>
 {{/if}}
 
 {{#if routine}}
-<div class="section">
+<div class="section" data-section="routine">
     <div class="header">{{localize 'PF2E.HazardRoutineLabel'}}</div>
     <div class="content">{{{routine}}}</div>
 </div>
 {{/if}}
 
 {{#if reset}}
-<div class="section">
+<div class="section" data-section="reset">
     <div class="header">{{localize 'PF2E.HazardResetLabel'}}</div>
     <div class="content">{{{reset}}}</div>
 </div>
