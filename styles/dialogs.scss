@@ -54,5 +54,18 @@
                 align-items: center;
             }
         }
+
+        &.spell-attacks {
+            margin-bottom: 0.5em;
+
+            label {
+                display: block;
+                line-height: 1.4;
+
+                input {
+                    margin-right: 0.2em;
+                }
+            }
+        }
     }
 }

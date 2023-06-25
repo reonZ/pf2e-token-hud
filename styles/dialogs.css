@@ -37,3 +37,13 @@
   display: flex;
   align-items: center;
 }
+.app.window-app.dialog .pf2e-token-hud.spell-attacks {
+  margin-bottom: 0.5em;
+}
+.app.window-app.dialog .pf2e-token-hud.spell-attacks label {
+  display: block;
+  line-height: 1.4;
+}
+.app.window-app.dialog .pf2e-token-hud.spell-attacks label input {
+  margin-right: 0.2em;
+}

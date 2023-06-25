@@ -1,3 +1,15 @@
+<a class="row" data-action="spell-attack">
+    {{localize 'PF2E.SpellAttackLabel'}}
+    {{#if attackMod}}
+    (
+    <i class="fa-solid fa-dice-d20"></i>
+    {{attackMod}}
+    )
+    {{else}}
+    <i class="fa-solid fa-dice-d20"></i>
+    {{/if}}
+</a>
+
 {{#if spells.length}}
 {{#each spells as |entry|}}
 {{#if entry includeZero=true}}

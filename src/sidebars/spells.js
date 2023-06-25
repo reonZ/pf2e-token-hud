@@ -1,4 +1,5 @@
-import { getSetting, MODULE_ID } from '../module.js'
+import { getSetting, localize, modifier, MODULE_ID, templatePath } from '../module.js'
+import { eventToRollParams } from '../pf2e/scripts.js'
 import { showItemSummary } from '../popup.js'
 import { addNameTooltipListeners, filterIn, getItemFromEvent } from '../shared.js'
 
@@ -118,6 +119,8 @@ export async function getSpellsData(actor, token, filter) {
     )
 
     if (spells.length || rituals?.length) {
+        const attacks = getSpellAttacks(actor)
+
         const nb = spells.length + Number((rituals?.length ?? 0) > 0)
         return {
             contentData: {
@@ -125,13 +128,24 @@ export async function getSpellsData(actor, token, filter) {
                 rituals,
                 focusPool,
                 hasFocusCantrips,
+                attackMod: hasSingleSpellAttack(attacks) ? attacks[0].mod : null,
             },
             doubled: nb > 1 && getSetting('spells-columns'),
         }
     }
 }
 
-export function addSpellsListeners(el, actor) {
+function getSpellAttacks(actor) {
+    return actor.spellcasting
+        .filter(entry => entry.statistic)
+        .map(({ statistic, name, id }) => ({ name, id, mod: modifier(statistic.mod), statistic }))
+}
+
+function hasSingleSpellAttack(attacks) {
+    return new Set(attacks.map(({ mod }) => mod)).size === 1
+}
+
+export function addSpellsListeners(el, actor, token) {
     addNameTooltipListeners(el.find('.spell'))
 
     el.find('[data-action=spell-description]').on('click', async event => {
@@ -143,7 +157,37 @@ export function addSpellsListeners(el, actor) {
     // IS OWNER
     if (!actor.isOwner) return
 
+    el.find('[data-action=spell-attack]').on('click', async event => {
+        event.preventDefault()
+
+        const attacks = getSpellAttacks(actor)
+        if (!attacks.length) return
+
+        let statistic
+        if (!hasSingleSpellAttack(attacks)) {
+            const id = await Dialog.wait({
+                buttons: {
+                    ok: {
+                        icon: '<i class="fa-solid fa-dice-d20"></i>',
+                        label: localize('spells.attacks.ok'),
+                        callback: html => html.find('input:checked').val(),
+                    },
+                },
+                title: localize('spells.attacks.title'),
+                content: await renderTemplate(templatePath('dialogs/spell-attacks'), { attacks }),
+                close: () => null,
+            })
+
+            if (id) statistic = actor.items.get(id)?.statistic
+        } else {
+            statistic = attacks[0].statistic
+        }
+
+        statistic?.check.roll(eventToRollParams(event))
+    })
+
     el.find('[data-action=spell-chat]').on('click', async event => {
+        event.preventDefault()
         const item = getItemFromEvent(event, actor)
         item?.toMessage(event, { create: true })
     })

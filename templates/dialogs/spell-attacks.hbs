@@ -1,0 +1,8 @@
+<div class="pf2e-token-hud spell-attacks">
+    {{#each attacks as |attack|}}
+    <label>
+        <input type="radio" name="pick" value="{{attack.id}}" {{checked (eq @index 0)}}>
+        <span>{{attack.name}} ({{attack.mod}})</span>
+    </label>
+    {{/each}}
+</div>

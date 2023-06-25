@@ -5,6 +5,10 @@
         }
 
         .sidebar-content {
+            .row {
+                padding-inline: var(--inline-padding);
+            }
+
             .entry {
                 .header {
                     position: relative;

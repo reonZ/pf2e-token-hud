@@ -225,7 +225,11 @@
             "title": "Spells",
             "empty": "{name} doesn't have any spells, magic is evil anyways.",
             "charges": "Charges",
-            "staff": "Staff"
+            "staff": "Staff",
+            "attacks": {
+                "title": "Select a Spellcasting Entry",
+                "ok": "Roll"
+            }
         },
         "extras": {
             "title": "Extras",
