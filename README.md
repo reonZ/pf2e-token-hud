@@ -271,7 +271,7 @@ NOTE: you don't have to hold the key before hovering over a token, hitting the k
 
 ## Auto Lock
 
-When enabled, the tooltip will auto lock as soon as you hover over it, it will also auto lock when holding the 'Hold to Display' keybind.
+Should the tooltip get locked when hovering over it or as soon as it is rendered. This works for both the delayed and the `Hold to Display` rendering of the tooltip.
 
 ## Tooltip on Observe
 

@@ -53,9 +53,14 @@
                 "name": "Tooltip Delay",
                 "hint": "Delay in milliseconds before the main tooltip showing up on screen."
             },
-            "lock": {
+            "autolock": {
                 "name": "Auto Lock",
-                "hint": "When enabled, the tooltip will auto lock as soon as you hover over it, it will also auto lock when holding the 'Hold to Display' keybind."
+                "hint": "Should the tooltip get locked when hovering over it or as soon as it is rendered.",
+                "choices": {
+                    "none": "Disabled",
+                    "hover": "On Tooltip Hover",
+                    "render": "On Tooltip Render"
+                }
             },
             "spells": {
                 "name": "Sort Spells By Type",

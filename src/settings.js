@@ -61,7 +61,13 @@ export function registerSettings() {
         },
     })
 
-    register('lock', Boolean, false)
+    register('autolock', String, 'none', {
+        choices: {
+            none: path('autolock', 'choices.none'),
+            hover: path('autolock', 'choices.hover'),
+            render: path('autolock', 'choices.render'),
+        },
+    })
 
     register('observer', Boolean, true)
 

@@ -148,7 +148,7 @@ export class HUD extends Application {
 
         this.#holding = held
 
-        if (this.#softLock || (this.#lock && this.sidebar.length)) return
+        if (this.#softLock || this.#lock) return
 
         if (held) {
             if (!this.#hover) return
@@ -281,7 +281,11 @@ export class HUD extends Application {
     }
 
     get sidebar() {
-        return this.element.find('> .sidebar')
+        return this.element?.find('> .sidebar') ?? []
+    }
+
+    get inner() {
+        return this.element?.find('> .inner') ?? []
     }
 
     async getData() {
@@ -595,9 +599,8 @@ export class HUD extends Application {
 
         this.#lastToken = this.#token
 
-        if (getSetting('lock') && getSetting('use-holding') !== 'none' && this.#holding) {
-            this.lock()
-        }
+        if (!this.inner.length) return
+        if (getSetting('autolock') === 'render') this.lock()
     }
 
     render() {
@@ -679,7 +682,7 @@ export class HUD extends Application {
     }
 
     unlock(force) {
-        if (!force && (this.sidebar.length || getSetting('lock'))) return
+        if (!force && (this.sidebar.length || getSetting('autolock') !== 'none')) return
         this.#lock = false
     }
 
@@ -699,7 +702,7 @@ export class HUD extends Application {
 
         html.on('mouseenter', () => {
             if (!html.find('.inner').length) return
-            if (getSetting('lock')) this.lock()
+            if (getSetting('autolock') === 'hover') this.lock()
             this.#softLock = true
         })
 
