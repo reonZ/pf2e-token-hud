@@ -52,6 +52,9 @@
   margin-top: 2px;
   gap: 1px;
 }
+#pf2e-token-hud .sidebar.actions .sidebar-content .section .strike.hidden {
+  display: none;
+}
 #pf2e-token-hud .sidebar.actions .sidebar-content .section .strike .temporary {
   font-size: 0.86em;
 }

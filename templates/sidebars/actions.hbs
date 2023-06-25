@@ -26,7 +26,7 @@
 <div class="section" data-section="strikes">
     <div class="header"> {{localize "PF2E.StrikesLabel"}}</div>
     {{#each strikes as |strike|}}
-    <div class="strike details" data-index="{{strike.index}}">
+    <div class="strike details {{#unless strike.visible}} hidden{{/unless}}" data-index="{{strike.index}}">
         {{#if @root.isCharacter}}
         <a class="name" data-action="strike-description">{{strike.label}}</a>
         {{else}}

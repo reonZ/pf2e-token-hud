@@ -42,15 +42,13 @@ export async function getActionsData(actor, token, filter) {
     const strikes =
         actor.system.actions &&
         (await Promise.all(
-            actor.system.actions
-                .filter(strike => strike.visible !== false)
-                .map(async (strike, index) => ({
-                    ...strike,
-                    index,
-                    damageFormula: await strike.damage?.({ getFormula: true }),
-                    criticalFormula: await strike.critical?.({ getFormula: true }),
-                    description: strike.description ? await enrichHTML(strike.description, actor) : undefined,
-                }))
+            actor.system.actions.map(async (strike, index) => ({
+                ...strike,
+                index,
+                damageFormula: await strike.damage?.({ getFormula: true }),
+                criticalFormula: await strike.critical?.({ getFormula: true }),
+                description: strike.description ? await enrichHTML(strike.description, actor) : undefined,
+            }))
         ))
 
     let sections = {}

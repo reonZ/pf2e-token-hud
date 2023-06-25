@@ -66,6 +66,10 @@
                     margin-top: 2px;
                     gap: 1px;
 
+                    &.hidden {
+                        display: none;
+                    }
+
                     .temporary {
                         font-size: 0.86em;
                     }
