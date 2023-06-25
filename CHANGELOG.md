@@ -1,3 +1,10 @@
+# 1.24.2
+
+-   added a lot of html attributes in the sidebars to help third parties pinpoint what they would want to access/modify via js/css
+-   removed the option to "send to container" for containers all together, should be rare enough to be handled in the sheet anyways
+-   0-hand held equipment now show the greyed shirt instead of a hand with a 0 in it
+-   removed forced `stowed` state when sending item to container
+
 # 1.24.1
 
 -   containers inside other containers will still be shown outside to avoid nesting
