@@ -3,7 +3,7 @@
 -   the `Auto Lock` becomes a multi choices setting, you can now decide to auto-lock the tooltip when hovering over it or as soon as it is rendered, it works for both the delayed and the `Hold to Display` rendering of the tooltip
 -   added alternate usages for strikes (e.g. `thrown`)
 -   added `Spell Attack` roll at the top of the spells sidebar, if the actor has a single possible modifier accross all its spellcasting entries, it will be shown there, if more than one modifier exist then a dialog to select one will pop before rolling
--   fixed hidding `Unarmed Attack` messing up with the other strikes indexes when they are sheathed
+-   fixed hiding `Unarmed Attack` messing up with the other strikes indexes when they are sheathed
 
 # 1.24.2
 
