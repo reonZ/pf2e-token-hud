@@ -1,3 +1,21 @@
+# 1.26.0
+
+-   added support for `PF2e Stances` module, the stances will appear in the actions sidebar above the strikes ; contrary to how the module itself works, this one doesn't check if the actor is in combat
+-   exposed `getHud` to the module's api, a lot of its methods have also been made public, here is how you could open the tooltip on a selected token
+
+```js
+// get the first selected token found
+const token = canvas.tokens.controlled[0]
+// retrieve the HUD object
+const hud = game.modules.get('pf2e-token-hud').api.getHud()
+// set the token as the current HUD token
+hud.setToken(token)
+// render the HUD on screen
+hud.render()
+// lock the HUD until a click is made outside
+hud.lock()
+```
+
 # 1.25.0
 
 -   the `Auto Lock` becomes a multi choices setting, you can now decide to auto-lock the tooltip when hovering over it or as soon as it is rendered, it works for both the delayed and the `Hold to Display` rendering of the tooltip
