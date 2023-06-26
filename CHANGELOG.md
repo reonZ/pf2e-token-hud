@@ -1,7 +1,7 @@
 # 1.26.0
 
 -   added support for `PF2e Stances` module, the stances will appear in the actions sidebar above the strikes ; contrary to how the module itself works, this one doesn't check if the actor is in combat
--   exposed `getHud` to the module's api, a lot of its methods have also been made public, here is how you could open the tooltip on a selected token
+-   exposed `getHud` to the module's API, a lot of its methods have also been made public, here is how you could open the tooltip on a selected token
 
 ```js
 // get the first selected token found
