@@ -1,5 +1,5 @@
 import { registerKeybindings } from './keybindings.js'
-import { enableModule, getSetting, localize, MODULE_ID, templatePath } from './module.js'
+import { enableModule, getSetting, localize, MODULE_ID, templatePath, getHud } from './module.js'
 import { registerSettings, renderSettingsConfig } from './settings.js'
 import { deleteMacro, getMacros, onDroppedMacro } from './shared.js'
 
@@ -16,6 +16,10 @@ Hooks.once('setup', async () => {
 
 Hooks.once('ready', () => {
     if (getSetting('enabled')) enableModule(true)
+
+    game.modules.get('pf2e-token-hud').api = {
+        getHud,
+    }
 })
 
 Hooks.on('renderSettingsConfig', renderSettingsConfig)

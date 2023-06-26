@@ -369,6 +369,25 @@ When enabled, all skill action that require the character to be trained will be 
 
 This does nothing on NPCs
 
+# API
+
+A set of functions is exposed from the module to be used by third parties:
+
+```js
+/**
+ * Retrieves the API object containing the funtions
+ */
+game.modules.get('pf2e-token-hud').api
+```
+
+```js
+/**
+ * @param {boolean} [element] - when true, the dom element of the HUD will be returned instead
+ * @returns {HUD | JQuery | null} return the HUD object, its dom element or null
+ */
+getHud: (element?: boolean) => HUD | JQuery | null
+```
+
 # CHANGELOG
 
 You can see the changelog [HERE](./CHANGELOG.md)
