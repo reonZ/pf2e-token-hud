@@ -256,7 +256,8 @@
             "treat-wounds": {
                 "title": "{name} - Treat Wounds",
                 "no-proficiency": "{name} doesn't have the required proficiency to treat wounds."
-            }
+            },
+            "stances": "Stances"
         },
         "hazard": {
             "empty": "{name} isn't really hazardeous."

@@ -1,4 +1,4 @@
-import { enrichHTML, getSetting, templatePath } from '../module.js'
+import { enrichHTML, getSetting, localize, templatePath } from '../module.js'
 import { getActionIcon } from '../pf2e/misc.js'
 import { toggleWeaponTrait } from '../pf2e/weapon.js'
 import { popup, showItemSummary } from '../popup.js'
@@ -23,7 +23,16 @@ export async function getActionsData(actor, token, filter) {
     const isCharacter = actor.isOfType('character')
     const toggles = actor.synthetics.toggles.slice()
     const sorting = getSetting('actions')
-    const actions = isCharacter ? getCharacterActions(actor) : getNpcActions(actor)
+
+    let stances
+    let stancesActionsUUIDS
+    const stancesModule = game.modules.get('pf2e-stances')
+    if (stancesModule?.active && isCharacter) {
+        stances = stancesModule.api.getStances(actor).sort((a, b) => a.name.localeCompare(b.name))
+        stancesActionsUUIDS = stancesModule.api.getActionsUUIDS()
+    }
+
+    const actions = isCharacter ? getCharacterActions(actor, stancesActionsUUIDS) : getNpcActions(actor)
 
     let heroActions
     const heroActionsModule = game.modules.get('pf2e-hero-actions')
@@ -95,15 +104,21 @@ export async function getActionsData(actor, token, filter) {
 
     if (sorting === 'split') sections.sort((a, b) => SECTIONS_TYPES[a.type].order - SECTIONS_TYPES[b.type].order)
 
-    if (toggles.length || strikes?.length || sections.length || heroActions?.actions.length) {
-        const nb = Number((strikes?.length ?? 0) > 0) + sections.length + Number((heroActions?.actions.length ?? 0) > 0)
+    if (toggles.length || stances?.length || strikes?.length || sections.length || heroActions?.actions.length) {
+        const nb =
+            Number((stances?.length ?? 0) > 0) +
+            Number((strikes?.length ?? 0) > 0) +
+            sections.length +
+            Number((heroActions?.actions.length ?? 0) > 0)
 
         return {
             contentData: {
                 toggles,
+                stances,
                 strikes,
                 sections,
                 heroActions,
+                i18n: str => localize(`actions.${str}`),
                 damageTypes: CONFIG.PF2E.damageTypes,
             },
             doubled: nb > 1 && getSetting('actions-columns'),
@@ -172,8 +187,23 @@ export function addActionsListeners(el, actor) {
         if (description) popup(game.i18n.localize(trait.label), description, actor)
     })
 
+    action('stance-description', event => {
+        const stance = $(event.currentTarget).closest('.action')
+        showItemSummary(stance, actor)
+    })
+
     // IS OWNER
     if (!actor.isOwner) return
+
+    action('stance-chat', event => {
+        const item = getItemFromEvent(event, actor)
+        item?.toMessage(event, { create: true })
+    })
+
+    action('stance-toggle', event => {
+        const { effectUuid } = event.currentTarget.closest('.action').dataset
+        game.modules.get('pf2e-stances')?.api.toggleStance(actor, effectUuid)
+    })
 
     action('action-chat', event => {
         const item = getItemFromEvent(event, actor)
@@ -260,9 +290,9 @@ function getHeroActionDescription(uuid) {
     return game.modules.get('pf2e-hero-actions')?.api.getHeroActionDetails(uuid)
 }
 
-function getCharacterActions(actor) {
+function getCharacterActions(actor, actionsUUIDS = new Set()) {
     const actions = actor.itemTypes.action.filter(item => !actionsUUIDS.has(item.sourceId))
-    const feats = actor.itemTypes.feat.filter(item => item.actionCost)
+    const feats = actor.itemTypes.feat.filter(item => item.actionCost && !actionsUUIDS.has(item.sourceId))
 
     return (
         [...actions, ...feats]

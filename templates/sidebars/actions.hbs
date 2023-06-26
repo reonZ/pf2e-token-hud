@@ -22,6 +22,26 @@
 </div>
 {{/if}}
 
+{{#if stances.length}}
+<div class="section" data-section="stances">
+    <div class="header"> {{i18n "stances"}}</div>
+    {{#each stances as |stance|}}
+    <div class="action" data-item-id="{{stance.actionID}}" data-effect-uuid="{{stance.effectUUID}}">
+        <div class="action-icon"><img src="systems/pf2e/icons/actions/OneAction.webp"></div>
+        <a class="name" data-action="stance-description">{{stance.name}}</a>
+        {{#if @root.isOwner}}
+        {{#if stance.effectID}}
+        <a data-action="stance-toggle"><i class="fa-solid fa-toggle-on"></i></a>
+        {{else}}
+        <a data-action="stance-toggle"><i class="fa-solid fa-toggle-off"></i></a>
+        {{/if}}
+        <a class="chat" data-action="stance-chat"><i class="fa-solid fa-message"></i></a>
+        {{/if}}
+    </div>
+    {{/each}}
+</div>
+{{/if}}
+
 {{#if strikes.length}}
 <div class="section" data-section="strikes">
     <div class="header"> {{localize "PF2E.StrikesLabel"}}</div>
