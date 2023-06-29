@@ -19,6 +19,7 @@ export async function getItemsData(actor, token, filter) {
     let categories = {}
 
     for (const item of contents) {
+        if (!ITEMS_TYPES[item.type]) continue
         if (!filterIn(item.name, filter)) continue
 
         const containerId = item.system.containerId
