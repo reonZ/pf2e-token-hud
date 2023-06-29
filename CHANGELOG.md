@@ -1,3 +1,7 @@
+# 1.27.1
+
+-   fixed empty containers preventing the display of the equipment sidebar
+
 # 1.27.0
 
 -   this is an update for foundry `11.304`
