@@ -266,6 +266,10 @@ export class HUD extends Application {
         return this.element?.find('> .sidebar') ?? []
     }
 
+    get popup() {
+        return this.element?.find('> .popup') ?? []
+    }
+
     get inner() {
         return this.element?.find('> .inner') ?? []
     }
@@ -558,17 +562,22 @@ export class HUD extends Application {
 
     async _render(force = false, options = {}) {
         let sidebarType
-        let scrollTop
+        let sidebarScrolltop
+        let popup
+        let popupScrollTop
         let filter
 
         if (this.#lastToken === this.#token) {
             const sidebar = this.sidebar[0]
             if (sidebar) {
                 sidebarType = sidebar.dataset.type
-                scrollTop = sidebar.scrollTop
+                sidebarScrolltop = sidebar.scrollTop
                 const filterHeader = sidebar.querySelector('.sidebar-header')
                 if (filterHeader.classList.contains('show')) filter = filterHeader.querySelector(' input').value.trim()
             }
+
+            popup = this.popup[0]
+            if (popup) popupScrollTop = popup.scrollTop
         }
 
         await super._render(force, options)
@@ -576,7 +585,12 @@ export class HUD extends Application {
 
         if (sidebarType) {
             const sidebar = await this.#openSidebar(sidebarType, filter)
-            if (scrollTop > 0) sidebar.scrollTop(scrollTop)
+            if (sidebarScrolltop > 0) sidebar.scrollTop(sidebarScrolltop)
+        }
+
+        if (popup) {
+            this.element.append(popup)
+            if (popupScrollTop > 0) popup.scrollTop = popupScrollTop
         }
 
         this.#lastToken = this.#token
@@ -695,7 +709,7 @@ export class HUD extends Application {
         })
 
         html.on('dragover', () => {
-            if (token.isOwner && html.find('> .sidebar.extras').length && !html.find('.popup').length) return
+            if (token.isOwner && html.find('> .sidebar.extras').length && !html.find('> .popup').length) return
             html.css('opacity', 0.1)
             html.css('pointerEvents', 'none')
             window.addEventListener(
