@@ -5,6 +5,12 @@ import { showItemSummary } from '../popup.js'
 import { addNameTooltipListeners, deleteMacro, filterIn, getMacros, onDroppedMacro } from '../shared.js'
 import { createVariantDialog, getSkillLabel, SKILLS_SLUGS } from './skills.js'
 
+export const extrasUUIDS = {
+    aid: 'Compendium.pf2e.actionspf2e.Item.HCl3pzVefiv9ZKQW',
+    escape: 'Compendium.pf2e.actionspf2e.Item.SkZAQRkLLkmBQNB9',
+    'recall-knowledge': 'Compendium.pf2e.actionspf2e.Item.1OagaWtBpVXExToo',
+}
+
 export async function getExtrasData(actor, token, filter) {
     const { attributes } = actor
     const { initiative } = attributes
@@ -18,6 +24,7 @@ export async function getExtrasData(actor, token, filter) {
                 skills: SKILLS_SLUGS.map(slug => ({ slug, label: getSkillLabel(slug) })),
             },
             hasDailies: game.modules.get('pf2e-dailies')?.active,
+            uuids: extrasUUIDS,
         },
     }
 }

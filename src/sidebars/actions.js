@@ -3,7 +3,8 @@ import { getActionIcon } from '../pf2e/misc.js'
 import { toggleWeaponTrait } from '../pf2e/weapon.js'
 import { popup, showItemSummary } from '../popup.js'
 import { addNameTooltipListeners, filterIn, getItemFromEvent } from '../shared.js'
-import { actionsUUIDS } from './skills.js'
+import { extrasUUIDS } from './extras.js'
+import { skillActionsUUIDS } from './skills.js'
 
 const SECTIONS_TYPES = {
     action: { order: 0, label: 'PF2E.ActionsActionsHeader', actionLabel: 'PF2E.ActionTypeAction' },
@@ -24,15 +25,11 @@ export async function getActionsData(actor, token, filter) {
     const toggles = actor.synthetics.toggles.slice()
     const sorting = getSetting('actions')
 
-    let stances
-    let stancesActionsUUIDS
-    const stancesModule = game.modules.get('pf2e-stances')
-    if (stancesModule?.active && isCharacter) {
-        stances = stancesModule.api.getStances(actor).sort((a, b) => a.name.localeCompare(b.name))
-        stancesActionsUUIDS = stancesModule.api.getActionsUUIDS()
-    }
+    const stances = getStancesModuleApi()
+        ?.getStances(actor)
+        .sort((a, b) => a.name.localeCompare(b.name))
 
-    const actions = isCharacter ? getCharacterActions(actor, stancesActionsUUIDS) : getNpcActions(actor)
+    const actions = isCharacter ? getCharacterActions(actor) : getNpcActions(actor)
 
     let heroActions
     const heroActionsModule = game.modules.get('pf2e-hero-actions')
@@ -286,13 +283,20 @@ export function addActionsListeners(el, actor) {
     )
 }
 
+function getStancesModuleApi() {
+    const module = game.modules.get('pf2e-stances')
+    return module?.active ? module.api : undefined
+}
+
 function getHeroActionDescription(uuid) {
     return game.modules.get('pf2e-hero-actions')?.api.getHeroActionDetails(uuid)
 }
 
-function getCharacterActions(actor, actionsUUIDS = new Set()) {
+function getCharacterActions(actor) {
+    const stancesUUIDS = getStancesModuleApi()?.getActionsUUIDS() ?? new Set()
+    const actionsUUIDS = new Set([...stancesUUIDS, ...skillActionsUUIDS, ...Object.values(extrasUUIDS)])
     const actions = actor.itemTypes.action.filter(item => !actionsUUIDS.has(item.sourceId))
-    const feats = actor.itemTypes.feat.filter(item => item.actionCost && !actionsUUIDS.has(item.sourceId))
+    const feats = actor.itemTypes.feat.filter(item => item.actionCost && !stancesUUIDS.has(item.sourceId))
 
     return (
         [...actions, ...feats]

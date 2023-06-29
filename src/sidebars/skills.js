@@ -334,7 +334,7 @@ const SKILLS_MAP = SKILLS.reduce((skills, { slug, actions }) => {
     return skills
 }, {})
 
-export const actionsUUIDS = new Set(Object.values(ACTIONS_UUIDS).filter(Boolean))
+export const skillActionsUUIDS = new Set(Object.values(ACTIONS_UUIDS).filter(Boolean))
 
 export function getSkillLabel(slug) {
     return game.i18n.localize(slug === 'perception' ? 'PF2E.PerceptionLabel' : CONFIG.PF2E.skillList[slug])
