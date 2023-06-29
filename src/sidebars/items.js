@@ -37,7 +37,7 @@ export async function getItemsData(actor, token, filter) {
             if (type === 'backpack') {
                 for (let i = items.length - 1; i >= 0; i--) {
                     const container = items[i]
-                    const contained = containers[container.id].filter(item => filterIn(item.name, filter))
+                    const contained = containers[container.id]?.filter(item => filterIn(item.name, filter))
                     if (!contained?.length) {
                         if (!filterIn(container.name, filter)) items.splice(i, 1)
                         continue
