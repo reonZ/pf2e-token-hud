@@ -1,3 +1,4 @@
+import { useResolve } from './actions/use-resolve.js'
 import { enrichHTML, getFlag, getSetting, localize, modifier, MODULE_ID, setFlag, templatePath } from './module.js'
 import { getUniqueTarget, RANKS } from './shared.js'
 import { addActionsListeners, getActionsData } from './sidebars/actions.js'
@@ -8,7 +9,6 @@ import { addSkillsListeners, getSkillsData } from './sidebars/skills.js'
 import { addSpellsListeners, getSpellsData } from './sidebars/spells.js'
 
 const COVER_UUID = 'Compendium.pf2e.other-effects.Item.I9lfZUiCwMiGogVi'
-const RESOLVE_UUID = 'Compendium.pf2e.feats-srd.Item.jFmdevE4nKevovzo'
 
 const POSITIONS = {
     left: ['left', 'right', 'top', 'bottom'],
@@ -54,44 +54,30 @@ const SKILLS = {
 
 export class HUD extends Application {
     #token = null
-    #nextToken = null
     #lastToken = null
+    #hoveredToken = null
     #delay = null
-    #hover = false
     #holding = false
     #closing = null
-    #mouseevent
     #mousedown = [false, false, false]
     #lock = false
     #softLock = false
-    #hoverToken = null
-    #deleteToken = null
     #isObserved = false
-    #entering = null
-    #leaving = null
+    #hoverTokenHandler
+    #mouseeventHandler
+    #deleteTokenHandler
 
     constructor() {
         super()
 
         this.forceClose = () => this.close({ force: true })
 
-        this.#hoverToken = (token, hover) => {
-            if (hover) {
-                if (window.chrome) this.#tokenEnter(token)
-                else {
-                    if (this.#entering) clearTimeout(this.#entering)
-                    this.#entering = setTimeout(() => this.#tokenEnter(token), 10)
-                }
-            } else {
-                if (window.chrome) this.#tokenLeave(token)
-                else {
-                    if (this.#leaving) clearTimeout(this.#leaving)
-                    this.#leaving = setTimeout(() => this.#tokenLeave(token), 10)
-                }
-            }
+        this.#hoverTokenHandler = (token, hover) => {
+            if (hover) this.#tokenEnter(token)
+            else this.#tokenLeave(token)
         }
 
-        this.#mouseevent = event => {
+        this.#mouseeventHandler = event => {
             const button = event.button
             if (![0, 2].includes(button)) return
 
@@ -107,28 +93,23 @@ export class HUD extends Application {
 
             if (el) {
                 const popup = el.querySelector('.popup')
-                if (el.contains(target)) {
-                    if (popup && !popup.contains(target)) popup.remove()
-                    return
-                }
-                if (target.closest('.app') || target.closest('.tooltipster-base')) return
-                if (el.querySelector('.sidebar.extras') && target.closest('#hotbar')) return
-                if (popup) return popup.remove()
-                this.forceClose()
+                if (popup && !popup.contains(target)) return popup.remove()
+                if (target.closest('canvas')) this.forceClose()
+                return
             } else this.#cancelDelay()
 
             this.unlock(true)
         }
 
-        this.#deleteToken = token => {
+        this.#deleteTokenHandler = token => {
             if (this.#token && token.id === this.#token.id) this.forceClose()
         }
 
-        window.addEventListener('mousedown', this.#mouseevent)
-        window.addEventListener('mouseup', this.#mouseevent)
+        window.addEventListener('mousedown', this.#mouseeventHandler)
+        window.addEventListener('mouseup', this.#mouseeventHandler)
 
-        Hooks.on('hoverToken', this.#hoverToken)
-        Hooks.on('deleteToken', this.#deleteToken)
+        Hooks.on('hoverToken', this.#hoverTokenHandler)
+        Hooks.on('deleteToken', this.#deleteTokenHandler)
         Hooks.on('canvasPan', this.forceClose)
     }
 
@@ -151,19 +132,19 @@ export class HUD extends Application {
         if (this.#softLock || this.#lock) return
 
         if (held) {
-            if (!this.#hover) return
-            const isObserved = this.#checkIfObserved(this.#nextToken)
+            if (!this.#hoveredToken) return
+            const isObserved = this.#checkIfObserved(this.#hoveredToken)
             if (holding === 'half' && !game.user.isGM && !isObserved) {
                 this.#cancelDelay()
                 this.render()
                 return
             }
-            this.setToken(this.#nextToken, isObserved)
+            this.setToken(this.#hoveredToken, isObserved)
             this.render()
         } else {
             if (holding === 'all') this.close()
             else if (game.user.isGM) {
-                this.setToken(this.#nextToken)
+                this.setToken(this.#hoveredToken)
                 this.render()
             } else if (this.#isObserved) this.close()
         }
@@ -189,8 +170,9 @@ export class HUD extends Application {
         const actor = token.actor
         if (!actor || actor.isOfType('loot', 'party')) return
 
-        this.#hover = true
-        this.#nextToken = token
+        this.#hoveredToken = token
+
+        if (token !== this.#lastToken && !this.#lock) this.close()
 
         if (this.mousedown || this.#lock || this.#softLock || token === this.#token) return
 
@@ -206,7 +188,7 @@ export class HUD extends Application {
     }
 
     #tokenLeave(token) {
-        this.#hover = false
+        this.#hoveredToken = null
 
         if (this.mousedown || this.#lock || this.#softLock) return
 
@@ -244,11 +226,11 @@ export class HUD extends Application {
     delete() {
         this.forceClose()
 
-        window.removeEventListener('mousedown', this.#mouseevent)
-        window.removeEventListener('mouseup', this.#mouseevent)
+        window.removeEventListener('mousedown', this.#mouseeventHandler)
+        window.removeEventListener('mouseup', this.#mouseeventHandler)
 
-        Hooks.off('hoverToken', this.#hoverToken)
-        Hooks.off('deleteToken', this.#deleteToken)
+        Hooks.off('hoverToken', this.#hoverTokenHandler)
+        Hooks.off('deleteToken', this.#deleteTokenHandler)
         Hooks.off('canvasPan', this.forceClose)
     }
 
@@ -708,21 +690,14 @@ export class HUD extends Application {
 
         html.on('mouseleave', () => {
             this.#softLock = false
-            if (this.#lock) return
-
-            const current = this.#token
-            if (this.#nextToken !== current && this.#hover) {
-                this.close()
-                this.#tokenEnter(this.#nextToken)
-            } else setTimeout(() => !this.#hover && this.close(), 10)
+            if (this.#lock || this.#hoveredToken) return
+            this.close()
         })
 
         html.on('dragover', () => {
             if (token.isOwner && html.find('> .sidebar.extras').length && !html.find('.popup').length) return
-
             html.css('opacity', 0.1)
             html.css('pointerEvents', 'none')
-
             window.addEventListener(
                 'dragend',
                 () => {
@@ -1008,68 +983,4 @@ function postionFromTargetX(el, target) {
     if (x + el.width > window.innerWidth) y = window.innerWidth - el.width
     if (x < 0) x = 0
     return x
-}
-
-async function useResolve(actor) {
-    function toChat(content) {
-        ChatMessage.create({
-            user: game.user.id,
-            content,
-            speaker: ChatMessage.getSpeaker({ actor }),
-        })
-    }
-
-    const { name, attributes } = actor
-    const { sp, resolve } = attributes
-    const fullStamina = localize('hud.resolve.full', { name })
-    const noResolve = game.i18n.format('PF2E.Actions.SteelYourResolve.NoStamina', { name })
-
-    if (sp.value === sp.max) return ui.notifications.warn(fullStamina)
-    if (resolve.value < 1) return ui.notifications.warn(noResolve)
-
-    const hasSteel = actor.itemTypes.feat.find(item => item.sourceId === RESOLVE_UUID)
-    const content = await renderTemplate(templatePath('dialogs/resolve'), {
-        hasSteel,
-        i18n: str => localize(`hud.resolve.${str}`),
-    })
-
-    new Dialog({
-        title: localize('hud.resolve.title'),
-        content,
-        buttons: {
-            yes: {
-                icon: "<i class='fas fa-check'></i>",
-                label: localize('hud.resolve.yes'),
-                callback: async html => {
-                    const { attributes } = actor
-                    const { sp, resolve } = attributes
-
-                    if (sp.value === sp.max) return toChat(fullStamina)
-                    if (resolve.value < 1) return toChat(noResolve)
-
-                    const selected = html.find('input:checked').val()
-                    const ratio = `${sp.value}/${sp.max}`
-
-                    if (selected === 'breather') {
-                        toChat(localize('hud.resolve.breather.used', { name, ratio }))
-                        await actor.update({
-                            'system.attributes.sp.value': sp.max,
-                            'system.attributes.resolve.value': resolve.value - 1,
-                        })
-                    } else {
-                        toChat(game.i18n.format('PF2E.Actions.SteelYourResolve.RecoverStamina', { name, ratio }))
-                        const newSP = sp.value + Math.floor(sp.max / 2)
-                        await actor.update({
-                            'system.attributes.sp.value': Math.min(newSP, sp.max),
-                            'system.attributes.resolve.value': resolve.value - 1,
-                        })
-                    }
-                },
-            },
-            no: {
-                icon: "<i class='fas fa-times'></i>",
-                label: localize('hud.resolve.no'),
-            },
-        },
-    }).render(true)
 }

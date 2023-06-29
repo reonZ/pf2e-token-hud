@@ -55,7 +55,7 @@
   height: 100%;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 10px;
 }
 #pf2e-token-hud .sidebar.items .sidebar-content .category .item .details .extras .infos .quantity {
   height: 100%;
