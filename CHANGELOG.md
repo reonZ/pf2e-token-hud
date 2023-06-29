@@ -1,3 +1,13 @@
+# 1.27.0
+
+-   this is an update for foundry `11.304`
+-   removed all the extra failsafes that were introduced to counter the problems with PIXI v7, this foundry update fixed them all
+-   the tooltip will now close only when the canvas is clicked, clicking anywhere on the UI will not close it, allowing the use of dialogs and dropdowns
+-   actions in the actions sidebar are now properly filtered out when they appear anywhere else in the tooltip (e.g. skills actions, stances actions when the `PF2e Stances` module is used and actions appearing in the extras sidebar)
+-   the popup will now be re-rendered with the tooltip instead of closing as soon as the linked actor is updated ; IMPORTANT: the popup re-renders exactly as it was, therefore, if the actor's update actually modified the content of the popup itself, it will not be updated
+-   filter now works with equipment inside containers
+-   fixed unused system equipment types breaking the tooltip (looking at you `book`)
+
 # 1.26.0
 
 -   added support for `PF2e Stances` module, the stances will appear in the actions sidebar above the strikes ; contrary to how the module itself works, this one doesn't check if the actor is in combat
