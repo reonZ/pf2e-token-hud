@@ -20,7 +20,6 @@ export async function getItemsData(actor, token, filter) {
 
     for (const item of contents) {
         if (!ITEMS_TYPES[item.type]) continue
-        if (!filterIn(item.name, filter)) continue
 
         const containerId = item.system.containerId
         if (item.type !== 'backpack' && containerId && (openedContainers === true || openedContainers.includes(containerId))) {
@@ -38,14 +37,22 @@ export async function getItemsData(actor, token, filter) {
             if (type === 'backpack') {
                 for (let i = items.length - 1; i >= 0; i--) {
                     const container = items[i]
-                    const contained = containers[container.id]
-                    if (!contained?.length) continue
+                    const contained = containers[container.id].filter(item => filterIn(item.name, filter))
+                    if (!contained?.length) {
+                        if (!filterIn(container.name, filter)) items.splice(i, 1)
+                        continue
+                    }
                     contained.sort((a, b) => a.name.localeCompare(b.name))
                     items.splice(i + 1, 0, ...contained)
                 }
+            } else items = items.filter(item => filterIn(item.name, filter))
+            return {
+                type,
+                items,
+                label: ITEMS_TYPES[type].label,
             }
-            return { type, items, label: ITEMS_TYPES[type].label }
         })
+        .filter(category => category.items.length)
         .sort((a, b) => ITEMS_TYPES[a.type].order - ITEMS_TYPES[b.type].order)
 
     if (categories.length) {
