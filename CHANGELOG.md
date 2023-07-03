@@ -1,3 +1,11 @@
+# 1.28.0
+
+-   added MAP variants to the `escape` skill action in the extras sidebar
+-   replaced the `fortitude` icon with a rook
+-   replaced the `athletics` icon with the closed fist (formerly used for `fortitude`)
+-   replaced the extras sidebar icon with something less misleading
+-   replaced root-level urls to use relative path
+
 # 1.27.1
 
 -   fixed empty containers preventing the display of the equipment sidebar
