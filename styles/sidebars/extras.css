@@ -33,6 +33,13 @@
   gap: 6px;
   font-size: 0.9em;
 }
+#pf2e-token-hud .sidebar.extras .sidebar-content .row .actions .chat {
+  margin-top: 2px;
+}
+#pf2e-token-hud .sidebar.extras .sidebar-content .variants {
+  margin-top: calc(var(--inner-padding) * -1 - 1px);
+  padding-inline: calc(var(--inner-padding) - 1px);
+}
 #pf2e-token-hud .sidebar.extras .sidebar-content .macro .details .extras {
   justify-content: flex-end;
 }

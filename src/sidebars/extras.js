@@ -116,7 +116,9 @@ export function addExtrasListeners(el, actor, token) {
         'roll-escape',
         async event => {
             const variant = event.type === 'contextmenu' ? await createVariantDialog() : undefined
-            if (variant !== null) game.pf2e.actions.get('escape').use({ event, actors: [actor], statistic: variant?.selected })
+            const multipleAttackPenalty = $(event.currentTarget).data().map
+            if (variant === null) return
+            game.pf2e.actions.get('escape').use({ event, actors: [actor], statistic: variant?.selected, multipleAttackPenalty })
         },
         'click contextmenu'
     )

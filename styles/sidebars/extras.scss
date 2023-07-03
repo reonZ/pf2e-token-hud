@@ -40,7 +40,16 @@
                     align-items: center;
                     gap: 6px;
                     font-size: 0.9em;
+
+                    .chat {
+                        margin-top: 2px;
+                    }
                 }
+            }
+
+            .variants {
+                margin-top: calc(var(--inner-padding) * -1 + -1px);
+                padding-inline: calc(var(--inner-padding) - 1px);
             }
 
             .macro {

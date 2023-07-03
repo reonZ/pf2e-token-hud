@@ -24,14 +24,24 @@
     {{> roll action='roll-aid' cost='reaction' label='PF2E.Actions.Aid.Title' actions=true}}
 </div>
 
-<div class="row" data-row="escape" data-uuid="{{uuids.escape}}">
-    {{> roll action='roll-escape' cost=1 label='PF2E.Actions.Escape.Title' actions=true}}
-</div>
-
 <div class="row" data-row="recall-knowledge" data-uuid="{{uuids.recall-knowledge}}">
     {{> roll action='roll-recall-knowledge' cost=1 label='PF2E.RecallKnowledge.Label' actions=true}}
 </div>
 
+<div class="row" data-row="escape" data-uuid="{{uuids.escape}}">
+    {{> roll cost=1 label='PF2E.Actions.Escape.Title' actions=true}}
+</div>
+<div class="variants">
+    <div class="variant" data-action="roll-escape">
+        {{localize 'PF2E.Roll.Normal'}}
+    </div>
+    <div class="variant" data-action="roll-escape" data-map="1">
+        {{localize 'PF2E.MAPAbbreviationLabel' penalty="-5"}}
+    </div>
+    <div class="variant" data-action="roll-escape" data-map="2">
+        {{localize 'PF2E.MAPAbbreviationLabel' penalty="-10"}}
+    </div>
+</div>
 
 {{#if isOwner}}
 {{#if macros.length}}
@@ -60,7 +70,7 @@
 
 
 {{#*inline 'roll'}}
-<a class="name" data-action="{{action}}">
+<{{#if action}}a{{else}}div{{/if}} class="name" {{#if action}}data-action="{{action}}" {{/if}}>
     {{#if cost}}
     {{localize label}}
     {{{actionGlyph cost}}}
@@ -71,7 +81,7 @@
     {{localize label}}
     <i class="fa-solid fa-dice-d20"></i>
     {{/if}}
-</a>
+</{{#if action}}a{{else}}div{{/if}}>
 {{#if actions}}
 <div class="actions">
     <a class="observable" data-action="action-description">
