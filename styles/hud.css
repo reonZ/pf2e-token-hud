@@ -44,7 +44,7 @@
 #pf2e-token-hud .inner,
 #pf2e-token-hud .popup {
   border-radius: var(--inner-border-radius);
-  background: url(/ui/parchment.jpg) repeat;
+  background: url(../../../ui/parchment.jpg) repeat;
   padding: var(--inner-padding);
   box-shadow: var(--outer-box-shadow);
 }
@@ -57,7 +57,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: url(/ui/denim075.png) repeat;
+  background: url(../../../ui/denim075.png) repeat;
   background-color: rgba(0, 0, 0, 0.3490196078);
   padding: var(--padding-block) 4px;
   color: var(--text-light);
