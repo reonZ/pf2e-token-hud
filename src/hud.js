@@ -41,7 +41,7 @@ const SIDEBARS = {
 }
 
 const SAVES = {
-    fortitude: { icon: 'fa-solid fa-hand-fist', label: 'PF2E.SavesFortitude' },
+    fortitude: { icon: 'fa-solid fa-chess-rook', label: 'PF2E.SavesFortitude' },
     reflex: { icon: 'fa-solid fa-person-running', label: 'PF2E.SavesReflex' },
     will: { icon: 'fa-solid fa-brain', label: 'PF2E.SavesWill' },
 }
@@ -49,7 +49,7 @@ const SAVES = {
 const SKILLS = {
     perception: { icon: 'fa-solid fa-eye', label: 'PF2E.PerceptionLabel' },
     stealth: { icon: 'fa-duotone fa-eye-slash', label: 'PF2E.SkillStealth' },
-    athletics: { icon: 'fa-solid fa-dumbbell', label: 'PF2E.SkillAthletics' },
+    athletics: { icon: 'fa-solid fa-hand-fist', label: 'PF2E.SkillAthletics' },
 }
 
 export class HUD extends Application {
