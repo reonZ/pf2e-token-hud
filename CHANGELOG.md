@@ -1,3 +1,8 @@
+# 1.28.1
+
+-   fixed lore name not showing up in the skills sidebar
+-   you can now click on the lore name as well to roll the skill check instead of just its modifier in the skills sidebar
+
 # 1.28.0
 
 -   added MAP variants to the `escape` skill action in the extras sidebar
