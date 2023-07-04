@@ -56,10 +56,10 @@
     <div class="header">{{localize 'PF2E.LoreSkillsHeader'}}</div>
     {{#each lores as |lore|}}
     <div class="lore">
-        <div>
-            <a class="modifier" data-action="roll-skill" data-slug="{{lore.slug}}">{{lore.modifier}}</a>
-            {{localize lore.name}}
-        </div>
+        <a data-action="roll-skill" data-slug="{{lore.slug}}">
+            <span class="modifier">{{lore.modifier}}</span>
+            {{localize lore.label}}
+        </a>
         <div class="rank {{lore.rank}}">{{localize (concat 'PF2E.ProficiencyLevel' lore.rank)}}</div>
     </div>
     {{/each}}
