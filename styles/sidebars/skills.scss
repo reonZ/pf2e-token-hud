@@ -86,6 +86,13 @@
                 .header {
                     text-align: center;
                 }
+
+                .lore {
+                    .modifier {
+                        display: inline-block;
+                        text-align: end;
+                    }
+                }
             }
 
             .follow {

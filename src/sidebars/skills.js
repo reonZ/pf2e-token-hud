@@ -393,11 +393,14 @@ export async function getSkillsData(actor, token, filter) {
             modifier: modifier(mod),
         }))
 
+    const loresModifierWidth = lores.reduce((width, lore) => (lore.modifier.length > width ? lore.modifier.length : width), 2)
+
     return {
         contentData: {
             follow: localize(`skills.actions.${isFollowingAnExpert(actor) ? 'following' : 'follow'}`),
             skills,
             lores,
+            loresModifierWidth,
         },
         doubled: getSetting('skills-columns'),
     }

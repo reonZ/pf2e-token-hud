@@ -57,7 +57,7 @@
     {{#each lores as |lore|}}
     <div class="lore">
         <a data-action="roll-skill" data-slug="{{lore.slug}}">
-            <span class="modifier">{{lore.modifier}}</span>
+            <span class="modifier" style="width: {{@root.loresModifierWidth}}ch">{{lore.modifier}}</span>
             {{localize lore.label}}
         </a>
         <div class="rank {{lore.rank}}">{{localize (concat 'PF2E.ProficiencyLevel' lore.rank)}}</div>
