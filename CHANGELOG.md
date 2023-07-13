@@ -1,3 +1,8 @@
+# 1.28.2
+
+-   lore modifiers will now be aligned in the skills sidebar
+-   prevent fragmentation of sidebars elements when using the `Two Columns X` settings
+
 # 1.28.1
 
 -   fixed lore name not showing up in the skills sidebar
