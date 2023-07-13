@@ -37,6 +37,10 @@
             }
 
             .skill {
+                > * {
+                    break-inside: avoid;
+                }
+
                 .action {
                     display: flex;
                     flex-direction: column;

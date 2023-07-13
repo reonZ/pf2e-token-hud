@@ -1,6 +1,11 @@
 #pf2e-token-hud .sidebar.actions {
   --max-width: 20em;
 }
+#pf2e-token-hud .sidebar.actions .sidebar-content .toggles > *,
+#pf2e-token-hud .sidebar.actions .sidebar-content .section > * {
+  -moz-column-break-inside: avoid;
+       break-inside: avoid;
+}
 #pf2e-token-hud .sidebar.actions .sidebar-content .toggles {
   display: flex;
   flex-direction: column;

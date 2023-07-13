@@ -3,6 +3,13 @@
         --max-width: 20em;
 
         .sidebar-content {
+            .toggles,
+            .section {
+                > * {
+                    break-inside: avoid;
+                }
+            }
+
             .toggles {
                 display: flex;
                 flex-direction: column;

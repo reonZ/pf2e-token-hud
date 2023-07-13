@@ -48,6 +48,10 @@
   font-size: 0.86em;
   white-space: nowrap;
 }
+#pf2e-token-hud .sidebar.items .sidebar-content .category > * {
+  -moz-column-break-inside: avoid;
+       break-inside: avoid;
+}
 #pf2e-token-hud .sidebar.items .sidebar-content .category .header {
   text-align: center;
 }

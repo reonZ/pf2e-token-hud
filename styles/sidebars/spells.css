@@ -4,6 +4,10 @@
 #pf2e-token-hud .sidebar.spells .sidebar-content .row {
   padding-inline: var(--inline-padding);
 }
+#pf2e-token-hud .sidebar.spells .sidebar-content .entry > * {
+  -moz-column-break-inside: avoid;
+       break-inside: avoid;
+}
 #pf2e-token-hud .sidebar.spells .sidebar-content .entry .header {
   position: relative;
   text-align: center;

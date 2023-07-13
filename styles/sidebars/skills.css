@@ -29,6 +29,10 @@
   flex-direction: column;
   gap: 2px;
 }
+#pf2e-token-hud .sidebar.skills .sidebar-content .skill > * {
+  -moz-column-break-inside: avoid;
+       break-inside: avoid;
+}
 #pf2e-token-hud .sidebar.skills .sidebar-content .skill .action {
   display: flex;
   flex-direction: column;

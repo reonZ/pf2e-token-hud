@@ -61,6 +61,10 @@
             }
 
             .category {
+                > * {
+                    break-inside: avoid;
+                }
+
                 .header {
                     text-align: center;
                 }
