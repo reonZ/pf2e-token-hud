@@ -1,3 +1,14 @@
+# 1.29.0
+
+-   added `Digital Pips` setting, when enabled, the main tooltip will display a digital version of the pips (still works the same as regular pips when it comes to mouse clicks)
+-   added support for workbench variant rule `max hero points` (when above 4 max points, the tooltip will render a digital version of the pips instead)
+-   added `Point Out` action in extras sidebar when the `PF2e Perception` module is active
+-   added other required compatibilities for the `PF2e Perception` module
+-   changed the `Wounded` icon to `notes-medical`
+-   `Take Cover` now uses the action instead of the effect directly
+-   fixed localization issue with thrown icon
+-   fixed not being able to change the `worn` state of items in the equipment sidebar
+
 # 1.28.2
 
 -   lore modifiers will now be aligned in the skills sidebar
