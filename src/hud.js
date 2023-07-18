@@ -165,7 +165,8 @@ export class HUD extends Application {
     }
 
     #tokenEnter(token) {
-        if ($(window.document).find(':hover').filter('#combat-popout, #sidebar, #mini-tracker').length) return
+        if ($(window.document).find(':hover').filter('#combat-popout, #sidebar, #mini-tracker, [id^=pf2e-perception]').length)
+            return
 
         const actor = token.actor
         if (!actor || actor.isOfType('loot', 'party')) return
@@ -441,7 +442,7 @@ export class HUD extends Application {
         const { traits } = system
         const { wounded, dying, shield, resolve, speed, adjustment } = attributes
 
-        if (game.modules.get('xdy-pf2e-workbench')?.active) {
+        if (heroPoints && game.modules.get('xdy-pf2e-workbench')?.active) {
             heroPoints.max = game.settings.get('xdy-pf2e-workbench', 'maxHeroPoints') || 3
         }
 
@@ -837,18 +838,12 @@ export class HUD extends Application {
 
         html.find('[data-action=raise-shield]').on('click', event => {
             event.preventDefault()
-            game.pf2e.actions.raiseAShield({ actors: [actor] })
+            game.pf2e.actions.raiseAShield({ actors: [actor], tokens: [token] })
         })
 
         html.find('[data-action=take-cover]').on('click', async event => {
             event.preventDefault()
-
-            const source = (await fromUuid(COVER_UUID)).toObject()
-            setProperty(source, 'flags.core.sourceId', COVER_UUID)
-
-            const hasCover = this.hasCover
-            if (this.hasCover) await hasCover.delete()
-            else await actor.createEmbeddedDocuments('Item', [source])
+            game.pf2e.actions.get('take-cover').use({ actors: [actor], tokens: [token] })
         })
 
         html.find('[data-action=roll-save]').on('click', event => {

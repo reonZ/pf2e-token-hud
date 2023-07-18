@@ -71,7 +71,7 @@ export async function getItemsData(actor, token, filter) {
     }
 }
 
-export function addItemsListeners(el, actor) {
+export function addItemsListeners(el, actor, token) {
     const item = el.find('.item')
 
     addNameTooltipListeners(item)
@@ -136,7 +136,7 @@ export function addItemsListeners(el, actor) {
     el.find('[data-action=repair-item]').on('click', event => {
         event.preventDefault()
         const item = getItemFromEvent(event, actor)
-        if (item) game.pf2e.actions.repair({ item, actors: [actor] })
+        if (item) game.pf2e.actions.repair({ item, actors: [actor], tokens: [token] })
     })
 
     el.find('[data-action=toggle-identified]').on('click', event => {

@@ -3,12 +3,13 @@ import { localize } from '../module.js'
 import { unownedItemToMessage } from '../pf2e/item.js'
 import { showItemSummary } from '../popup.js'
 import { addNameTooltipListeners, deleteMacro, filterIn, getMacros, onDroppedMacro } from '../shared.js'
-import { createVariantDialog, getSkillLabel, SKILLS_SLUGS } from './skills.js'
+import { variantsDialog, getSkillLabel, SKILLS_SLUGS } from './skills.js'
 
 export const extrasUUIDS = {
     aid: 'Compendium.pf2e.actionspf2e.Item.HCl3pzVefiv9ZKQW',
     escape: 'Compendium.pf2e.actionspf2e.Item.SkZAQRkLLkmBQNB9',
     'recall-knowledge': 'Compendium.pf2e.actionspf2e.Item.1OagaWtBpVXExToo',
+    'point-out': 'Compendium.pf2e.actionspf2e.Item.sn2hIy1iIJX9Vpgj',
 }
 
 export async function getExtrasData(actor, token, filter) {
@@ -24,6 +25,7 @@ export async function getExtrasData(actor, token, filter) {
                 skills: SKILLS_SLUGS.map(slug => ({ slug, label: getSkillLabel(slug) })),
             },
             hasDailies: game.modules.get('pf2e-dailies')?.active,
+            hasPerception: game.modules.get('pf2e-perception')?.active,
             uuids: extrasUUIDS,
         },
     }
@@ -88,7 +90,7 @@ export function addExtrasListeners(el, actor, token) {
     })
 
     action('rest-for-the-night', event => {
-        game.pf2e.actions.restForTheNight({ actors: [actor] })
+        game.pf2e.actions.restForTheNight({ actors: [actor], tokens: [token] })
     })
 
     action('roll-recall-knowledge', event => {
@@ -98,27 +100,34 @@ export function addExtrasListeners(el, actor, token) {
     action(
         'roll-aid',
         async event => {
-            const variant = await createVariantDialog(null, 20)
+            const variants = await variantsDialog(null, 20)
             const note = { text: '@UUID[Compendium.pf2e.other-effects.Item.AHMUpMbaVkZ5A1KX]' }
-            if (variant !== null)
+            if (variants !== null)
                 game.pf2e.actions.get('aid').use({
                     event,
                     actors: [actor],
-                    statistic: variant?.selected,
-                    difficultyClass: { value: variant?.dc },
+                    tokens: [token],
+                    statistic: variants?.selected,
+                    difficultyClass: { value: variants?.dc },
                     notes: [note],
                 })
         },
         'click contextmenu'
     )
 
+    action('roll-point-our', event => {
+        game.pf2e.actions.get('point-out').use({ event, actors: [actor], tokens: [token] })
+    })
+
     action(
         'roll-escape',
         async event => {
-            const variant = event.type === 'contextmenu' ? await createVariantDialog() : undefined
+            const variants = event.type === 'contextmenu' ? await variantsDialog() : undefined
             const multipleAttackPenalty = $(event.currentTarget).data().map
-            if (variant === null) return
-            game.pf2e.actions.get('escape').use({ event, actors: [actor], statistic: variant?.selected, multipleAttackPenalty })
+            if (variants === null) return
+            game.pf2e.actions
+                .get('escape')
+                .use({ event, actors: [actor], tokens: [token], statistic: variants?.selected, multipleAttackPenalty })
         },
         'click contextmenu'
     )

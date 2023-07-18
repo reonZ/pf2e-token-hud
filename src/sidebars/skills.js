@@ -406,7 +406,7 @@ export async function getSkillsData(actor, token, filter) {
     }
 }
 
-export function addSkillsListeners(el, actor) {
+export function addSkillsListeners(el, actor, token) {
     el.find('[data-action=action-description]').on('click', event => {
         event.preventDefault()
         const action = $(event.currentTarget).closest('.action')
@@ -437,8 +437,9 @@ export function addSkillsListeners(el, actor) {
         event.preventDefault()
         const target = $(event.currentTarget)
         const { skillSlug, slug } = target.closest('.action').data()
-        const variant = event.type === 'contextmenu' ? await createVariantDialog(skillSlug) : undefined
-        if (variant !== null) rollAction(event, actor, skillSlug, slug, target.data(), variant?.selected)
+        const { variant, map } = target.data()
+        const variants = event.type === 'contextmenu' ? await variantsDialog(skillSlug) : undefined
+        if (variants !== null) rollAction({ event, actor, token, skillSlug, slug, variant, map, skill: variants?.selected })
     })
 
     el.find('[data-action=action-chat]').on('click', async event => {
@@ -453,7 +454,7 @@ function isFollowingAnExpert(actor) {
     return actor.itemTypes.effect.find(effect => effect.sourceId === FOLLOW_THE_EXPERT_UUID)
 }
 
-export async function createVariantDialog(base, dc) {
+export async function variantsDialog(base, dc) {
     const skills = SKILLS_SLUGS.map(slug => ({ slug, label: getSkillLabel(slug) }))
 
     const content = await renderTemplate(templatePath('dialogs/variant'), {
@@ -473,7 +474,7 @@ export async function createVariantDialog(base, dc) {
     })
 }
 
-function rollAction(event, actor, skillSlug, slug, { variant, map }, skill) {
+function rollAction({ event, actor, skillSlug, slug, variant, map, skill, token }) {
     const action = SKILLS_MAP[skillSlug].actions[slug]
     const type = action.type
 
@@ -485,6 +486,7 @@ function rollAction(event, actor, skillSlug, slug, { variant, map }, skill) {
     const options = {
         event,
         actors: [actor],
+        tokens: [token],
         variant,
         rollOptions,
         rollMode: action.secret ? 'blindroll' : 'roll',

@@ -24,6 +24,12 @@
     {{> roll action='roll-aid' cost='reaction' label='PF2E.Actions.Aid.Title' actions=true}}
 </div>
 
+{{#if hasPerception}}
+<div class="row" data-row="point-out" data-uuid="{{uuids.point-out}}">
+    {{> roll action='roll-point-out' cost=1 label='pf2e-perception.action.point-out' actions=true}}
+</div>
+{{/if}}
+
 <div class="row" data-row="recall-knowledge" data-uuid="{{uuids.recall-knowledge}}">
     {{> roll action='roll-recall-knowledge' cost=1 label='PF2E.RecallKnowledge.Label' actions=true}}
 </div>
