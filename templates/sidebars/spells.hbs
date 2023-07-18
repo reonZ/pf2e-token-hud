@@ -26,9 +26,7 @@
         {{#if (or (eq @index 12) (and (eq @index 0) @root.hasFocusCantrips))}}
         <div class="pips" data-action="toggle-pips">
             {{#times @root.focusPool.max}}
-            <div class="pip">
-                <i class="{{#if (gt @root.focusPool.value this)}}fas fa-dot-circle{{else}}far fa-circle{{/if}}"></i>
-            </div>
+            <i class="{{#if (gt @root.focusPool.value this)}}fas fa-dot-circle{{else}}far fa-circle{{/if}}"></i>
             {{/times}}
         </div>
         {{/if}}

@@ -25,10 +25,16 @@
 </div>
 
 {{#*inline "pips"}}
-<div class="pips" data-action="{{action}}" data-tooltip="{{tooltip}}">
+<div class="pips {{#if digits}}digits{{/if}}" data-action="{{action}}" data-tooltip="{{tooltip}}">
+    {{#if digits}}
+    <i class="fa-solid fa-angle-left {{#if (eq value 0)}}disabled{{/if}}"></i>
+    {{value}}
+    <i class="fa-solid fa-angle-right  {{#if (eq value max)}}disabled{{/if}}"></i>
+    {{else}}
     {{#times max}}
     <i class="{{#if (gt ../value this)}}fas fa-dot-circle{{else}}far fa-circle{{/if}}"></i>
     {{/times}}
+    {{/if}}
 </div>
 {{/inline}}
 

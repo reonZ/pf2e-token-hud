@@ -43,6 +43,19 @@
         align-items: center;
         gap: 1px;
         cursor: pointer;
+
+        &.digits {
+            padding-inline: 2px;
+            background: rgba(0, 0, 0, 0.05);
+
+            i {
+                font-size: 0.5em;
+
+                &.disabled {
+                    color: #a19d9d;
+                }
+            }
+        }
     }
 
     input,

@@ -56,9 +56,14 @@
     width: 3ch;
   }
 }
+#pf2e-token-hud .inner .group .section .pips {
+  gap: 1px;
+}
 #pf2e-token-hud .inner .group .section .pips i {
-  font-size: 0.86em;
   margin: 0;
+}
+#pf2e-token-hud .inner .group .section .pips:not(.digits) i {
+  font-size: 0.86em;
   margin-top: 1px;
 }
 #pf2e-token-hud .inner .group .section sup {

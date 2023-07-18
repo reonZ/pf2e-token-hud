@@ -73,8 +73,6 @@ export function registerSettings() {
 
     register('see-status', Boolean, false)
 
-    // register('chat', Boolean, true)
-
     // tooltip
 
     register('saves', String, 'bonus', {
@@ -106,6 +104,8 @@ export function registerSettings() {
     register('force-speed', Boolean, false)
 
     register('tooltips', Boolean, false)
+
+    register('pips', Boolean, false)
 
     // distance
 

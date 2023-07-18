@@ -36,6 +36,16 @@
   gap: 1px;
   cursor: pointer;
 }
+#pf2e-token-hud .pips.digits {
+  padding-inline: 2px;
+  background: rgba(0, 0, 0, 0.05);
+}
+#pf2e-token-hud .pips.digits i {
+  font-size: 0.5em;
+}
+#pf2e-token-hud .pips.digits i.disabled {
+  color: #a19d9d;
+}
 #pf2e-token-hud input,
 #pf2e-token-hud select {
   color: var(--color);

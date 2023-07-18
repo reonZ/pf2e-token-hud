@@ -49,7 +49,7 @@
 #pf2e-token-hud .sidebar.spells .sidebar-content .entry .spell .details .extras .actions .pips {
   margin-right: 3px;
 }
-#pf2e-token-hud .sidebar.spells .sidebar-content .entry .spell .details .extras .actions .pips .pip {
+#pf2e-token-hud .sidebar.spells .sidebar-content .entry .spell .details .extras .actions .pips:not(.digits) i {
   font-size: 0.9em;
   margin-top: 2px;
 }

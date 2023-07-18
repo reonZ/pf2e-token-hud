@@ -2,7 +2,7 @@
     {{#if isCharacter}}
     <div class="section" data-tooltip="PF2E.HeroPointsLabel">
         <i class="fa-solid fa-circle-h"></i>
-        {{> pips max=hero.max value=hero.value action="toggle-hero"}}
+        {{> pips max=hero.max value=hero.value action="toggle-hero" digits=(or digitalPips (gt hero.max 4))}}
     </div>
     {{else}}
     <div class="section">
@@ -121,12 +121,12 @@
 <div class="group">
     <div class="section">
         <a data-action="recovery-check"><i class="fa-solid fa-skull" data-tooltip="PF2E.Check.Specific.Recovery"></i></a>
-        {{> pips max=dying.max value=dying.value action="toggle-dying" tooltip="PF2E.ConditionTypeDying"}}
+        {{> pips max=dying.max value=dying.value action="toggle-dying" tooltip="PF2E.ConditionTypeDying" digits=digitalPips}}
     </div>
 
     <div class="section" data-tooltip="PF2E.ConditionTypeWounded">
         <i class="fa-solid fa-tombstone"></i>
-        {{> pips max=wounded.max value=wounded.value action="toggle-wounded"}}
+        {{> pips max=wounded.max value=wounded.value action="toggle-wounded" digits=digitalPips}}
     </div>
 </div>
 {{/if}}

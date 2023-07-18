@@ -35,6 +35,10 @@
                 "name": "Enabled",
                 "hint": "Should the module be enabled on this client."
             },
+            "pips": {
+                "name": "Digital Pips",
+                "hint": "Use a digital representation of pips in the tooltip."
+            },
             "position": {
                 "name": "Tooltip Position",
                 "hint": "Which side of the token would you prefer the main tooltip to show, if not possible, the module will try first on the opposite side, otherwise on one of the remaining two.",

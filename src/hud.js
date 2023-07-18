@@ -441,6 +441,10 @@ export class HUD extends Application {
         const { traits } = system
         const { wounded, dying, shield, resolve, speed, adjustment } = attributes
 
+        if (game.modules.get('xdy-pf2e-workbench')?.active) {
+            heroPoints.max = game.settings.get('xdy-pf2e-workbench', 'maxHeroPoints') || 3
+        }
+
         function toInfo(str) {
             return `<li>${str.trim()}</li>`
         }
@@ -512,6 +516,7 @@ export class HUD extends Application {
             alliances,
             isCharacter,
             showDeathLine: isCharacter && (showDeath === 'always' || dying.value || wounded.value),
+            digitalPips: getSetting('pips'),
             hasCover: this.hasCover,
             saves:
                 savesSetting !== 'none' &&
@@ -818,9 +823,15 @@ export class HUD extends Application {
 
         html.find('[data-action=toggle-hero]').on('click contextmenu', event => {
             event.preventDefault()
-            const { max, value } = actor.heroPoints
+            let { max, value } = actor.heroPoints
+
+            if (game.modules.get('xdy-pf2e-workbench')?.active) {
+                max = game.settings.get('xdy-pf2e-workbench', 'maxHeroPoints') || 3
+            }
+
             const change = event.type === 'click' ? 1 : -1
             const newValue = Math.clamped(value + change, 0, max)
+
             if (newValue !== value) actor.update({ 'system.resources.heroPoints.value': newValue })
         })
 

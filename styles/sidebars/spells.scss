@@ -67,9 +67,11 @@
                                 .pips {
                                     margin-right: 3px;
 
-                                    .pip {
-                                        font-size: 0.9em;
-                                        margin-top: 2px;
+                                    &:not(.digits) {
+                                        i {
+                                            font-size: 0.9em;
+                                            margin-top: 2px;
+                                        }
                                     }
                                 }
                             }
