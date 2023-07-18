@@ -215,9 +215,9 @@
 
     {{#if (ne altUsage undefined)}}
     {{#if strike.item.isThrown}}
-    <img class="alt-usage-icon" src="systems/pf2e/icons/mdi/thrown.svg" title="{{localize " PF2E.Item.Weapon.ThrownUsage.Label"}}" />
+    <img class="alt-usage-icon" src="systems/pf2e/icons/mdi/thrown.svg" data-tooltip="{{localize 'PF2E.Item.Weapon.ThrownUsage.Label'}}" />
     {{else}}
-    <img class="alt-usage-icon" src="systems/pf2e/icons/mdi/sword.svg" title="{{localize " PF2E.Item.Weapon.MeleeUsage.Label"}}" />
+    <img class="alt-usage-icon" src="systems/pf2e/icons/mdi/sword.svg" data-tooltip="{{localize 'PF2E.Item.Weapon.MeleeUsage.Label'}}" />
     {{/if}}
     {{/if}}
 </div>
