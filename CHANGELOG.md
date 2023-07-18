@@ -1,3 +1,7 @@
+# 1.29.1
+
+-   swap `Wounded` and `Dying` icons
+
 # 1.29.0
 
 -   added `Digital Pips` setting, when enabled, the main tooltip will display a digital version of the pips (still works the same as regular pips when it comes to mouse clicks)
