@@ -181,9 +181,17 @@ export function addItemsListeners(el, actor) {
             const $content = $(content)
 
             $content.find('[data-carry-type]').on('click', async event => {
-                const { carryType, handsHeld = 0, inSlot } = $(event.currentTarget).data()
-                tooltipster.close()
-                await actor.adjustCarryType?.(item, carryType, handsHeld, inSlot)
+                const current = item.system.equipped
+                let { carryType, handsHeld = 0, inSlot } = $(event.currentTarget).data()
+                inSlot = inSlot === 'true'
+
+                if (
+                    carryType !== current.carryType ||
+                    inSlot !== current.inSlot ||
+                    (carryType === 'held' && handsHeld !== current.handsHeld)
+                ) {
+                    await actor.adjustCarryType(item, { carryType, handsHeld, inSlot })
+                }
             })
 
             if (item.type !== 'backpack') {
