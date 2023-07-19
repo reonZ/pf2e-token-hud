@@ -115,7 +115,7 @@ export function addExtrasListeners(el, actor, token) {
         'click contextmenu'
     )
 
-    action('roll-point-our', event => {
+    action('roll-point-out', event => {
         game.pf2e.actions.get('point-out').use({ event, actors: [actor], tokens: [token] })
     })
 
