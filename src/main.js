@@ -24,6 +24,10 @@ Hooks.once('ready', () => {
 
 Hooks.on('renderSettingsConfig', renderSettingsConfig)
 
+Hooks.on('drawMeasuredTemplate', template => {
+    if (template.isPreview) getHud()?.close()
+})
+
 Hooks.on('getActorDirectoryEntryContext', (_, data) => {
     data.unshift({
         icon: '<i class="fa-solid fa-code"></i>',
