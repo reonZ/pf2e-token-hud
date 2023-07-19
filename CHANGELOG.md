@@ -1,3 +1,8 @@
+# 1.30.0
+
+-   the tooltip will now close when you start creating any kind of template preview
+-   fixed `Point Out` not doing anything
+
 # 1.29.1
 
 -   swap `Wounded` and `Dying` icons
