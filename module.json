@@ -13,7 +13,7 @@
         "scripts/main.js"
     ],
     "compatibility": {
-        "minimum": "11.305",
+        "minimum": "11.306",
         "verified": "11"
     },
     "version": "1.31.0",
@@ -53,7 +53,7 @@
                 "type": "system",
                 "manifest": "https://raw.githubusercontent.com/foundryvtt/pf2e/master/system.json",
                 "compatibility": {
-                    "minimum": "5.1.2"
+                    "minimum": "5.2.1"
                 }
             }
         ]
