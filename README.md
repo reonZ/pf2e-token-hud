@@ -369,7 +369,7 @@ When enabled, all skill action that require the character to be trained will be 
 
 This does nothing on NPCs
 
-# HOOKS
+# Hooks
 
 A custom hook is called every time a sidebar is rendered in the HUD
 
