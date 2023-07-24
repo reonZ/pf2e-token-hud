@@ -1,3 +1,15 @@
+# 1.31.0
+
+-   added MAPs to the spell attack at the top of the spells sidebar
+-   added `renderHUDSidebar` hook event when any sidebar is rendered
+
+```typescript
+Hooks.callAll('renderHUDSidebar', type: string, sidebar: jQuery, hud: HUD)
+```
+
+-   removed the total modifier of strikes MAP that were added in the last system update
+-   fixed encumbered being broken with the latest system update
+
 # 1.30.0
 
 -   the tooltip will now close when you start creating any kind of template preview
