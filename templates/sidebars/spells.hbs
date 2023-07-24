@@ -1,14 +1,16 @@
-<a class="row" data-action="spell-attack">
-    {{localize 'PF2E.SpellAttackLabel'}}
-    {{#if attackMod}}
-    (
-    <i class="fa-solid fa-dice-d20"></i>
-    {{attackMod}}
-    )
-    {{else}}
-    <i class="fa-solid fa-dice-d20"></i>
-    {{/if}}
-</a>
+<div class="row">
+    <div class="variants">
+        <div class="variant" data-action="spell-attack">
+            {{localize 'PF2E.SpellAttackLabel'}}{{#if attackMod}} {{attackMod}}{{/if}}
+        </div>
+        <div class="variant" data-action="spell-attack" data-map="-5">
+            {{localize 'PF2E.MAPAbbreviationLabel' penalty='-5'}}
+        </div>
+        <div class="variant" data-action="spell-attack" data-map="-10">
+            {{localize 'PF2E.MAPAbbreviationLabel' penalty='-10'}}
+        </div>
+    </div>
+</div>
 
 {{#if spells.length}}
 {{#each spells as |entry|}}

@@ -183,7 +183,13 @@ export function addSpellsListeners(el, actor, token) {
             statistic = attacks[0].statistic
         }
 
-        statistic?.check.roll(eventToRollParams(event))
+        const rollParams = eventToRollParams(event)
+        const { map } = event.currentTarget.dataset
+        if (map) {
+            rollParams.modifiers = [new game.pf2e.Modifier({ label: 'PF2E.MultipleAttackPenalty', modifier: Number(map) })]
+        }
+
+        statistic?.check.roll(rollParams)
     })
 
     el.find('[data-action=spell-chat]').on('click', async event => {
