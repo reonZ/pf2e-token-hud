@@ -191,7 +191,7 @@
     {{#each strike.variants as |variant|}}
     <div class="variant {{#if (or (eq strike.quantity 0) (not @root.isOwner))}}disabled{{/if}}" data-action="strike-attack"
         data-index="{{@index}}" data-alt-usage="{{../altUsage}}">
-        {{variant.label}}
+        {{@root.variantLabel variant.label}}
     </div>
     {{/each}}
     {{#if strike.item.dealsDamage}}

@@ -116,6 +116,7 @@ export async function getActionsData(actor, token, filter) {
                 sections,
                 heroActions,
                 i18n: str => localize(`actions.${str}`),
+                variantLabel: label => label.replace(/.+\((.+)\)/, '$1'),
                 damageTypes: CONFIG.PF2E.damageTypes,
             },
             doubled: nb > 1 && getSetting('actions-columns'),
