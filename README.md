@@ -369,6 +369,14 @@ When enabled, all skill action that require the character to be trained will be 
 
 This does nothing on NPCs
 
+# HOOKS
+
+A custom hook is called every time a sidebar is rendered in the HUD
+
+```typescript
+Hooks.callAll('renderHUDSidebar', type: string, sidebar: jQuery, hud: HUD)
+```
+
 # API
 
 A set of functions is exposed from the module to be used by third parties:
