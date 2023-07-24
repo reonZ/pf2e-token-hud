@@ -987,6 +987,8 @@ export class HUD extends Application {
         })
         addListeners(sidebar, actor, token)
 
+        Hooks.callAll('renderHUDSidebar', type, sidebar, this)
+
         return sidebar
     }
 }
