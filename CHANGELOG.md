@@ -1,3 +1,7 @@
+# 1.32.0
+
+-   updated popup inline rolls events to be in sync with the system recent changes
+
 # 1.31.0
 
 -   added MAPs to the spell attack at the top of the spells sidebar
