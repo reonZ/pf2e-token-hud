@@ -962,13 +962,20 @@ export class HUD extends Application {
         })
 
         sidebar = tmp.firstElementChild
-        this.element.append(sidebar)
+        element.append(sidebar)
 
         const rect = sidebar.getBoundingClientRect()
         const target = element.getBoundingClientRect()
 
-        let left = target.x - rect.width
-        if (left < 0) left = target.right
+        let left
+        const position = getSetting('position')
+        if (position === 'left') {
+            left = target.x - rect.width
+            if (left < 0) left = target.right
+        } else {
+            left = target.right
+            if (left + rect.width > window.innerWidth) left = target.x - rect.width
+        }
 
         const elPadding = parseInt(window.getComputedStyle(element).padding)
         let top = postionFromTargetY(rect, target, elPadding)

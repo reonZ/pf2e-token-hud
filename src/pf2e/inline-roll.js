@@ -89,7 +89,6 @@ function repostAction(target, actor = null) {
 
 /**
  * Significant rework has been done here
- * flat check has been completely redone
  * actions & checks use the actor directly instead of selections
  */
 export function listenInlineRoll($html, actor) {
@@ -186,6 +185,7 @@ export function listenInlineRoll($html, actor) {
                     })()
 
                     const isSavingThrow = tupleHasValue(['fortitude', 'reflex', 'will'], pf2Check)
+
                     // Get actual traits and include as such
                     const traits = isSavingThrow ? [] : parsedTraits?.filter(t => t in CONFIG.PF2E.actionTraits) ?? []
                     statistic.roll({
