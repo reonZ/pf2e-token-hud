@@ -1,3 +1,7 @@
+# 1.32.1
+
+-   the module will now try to not display the sidebars over the tooltip's token
+
 # 1.32.0
 
 -   updated popup inline rolls events to be in sync with the system recent changes
