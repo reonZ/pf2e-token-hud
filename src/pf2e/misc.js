@@ -65,3 +65,7 @@ export function getSelectedOrOwnActors(types, useOwnCharacter = true) {
 export function tupleHasValue(array, value) {
     return array.includes(value)
 }
+
+export function objectHasKey(obj, key) {
+    return (typeof key === 'string' || typeof key === 'number') && key in obj
+}

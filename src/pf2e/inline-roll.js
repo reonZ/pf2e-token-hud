@@ -1,16 +1,19 @@
+import { calculateDC } from './dc.js'
 import { htmlClosest, htmlQueryAll } from './dom.js'
-import { tupleHasValue } from './misc.js'
+import { ErrorPF2e, getActionGlyph, tupleHasValue } from './misc.js'
 import { eventToRollParams } from './scripts.js'
+
+const SAVE_TYPES = ['fortitude', 'reflex', 'will']
 
 const inlineSelector = ['action', 'check', 'effect-area'].map(keyword => `[data-pf2-${keyword}]`).join(',')
 
-function injectRepostElement(links, actor) {
+function injectRepostElement(links, foundryDoc) {
     for (const link of links) {
-        if (!actor || actor.isOwner) link.classList.add('with-repost')
+        if (!foundryDoc || foundryDoc.isOwner) link.classList.add('with-repost')
 
         const repostButtons = htmlQueryAll(link, 'i[data-pf2-repost]')
         if (repostButtons.length > 0) {
-            if (actor && !actor.isOwner) {
+            if (foundryDoc && !foundryDoc.isOwner) {
                 for (const button of repostButtons) {
                     button.remove()
                 }
@@ -19,7 +22,7 @@ function injectRepostElement(links, actor) {
             continue
         }
 
-        if (actor && !actor.isOwner) continue
+        if (foundryDoc && !foundryDoc.isOwner) continue
 
         const newButton = document.createElement('i')
         const icon = link.parentElement?.dataset?.pf2Checkgroup !== undefined ? 'fa-comment-alt-dots' : 'fa-comment-alt'
@@ -30,12 +33,13 @@ function injectRepostElement(links, actor) {
 
         newButton.addEventListener('click', event => {
             event.stopPropagation()
-
             const target = event.target
             if (!(target instanceof HTMLElement)) return
-
             const parent = target?.parentElement
-            if (parent) repostAction(parent, actor)
+            if (!parent) return
+
+            const document = resolveDocument(target, foundryDoc)
+            repostAction(parent, document)
         })
     }
 }
@@ -54,12 +58,13 @@ function makeRepostHtml(target, defaultVisibility) {
     return `<span data-visibility="${showDC}">${flavor}</span> ${target.outerHTML}`.trim()
 }
 
-function repostAction(target, actor = null) {
+function repostAction(target, foundryDoc = null) {
     if (!['pf2Action', 'pf2Check', 'pf2EffectArea'].some(d => d in target.dataset)) {
         return
     }
 
-    const defaultVisibility = (actor ?? actor)?.hasPlayerOwner ? 'all' : 'gm'
+    const actor = resolveActor(foundryDoc)
+    const defaultVisibility = (actor ?? foundryDoc)?.hasPlayerOwner ? 'all' : 'gm'
     const content = (() => {
         if (target.parentElement?.dataset?.pf2Checkgroup !== undefined) {
             const content = htmlQueryAll(target.parentElement, inlineSelector)
@@ -77,8 +82,15 @@ function repostAction(target, actor = null) {
         ? ChatMessagePF2e.getSpeaker({ actor, token: actor.getActiveTokens(false, true).shift() })
         : ChatMessagePF2e.getSpeaker()
 
+    // If the originating document is a journal entry, include its UUID as a flag. If a chat message, copy over
+    // the origin flag.
     const message = game.messages.get(htmlClosest(target, '[data-message-id]')?.dataset.messageId ?? '')
-    const flags = message?.flags.pf2e.origin ? { pf2e: { origin: deepClone(message.flags.pf2e.origin) } } : {}
+    const flags =
+        foundryDoc instanceof JournalEntry
+            ? { pf2e: { journalEntry: foundryDoc.uuid } }
+            : message?.flags.pf2e.origin
+            ? { pf2e: { origin: deepClone(message.flags.pf2e.origin) } }
+            : {}
 
     ChatMessagePF2e.create({
         speaker,
@@ -88,16 +100,15 @@ function repostAction(target, actor = null) {
 }
 
 /**
- * Significant rework has been done here
  * actions & checks use the actor directly instead of selections
  */
-export function listenInlineRoll($html, actor) {
-    const html = $html instanceof HTMLElement ? $html : $html[0]
+export function listenInlineRoll(html, foundryDoc) {
+    foundryDoc ??= resolveDocument(html, foundryDoc)
 
     const links = htmlQueryAll(html, inlineSelector).filter(l => ['A', 'SPAN'].includes(l.nodeName))
+    injectRepostElement(links, foundryDoc)
 
-    injectRepostElement(links, actor)
-    flavorDamageRolls(html, actor)
+    flavorDamageRolls(html, foundryDoc instanceof Actor ? foundryDoc : null)
 
     for (const link of links.filter(l => l.dataset.pf2Action)) {
         const { pf2Action, pf2Glyph, pf2Variant, pf2Dc, pf2ShowDc, pf2Skill } = link.dataset
@@ -111,7 +122,6 @@ export function listenInlineRoll($html, actor) {
                     variant: pf2Variant,
                     difficultyClass: pf2Dc ? { scope: 'check', value: Number(pf2Dc) || 0, visibility } : undefined,
                     skill: pf2Skill,
-                    actors: [actor],
                 })
             } else {
                 console.warn(`PF2e System | Skip executing unknown action '${pf2Action}'`)
@@ -120,14 +130,17 @@ export function listenInlineRoll($html, actor) {
     }
 
     for (const link of links.filter(l => l.dataset.pf2Check && !l.dataset.invalid)) {
-        const { pf2Check, pf2Dc, pf2Traits, pf2Label, pf2Defense, pf2Adjustment, pf2Roller } = link.dataset
+        const { pf2Check, pf2Dc, pf2Traits, pf2Label, pf2Defense, pf2Adjustment } = link.dataset
         if (!pf2Check) return
 
-        link.addEventListener('click', event => {
-            const parsedTraits = pf2Traits
-                ?.split(',')
-                .map(trait => trait.trim())
-                .filter(trait => !!trait)
+        link.addEventListener('click', async event => {
+            const actor = (parent = resolveActor(foundryDoc))
+
+            const extraRollOptions =
+                pf2Traits
+                    ?.split(',')
+                    .map(o => o.trim())
+                    .filter(o => !!o) ?? []
             const eventRollParams = eventToRollParams(event)
 
             switch (pf2Check) {
@@ -139,10 +152,16 @@ export function listenInlineRoll($html, actor) {
                         check: { type: 'flat-check' },
                     })
                     const dc = Number.isInteger(Number(pf2Dc)) ? { label: pf2Label, value: Number(pf2Dc) } : null
-                    flatCheck.roll({ ...eventRollParams, extraRollOptions: parsedTraits, dc })
+                    flatCheck.roll({ ...eventRollParams, extraRollOptions, dc })
+
                     break
                 }
                 default: {
+                    const isSavingThrow = tupleHasValue(SAVE_TYPES, pf2Check)
+
+                    // Get actual traits for display in chat cards
+                    const traits = isSavingThrow ? [] : extraRollOptions.filter(t => t in CONFIG.PF2E.actionTraits) ?? []
+
                     const statistic = (() => {
                         if (pf2Check in CONFIG.PF2E.magicTraditions) {
                             const bestSpellcasting =
@@ -153,7 +172,17 @@ export function listenInlineRoll($html, actor) {
                                     .shift() ?? null
                             if (bestSpellcasting) return bestSpellcasting
                         }
-                        return actor.getStatistic(pf2Check)
+                        const bySlug = actor.getStatistic(pf2Check)
+                        // Frame the statistic as an attack-roll stat if the action includes the "attack" trait
+                        // and the check is otherwise unclassified.
+                        return bySlug?.check.type === 'check' && traits.includes('attack')
+                            ? bySlug.extend({
+                                  check: {
+                                      type: 'attack-roll',
+                                      domains: ['attack', 'attack-roll', `${pf2Check}-attack-roll`],
+                                  },
+                              })
+                            : bySlug
                     })()
                     if (!statistic) {
                         console.warn(ErrorPF2e(`Skip rolling unknown statistic ${pf2Check}`).message)
@@ -161,6 +190,7 @@ export function listenInlineRoll($html, actor) {
                     }
 
                     const targetActor = pf2Defense ? game.user.targets.first()?.actor : null
+
                     const dcValue = (() => {
                         const adjustment = Number(pf2Adjustment) || 0
                         if (pf2Dc === '@self.level') {
@@ -168,6 +198,7 @@ export function listenInlineRoll($html, actor) {
                         }
                         return Number(pf2Dc ?? 'NaN') + adjustment
                     })()
+
                     const dc = (() => {
                         if (Number.isInteger(dcValue)) {
                             return { label: pf2Label, value: dcValue }
@@ -184,18 +215,42 @@ export function listenInlineRoll($html, actor) {
                         return null
                     })()
 
-                    const isSavingThrow = tupleHasValue(['fortitude', 'reflex', 'will'], pf2Check)
+                    // Retrieve the item if:
+                    // (2) The item is an action or,
+                    // (1) The check is a saving throw and the item is not a weapon.
+                    // Exclude weapons so that roll notes on strikes from incapacitation abilities continue to work.
+                    const item = (() => {
+                        const itemFromDoc =
+                            foundryDoc instanceof Item ? foundryDoc : foundryDoc instanceof ChatMessage ? foundryDoc.item : null
 
-                    // Get actual traits and include as such
-                    const traits = isSavingThrow ? [] : parsedTraits?.filter(t => t in CONFIG.PF2E.actionTraits) ?? []
-                    statistic.roll({
+                        return itemFromDoc?.isOfType('action') || (isSavingThrow && !itemFromDoc?.isOfType('weapon'))
+                            ? itemFromDoc
+                            : null
+                    })()
+
+                    const args = {
                         ...eventRollParams,
-                        extraRollOptions: parsedTraits,
-                        origin: isSavingThrow ? actor : null,
+                        extraRollOptions,
+                        origin: isSavingThrow && parent instanceof Actor ? parent : null,
                         dc,
                         target: !isSavingThrow && dc?.statistic ? targetActor : null,
+                        item,
                         traits,
-                    })
+                    }
+
+                    // Use a special header for checks against defenses
+                    const itemIsEncounterAction = !!(item?.isOfType('action') && item.actionCost)
+                    if (itemIsEncounterAction && pf2Defense) {
+                        const subtitleLocKey =
+                            pf2Check in CONFIG.PF2E.magicTraditions ? 'PF2E.ActionsCheck.spell' : 'PF2E.ActionsCheck.x'
+                        args.label = await renderTemplate('systems/pf2e/templates/chat/action/header.hbs', {
+                            glyph: getActionGlyph(item.actionCost),
+                            subtitle: game.i18n.format(subtitleLocKey, { type: statistic.label }),
+                            title: item.name,
+                        })
+                    }
+
+                    statistic.roll(args)
                 }
             }
         })
@@ -243,4 +298,21 @@ export function listenInlineRoll($html, actor) {
             new CONFIG.MeasuredTemplate.objectClass(templateDoc).drawPreview()
         })
     }
+}
+
+/** If the provided document exists returns it, otherwise attempt to derive it from the sheet */
+function resolveDocument(html, foundryDoc) {
+    if (foundryDoc) return foundryDoc
+
+    const sheet = ui.windows[Number(html.closest('.app.sheet')?.dataset.appid)] ?? null
+
+    const document = sheet?.document
+    return document instanceof Actor || document instanceof JournalEntry ? document : null
+}
+
+/** Retrieves the actor for the given document, or the document itself if its already an actor */
+function resolveActor(foundryDoc) {
+    if (foundryDoc instanceof Actor) return foundryDoc
+    if (foundryDoc instanceof Item || foundryDoc instanceof ChatMessage) return foundryDoc.actor
+    return null
 }

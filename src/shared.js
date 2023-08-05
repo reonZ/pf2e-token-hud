@@ -13,7 +13,7 @@ export async function getItemSummary(el, actor) {
     description.classList.add('description')
 
     await actor.sheet.itemRenderer.renderItemSummary(description, item, data)
-    listenInlineRoll(description, actor)
+    listenInlineRoll(description, item)
 
     return description
 }
