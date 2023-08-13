@@ -1,3 +1,7 @@
+# 1.34.0
+
+-   `Recall Knowledge` action is now a proper check roll and will have the extra option `action:recall-knowledge` to accomodate people already using it with `Workbench`
+
 # 1.33.0
 
 -   updated popup inline rolls to be in sync with the system `5.3.1`
