@@ -60,6 +60,7 @@ export async function getActionsData(actor, token, filter) {
                     (await Promise.all(
                         strike.altUsages.map(async altUsage => ({
                             ...altUsage,
+                            usage: strike.item.isThrown ? 'thrown' : 'melee',
                             damageFormula: await altUsage.damage?.({ getFormula: true }),
                             criticalFormula: await altUsage.critical?.({ getFormula: true }),
                         }))
@@ -140,11 +141,14 @@ export function addActionsListeners(el, actor) {
     }
 
     function getStrike(event) {
-        const { altUsage } = event.currentTarget.dataset
         const strikeEl = event.currentTarget.closest('.strike')
         const strike = actor.system.actions[strikeEl.dataset.index]
-        if (!altUsage) return strike
-        return strike?.altUsages[altUsage]
+        if (!strike) return null
+
+        const { altUsage } = event.currentTarget.dataset
+        return ['melee', 'thrown'].includes(altUsage)
+            ? strike.altUsages?.find(s => (altUsage === 'thrown' ? s.item.isThrown : s.item.isMelee)) ?? null
+            : strike
     }
 
     function getUuid(event) {
@@ -229,9 +233,9 @@ export function addActionsListeners(el, actor) {
     })
 
     action('strike-attack', event => {
-        const { index } = event.currentTarget.dataset
+        const { index, altUsage } = event.currentTarget.dataset
         const strike = getStrike(event)
-        strike?.variants[index].roll({ event })
+        strike?.variants[index].roll({ event, altUsage })
     })
 
     action(['strike-damage', 'strike-critical'], event => {

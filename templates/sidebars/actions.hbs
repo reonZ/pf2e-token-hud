@@ -73,8 +73,8 @@
         {{#if strike.ready}}
         {{> strike strike=strike}}
         {{#if strike.altUsages.length}}
-        {{#each strike.altUsages as |altUsages|}}
-        {{> strike strike=altUsages altUsage=@index}}
+        {{#each strike.altUsages as |altUsage|}}
+        {{> strike strike=altUsage altUsage=altUsage.usage}}
         {{/each}}
         {{/if}}
         {{/if}}
@@ -190,7 +190,7 @@
 <div class="variants">
     {{#each strike.variants as |variant|}}
     <div class="variant {{#if (or (eq strike.quantity 0) (not @root.isOwner))}}disabled{{/if}}" data-action="strike-attack"
-        data-index="{{@index}}" data-alt-usage="{{../altUsage}}">
+        data-index="{{@index}}" {{#if ../altUsage}}data-alt-usage="{{../altUsage}}" {{/if}}>
         {{@root.variantLabel variant.label}}
     </div>
     {{/each}}
@@ -199,16 +199,16 @@
 </div>
 <div class="variants">
     {{/unless}}
-    <div class="variant damage {{#unless @root.isOwner}}disabled{{/unless}}" data-action="strike-damage" data-alt-usage="{{altUsage}}"
-        title="{{strike.damageFormula}}">
+    <div class="variant damage {{#unless @root.isOwner}}disabled{{/unless}}" data-action="strike-damage" title="{{strike.damageFormula}}"
+        {{#if altUsage}}data-alt-usage="{{altUsage}}" {{/if}}>
         {{#if @root.isCharacter}}
         {{localize "PF2E.DamageLabel"}}
         {{else}}
         {{strike.damageFormula}}
         {{/if}}
     </div>
-    <div class="variant {{#unless @root.isOwner}}disabled{{/unless}}" data-action="strike-critical" data-alt-usage="{{altUsage}}"
-        title="{{strike.criticalFormula}}">
+    <div class="variant {{#unless @root.isOwner}}disabled{{/unless}}" data-action="strike-critical" title="{{strike.criticalFormula}}" {{#if
+        altUsage}}data-alt-usage="{{altUsage}}" {{/if}}>
         {{localize "PF2E.CriticalDamageLabel"}}
     </div>
     {{/if}}
