@@ -60,7 +60,7 @@ export async function getActionsData(actor, token, filter) {
                     (await Promise.all(
                         strike.altUsages.map(async altUsage => ({
                             ...altUsage,
-                            usage: strike.item.isThrown ? 'thrown' : 'melee',
+                            usage: altUsage.item.isThrown ? 'thrown' : 'melee',
                             damageFormula: await altUsage.damage?.({ getFormula: true }),
                             criticalFormula: await altUsage.critical?.({ getFormula: true }),
                         }))
