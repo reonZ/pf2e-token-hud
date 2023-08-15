@@ -1,6 +1,10 @@
+# 1.34.1
+
+-   fixed issue with strikes alt usages (e.g. `combination` strikes) which would generate an attack roll card unable to use the right alternate damage formulas when clicking on the `damage` and `critical` buttons
+
 # 1.34.0
 
--   `Recall Knowledge` action is now a proper check roll and will have the extra option `action:recall-knowledge` to accomodate people already using it with `Workbench`
+-   `Recall Knowledge` action is now a proper check roll and will have the extra option `action:recall-knowledge` to accommodate people already using it with `Workbench`
 
 # 1.33.0
 
