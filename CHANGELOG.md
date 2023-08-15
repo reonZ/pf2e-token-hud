@@ -1,3 +1,7 @@
+# 1.34.2
+
+-   fixed thrown strikes not working
+
 # 1.34.1
 
 -   fixed issue with strikes alt usages (e.g. `combination` strikes) which would generate an attack roll card unable to use the right alternate damage formulas when clicking on the `damage` and `critical` buttons
