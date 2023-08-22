@@ -1,0 +1,338 @@
+{
+    "pf2e-token-hud": {
+        "filter": "筛选器",
+        "actor": {
+            "macros": {
+                "contextmenu": "ITT Macros（宏）",
+                "title": "ITT Macros（宏）"
+            }
+        },
+        "menu": {
+            "gm": {},
+            "client": {
+                "header": "客户端设置",
+                "distance": "距离",
+                "sidebar": "侧边栏",
+                "actions": "动作",
+                "spells": "法术",
+                "skills": "技能",
+                "tooltip": "工具箱",
+                "items": "装备"
+            }
+        },
+        "keybinds": {
+            "hold": {
+                "name": "长按显示",
+                "hint": "长按以显示token工具箱的快捷键"
+            },
+            "filter": {
+                "name": "显示筛选器",
+                "hint": "当工具箱打开时，你可以用这个快捷键打开筛选器，将页面滚动到工具箱最上方，并聚焦在筛选器搜索栏所在的位置。"
+            }
+        },
+        "settings": {
+            "enabled": {
+                "name": "启用",
+                "hint": "是否在该客户端启用该模组"
+            },
+            "pips": {
+                "name": "数字化点数",
+                "hint": "用数字来表示点数（例如英雄点数量）"
+            },
+            "position": {
+                "name": "工具箱位置",
+                "hint": "你希望主工具箱展示在什么位置，若情况不允许，则模组会首先尝试在另一侧展示，再不行，就用剩下的两侧。",
+                "choices": {
+                    "left": "左",
+                    "right": "右",
+                    "top": "上",
+                    "bottom": "下"
+                }
+            },
+            "small-position": {
+                "name": "小工具箱位置",
+                "hint": "选择小工具箱位于什么位置，可能的调整逻辑如主工具箱。"
+            },
+            "delay": {
+                "name": "工具箱延迟",
+                "hint": "在打开工具箱前，延迟的毫秒数。"
+            },
+            "autolock": {
+                "name": "自动锁定",
+                "hint": "工具箱应当是在鼠标悬停后锁定还是打开后立即锁定。",
+                "choices": {
+                    "none": "不锁定",
+                    "hover": "悬停锁定",
+                    "render": "即刻锁定"
+                }
+            },
+            "spells": {
+                "name": "按类别分配法术",
+                "hint": "在同一个表格中，法术是否应先按类型再按字母排序。"
+            },
+            "scrollbar": {
+                "name": "侧边栏的掷骰栏",
+                "hint": "当侧边栏（例如技能侧边栏）打开时，是否要在其中显示掷骰栏。若禁止，则你将不会在侧边栏中看到掷骰按钮，但你仍然可以点击名称掷骰。"
+            },
+            "height": {
+                "name": "侧边栏最大高度",
+                "hint": "设置侧边栏的最大高度，可以是任何用来表示 'height'（高度）的 css 字符串（例如：'50%' or '300px'）。该模组会控制侧边栏，以使其不超过画面范围的极限。"
+            },
+            "actions": {
+                "name": "动作分类",
+                "hint": "动作选项进行分类的原则。",
+                "choices": {
+                    "name": "按照名称划归一组",
+                    "type": "按照类别划归一组",
+                    "split": "按照类别将其分割"
+                }
+            },
+            "actions-colors": {
+                "name": "打击及伤害的系统颜色 System Colors",
+                "hint": "启用后，该模块将采角色卡中打击和伤害按钮的系统配色方案。"
+            },
+            "distance": {
+                "name": "Token间距",
+                "hint": "是否在界面上显示所选角色与另一个 被选择/被瞄准 目标之间的距离。",
+                "choices": {
+                    "none": "禁止",
+                    "self": "仅限已拥有的角色",
+                    "all": "允许所有"
+                }
+            },
+            "unit": {
+                "name": "距离单元",
+                "hint": "用来表示距离的字符串，分别代表单位转化率（如 1 英尺对应 0.3 米）、具体单位和小数位数（均用逗号分隔）。例如：'0.3, m, 2'。留空默认为 '1, ft, 0'。"
+            },
+            "status": {
+                "name": "健康状况",
+                "hint": "逗号分隔的字符串，代表生物的健康状况从最差到最好的不同情况（请不要包含 \"dead\" 即死亡状态）。模块将用最大健康值除以所提供的字符串（即健康状况种类）的数量。留空表示禁用。",
+                "statuses": {
+                    "first": "濒死",
+                    "second": "堪危",
+                    "third": "欠佳",
+                    "fourth": "良好"
+                }
+            },
+            "last-status": {
+                "name": "满血状态 100%",
+                "hint": "启用后，最后一个健康状态字符串将只用于剩余 100% 生命值的情况，而不再是一整个区间。"
+            },
+            "see-status": {
+                "name": "Health Status on Owned",
+                "hint": "启用后，健康状况也会显示在常用的工具箱上，而不再只显示在未拥有的角色的工具箱上。"
+            },
+            "untrained": {
+                "name": "隐藏受训技能动作",
+                "hint": "启用此项后，需要至少受训的技能动作将不会再显示在技能边栏之中。"
+            },
+            "tradition": {
+                "name": "显示法术根源",
+                "hint": "在施法列表的最前面加上根源特征。"
+            },
+            "actions-columns": {
+                "name": "分栏显示（动作）",
+                "hint": "启用后，动作边栏将显示成 2 列。"
+            },
+            "items-columns": {
+                "name": "分栏显示（装备）",
+                "hint": "启用后，装备边栏将显示成 2 列。"
+            },
+            "spells-columns": {
+                "name": "分栏显示（法术）",
+                "hint": "启用后，法术边栏将显示成 2 列。"
+            },
+            "skills-columns": {
+                "name": "分栏显示（技能）",
+                "hint": "启用后，技能边栏将显示成 2 列。"
+            },
+            "show-death": {
+                "name": "显示斩杀线",
+                "hint": "是否在主工具箱中显示濒死与受伤情况。",
+                "choices": {
+                    "none": "始终不显示",
+                    "always": "始终显示",
+                    "only": "仅在有以上状态时显示"
+                }
+            },
+            "use-holding": {
+                "name": "使用长按显示的快捷键",
+                "choices": {
+                    "none": "禁用",
+                    "player": {
+                        "hint": "何种token需要（长）按快捷键来打开工具箱。",
+                        "half": "仅限已拥有的角色",
+                        "all": "已拥有以及未拥有的角色"
+                    },
+                    "gm": {
+                        "hint": "在不按住键绑定的情况下不显示工具箱，或者在按下/按住快捷键前仅显示简略版（小）工具箱。",
+                        "half": "按住以将简略版转换为完整内容",
+                        "all": "按住显示，否则不显示"
+                    }
+                }
+            },
+            "observer": {
+                "name": "权限为查看时的工具箱",
+                "hint": "启用后，对于你拥有'查看'权限的token，将显示常规工具箱的不可编辑版本。 此外，大多数'仅限拥有'权限才适用的功能现在也将扩展到'查看'权限的角色上。"
+            },
+            "chat": {
+                "name": "禁用聊天卡悬停",
+                "hint": "将鼠标悬停在token锁拥有的聊天卡上时将阻止显示工具提示。"
+            },
+            "party": {
+                "name": "团队可查看",
+                "hint": "将'团队'中的盟友视作PL可查看的对象。"
+            },
+            "saves": {
+                "name": "豁免显示",
+                "hint": "强韧、反射、意志豁免的显示方式。",
+                "choices": {
+                    "none": "不显示",
+                    "bonus": "显示加值",
+                    "dc": "显示 DC"
+                }
+            },
+            "others": {
+                "name": "察觉、隐秘、运动",
+                "hint": "是否在工具箱中显示察觉、隐秘、运动的加值/DC。"
+            },
+            "ranks": {
+                "name": "显示熟练度",
+                "hint": "启用后，一个小的熟练度等级标志将被添加到主工具箱的豁免以及其它选项之上。"
+            },
+            "tooltips": {
+                "name": "禁用工具箱中的点数功能",
+                "hint": "禁止点数工具（如英雄点等）显示在主工具箱中"
+            },
+            "scale": {
+                "name": "调整字体大小",
+                "hint": "您可以通过更改字体大小来缩放整个工具提示及其附加的侧边栏及弹出窗口。该模块默认设计为使用 14px 字体大小。"
+            },
+            "hazard-width": {
+                "name": "危害最大宽度",
+                "hint": "这可以让您设置危害侧边栏所可以采用的最大宽度（以 em 为单位）"
+            },
+            "force-speed": {
+                "name": "始终显示最快速度",
+                "hint": "启用后，默认速度（未手动选择时）将始终为角色卡上所找到的最快速度（原本情况下，只有在陆地速度为 0 时才采用其它速度）。"
+            },
+            "filter": {
+                "name": "始终显示筛选器",
+                "hint": "启用后，筛选器搜索栏将始终显示在侧边栏的顶部，而无需额外绑定快捷键，但你仍可以使用绑定的快捷键将边栏滚动到顶部并聚焦在搜索栏上。"
+            },
+            "containers": {
+                "name": "容器中的物品",
+                "hint": "若启用，容器中的物品将始终将显示在容器之中。"
+            }
+        },
+        "spells": {
+            "title": "法术",
+            "empty": "{name} 不拥有任何法术，是法三分毒",
+            "charges": "聚能",
+            "staff": "法杖",
+            "attacks": {
+                "title": "选择一项施放条目",
+                "ok": "掷骰"
+            }
+        },
+        "extras": {
+            "title": "其它",
+            "empty": "这里空无一物，还请改日再来",
+            "no-macro": "把 Macros（宏）拖到这里"
+        },
+        "actions": {
+            "title": "动作",
+            "empty": "{name} 没有任何事情能做，这也太无趣了。",
+            "recall-knowledge": {
+                "result": "结果",
+                "modifier": "调整",
+                "target": "目标",
+                "first": "1st",
+                "second": "2nd",
+                "third": "3rd",
+                "fourth": "4th",
+                "fifth": "5th",
+                "sixth": "6th",
+                "dc": "DC",
+                "unspecific": "非特别",
+                "specific": "特别"
+            },
+            "treat-wounds": {
+                "title": "{name} - 治疗伤害",
+                "no-proficiency": "{name} 不掌握治疗伤害所需的熟练度。"
+            },
+            "stances": "架势"
+        },
+        "hazard": {
+            "empty": "{name} 并不危险。"
+        },
+        "popup": {
+            "close": "关闭"
+        },
+        "skills": {
+            "title": "技能",
+            "actions": {
+                "earnIncome": "赚取收入",
+                "treatWounds": "治疗伤害",
+                "borrow-arcane-spell": "借阅奥术法术",
+                "identify-magic": "辨识魔法",
+                "identify-alchemy": "辨识炼金术",
+                "learn-spell": "学习法术",
+                "crafting-goods": "制作商品",
+                "staging-performance": "卖艺演出",
+                "distracting-words": "挑衅言语",
+                "gesture": "摆出姿势",
+                "trick": "玩弄花招",
+                "stabilize": "稳定伤势",
+                "stop-bleeding": "止血",
+                "acting": "戏剧",
+                "comedy": "喜剧",
+                "dance": "舞蹈",
+                "keyboards": "键盘乐器",
+                "oratory": "演讲",
+                "percussion": "打击乐",
+                "singing": "声乐",
+                "strings": "弦乐",
+                "winds": "管乐",
+                "follow": "跟随专家",
+                "following": "正在跟随一名专家"
+            },
+            "modifiers": {
+                "crowbar-missing": "无撬棍（Crowbar）"
+            },
+            "variant": {
+                "title": "可选技能",
+                "label": "可选技能",
+                "dc": "难度等级",
+                "button": "选择"
+            }
+        },
+        "items": {
+            "title": "装备",
+            "empty": "{name} 囊中羞涩，真可怜。",
+            "inContainer": "按照容器显示物品",
+            "outContainer": "按照类别显示物品"
+        },
+        "deleteItem": {
+            "title": "Delete Confirmation",
+            "ok": "删除",
+            "cancel": "取消"
+        },
+        "hud": {
+            "resolve": {
+                "title": "使用决心点数",
+                "yes": "确定",
+                "no": "取消",
+                "full": "{name} 耐力值已满，不需要休息。",
+                "breather": {
+                    "label": "小憩一刻",
+                    "msg": "休息10分钟来回复你的耐力值。在你完成此行动后，你回复所有的耐力值。",
+                    "used": "{name} 拥有 {ratio} SP 并消耗了一点决心点数、花费 10 分钟以小憩一刻，从而回复了所有耐力值。"
+                },
+                "steel": {
+                    "msg": "使用一个动作，消耗一点决心点数从而回复等同于你耐力值上限一般的耐力值。"
+                }
+            }
+        }
+    }
+}
