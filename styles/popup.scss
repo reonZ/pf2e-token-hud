@@ -33,5 +33,20 @@
             overflow-y: auto;
             overflow-x: hidden;
         }
+
+        .notes-header {
+            color: var(--primary);
+            padding: 4px;
+            line-height: 1;
+            text-transform: uppercase;
+            font-family: var(--sans-serif);
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .notes-content {
+            text-indent: 1em;
+            padding-inline-start: 4px;
+        }
     }
 }

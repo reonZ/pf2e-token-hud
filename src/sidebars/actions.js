@@ -45,6 +45,9 @@ export async function getActionsData(actor, token, filter) {
         }
     }
 
+    const isOwner = actor.isOwner
+    const rollData = actor.getRollData()
+
     const strikes =
         actor.system.actions &&
         (await Promise.all(
@@ -54,7 +57,7 @@ export async function getActionsData(actor, token, filter) {
                 visible: !isCharacter || strike.visible,
                 damageFormula: await strike.damage?.({ getFormula: true }),
                 criticalFormula: await strike.critical?.({ getFormula: true }),
-                description: strike.description ? await enrichHTML(strike.description, actor) : undefined,
+                description: strike.description ? await enrichHTML(strike.description, actor, { rollData, isOwner }) : undefined,
                 altUsages:
                     strike.altUsages &&
                     (await Promise.all(

@@ -2,10 +2,11 @@ import { enrichHTML, getHud, localize } from './module.js'
 import { getItemSummary } from './shared.js'
 
 export async function popup(title, content, actor) {
-    const hud = getHud(true)
-    if (!hud.length) return
+    const hud = getHud()
+    const el = hud?.element
+    if (!el) return
 
-    hud.find('> .popup').remove()
+    el.find('> .popup').remove()
 
     const tmp = document.createElement('div')
     tmp.innerHTML = `<div class="popup">
@@ -25,7 +26,8 @@ export async function popup(title, content, actor) {
 
     popup.querySelector('[data-action=close-popup]').addEventListener('click', () => popup.remove())
 
-    hud.append(popup)
+    el.append(popup)
+    hud.lock()
 }
 
 export async function showItemSummary(el, actor, title) {

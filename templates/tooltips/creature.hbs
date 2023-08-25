@@ -27,6 +27,14 @@
     <div class="section">
         <i class="fa-solid fa-user-graduate" data-tooltip="PF2E.CharacterLevelLabel"></i>{{level}}
     </div>
+
+    {{#unless isCharacter}}
+    <div class="section">
+        <a class="notes {{#unless hasNotes}}disabled{{/unless}}" data-action="show-notes" data-tooltip="PF2E.NPC.NotesTab">
+            <i class="fa-duotone fa-clipboard"></i>
+        </a>
+    </div>
+    {{/unless}}
 </div>
 
 {{#if hp.max}}

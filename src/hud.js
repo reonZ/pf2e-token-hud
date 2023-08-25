@@ -1,5 +1,6 @@
 import { useResolve } from './actions/use-resolve.js'
 import { enrichHTML, getFlag, getSetting, localize, modifier, MODULE_ID, setFlag, templatePath } from './module.js'
+import { popup } from './popup.js'
 import { getUniqueTarget, RANKS } from './shared.js'
 import { addActionsListeners, getActionsData } from './sidebars/actions.js'
 import { addExtrasListeners, getExtrasData } from './sidebars/extras.js'
@@ -93,8 +94,14 @@ export class HUD extends Application {
 
             if (el) {
                 const popup = el.querySelector('.popup')
-                if (popup && !popup.contains(target)) return popup.remove()
+
+                if (popup && !popup.contains(target)) {
+                    if (!el.querySelector('.sidebar')) this.forceClose()
+                    else return popup.remove()
+                }
+
                 if (target.closest('canvas')) this.forceClose()
+
                 return
             } else this.#cancelDelay()
 
@@ -536,6 +543,7 @@ export class HUD extends Application {
             senses: senses?.filter(Boolean).map(toInfo).join(''),
             languages,
             hasSpells: actor.spellcasting.some(x => x.category !== 'items'),
+            hasNotes: !isCharacter && (system.details.publicNotes || (system.details.privateNotes && isOwner)),
         }
     }
 
@@ -699,6 +707,27 @@ export class HUD extends Application {
         if (getSetting('tooltips')) {
             html.find('.inner [data-tooltip]').attr('data-tooltip', '')
         }
+
+        html.find('[data-action=show-notes').on('click', event => {
+            event.preventDefault()
+
+            const { publicNotes, privateNotes } = actor.system.details
+            if (!publicNotes && (!privateNotes || !isOwner)) return
+
+            let content = ''
+
+            if (publicNotes) {
+                content += `<div class="notes-header">${game.i18n.localize('PF2E.NPC.PublicNotes')}</div>`
+                content += `<div class="notes-content">${publicNotes}</div>`
+            }
+
+            if (privateNotes && isOwner) {
+                content += `<div class="notes-header">${game.i18n.localize('PF2E.NPC.PrivateNotes')}</div>`
+                content += `<div class="notes-content">${privateNotes}</div>`
+            }
+
+            popup(`${actor.name} - ${game.i18n.localize('PF2E.NPC.NotesTab')}`, content, actor)
+        })
 
         html.on('mousedown', () => this.bringToTop())
 
