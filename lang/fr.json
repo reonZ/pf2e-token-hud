@@ -1,0 +1,338 @@
+{
+    "pf2e-token-hud": {
+        "filter": "Filtre",
+        "actor": {
+            "macros": {
+                "contextmenu": "Macros ITT",
+                "title": "Macros ITT"
+            }
+        },
+        "menu": {
+            "gm": {},
+            "client": {
+                "header": "Réglages du client",
+                "distance": "Distance",
+                "sidebar": "Barre latérale",
+                "actions": "Actions",
+                "spells": "Sorts",
+                "skills": "Compétences",
+                "tooltip": "Info-bulle",
+                "items": "Équipement"
+            }
+        },
+        "keybinds": {
+            "hold": {
+                "name": "Presser pour afficher",
+                "hint": "Vous avez besoin d'appuyer sur le raccourci pour afficher l'info-bulle du jeton."
+            },
+            "filter": {
+                "name": "Afficher le filtre",
+                "hint": "Lorsqu'un infobulle de la barre latérale est ouverte, vous pouvez utiliser ce raccourci pour afficher le champ filtre, faisant défiler en haut de la barre latérale en mettant en évidence le champ."
+            }
+        },
+        "settings": {
+            "enabled": {
+                "name": "Activé",
+                "hint": "Le module doit il être activé sur ce client."
+            },
+            "pips": {
+                "name": "Points numériques",
+                "hint": "Utiliser une représentation des points numériques dans l'infobulle."
+            },
+            "position": {
+                "name": "Position de l'info-bulle",
+                "hint": "De quel côté souhaitez vous voir apparaître la principale info-bulle. Si ce n'est pas possible, le module tentera d'abor de l'afficher du côté opposé et autrement sur un des deux restants.",
+                "choices": {
+                    "left": "Gauche",
+                    "right": "Droite",
+                    "top": "Au dessus",
+                    "bottom": "En dessous"
+                }
+            },
+            "small-position": {
+                "name": "Position de la petite info-bulle",
+                "hint": "Choisissez un côté préféré pour la petite version d'info-bulle, la même logique s'applique que pour la principale."
+            },
+            "delay": {
+                "name": "Délai d'info-bulle",
+                "hint": "Le délai en millisecondes avant que l'info-bulle principale ne s'affiche à l'écran."
+            },
+            "autolock": {
+                "name": "Verrouillage automatique",
+                "hint": "L'info-bulle doit-elle être verrouillée lorsqu'on la survole ou dès qu'elle est affichée ?",
+                "choices": {
+                    "none": "Désactivé",
+                    "hover": "Au survol de l'info-bulle",
+                    "render": "Lors de l'affichage de l'info-bulle"
+                }
+            },
+            "spells": {
+                "name": "Trier les sorts par type",
+                "hint": "Les sorts seront triés par type avant d'être triés alphabétiquement sur une même table."
+            },
+            "scrollbar": {
+                "name": "Barre de défilement de la barre latérale",
+                "hint": "La barre de défilement doit-elle être affichée sur les barres latérales du hud, si elle est désactivée, vous pourrez toujours faire défiler la page mais la barre de défilement ne sera plus visible."
+            },
+            "height": {
+                "name": "Hauteur maximale de la barre latérale",
+                "hint": "Définit la hauteur maximale des barres latérales, peut être n'importe quelle chaîne css utilisée pour la propriété 'height' (par exemple '50%' ou '300px'). Le module s'assurera que les barres latérales ne dépasseront pas les limites de hauteur de la fenêtre."
+            },
+            "actions": {
+                "name": "Tri des actions",
+                "hint": "Comment les actions seront triées.",
+                "choices": {
+                    "name": "Groupées par nom",
+                    "type": "Groupées par type",
+                    "split": "Divisées par type"
+                }
+            },
+            "actions-colors": {
+                "name": "Couleurs du système pour Frappes & Dégâts",
+                "hint": "Lorsqu'il est activé, le module reproduit le schéma de couleurs du système pour les Frappes et les boutons de dégâts sur la feuille de l'acteur."
+            },
+            "distance": {
+                "name": "Distance au Token",
+                "hint": "La distance entre le jeton sélectionné/ciblé doit-elle être affichée sur le hud.",
+                "choices": {
+                    "none": "Désactive",
+                    "self": "Jetons possédés seulement",
+                    "all": "Tous les jetons"
+                }
+            },
+            "unit": {
+                "name": "Unité de distance",
+                "hint": "Chaîne représentant le multiplicateur, l'unité et le nombre de décimales (tous séparés par des virgules) utilisés lors de l'affichage de la 'distance au jeton'. Exemple : '0.3, m, 2'. Les valeurs par défaut : '1, ft, 0' : '1, ft, 0', "
+            },
+            "status": {
+                "name": "État de santé",
+                "hint": "Chaînes séparées par des virgules représentant les différentes divisions de l'état de santé d'une créature, du pire au meilleur (ne pas inclure \"mort\"). Le module divisera la santé max par le nombre de chaines indiquées. Laisser vide pour le désactiver.",
+                "statuses": {
+                    "first": "Aux portes de la mort",
+                    "second": "Ne se sent pas bien",
+                    "third": "A connu des jours meilleurs",
+                    "fourth": "Parfaitement bien"
+                }
+            },
+            "last-status": {
+                "name": "Dernier état à 100%",
+                "hint": "Lorsqu'il est activé, le dernier état de santé sera utilisé uniquement pour 100% au lieu de la dernière division du ration de santé."
+            },
+            "see-status": {
+                "name": "État de santé sur propriété",
+                "hint": "Lorsque cette option est activée, l'état de santé est également affiché dans l'info-bulle ordinaire et non plus exclusivement dans les info-bulles non propriétaires."
+            },
+            "untrained": {
+                "name": "Cacher les actions de compétence Inexpérimentées",
+                "hint": "Lorsque cette option est activée, les actions de compétences qui nécessitent un minimum de formation ne seront pas affichées dans la barre latérale des compétences."
+            },
+            "tradition": {
+                "name": "Afficher la tradition du sort",
+                "hint": "Ceci ajoutera la première lettre de la tradition avant la catégorie d'incantation."
+            },
+            "actions-columns": {
+                "name": "Actions sur deux colonnes",
+                "hint": "Lorsqu'elle est activée, la barre latérale des actions est sur deux colonnes."
+            },
+            "items-columns": {
+                "name": "Équipement sur deux colonnes",
+                "hint": "Lorsqu'elle est activée, la barre latérale de l'équipement est sur deux colonnes."
+            },
+            "spells-columns": {
+                "name": "Sorts sur deux colonnes",
+                "hint": "Lorsqu'elle est activée, la barre latérale des sorts est sur deux colonnes."
+            },
+            "skills-columns": {
+                "name": "Compétences sur deux colonnes",
+                "hint": "Lorsqu'elle est activée, la barre latérale des compétences est sur deux colonnes."
+            },
+            "show-death": {
+                "name": "Afficher la ligne Mort",
+                "hint": "Choisissez si la ligne concernant les états Mourant et Blessé est affichée sur l'info-bulle principale.",
+                "choices": {
+                    "none": "Jamais montrer",
+                    "always": "Toujours montrer",
+                    "only": "Uniquement lorsque nécessaire"
+                }
+            },
+            "use-holding": {
+                "name": "Utiliser Presser le raccourci clavier",
+                "choices": {
+                    "none": "Désactivée",
+                    "player": {
+                        "hint": "Quels sont les types de jetons pour lesquels il est nécessaire d'appuyer ou de maintenir le raccourci clavierpour afficher leur infobulle.",
+                        "half": "Jetons possédés seulement",
+                        "all": "Jetons possédés ou non"
+                    },
+                    "gm": {
+                        "hint": "N'afficher aucune info-bulle sans maintenir le raccourci clavier ou seulement la petite version jusqu'à ce que l'on appuie ou maintienne la touche.",
+                        "half": "Maintenir pour afficher complètement",
+                        "all": "Maintenir ou rien"
+                    }
+                }
+            },
+            "observer": {
+                "name": "Info-bulle pour observer",
+                "hint": "Lorsqu'elle est activée, une version non modifiable de l'infobulle normale sera affichée pour les jetons pour lesquels vous avez la permission 'observateur'. De plus, la plupart des fonctionnalités 'possédées uniquement' s'étendent désormais à 'observées'."
+            },
+            "chat": {
+                "name": "Désactiver au survol d'une carte dans la conversation",
+                "hint": "Empêche l'affichage de l'info-bulle lors du survol d'une carte de conversation appartenant à un jeton."
+            },
+            "party": {
+                "name": "Groupe observé",
+                "hint": "Considère que les acteurs dans le 'Groupe' alliance sont obesrvées par les joueurs."
+            },
+            "saves": {
+                "name": "Montrer les jets de sauvegarde",
+                "hint": "Comment les jets de Réflexes, Vigueur et Volonté doivent-ils être affichés dans l'info-bulle.",
+                "choices": {
+                    "none": "Désactivé",
+                    "bonus": "Affiche le bonus",
+                    "dc": "Affiche le DD"
+                }
+            },
+            "others": {
+                "name": "Perception, Stealth, Athletics",
+                "hint": "Comment les bonus/DD de Perception, Discrétion et Athlétisme doivent-ils être affichés dans l'info-bulle."
+            },
+            "ranks": {
+                "name": "Afficher les rangs",
+                "hint": "Lorsqu'il est activé, un petit indicateur de rang sera ajouté aux jets de sauvegarde et autres dans l'info-bulle principale."
+            },
+            "tooltips": {
+                "name": "Désactiver les info-bulles Icônes",
+                "hint": "Désactive toutes les info-bulles icônes dans l'infobulle principale qui ne seront pas affichées."
+            },
+            "scale": {
+                "name": "Mise à l'échelle de la police",
+                "hint": "Vous pouvez modifier la taille de la police de l'info-bulle et des barres latérales/popup qui y sont attachées. Le module a été conçu pour utiliser une taille de police de 14px par défaut."
+            },
+            "hazard-width": {
+                "name": "Largeur maximale du Danger",
+                "hint": "Cela vous permet de définir la largeur maximale (en 'em') de la barre latérale du danger."
+            },
+            "force-speed": {
+                "name": "Prendre la Vitesse la plus élevée",
+                "hint": "Lorsque cette option est activée, la vitesse par défaut (lorsqu'aucune vitesse n'est sélectionnée manuellement) sera toujours la plus élevée relevée sur l'acteur et non plus seulement si la Vitesse terrestre est égale à 0."
+            },
+            "filter": {
+                "name": "Toujours montrer le filtre",
+                "hint": "Lorsque cette option est activée, le champ filtre sera toujours affiché en haut des barres latérales au lieu d'être affiché lors de l'utilisation de la combinaison de touches 'Afficher le filtre', qui permet toujours de faire défiler le champ vers le haut."
+            },
+            "containers": {
+                "name": "Objets dans les contenants",
+                "hint": "Lorsqu'il est activé, les objets dans les contenants seront toujours affichés dans leur contenant."
+            }
+        },
+        "spells": {
+            "title": "Sorts",
+            "empty": "{name} ne possède aucun sort : la magie est mauvaise de toute façon.",
+            "charges": "Charges",
+            "staff": "Bâton",
+            "attacks": {
+                "title": "Choisissez une entrée d'incantation",
+                "ok": "Lancez"
+            }
+        },
+        "extras": {
+            "title": "Extras",
+            "empty": "Rien à voir ici, peut être un jour.",
+            "no-macro": "Glisser les macros ici"
+        },
+        "actions": {
+            "title": "Actions",
+            "empty": "{name} n'a rien à faire, dommage.",
+            "recall-knowledge": {
+                "result": "Résultat",
+                "modifier": "Mod.",
+                "target": "Cible",
+                "first": "1er",
+                "second": "2e",
+                "third": "3e",
+                "fourth": "4e",
+                "fifth": "5e",
+                "sixth": "6e",
+                "dc": "DD",
+                "unspecific": "Générale",
+                "specific": "Spécifique"
+            },
+            "treat-wounds": {
+                "title": "Soigner les blessures - {name}",
+                "no-proficiency": "{name} n'a pas la maîtrise nécessaire pour soigner les blessures."
+            },
+            "stances": "Postures"
+        },
+        "hazard": {
+            "empty": "{name} n'est pas réellement dangereux."
+        },
+        "popup": {
+            "close": "Fermer"
+        },
+        "skills": {
+            "title": "Compétences",
+            "actions": {
+                "earnIncome": "Gagner de l'argent",
+                "treatWounds": "Soigner les blessures",
+                "borrow-arcane-spell": "Emprunter un sort arcanique",
+                "identify-magic": "Identifier la magie",
+                "identify-alchemy": "Identifier l'alchimie",
+                "learn-spell": "Apprendre un sort",
+                "crafting-goods": "Fabriquer des biens",
+                "staging-performance": "Donner une représentation",
+                "distracting-words": "Paroles de diversion",
+                "gesture": "Geste",
+                "trick": "Astuce",
+                "stabilize": "Stabiliser",
+                "stop-bleeding": "Arrêter les saignements",
+                "acting": "Théatre",
+                "comedy": "Comédie",
+                "dance": "Danse",
+                "keyboards": "Claviers",
+                "oratory": "Art oratoire",
+                "percussion": "Percussion",
+                "singing": "Chant",
+                "strings": "à cordes",
+                "winds": "à vent",
+                "follow": "Suivre l'expert",
+                "following": "Suit un expert"
+            },
+            "modifiers": {
+                "crowbar-missing": "Pas de pied-de-biche"
+            },
+            "variant": {
+                "title": "Variante de compétence",
+                "label": "Variante de compétence",
+                "dc": "Degré de difficulté",
+                "button": "Choisir"
+            }
+        },
+        "items": {
+            "title": "Équipement",
+            "empty": "{name} a les poches vides, malheureusement.",
+            "inContainer": "Afficher les objets dans le contenant",
+            "outContainer": "Afficher les objets dans les catégories"
+        },
+        "deleteItem": {
+            "title": "Confirmation d'effacement",
+            "ok": "Effacer",
+            "cancel": "Annuler"
+        },
+        "hud": {
+            "resolve": {
+                "title": "Utiliser les points de persévérance",
+                "yes": "Accepter",
+                "no": "Annuler",
+                "full": "{name} est plein d'endurance et n'a pas besoin de se reposer.",
+                "breather": {
+                    "label": "Prendre une pause",
+                    "msg": "Se reposer pendant 10 minutes, dépenser un point de persévérance et regagner toute votre endurance.",
+                    "used": "{name} possède {ratio} PE et dépense un point de persévérance, en prenant une pause de 10 minutes. Endurance restaurée."
+                },
+                "steel": {
+                    "msg": "Utiliser une action, dépenser un point de persévérance et récupérer la moitié de votre endurance."
+                }
+            }
+        }
+    }
+}
