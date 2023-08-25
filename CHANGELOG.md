@@ -1,3 +1,9 @@
+# 1.35.0
+
+-   added a new `Notes` icon for NPCs (first line next to `Level`), showing their notes in the popup window when clicked
+-   added chinese localization
+-   added french localization
+
 # 1.34.2
 
 -   fixed thrown strikes not working
