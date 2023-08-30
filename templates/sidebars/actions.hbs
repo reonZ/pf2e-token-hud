@@ -101,7 +101,7 @@
 
             {{#each strike.auxiliaryActions as |action|}}
             <div class="variant {{#unless @root.isOwner}}disabled{{/unless}}" data-action="strike-auxiliary" data-index="{{@index}}">
-                <span class="activity-icon">{{action.glyph}}</span>
+                <span class="action-glyph">{{action.glyph}}</span>
                 {{action.label}}
                 {{#if action.options}}
                 <select class="modular" {{disabled (not @root.isOwner)}}>
