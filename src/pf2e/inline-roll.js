@@ -1,6 +1,6 @@
 import { calculateDC } from './dc.js'
 import { htmlClosest, htmlQueryAll } from './dom.js'
-import { ErrorPF2e, getActionGlyph, tupleHasValue } from './misc.js'
+import { ErrorPF2e, getActionGlyph, sluggify, tupleHasValue } from './misc.js'
 import { eventToRollParams } from './scripts.js'
 
 const SAVE_TYPES = ['fortitude', 'reflex', 'will']
@@ -113,7 +113,7 @@ export function listenInlineRoll(html, foundryDoc) {
     for (const link of links.filter(l => l.dataset.pf2Action)) {
         const { pf2Action, pf2Glyph, pf2Variant, pf2Dc, pf2ShowDc, pf2Skill } = link.dataset
         link.addEventListener('click', event => {
-            const action = game.pf2e.actions[pf2Action ? game.pf2e.system.sluggify(pf2Action, { camel: 'dromedary' }) : '']
+            const action = game.pf2e.actions[pf2Action ? sluggify(pf2Action, { camel: 'dromedary' }) : '']
             const visibility = pf2ShowDc ?? 'all'
             if (pf2Action && action) {
                 action({
@@ -130,30 +130,31 @@ export function listenInlineRoll(html, foundryDoc) {
     }
 
     for (const link of links.filter(l => l.dataset.pf2Check && !l.dataset.invalid)) {
-        const { pf2Check, pf2Dc, pf2Traits, pf2Label, pf2Defense, pf2Adjustment } = link.dataset
+        const { pf2Check, pf2Dc, pf2Traits, pf2Label, pf2Defense, pf2Adjustment, pf2Roller, pf2RollOptions } = link.dataset
+
         if (!pf2Check) return
 
         link.addEventListener('click', async event => {
-            const actor = (parent = resolveActor(foundryDoc))
-
-            const extraRollOptions =
-                pf2Traits
-                    ?.split(',')
-                    .map(o => o.trim())
-                    .filter(o => !!o) ?? []
+            const parent = resolveActor(foundryDoc)
+            const actors = [parent]
+            const extraRollOptions = [
+                ...(pf2Traits?.split(',').map(o => o.trim()) ?? []),
+                ...(pf2RollOptions?.split(',').map(o => o.trim()) ?? []),
+            ]
             const eventRollParams = eventToRollParams(event)
 
             switch (pf2Check) {
                 case 'flat': {
-                    const flatCheck = new actor.perception.constructor(actor, {
-                        label: '',
-                        slug: 'flat',
-                        modifiers: [],
-                        check: { type: 'flat-check' },
-                    })
-                    const dc = Number.isInteger(Number(pf2Dc)) ? { label: pf2Label, value: Number(pf2Dc) } : null
-                    flatCheck.roll({ ...eventRollParams, extraRollOptions, dc })
-
+                    for (const actor of actors) {
+                        const flatCheck = new Statistic(actor, {
+                            label: '',
+                            slug: 'flat',
+                            modifiers: [],
+                            check: { type: 'flat-check' },
+                        })
+                        const dc = Number.isInteger(Number(pf2Dc)) ? { label: pf2Label, value: Number(pf2Dc) } : null
+                        flatCheck.roll({ ...eventRollParams, extraRollOptions, dc })
+                    }
                     break
                 }
                 default: {
@@ -162,95 +163,96 @@ export function listenInlineRoll(html, foundryDoc) {
                     // Get actual traits for display in chat cards
                     const traits = isSavingThrow ? [] : extraRollOptions.filter(t => t in CONFIG.PF2E.actionTraits) ?? []
 
-                    const statistic = (() => {
-                        if (pf2Check in CONFIG.PF2E.magicTraditions) {
-                            const bestSpellcasting =
-                                actor.spellcasting
-                                    .filter(c => c.tradition === pf2Check)
-                                    .flatMap(s => s.statistic ?? [])
-                                    .sort((a, b) => b.check.mod - a.check.mod)
-                                    .shift() ?? null
-                            if (bestSpellcasting) return bestSpellcasting
+                    for (const actor of actors) {
+                        const statistic = (() => {
+                            if (pf2Check in CONFIG.PF2E.magicTraditions) {
+                                const bestSpellcasting =
+                                    actor.spellcasting
+                                        .filter(c => c.tradition === pf2Check)
+                                        .flatMap(s => s.statistic ?? [])
+                                        .sort((a, b) => b.check.mod - a.check.mod)
+                                        .shift() ?? null
+                                if (bestSpellcasting) return bestSpellcasting
+                            }
+                            return actor.getStatistic(pf2Check)
+                        })()
+
+                        if (!statistic) {
+                            console.warn(ErrorPF2e(`Skip rolling unknown statistic ${pf2Check}`).message)
+                            continue
                         }
-                        const bySlug = actor.getStatistic(pf2Check)
-                        // Frame the statistic as an attack-roll stat if the action includes the "attack" trait
-                        // and the check is otherwise unclassified.
-                        return bySlug?.check.type === 'check' && traits.includes('attack')
-                            ? bySlug.extend({
-                                  check: {
-                                      type: 'attack-roll',
-                                      domains: ['attack', 'attack-roll', `${pf2Check}-attack-roll`],
-                                  },
-                              })
-                            : bySlug
-                    })()
-                    if (!statistic) {
-                        console.warn(ErrorPF2e(`Skip rolling unknown statistic ${pf2Check}`).message)
-                        break
-                    }
 
-                    const targetActor = pf2Defense ? game.user.targets.first()?.actor : null
+                        const targetActor = pf2Defense ? game.user.targets.first()?.actor : null
 
-                    const dcValue = (() => {
-                        const adjustment = Number(pf2Adjustment) || 0
-                        if (pf2Dc === '@self.level') {
-                            return calculateDC(actor.level) + adjustment
-                        }
-                        return Number(pf2Dc ?? 'NaN') + adjustment
-                    })()
+                        const dcValue = (() => {
+                            const adjustment = Number(pf2Adjustment) || 0
+                            if (pf2Dc === '@self.level') {
+                                return calculateDC(actor.level) + adjustment
+                            }
+                            return Number(pf2Dc ?? 'NaN') + adjustment
+                        })()
 
-                    const dc = (() => {
-                        if (Number.isInteger(dcValue)) {
-                            return { label: pf2Label, value: dcValue }
-                        } else if (pf2Defense) {
-                            const defenseStat = targetActor?.getStatistic(pf2Defense)
-                            return defenseStat
-                                ? {
-                                      statistic: defenseStat.dc,
-                                      scope: 'check',
-                                      value: defenseStat.dc.value,
-                                  }
+                        const dc = (() => {
+                            if (Number.isInteger(dcValue)) {
+                                return { label: pf2Label, value: dcValue }
+                            } else if (pf2Defense) {
+                                const defenseStat = targetActor?.getStatistic(pf2Defense)
+                                return defenseStat
+                                    ? {
+                                          statistic: defenseStat.dc,
+                                          scope: 'check',
+                                          value: defenseStat.dc.value,
+                                      }
+                                    : null
+                            }
+                            return null
+                        })()
+
+                        // Retrieve the item if:
+                        // (2) The item is an action or,
+                        // (1) The check is a saving throw and the item is not a weapon.
+                        // Exclude weapons so that roll notes on strikes from incapacitation abilities continue to work.
+                        const item = (() => {
+                            const itemFromDoc =
+                                foundryDoc instanceof Item
+                                    ? foundryDoc
+                                    : foundryDoc instanceof ChatMessage
+                                    ? foundryDoc.item
+                                    : null
+
+                            return itemFromDoc?.isOfType('action', 'feat') || (isSavingThrow && !itemFromDoc?.isOfType('weapon'))
+                                ? itemFromDoc
                                 : null
+                        })()
+
+                        const args = {
+                            ...eventRollParams,
+                            extraRollOptions,
+                            origin: isSavingThrow && parent instanceof Actor ? parent : null,
+                            dc,
+                            target: !isSavingThrow && dc?.statistic ? targetActor : null,
+                            item,
+                            traits,
                         }
-                        return null
-                    })()
 
-                    // Retrieve the item if:
-                    // (2) The item is an action or,
-                    // (1) The check is a saving throw and the item is not a weapon.
-                    // Exclude weapons so that roll notes on strikes from incapacitation abilities continue to work.
-                    const item = (() => {
-                        const itemFromDoc =
-                            foundryDoc instanceof Item ? foundryDoc : foundryDoc instanceof ChatMessage ? foundryDoc.item : null
+                        // Use a special header for checks against defenses
+                        const itemIsEncounterAction = !!(item?.isOfType('action', 'feat') && item.actionCost)
+                        if (itemIsEncounterAction && pf2Defense) {
+                            const subtitleLocKey =
+                                pf2Check in CONFIG.PF2E.magicTraditions
+                                    ? 'PF2E.ActionsCheck.spell'
+                                    : statistic.check.type === 'attack-roll'
+                                    ? 'PF2E.ActionsCheck.x-attack-roll'
+                                    : 'PF2E.ActionsCheck.x'
+                            args.label = await renderTemplate('systems/pf2e/templates/chat/action/header.hbs', {
+                                glyph: getActionGlyph(item.actionCost),
+                                subtitle: game.i18n.format(subtitleLocKey, { type: statistic.label }),
+                                title: item.name,
+                            })
+                        }
 
-                        return itemFromDoc?.isOfType('action') || (isSavingThrow && !itemFromDoc?.isOfType('weapon'))
-                            ? itemFromDoc
-                            : null
-                    })()
-
-                    const args = {
-                        ...eventRollParams,
-                        extraRollOptions,
-                        origin: isSavingThrow && parent instanceof Actor ? parent : null,
-                        dc,
-                        target: !isSavingThrow && dc?.statistic ? targetActor : null,
-                        item,
-                        traits,
+                        statistic.roll(args)
                     }
-
-                    // Use a special header for checks against defenses
-                    const itemIsEncounterAction = !!(item?.isOfType('action') && item.actionCost)
-                    if (itemIsEncounterAction && pf2Defense) {
-                        const subtitleLocKey =
-                            pf2Check in CONFIG.PF2E.magicTraditions ? 'PF2E.ActionsCheck.spell' : 'PF2E.ActionsCheck.x'
-                        args.label = await renderTemplate('systems/pf2e/templates/chat/action/header.hbs', {
-                            glyph: getActionGlyph(item.actionCost),
-                            subtitle: game.i18n.format(subtitleLocKey, { type: statistic.label }),
-                            title: item.name,
-                        })
-                    }
-
-                    statistic.roll(args)
                 }
             }
         })
@@ -258,10 +260,12 @@ export function listenInlineRoll(html, foundryDoc) {
 
     const templateConversion = {
         burst: 'circle',
+        cone: 'cone',
+        cube: 'rect',
         emanation: 'circle',
         line: 'ray',
-        cone: 'cone',
         rect: 'rect',
+        square: 'rect',
     }
 
     for (const link of links.filter(l => l.hasAttribute('data-pf2-effect-area'))) {
@@ -277,11 +281,21 @@ export function listenInlineRoll(html, foundryDoc) {
             templateData.fillColor ||= game.user.color
             templateData.t = templateConversion[pf2EffectArea]
 
-            if (templateData.t === 'ray') {
-                templateData.width =
-                    Number(pf2Width) || CONFIG.MeasuredTemplate.defaults.width * (canvas.dimensions?.distance ?? 1)
-            } else if (templateData.t === 'cone') {
-                templateData.angle = CONFIG.MeasuredTemplate.defaults.angle
+            switch (templateData.t) {
+                case 'ray':
+                    templateData.width =
+                        Number(pf2Width) || CONFIG.MeasuredTemplate.defaults.width * (canvas.dimensions?.distance ?? 1)
+                    break
+                case 'cone':
+                    templateData.angle = CONFIG.MeasuredTemplate.defaults.angle
+                    break
+                case 'rect': {
+                    const distance = templateData.distance ?? 0
+                    templateData.distance = Math.hypot(distance, distance)
+                    templateData.width = distance
+                    templateData.direction = 45
+                    break
+                }
             }
 
             if (pf2Traits) {
