@@ -191,7 +191,14 @@
     {{#each strike.variants as |variant|}}
     <div class="variant {{#if (or (eq strike.quantity 0) (not @root.isOwner))}}disabled{{/if}}" data-action="strike-attack"
         data-index="{{@index}}" {{#if ../altUsage}}data-alt-usage="{{../altUsage}}" {{/if}}>
+        {{#if (eq @index 0)}}
+        {{#if @root.isCharacter}}
+        {{localize "PF2E.WeaponStrikeLabel"}}
+        {{/if}}
+        {{variant.label}}
+        {{else}}
         {{@root.variantLabel variant.label}}
+        {{/if}}
     </div>
     {{/each}}
     {{#if strike.item.dealsDamage}}
