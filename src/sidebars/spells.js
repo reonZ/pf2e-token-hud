@@ -11,82 +11,84 @@ export async function getSpellsData(actor, token, filter) {
     const focuses = []
     let hasFocusCantrips = false
 
-    for (const entry of entries) {
-        const entryId = entry.id
-        const tradition = showTradition && entry.statistic.label[0]
-        const data = await entry.getSheetData()
-        const isFocus = data.isFocusPool
-        const isCharge = entry.system?.prepared?.value === 'charge'
-        const isStaff = getProperty(entry, 'flags.pf2e-staves.staveID') !== undefined
-        const charges = { value: getProperty(entry, 'flags.pf2e-staves.charges') ?? 0 }
+    await Promise.all(
+        entries.map(async entry => {
+            const entryId = entry.id
+            const tradition = showTradition && entry.statistic.label[0]
+            const data = await entry.getSheetData()
+            const isFocus = data.isFocusPool
+            const isCharge = entry.system?.prepared?.value === 'charge'
+            const isStaff = getProperty(entry, 'flags.pf2e-staves.staveID') !== undefined
+            const charges = { value: getProperty(entry, 'flags.pf2e-staves.charges') ?? 0 }
 
-        for (const slot of data.levels) {
-            if (!slot.active.length || slot.uses?.max === 0) continue
+            for (const slot of data.levels) {
+                if (!slot.active.length || slot.uses?.max === 0) continue
 
-            const slotSpells = []
-            const isCantrip = slot.isCantrip
-            const actives = slot.active.filter(x => x && x.uses?.max !== 0)
+                const slotSpells = []
+                const isCantrip = slot.isCantrip
+                const actives = slot.active.filter(x => x && x.uses?.max !== 0)
 
-            for (let slotId = 0; slotId < actives.length; slotId++) {
-                const { spell, expended, virtual, uses, castLevel } = actives[slotId]
-                if (!filterIn(spell.name, filter)) continue
+                for (let slotId = 0; slotId < actives.length; slotId++) {
+                    const { spell, expended, virtual, uses, castLevel } = actives[slotId]
+                    if (!filterIn(spell.name, filter)) continue
 
-                slotSpells.push({
-                    name: spell.name,
-                    img: spell.img,
-                    tradition,
-                    castLevel: castLevel ?? spell.level,
-                    slotId,
-                    entryId,
-                    itemId: spell.id,
-                    inputId: data.isInnate ? spell.id : data.id,
-                    inputPath: isCharge
-                        ? 'flags.pf2e-staves.charges'
-                        : data.isInnate
-                        ? 'system.location.uses.value'
-                        : `system.slots.slot${slot.level}.value`,
-                    isCharge,
-                    isVirtual: virtual,
-                    isInnate: data.isInnate,
-                    isCantrip: isCantrip,
-                    isFocus,
-                    isPrepared: data.isPrepared,
-                    isSpontaneous: data.isSpontaneous || data.isFlexible,
-                    slotLevel: slot.level,
-                    uses: uses ?? (isCharge ? charges : slot.uses),
-                    expended: expended ?? (isFocus && !isCantrip ? focusPool.value <= 0 : false),
-                    action: spell.system.time.value,
-                    type: isCharge
-                        ? isStaff
-                            ? `${MODULE_ID}.spells.staff`
-                            : `${MODULE_ID}.spells.charges`
-                        : data.isInnate
-                        ? 'PF2E.PreparationTypeInnate'
-                        : data.isSpontaneous
-                        ? 'PF2E.PreparationTypeSpontaneous'
-                        : data.isFlexible
-                        ? 'PF2E.SpellFlexibleLabel'
-                        : isFocus
-                        ? 'PF2E.SpellFocusLabel'
-                        : 'PF2E.SpellPreparedLabel',
-                    order: isCharge ? 0 : data.isPrepared ? 1 : isFocus ? 2 : data.isInnate ? 3 : data.isSpontaneous ? 4 : 5,
-                })
-            }
-
-            if (slotSpells.length) {
-                if (isFocus) {
-                    if (isCantrip) hasFocusCantrips = true
-                    else {
-                        focuses.push(...slotSpells)
-                        continue
-                    }
+                    slotSpells.push({
+                        name: spell.name,
+                        img: spell.img,
+                        tradition,
+                        castLevel: castLevel ?? spell.level,
+                        slotId,
+                        entryId,
+                        itemId: spell.id,
+                        inputId: data.isInnate ? spell.id : data.id,
+                        inputPath: isCharge
+                            ? 'flags.pf2e-staves.charges'
+                            : data.isInnate
+                            ? 'system.location.uses.value'
+                            : `system.slots.slot${slot.level}.value`,
+                        isCharge,
+                        isVirtual: virtual,
+                        isInnate: data.isInnate,
+                        isCantrip: isCantrip,
+                        isFocus,
+                        isPrepared: data.isPrepared,
+                        isSpontaneous: data.isSpontaneous || data.isFlexible,
+                        slotLevel: slot.level,
+                        uses: uses ?? (isCharge ? charges : slot.uses),
+                        expended: expended ?? (isFocus && !isCantrip ? focusPool.value <= 0 : false),
+                        action: spell.system.time.value,
+                        type: isCharge
+                            ? isStaff
+                                ? `${MODULE_ID}.spells.staff`
+                                : `${MODULE_ID}.spells.charges`
+                            : data.isInnate
+                            ? 'PF2E.PreparationTypeInnate'
+                            : data.isSpontaneous
+                            ? 'PF2E.PreparationTypeSpontaneous'
+                            : data.isFlexible
+                            ? 'PF2E.SpellFlexibleLabel'
+                            : isFocus
+                            ? 'PF2E.SpellFocusLabel'
+                            : 'PF2E.SpellPreparedLabel',
+                        order: isCharge ? 0 : data.isPrepared ? 1 : isFocus ? 2 : data.isInnate ? 3 : data.isSpontaneous ? 4 : 5,
+                    })
                 }
 
-                spells[slot.level] ??= []
-                spells[slot.level].push(...slotSpells)
+                if (slotSpells.length) {
+                    if (isFocus) {
+                        if (isCantrip) hasFocusCantrips = true
+                        else {
+                            focuses.push(...slotSpells)
+                            continue
+                        }
+                    }
+
+                    spells[slot.level] ??= []
+                    spells[slot.level].push(...slotSpells)
+                }
             }
-        }
-    }
+        })
+    )
 
     if (spells.length) {
         const sort = getSetting('spells')
