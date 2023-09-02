@@ -3,11 +3,13 @@
  * So it is not technically a direct copy/paste of the system code but a slightly rearanged version
  */
 
+import { getChatMessageClass } from './classes'
+
 export async function unownedItemToMessage(event, item, actor, { rollMode = undefined, create = true, data = {} }) {
     const template = `systems/pf2e/templates/chat/${item.type}-card.hbs`
     const token = actor.token
     const nearestItem = event?.currentTarget.closest('.item') ?? {}
-    const ChatMessagePF2e = CONFIG.ChatMessage.documentClass
+    const ChatMessagePF2e = getChatMessageClass()
 
     const contextualData = Object.keys(data).length > 0 ? data : nearestItem.dataset || {}
     const templateData = {

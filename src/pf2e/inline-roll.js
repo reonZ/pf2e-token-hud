@@ -1,3 +1,4 @@
+import { getChatMessageClass, getMeasuredTemplateDocumentClass, getMeasuredTemplateObjectClass } from './classes.js'
 import { calculateDC } from './dc.js'
 import { htmlClosest, htmlQueryAll } from './dom.js'
 import { ErrorPF2e, getActionGlyph, sluggify, tupleHasValue } from './misc.js'
@@ -77,7 +78,7 @@ function repostAction(target, foundryDoc = null) {
         }
     })()
 
-    const ChatMessagePF2e = CONFIG.ChatMessage.documentClass
+    const ChatMessagePF2e = getChatMessageClass()
     const speaker = actor
         ? ChatMessagePF2e.getSpeaker({ actor, token: actor.getActiveTokens(false, true).shift() })
         : ChatMessagePF2e.getSpeaker()
@@ -308,8 +309,8 @@ export function listenInlineRoll(html, foundryDoc) {
                 }
             }
 
-            const templateDoc = new CONFIG.MeasuredTemplate.documentClass(templateData, { parent: canvas.scene })
-            new CONFIG.MeasuredTemplate.objectClass(templateDoc).drawPreview()
+            const templateDoc = new (getMeasuredTemplateDocumentClass())(templateData, { parent: canvas.scene })
+            new (getMeasuredTemplateObjectClass())(templateDoc).drawPreview()
         })
     }
 }

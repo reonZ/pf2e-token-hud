@@ -1,5 +1,6 @@
 import { useResolve } from './actions/use-resolve.js'
 import { enrichHTML, getFlag, getSetting, localize, modifier, MODULE_ID, setFlag, templatePath } from './module.js'
+import { getChatMessageClass, getDamageRollClass } from './pf2e/classes.js'
 import { popup } from './popup.js'
 import { getUniqueTarget, RANKS } from './shared.js'
 import { addActionsListeners, getActionsData } from './sidebars/actions.js'
@@ -702,7 +703,7 @@ export class HUD extends Application {
         if (!actor) return
 
         const isOwner = token.isOwner
-        const ChatMessagePF2e = CONFIG.ChatMessage.documentClass
+        const ChatMessagePF2e = getChatMessageClass()
 
         if (getSetting('tooltips')) {
             html.find('.inner [data-tooltip]').attr('data-tooltip', '')
@@ -829,7 +830,7 @@ export class HUD extends Application {
             event.preventDefault()
             let formula = (actor.system.attributes.collisionDamage.value || '1d6').trim()
             if (!isNaN(Number(formula.at(-1)))) formula += '[bludgeoning]'
-            const DamageRoll = CONFIG.Dice.rolls.find(R => R.name === 'DamageRoll')
+            const DamageRoll = getDamageRollClass()
             const roll = await new DamageRoll(formula).evaluate({ async: true })
             ChatMessagePF2e.create({
                 flavor: `<strong>${game.i18n.localize('PF2E.vehicle.collisionDamageLabel')}</strong>`,
