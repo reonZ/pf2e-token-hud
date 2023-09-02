@@ -62,7 +62,7 @@
 
                     {{#if (and (eq item.type 'backpack') (ne @root.containers true))}}
                     <a data-action="toggle-contains-items">
-                        {{#if (contains @root.containers item.id)}}
+                        {{#if (includes @root.containers item.id)}}
                         <i class="fa-solid fa-box-open" data-tooltip="{{@root.i18n 'outContainer'}}"></i>
                         {{else}}
                         <i class="fa-solid fa-box" data-tooltip="{{@root.i18n 'inContainer'}}"></i>
