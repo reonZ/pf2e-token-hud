@@ -1,7 +1,7 @@
 import { getSetting, localize, modifier, MODULE_ID, templatePath } from '../module.js'
 import { eventToRollParams } from '../pf2e/scripts.js'
 import { showItemSummary } from '../popup.js'
-import { addNameTooltipListeners, filterIn, getItemFromEvent } from '../shared.js'
+import { addNameTooltipListeners, filterIn, getItemFromEvent, localeCompare } from '../shared.js'
 
 export async function getSpellsData(actor, token, filter) {
     const focusPool = actor.system.resources.focus ?? { value: 0, max: 0 }
@@ -92,13 +92,13 @@ export async function getSpellsData(actor, token, filter) {
 
     if (spells.length) {
         const sort = getSetting('spells')
-            ? (a, b) => (a.order === b.order ? a.name.localeCompare(b.name) : a.order - b.order)
-            : (a, b) => a.name.localeCompare(b.name)
+            ? (a, b) => (a.order === b.order ? localeCompare(a.name, b.name) : a.order - b.order)
+            : (a, b) => localeCompare(a.name, b.name)
         spells.forEach(entry => entry.sort(sort))
     }
 
     if (focuses.length) {
-        focuses.sort((a, b) => a.name.localeCompare(b.name))
+        focuses.sort((a, b) => localeCompare(a.name, b.name))
         spells[12] = focuses
         hasFocusCantrips = false
     }

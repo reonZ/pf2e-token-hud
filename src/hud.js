@@ -2,7 +2,7 @@ import { useResolve } from './actions/use-resolve.js'
 import { enrichHTML, getFlag, getSetting, localize, modifier, MODULE_ID, setFlag, templatePath } from './module.js'
 import { getChatMessageClass, getDamageRollClass } from './pf2e/classes.js'
 import { popup } from './popup.js'
-import { getUniqueTarget, RANKS } from './shared.js'
+import { getUniqueTarget, localeCompare, RANKS } from './shared.js'
 import { addActionsListeners, getActionsData } from './sidebars/actions.js'
 import { addExtrasListeners, getExtrasData } from './sidebars/extras.js'
 import { addHazardListeners, getHazardData } from './sidebars/hazard.js'
@@ -459,7 +459,7 @@ export class HUD extends Application {
         }
 
         function sort(a, b) {
-            return a.localeCompare(b)
+            return localeCompare(a, b)
         }
 
         const languages = traits?.languages?.value

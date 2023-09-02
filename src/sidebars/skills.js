@@ -1,7 +1,7 @@
 import { getSetting, hasFeat, localize, modifier, templatePath } from '../module.js'
 import { unownedItemToMessage } from '../pf2e/item.js'
 import { showItemSummary } from '../popup.js'
-import { filterIn } from '../shared.js'
+import { filterIn, localeCompare } from '../shared.js'
 
 const MODULE_ID = 'pf2e-token-hud'
 
@@ -382,7 +382,7 @@ export async function getSkillsData(actor, token, filter) {
         }
     }
 
-    skills.sort((a, b) => (a.slug === 'perception' ? -1 : b.slug === 'perception' ? 1 : a.name.localeCompare(b.name)))
+    skills.sort((a, b) => (a.slug === 'perception' ? -1 : b.slug === 'perception' ? 1 : localeCompare(a.name, b.name)))
 
     const lores = Object.values(actor.skills)
         .filter(({ lore, label }) => lore && filterIn(label, filter))

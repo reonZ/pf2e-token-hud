@@ -123,3 +123,7 @@ export function filterIn(value, filter) {
     if (!filter) return true
     return value.toLowerCase().includes(filter)
 }
+
+export function localeCompare(a, b) {
+    return a.localeCompare(b, game.i18n.lang)
+}

@@ -1,7 +1,7 @@
 import { getFlag, getSetting, localize, setFlag } from '../module.js'
 import { IdentifyItemPopup } from '../pf2e/identify.js'
 import { showItemSummary } from '../popup.js'
-import { addNameTooltipListeners, deleteItem, editItem, filterIn, getItemFromEvent } from '../shared.js'
+import { addNameTooltipListeners, deleteItem, editItem, filterIn, getItemFromEvent, localeCompare } from '../shared.js'
 
 const ITEMS_TYPES = {
     weapon: { order: 0, label: 'PF2E.InventoryWeaponsHeader' },
@@ -33,7 +33,7 @@ export async function getItemsData(actor, token, filter) {
 
     categories = Object.entries(categories)
         .map(([type, items]) => {
-            items.sort((a, b) => a.name.localeCompare(b.name))
+            items.sort((a, b) => localeCompare(a.name, b.name))
             if (type === 'backpack') {
                 for (let i = items.length - 1; i >= 0; i--) {
                     const container = items[i]
@@ -42,7 +42,7 @@ export async function getItemsData(actor, token, filter) {
                         if (!filterIn(container.name, filter)) items.splice(i, 1)
                         continue
                     }
-                    contained.sort((a, b) => a.name.localeCompare(b.name))
+                    contained.sort((a, b) => localeCompare(a.name, b.name))
                     items.splice(i + 1, 0, ...contained)
                 }
             } else items = items.filter(item => filterIn(item.name, filter))
