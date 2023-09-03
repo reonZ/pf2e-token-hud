@@ -1,3 +1,17 @@
+# 1.36.0
+
+-   this is a system `5.4.2` release
+-   updated popup inline links to be in sync with the recent system changes
+-   characters with the `Untrained Improvisation` skill will now always see all the skill actions even if the `Hide Untrained Skill Actions` is enabled
+-   added support for kineticist elemental blasts
+-   added support for usable actions
+-   added traits and blurb to NPCs notes popup
+-   added support for popup inline `@Damage`
+-   fixed issue with workbench max hero points settings which has been removed in one of its latest updates
+-   fixed auxiliary actions icon
+-   fixed character strike labels
+-   fixed equipment sidebar handlebar helper missing
+
 # 1.35.0
 
 -   added a new `Notes` icon for NPCs (first line next to `Level`), showing their notes in the popup window when clicked
