@@ -5,6 +5,8 @@ import { filterIn, localeCompare } from '../shared.js'
 
 const MODULE_ID = 'pf2e-token-hud'
 
+const UNTRAINED_IMPROVISATION = 'Compendium.pf2e.feats-srd.Item.9jGaBxLUtevZYcZO'
+
 const CROWBAR_UUIDS = new Set([
     'Compendium.pf2e.equipment-srd.Item.44F1mfJei4GY8f2X',
     'Compendium.pf2e.equipment-srd.Item.4kz3vhkKPUuXBpxk',
@@ -342,8 +344,10 @@ export function getSkillLabel(slug) {
 
 export async function getSkillsData(actor, token, filter) {
     const skills = []
-    const noUntrained = !getSetting('untrained')
-    const notCharacter = !actor.isOfType('character')
+    const isCharacter = actor.isOfType('character')
+
+    const noUntrained =
+        isCharacter && getSetting('untrained') && !actor.itemTypes.feat.some(feat => feat.sourceId === UNTRAINED_IMPROVISATION)
 
     for (let i = 0; i < SKILLS.length; i++) {
         const { slug, actions } = SKILLS[i]
@@ -353,7 +357,7 @@ export async function getSkillsData(actor, token, filter) {
         const actionsList = actions
             .filter(
                 ({ condition, trained }) =>
-                    (noUntrained || notCharacter || !trained || actor.skills[slug].rank >= 1) && (!condition || condition(actor))
+                    (!noUntrained || !isCharacter || !trained || actor.skills[slug].rank >= 1) && (!condition || condition(actor))
             )
             .map(action => ({
                 ...action,
