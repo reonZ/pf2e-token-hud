@@ -11,6 +11,10 @@
         display: flex;
         flex-direction: column;
 
+        > hr {
+            border-width: 2px;
+        }
+
         .header {
             position: relative;
             display: flex;

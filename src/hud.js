@@ -705,23 +705,21 @@ export class HUD extends Application {
             html.find('.inner [data-tooltip]').attr('data-tooltip', '')
         }
 
-        html.find('[data-action=show-notes').on('click', event => {
+        html.find('[data-action=show-notes').on('click', async event => {
             event.preventDefault()
 
-            const { publicNotes, privateNotes } = actor.system.details
-            if (!publicNotes && (!privateNotes || !isOwner)) return
+            const { publicNotes, privateNotes, blurb } = actor.system.details
+            const traits = actor.system.traits.value.map(trait => ({
+                label: game.i18n.localize(CONFIG.PF2E.monsterTraits[trait]) ?? trait,
+                description: game.i18n.localize(CONFIG.PF2E.traitsDescriptions[trait]) ?? '',
+            }))
 
-            let content = ''
-
-            if (publicNotes) {
-                content += `<div class="notes-header">${game.i18n.localize('PF2E.NPC.PublicNotes')}</div>`
-                content += `<div class="notes-content">${publicNotes}</div>`
-            }
-
-            if (privateNotes && isOwner) {
-                content += `<div class="notes-header">${game.i18n.localize('PF2E.NPC.PrivateNotes')}</div>`
-                content += `<div class="notes-content">${privateNotes}</div>`
-            }
+            const content = await renderTemplate(templatePath('show-notes'), {
+                traits,
+                blurb: blurb.trim(),
+                publicNotes: publicNotes.trim(),
+                privateNotes: isOwner && privateNotes.trim(),
+            })
 
             popup(`${actor.name} - ${game.i18n.localize('PF2E.NPC.NotesTab')}`, content, actor)
         })
