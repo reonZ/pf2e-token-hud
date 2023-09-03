@@ -1,4 +1,5 @@
 import { enrichHTML, getSetting, localize, templatePath } from '../module.js'
+import { createSelfEffectMessage } from '../pf2e/item.js'
 import { getActionIcon } from '../pf2e/misc.js'
 import { toggleWeaponTrait } from '../pf2e/weapon.js'
 import { popup, showItemSummary } from '../popup.js'
@@ -251,6 +252,13 @@ export function addActionsListeners(el, actor) {
     // IS OWNER
     if (!actor.isOwner) return
 
+    action('use-action', event => {
+        const item = getItemFromEvent(event, actor)
+        if (item?.isOfType('action', 'feat')) {
+            createSelfEffectMessage(item)
+        }
+    })
+
     action('stance-chat', event => {
         const item = getItemFromEvent(event, actor)
         item?.toMessage(event, { create: true })
@@ -405,6 +413,7 @@ function getCharacterActions(actor) {
                     type: actionCost?.type ?? 'free',
                     cost: actionCost,
                     name: action.name,
+                    hasEffect: !!action.system.selfEffect,
                 }
             })
     )
@@ -425,6 +434,7 @@ function getNpcActions(actor) {
             name: item.name,
             hasDeathNote: item.system.deathNote,
             hasAura,
+            hasEffect: !!item.system.selfEffect,
         }
     })
 }
