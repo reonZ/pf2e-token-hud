@@ -3,7 +3,7 @@
  * adjusted to be independent function
  */
 
-const DegreeOfSuccess = {
+export const DEGREE_OF_SUCCESS = {
     CRITICAL_FAILURE: 0,
     FAILURE: 1,
     SUCCESS: 2,
@@ -48,12 +48,12 @@ function adjustDegreeByDieValue(dieResult, degree) {
 
 export function calculateDegreeOfSuccess(rollTotal, dieResult, dc) {
     if (rollTotal - dc >= 10) {
-        return adjustDegreeByDieValue(dieResult, DegreeOfSuccess.CRITICAL_SUCCESS)
+        return adjustDegreeByDieValue(dieResult, DEGREE_OF_SUCCESS.CRITICAL_SUCCESS)
     } else if (dc - rollTotal >= 10) {
-        return adjustDegreeByDieValue(dieResult, DegreeOfSuccess.CRITICAL_FAILURE)
+        return adjustDegreeByDieValue(dieResult, DEGREE_OF_SUCCESS.CRITICAL_FAILURE)
     } else if (rollTotal >= dc) {
-        return adjustDegreeByDieValue(dieResult, DegreeOfSuccess.SUCCESS)
+        return adjustDegreeByDieValue(dieResult, DEGREE_OF_SUCCESS.SUCCESS)
     }
 
-    return adjustDegreeByDieValue(dieResult, DegreeOfSuccess.FAILURE)
+    return adjustDegreeByDieValue(dieResult, DEGREE_OF_SUCCESS.FAILURE)
 }

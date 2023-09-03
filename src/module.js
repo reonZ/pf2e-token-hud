@@ -56,3 +56,13 @@ export async function enrichHTML(str, actor, { isOwner = actor.isOwner, rollData
     const enriched = await TextEditor.enrichHTML(str, { async: true, secrets: isOwner, rollData })
     return enriched
 }
+
+export function isInstanceOf(obj, name) {
+    if (typeof obj !== 'object') return false
+
+    while ((obj = Reflect.getPrototypeOf(obj))) {
+        if (obj.constructor.name === name) return true
+    }
+
+    return false
+}

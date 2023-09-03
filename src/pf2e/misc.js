@@ -121,3 +121,41 @@ export function sluggify(text, { camel = null } = {}) {
             throw ErrorPF2e("I don't think that's a real camel.")
     }
 }
+
+/**
+ * Given an array and a key function, create a map where the key is the value that
+ * gets returned when each item is pushed into the function. Accumulate
+ * items in an array that have the same key
+ * @param array
+ * @param criterion
+ * @return
+ */
+export function groupBy(array, criterion) {
+    const result = new Map()
+    for (const elem of array) {
+        const key = criterion(elem)
+        const group = result.get(key)
+        if (group) {
+            group.push(elem)
+        } else {
+            result.set(key, [elem])
+        }
+    }
+    return result
+}
+
+export function sortBy(mapping) {
+    return (a, b) => {
+        const value1 = mapping(a)
+        const value2 = mapping(b)
+        return value1 < value2 ? -1 : value1 === value2 ? 0 : 1
+    }
+}
+
+export function sum(values) {
+    return values.reduce((a, b) => a + b, 0)
+}
+
+export function setHasElement(set, value) {
+    return set.has(value)
+}
