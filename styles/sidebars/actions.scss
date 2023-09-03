@@ -197,10 +197,11 @@
                                 justify-content: center;
 
                                 &.selected {
+                                    cursor: default;
                                     background: var(--light);
 
                                     &:hover {
-                                        box-shadow: inset 0 0 4px white;
+                                        box-shadow: none;
                                     }
                                 }
 
@@ -211,6 +212,16 @@
                                     }
                                 }
                             }
+                        }
+                    }
+                }
+
+                .blast {
+                    .variants {
+                        .alt-usage-icon {
+                            font-size: 1.2em;
+                            margin-left: 0;
+                            margin-right: calc(var(--inline-padding) * -1);
                         }
                     }
                 }
@@ -256,20 +267,23 @@
                     .strike {
                         .variants {
                             .variant {
-                                &[data-action='strike-attack'] {
+                                &[data-action='strike-attack'],
+                                &[data-action='roll-attack'] {
                                     &:not(.disabled) {
                                         background: var(--secondary);
                                     }
                                 }
 
                                 &[data-action='strike-damage'],
-                                &[data-action='strike-critical'] {
+                                &[data-action='strike-critical'],
+                                &[data-action='roll-damage'] {
                                     &:not(.disabled) {
                                         background: var(--primary);
                                     }
                                 }
 
                                 &[data-action='strike-attack'],
+                                &[data-action='roll-attack'],
                                 &[data-action='strike-damage'],
                                 &[data-action='strike-critical'] {
                                     &:not(.disabled):hover {

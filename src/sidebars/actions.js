@@ -2,7 +2,7 @@ import { enrichHTML, getSetting, localize, templatePath } from '../module.js'
 import { getActionIcon } from '../pf2e/misc.js'
 import { toggleWeaponTrait } from '../pf2e/weapon.js'
 import { popup, showItemSummary } from '../popup.js'
-import { addNameTooltipListeners, filterIn, getItemFromEvent } from '../shared.js'
+import { addNameTooltipListeners, filterIn, getItemFromEvent, localeCompare } from '../shared.js'
 import { extrasUUIDS } from './extras.js'
 import { skillActionsUUIDS } from './skills.js'
 
@@ -27,9 +27,7 @@ export async function getActionsData(actor, token, filter) {
 
     const stances = getStancesModuleApi()
         ?.getStances(actor)
-        .sort((a, b) => a.name.localeCompare(b.name))
-
-    const actions = isCharacter ? getCharacterActions(actor) : getNpcActions(actor)
+        .sort((a, b) => localeCompare(a.name, b.name))
 
     let heroActions
     const heroActionsModule = game.modules.get('pf2e-hero-actions')
@@ -48,31 +46,70 @@ export async function getActionsData(actor, token, filter) {
     const isOwner = actor.isOwner
     const rollData = actor.getRollData()
 
-    const strikes =
-        actor.system.actions &&
-        (await Promise.all(
-            actor.system.actions.map(async (strike, index) => ({
-                ...strike,
-                index,
-                visible: !isCharacter || strike.visible,
-                damageFormula: await strike.damage?.({ getFormula: true }),
-                criticalFormula: await strike.critical?.({ getFormula: true }),
-                description: strike.description ? await enrichHTML(strike.description, actor, { rollData, isOwner }) : undefined,
-                altUsages:
-                    strike.altUsages &&
-                    (await Promise.all(
-                        strike.altUsages.map(async altUsage => ({
-                            ...altUsage,
-                            usage: altUsage.item.isThrown ? 'thrown' : 'melee',
-                            damageFormula: await altUsage.damage?.({ getFormula: true }),
-                            criticalFormula: await altUsage.critical?.({ getFormula: true }),
-                        }))
-                    )),
-            }))
-        ))
+    const strikes = actor.system.actions
+        ? await Promise.all(
+              actor.system.actions.map(async (strike, index) => ({
+                  ...strike,
+                  index,
+                  visible: !isCharacter || strike.visible,
+                  damageFormula: await strike.damage?.({ getFormula: true }),
+                  criticalFormula: await strike.critical?.({ getFormula: true }),
+                  description: strike.description
+                      ? await enrichHTML(strike.description, actor, { rollData, isOwner })
+                      : undefined,
+                  altUsages:
+                      strike.altUsages &&
+                      (await Promise.all(
+                          strike.altUsages.map(async altUsage => ({
+                              ...altUsage,
+                              usage: altUsage.item.isThrown ? 'thrown' : 'melee',
+                              damageFormula: await altUsage.damage?.({ getFormula: true }),
+                              criticalFormula: await altUsage.critical?.({ getFormula: true }),
+                          }))
+                      )),
+              }))
+          )
+        : undefined
+
+    const blast = isCharacter ? new game.pf2e.ElementalBlast(actor) : undefined
+    const blasts = blast
+        ? (
+              await Promise.all(
+                  blast.configs.map(async config => {
+                      const damageType = config.damageTypes.find(damage => damage.selected)?.value ?? 'untyped'
+
+                      const formulaFor = (outcome, melee = true) => {
+                          return blast.damage({
+                              element: config.element,
+                              damageType,
+                              melee,
+                              outcome,
+                              getFormula: true,
+                          })
+                      }
+
+                      return {
+                          ...config,
+                          damageType,
+                          formula: {
+                              melee: {
+                                  damage: await formulaFor('success'),
+                                  critical: await formulaFor('criticalSuccess'),
+                              },
+                              ranged: {
+                                  damage: await formulaFor('success', false),
+                                  critical: await formulaFor('criticalSuccess', false),
+                              },
+                          },
+                      }
+                  })
+              )
+          ).sort((a, b) => localeCompare(a.label, b.label))
+        : undefined
 
     let sections = {}
 
+    const actions = isCharacter ? getCharacterActions(actor) : getNpcActions(actor)
     for (const action of actions) {
         if (!filterIn(action.name, filter)) continue
         if (sorting !== 'split') {
@@ -91,12 +128,12 @@ export async function getActionsData(actor, token, filter) {
         })
 
         if (sorting !== 'type') {
-            actions.sort((a, b) => a.name.localeCompare(b.name))
+            actions.sort((a, b) => localeCompare(a.name, b.name))
         } else {
             actions.sort((a, b) => {
                 const orderA = SECTIONS_TYPES[a.type].order
                 const orderB = SECTIONS_TYPES[b.type].order
-                return orderA === orderB ? a.name.localeCompare(b.name) : orderA - orderB
+                return orderA === orderB ? localeCompare(a.name, b.name) : orderA - orderB
             })
         }
 
@@ -105,10 +142,18 @@ export async function getActionsData(actor, token, filter) {
 
     if (sorting === 'split') sections.sort((a, b) => SECTIONS_TYPES[a.type].order - SECTIONS_TYPES[b.type].order)
 
-    if (toggles.length || stances?.length || strikes?.length || sections.length || heroActions?.actions.length) {
+    if (
+        toggles.length ||
+        stances?.length ||
+        strikes?.length ||
+        blasts?.length ||
+        sections.length ||
+        heroActions?.actions.length
+    ) {
         const nb =
             Number((stances?.length ?? 0) > 0) +
             Number((strikes?.length ?? 0) > 0) +
+            Number((blasts?.length ?? 0) > 0) +
             sections.length +
             Number((heroActions?.actions.length ?? 0) > 0)
 
@@ -117,6 +162,7 @@ export async function getActionsData(actor, token, filter) {
                 toggles,
                 stances,
                 strikes,
+                blasts,
                 sections,
                 heroActions,
                 i18n: str => localize(`actions.${str}`),
@@ -178,6 +224,11 @@ export function addActionsListeners(el, actor) {
         description.innerHTML = await renderTemplate(templatePath('strike-description'), strike)
 
         popup(strike.label, description, actor)
+    })
+
+    action('blast-description', async event => {
+        const blast = event.currentTarget.closest('.blast')
+        showItemSummary($(blast), actor)
     })
 
     action('trait-description', event => {
@@ -289,6 +340,39 @@ export function addActionsListeners(el, actor) {
         },
         'change'
     )
+
+    if (!actor.isOfType('character')) return
+
+    const selectors = ['roll-attack', 'roll-damage', 'set-damage-type'].map(s => `[data-action=${s}]`).join(',')
+    el.find('.blast').each((_, blastEl) => {
+        const { element, damageType } = blastEl.dataset
+        const blast = new game.pf2e.ElementalBlast(actor)
+
+        $(blastEl)
+            .find(selectors)
+            .on('click', async event => {
+                event.preventDefault()
+
+                const dataset = event.currentTarget.dataset
+                const melee = dataset.melee === 'true'
+
+                switch (dataset.action) {
+                    case 'roll-attack': {
+                        const mapIncreases = Math.clamped(Number(dataset.mapIncreases), 0, 2)
+                        await blast.attack({ mapIncreases: Math.clamped(mapIncreases, 0, 2), element, damageType, melee, event })
+                        break
+                    }
+                    case 'roll-damage': {
+                        await blast.damage({ element, damageType, melee, outcome: dataset.outcome, event })
+                        break
+                    }
+                    case 'set-damage-type': {
+                        console.log(element, dataset.value)
+                        await blast.setDamageType({ element, damageType: dataset.value })
+                    }
+                }
+            })
+    })
 }
 
 function getStancesModuleApi() {

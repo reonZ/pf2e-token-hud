@@ -5,8 +5,8 @@
     <div class="toggle" data-item-id="{{toggle.itemId}}" data-domain="{{toggle.domain}}" data-option="{{toggle.option}}"
         data-scope="{{toggle.scope}}">
         <label>
-            <input type="checkbox" data-action="toggle-roll-option" {{disabled (or (not toggle.enabled) (not @root.isOwner))}} {{checked
-                toggle.checked}} />
+            <input type="checkbox" {{#if toggle.alwaysActive}} class="hidden" {{/if}} data-action="toggle-roll-option" {{disabled (or (not
+                toggle.enabled) (not @root.isOwner))}} {{checked toggle.checked}} />
             <div class="name {{#if (not (or toggle.checked toggle.enabled))}}unchecked-disabled{{/if}}">{{localize toggle.label}}</div>
         </label>
         {{#if toggle.suboptions}}
@@ -44,7 +44,31 @@
 
 {{#if strikes.length}}
 <div class="section" data-section="strikes">
-    <div class="header"> {{localize "PF2E.StrikesLabel"}}</div>
+    <div class="header"> {{localize "PF2E.Actor.Attacks"}}</div>
+
+    {{#each blasts as |blast|}}
+    <div class="strike details blast" data-element="{{blast.element}}" data-damage-type={{blast.damageType}}
+        data-item-id="{{blast.item.id}}" data-item-type="{{blast.item.type}}">
+        <a class="name" data-action="blast-description">{{localize blast.label}}</a>
+
+        {{> blast blast=blast melee=true}}
+        {{> blast blast=blast melee=false}}
+
+        {{#unless (eq blast.damageTypes.length 1)}}
+        <div class="variants">
+            <div class="versatiles">
+                {{#each blast.damageTypes as |damageType|}}
+                <div class="variant {{#if damageType.selected}}selected{{/if}}" data-action="set-damage-type"
+                    data-value="{{damageType.value}}" data-tooltip="{{damageType.label}}">
+                    <i class="fa-solid fa-{{damageType.icon}} fa-fw"></i>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+        {{/unless}}
+    </div>
+    {{/each}}
+
     {{#each strikes as |strike|}}
     <div class="strike details {{#unless strike.visible}} hidden{{/unless}}" data-index="{{strike.index}}">
         {{#if @root.isCharacter}}
@@ -119,7 +143,8 @@
             <div class="versatiles">
                 {{#each strike.versatileOptions as |option|}}
                 <div class="variant {{#if option.selected}}selected{{/if}} {{#unless @root.isOwner}}disabled{{/unless}}"
-                    data-action="toggle-versatile" data-value="{{option.value}}" title="{{localize (lookup @root.damageTypes [value])}}">
+                    data-action="toggle-versatile" data-value="{{option.value}}"
+                    data-tooltip="{{localize (lookup @root.damageTypes [value])}}">
                     <i class="fa-solid fa-{{option.glyph}} fa-fw"></i>
                 </div>
                 {{/each}}
@@ -206,16 +231,16 @@
 </div>
 <div class="variants">
     {{/unless}}
-    <div class="variant damage {{#unless @root.isOwner}}disabled{{/unless}}" data-action="strike-damage" title="{{strike.damageFormula}}"
-        {{#if altUsage}}data-alt-usage="{{altUsage}}" {{/if}}>
+    <div class="variant damage {{#unless @root.isOwner}}disabled{{/unless}}" data-action="strike-damage"
+        data-tooltip="{{strike.damageFormula}}" {{#if altUsage}}data-alt-usage="{{altUsage}}" {{/if}}>
         {{#if @root.isCharacter}}
         {{localize "PF2E.DamageLabel"}}
         {{else}}
         {{strike.damageFormula}}
         {{/if}}
     </div>
-    <div class="variant {{#unless @root.isOwner}}disabled{{/unless}}" data-action="strike-critical" title="{{strike.criticalFormula}}" {{#if
-        altUsage}}data-alt-usage="{{altUsage}}" {{/if}}>
+    <div class="variant {{#unless @root.isOwner}}disabled{{/unless}}" data-action="strike-critical"
+        data-tooltip="{{strike.criticalFormula}}" {{#if altUsage}}data-alt-usage="{{altUsage}}" {{/if}}>
         {{localize "PF2E.CriticalDamageLabel"}}
     </div>
     {{/if}}
@@ -227,5 +252,41 @@
     <img class="alt-usage-icon" src="systems/pf2e/icons/mdi/sword.svg" data-tooltip="{{localize 'PF2E.Item.Weapon.MeleeUsage.Label'}}" />
     {{/if}}
     {{/if}}
+</div>
+{{/inline}}
+
+{{#*inline "blast"}}
+<div class="variants">
+    <div class="variant" data-action="roll-attack" data-melee="{{melee}}" data-map-increases="0">
+        {{localize "PF2E.SpecificRule.Kineticist.Impulse.ElementalBlast.ShortLabel"}}
+        {{numberFormat blast.statistic.check.mod sign=true}}
+    </div>
+    <div class="variant" data-action="roll-attack" data-melee="{{melee}}" data-map-increases="1">
+        {{#if melee}}
+        {{@root.variantLabel blast.maps.melee.map1}}
+        {{else}}
+        {{@root.variantLabel blast.maps.ranged.map1}}
+        {{/if}}
+    </div>
+    <div class="variant" data-action="roll-attack" data-melee="{{melee}}" data-map-increases="2">
+        {{#if melee}}
+        {{@root.variantLabel blast.maps.melee.map2}}
+        {{else}}
+        {{@root.variantLabel blast.maps.ranged.map2}}
+        {{/if}}
+    </div>
+    <div class="variant damage" data-action="roll-damage" data-melee="{{melee}}" data-outcome="success"
+        data-formula="{{#if melee}}{{blast.formula.melee.damage}}{{else}}{{blast.formula.ranged.damage}}{{/if}}"
+        data-tooltip="{{#if melee}}{{blast.formula.melee.damage}}{{else}}{{blast.formula.ranged.damage}}{{/if}}">
+        {{localize "PF2E.DamageLabel"}}
+    </div>
+    <div class="variant damage" data-action="roll-damage" data-melee="{{melee}}" data-outcome="critical-success"
+        data-formula="{{#if melee}}{{blast.formula.melee.critical}}{{else}}{{blast.formula.ranged.critical}}{{/if}}"
+        data-tooltip="{{#if melee}}{{blast.formula.melee.critical}}{{else}}{{blast.formula.ranged.critical}}{{/if}}">
+        {{localize "PF2E.CriticalDamageLabel"}}
+    </div>
+    {{#unless melee}}
+    <i class="fa-regular fa-meteor fa-rotate-180 alt-usage-icon" data-tooltip="{{blast.range.label}}"></i>
+    {{/unless}}
 </div>
 {{/inline}}
