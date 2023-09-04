@@ -1,3 +1,4 @@
+import { isInstanceOf } from '../module.js'
 import {
     getChatMessageClass,
     getDamageRollClass,
@@ -70,7 +71,7 @@ function repostAction(target, foundryDoc = null) {
         return
     }
 
-    const actor = resolveActor(foundryDoc)
+    const actor = resolveActor(foundryDoc, target)
     const defaultVisibility = (actor ?? foundryDoc)?.hasPlayerOwner ? 'all' : 'gm'
     const content = (() => {
         if (target.parentElement?.dataset?.pf2Checkgroup !== undefined) {
@@ -142,7 +143,7 @@ export function listenInlineRoll(html, foundryDoc) {
         if (!pf2Check) return
 
         link.addEventListener('click', async event => {
-            const parent = resolveActor(foundryDoc)
+            const parent = resolveActor(foundryDoc, link)
             const actors = [parent]
             const extraRollOptions = [
                 ...(pf2Traits?.split(',').map(o => o.trim()) ?? []),
@@ -320,44 +321,8 @@ export function listenInlineRoll(html, foundryDoc) {
         })
     }
 
-    /**
-     * this is a re-implementation of the system TextEditor._onClickInlineRoll
-     */
     for (const link of html.querySelectorAll('a[data-damage-roll]')) {
-        link.addEventListener('click', async event => {
-            event.stopImmediatePropagation()
-
-            const { pf2ItemId, flavor, mode, pf2BaseFormula, pf2Traits, pf2Domains, pf2RollOptions, formula } =
-                event.currentTarget.dataset
-            const actor = resolveActor(foundryDoc)
-            const rollData = actor.items.get(pf2ItemId)?.getRollData() ?? actor.getRollData()
-            const options = flavor ? { flavor } : {}
-            const speaker = getChatMessageClass().getSpeaker({ actor })
-            const rollMode = objectHasKey(CONFIG.Dice.rollModes, mode) ? mode : 'roll'
-
-            if (pf2BaseFormula) {
-                const item = rollData.item instanceof Item ? rollData.item : null
-                const traits = pf2Traits?.split(',') ?? []
-                const domains = pf2Domains?.split(',')
-                const extraRollOptions = pf2RollOptions?.split(',') ?? []
-                const result = await augmentInlineDamageRoll(pf2BaseFormula, {
-                    ...eventToRollParams(event),
-                    actor,
-                    item,
-                    domains,
-                    traits,
-                    extraRollOptions,
-                })
-                if (result) {
-                    await DamagePF2e.roll(result.template, result.context)
-                }
-
-                return
-            }
-
-            const roll = new (getDamageRollClass())(formula, rollData, options)
-            return roll.toMessage({ speaker, flavor: roll.options.flavor }, { rollMode })
-        })
+        link.dataset.itemUuid = foundryDoc.uuid
     }
 }
 
@@ -372,8 +337,12 @@ function resolveDocument(html, foundryDoc) {
 }
 
 /** Retrieves the actor for the given document, or the document itself if its already an actor */
-function resolveActor(foundryDoc) {
-    if (foundryDoc instanceof Actor) return foundryDoc
-    if (foundryDoc instanceof Item || foundryDoc instanceof ChatMessage) return foundryDoc.actor
-    return null
+function resolveActor(foundryDoc, anchor) {
+    if (isInstanceOf(foundryDoc, 'ActorPF2e')) return foundryDoc
+    if (isInstanceOf(foundryDoc, 'ItemPF2e') || isInstanceOf(foundryDoc, 'ChatMessagePF2e')) return foundryDoc.actor
+
+    // Retrieve item/actor from anywhere via UUID
+    const itemUuid = anchor.dataset.itemUuid
+    const itemByUUID = itemUuid && !itemUuid.startsWith('Compendium.') ? fromUuidSync(itemUuid) : null
+    return itemByUUID instanceof Item ? itemByUUID.actor : null
 }
