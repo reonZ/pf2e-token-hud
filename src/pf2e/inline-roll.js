@@ -1,14 +1,8 @@
 import { isInstanceOf } from '../module.js'
-import {
-    getChatMessageClass,
-    getDamageRollClass,
-    getMeasuredTemplateDocumentClass,
-    getMeasuredTemplateObjectClass,
-} from './classes.js'
-import { DamagePF2e, augmentInlineDamageRoll } from './damage.js'
+import { getChatMessageClass, getMeasuredTemplateDocumentClass, getMeasuredTemplateObjectClass } from './classes.js'
 import { calculateDC } from './dc.js'
 import { htmlClosest, htmlQueryAll } from './dom.js'
-import { ErrorPF2e, getActionGlyph, objectHasKey, sluggify, tupleHasValue } from './misc.js'
+import { ErrorPF2e, getActionGlyph, sluggify, tupleHasValue } from './misc.js'
 import { eventToRollParams } from './scripts.js'
 
 const SAVE_TYPES = ['fortitude', 'reflex', 'will']

@@ -1,8 +1,13 @@
+# 1.37.0
+
+-   this is a system `5.4.3` release
+-   updated the popup `@Damage` inline links to take advantage of the new system uuid addition
+
 # 1.36.0
 
 -   this is a system `5.4.2` release
 -   updated popup inline links to be in sync with the recent system changes
--   characters with the `Untrained Improvisation` skill will now always see all the skill actions even if the `Hide Untrained Skill Actions` is enabled
+-   characters with the `Untrained Improvisation` feat will now always see all the skill actions even if the `Hide Untrained Skill Actions` is enabled
 -   added support for kineticist elemental blasts
 -   added support for usable actions
 -   added traits and blurb to NPCs notes popup
