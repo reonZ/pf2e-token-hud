@@ -480,7 +480,7 @@ export async function variantsDialog(base, dc) {
 
 function rollAction({ event, actor, skillSlug, slug, variant, map, skill, token }) {
     const action = SKILLS_MAP[skillSlug].actions[slug]
-    const type = action.type
+    const type = action.type === 3 ? 3 : game.pf2e.actions.has(slug) ? 2 : 1
 
     skill ??= action.noSkill ? undefined : skillSlug
 
