@@ -123,7 +123,8 @@ export class HUD extends Application {
 
     setToken(token, isObserved) {
         if (token !== this.#token) {
-            if (this.#token) delete this.#token.actor.apps[this.appId]
+            delete this.#token?.actor?.apps[this.appId]
+
             this.#token = token
             const actor = token?.actor
             if (actor) actor.apps[this.appId] = this
