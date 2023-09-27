@@ -222,7 +222,8 @@ export function listenInlineRoll(html, foundryDoc) {
                                     ? foundryDoc.item
                                     : null
 
-                            return itemFromDoc?.isOfType('action', 'feat') || (isSavingThrow && !itemFromDoc?.isOfType('weapon'))
+                            return itemFromDoc?.isOfType('action', 'feat', 'campaignFeature') ||
+                                (isSavingThrow && !itemFromDoc?.isOfType('weapon'))
                                 ? itemFromDoc
                                 : null
                         })()
