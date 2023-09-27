@@ -1,6 +1,7 @@
 # 1.38.0
 
--   updated the popup inline links to be in sync with the system version `5.6.0`
+-   this is a system `5.6.0` release
+-   updated popup inline links to be in sync with the recent system changes
 -   fixed exceptional error with actorless tokens
 
 # 1.37.0
