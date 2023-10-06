@@ -1,0 +1,338 @@
+{
+    "pf2e-token-hud": {
+        "filter": "Filtro",
+        "actor": {
+            "macros": {
+                "contextmenu": "ITT Macros",
+                "title": "ITT Macros"
+            }
+        },
+        "menu": {
+            "gm": {},
+            "client": {
+                "header": "Opciones de cliente",
+                "distance": "Distancia",
+                "sidebar": "Barra lateral",
+                "actions": "Acciones",
+                "spells": "Conjuros",
+                "skills": "Habilidades",
+                "tooltip": "Menú",
+                "items": "Equipo"
+            }
+        },
+        "keybinds": {
+            "hold": {
+                "name": "Mantén pulsado para mostrar",
+                "hint": "La tecla que se debe mantener pulsada para mostrar el menú."
+            },
+            "filter": {
+                "name": "Mostrar filtro",
+                "hint": "Cuando la barra lateral se abre, puedes usar esta tecla para mostrar el filtro, haciendo scroll a la parte de arriba de la barra lateral y dándote foco en el campo."
+            }
+        },
+        "settings": {
+            "enabled": {
+                "name": "Activado",
+                "hint": "Activar o no el módulo en este cliente."
+            },
+            "pips": {
+                "name": "Pips digitales",
+                "hint": "Cambiar el estilo de algunos contadores del menú."
+            },
+            "position": {
+                "name": "Posición del menú",
+                "hint": "En que lado del token debería mostrarse el menú, si no es posible, se intentará primero en el lado contrario, si tampoco es posible, se mostrará en otro lado disponible.",
+                "choices": {
+                    "left": "Izquierda",
+                    "right": "Derecha",
+                    "top": "Arriba",
+                    "bottom": "Abajo"
+                }
+            },
+            "small-position": {
+                "name": "Posición del menú pequeño",
+                "hint": "Lugar preferido para la versión pequeña del menú, se aplica la misma lógica que para el menú de tamaño normal."
+            },
+            "delay": {
+                "name": "Retraso del menú",
+                "hint": "Retraso en milisegundos antes de que se muestre el menú en la pantalla."
+            },
+            "autolock": {
+                "name": "Auto bloquear",
+                "hint": "Bloquear o no el menú cuando se paso el ratón por encima suya o tan pronto como se muestre.",
+                "choices": {
+                    "none": "Desactivado",
+                    "hover": "Al pasar el ratón",
+                    "render": "Al mostrarse"
+                }
+            },
+            "spells": {
+                "name": "Ordenar conjuros por tipo",
+                "hint": "Deberán o no los conjuros ser ordenados por tipos antes que alfabéticamente en la misma tabla."
+            },
+            "scrollbar": {
+                "name": "Barra de desplazamiento lateral",
+                "hint": "Debería mostrarse o no la barra de desplazamiento lateral, si se desactiva, podrás desplazarte por el menú pero no verás barra alguna."
+            },
+            "height": {
+                "name": "Altura máxima de la barra lateral",
+                "hint": "Ajusta la altura máxima de la barra lateral, puede asignarse cualquier valor CSS para la propiedad 'height' (p.e. '50%' o '300px'). El módulo se asegurará de las barras no superen la altura máxima del viewport."
+            },
+            "actions": {
+                "name": "Ordenación de acciones",
+                "hint": "Cómo deberían ordenarse las acciones.",
+                "choices": {
+                    "name": "Por nombre",
+                    "type": "Por tipo",
+                    "split": "Separadas por tipo"
+                }
+            },
+            "actions-colors": {
+                "name": "Coloreado de golpeas y daños",
+                "hint": "Cuando se activa, el módulo replicará los colores para ataques y daños de la ficha de personaje."
+            },
+            "distance": {
+                "name": "Distancia al token",
+                "hint": "Mostrar o no la distancia al token seleccionado o marcado objetivo en el menú.",
+                "choices": {
+                    "none": "Desactivado",
+                    "self": "Solo con tokens de los que se es propietario",
+                    "all": "Para todos los tokens"
+                }
+            },
+            "unit": {
+                "name": "Unidades de distancia",
+                "hint": "Un texto que representa el multiplicador, la unidad y el número de decimales (separados por comas) que se usa cuando se muestra la 'Distancia al token'. Ejemplo: '0.3, m, 2'. Dejar esto vacio resulta en: '1, ft, 0', "
+            },
+            "status": {
+                "name": "Estado de salud",
+                "hint": "Textos separados por coma que representan las diferentes divisiones del estado de salud de una criatura, de peor a mejor (no incluya \"muerto\"). El módulo divirá la salud seǵun el número de textos que incluyas. Déjalo vacío para desactivar esta opción.",
+                "statuses": {
+                    "first": "A las puertas de la muerte",
+                    "second": "No se encuentra bien",
+                    "third": "Ha tenido mejores días",
+                    "fourth": "Perfectamente bien"
+                }
+            },
+            "last-status": {
+                "name": "Último estado al 100%",
+                "hint": "Cuando se activa, el mejor estado de salud solo se mostrará cuando se esté al 100% en vez de en el último rango."
+            },
+            "see-status": {
+                "name": "Estado de salud en tokens poseidos",
+                "hint": "Cuando se activa, el estado de salud también se mostrará en los tokens que posees en vez de solo en los que no posees."
+            },
+            "untrained": {
+                "name": "Ocultar las habilidades sin entrenar",
+                "hint": "Cuando se activa, las habilidades que requieren entrenamiento que no posees, no se mostrarán en el menú de acciones."
+            },
+            "tradition": {
+                "name": "Mostrar las tradriciones mágicas",
+                "hint": "Esto agregará la primera letra de la tradición antes de la categoría de conjuros."
+            },
+            "actions-columns": {
+                "name": "Acciones en dos columnas",
+                "hint": "Si se activa, mostrará en dos columnas el listado de acciones."
+            },
+            "items-columns": {
+                "name": "Equipamiento en dos columnas",
+                "hint": "Si se activa, mostrará el equipamiento en dos columnas."
+            },
+            "spells-columns": {
+                "name": "Conjuros en dos columnas",
+                "hint": "Si se activa, mostrará los conjuros en dos columnas."
+            },
+            "skills-columns": {
+                "name": "Habilidades en dos columnas",
+                "hint": "Si se activa, mostrará las habilidades en dos columnas."
+            },
+            "show-death": {
+                "name": "Mostrar moribundo/herido",
+                "hint": "Mostrar o no el indicador de moribundo/herido en el menú principal.",
+                "choices": {
+                    "none": "No mostrar nunca",
+                    "always": "Mostar siempre",
+                    "only": "Mostrar solo cuando aplique"
+                }
+            },
+            "use-holding": {
+                "name": "Usar el mantener pulsado",
+                "choices": {
+                    "none": "Desactivado",
+                    "player": {
+                        "hint": "Que tipos de tokens requieren que pulses la tecla para mostrar el menú.",
+                        "half": "Los tokens poseidos",
+                        "all": "Todos los tokens"
+                    },
+                    "gm": {
+                        "hint": "No mostrar ningún menu si no se pulsa tecla o solo la versión pequeña hasta que se pulse la tecla.",
+                        "half": "Menú pequeño, pulsar para cambiar al menú normal",
+                        "all": "Pulsar para mostar el menú normal"
+                    }
+                }
+            },
+            "observer": {
+                "name": "Menú en observados",
+                "hint": "Si se activa, una versión no editable del menú se mostrará para los tokens observados. Además, la mayoría de opciones para tokens poseidos se extenderán a los observados."
+            },
+            "chat": {
+                "name": "Desactivar la tarjeta de chat al pasar el ratón",
+                "hint": "Evitará que el menú se muestre cuando se posa el ratón en una tarjeta de chat de un token poseido."
+            },
+            "party": {
+                "name": "Grupo observado",
+                "hint": "Considerar las acciones de los actores en el grupo de aliados como observado."
+            },
+            "saves": {
+                "name": "Mostar salvaciones",
+                "hint": "Mostrar las salvaciónes de fortaleza, reflejos y voluntad en el menú.",
+                "choices": {
+                    "none": "Desactivado",
+                    "bonus": "Mostrar el bono",
+                    "dc": "Mostrar la CD"
+                }
+            },
+            "others": {
+                "name": "Mostrar Percepción, sigilo, atletismo",
+                "hint": "Mostrar el bono de percepción, sigilo y atletismo o la CD en el menú."
+            },
+            "ranks": {
+                "name": "Mostrar rangos",
+                "hint": "Si se activa, un pequeño indicador se agregará a las salvaciones y habilidades en el menú."
+            },
+            "tooltips": {
+                "name": "Desactivar iconos",
+                "hint": "Evitar que se muestren los iconos en el menú principal."
+            },
+            "scale": {
+                "name": "Escalar con la fuente",
+                "hint": "Puedes escalar la totalidad del menú y sus barras laterales cambiando el tamaño de la fuente. Por defecto, se usa un tamaño de 14px."
+            },
+            "hazard-width": {
+                "name": "Ancho máximo de los peligros",
+                "hint": "Esto te permite ajustar el ancho máximo (en 'em') de la barra lateral de peligros."
+            },
+            "force-speed": {
+                "name": "Forzar a mostrar velocidad máxima",
+                "hint": "Si se activa, la velocidad a mostrar (si no se ha elegido ninguna) será siempre la más alta en vez de solo mostrar otra velocidad si la velocidad corriendo es de 0."
+            },
+            "filter": {
+                "name": "Mostrar siempre el filtro",
+                "hint": "Si se activa, el campo de filtro se mostrará siempre arriba de las barras laterales en vez de cuando se use la tecla asignada a 'Mostrar filtro', pulsar la tecla seguirá moviendo el menú a la parte de arriba y dando foco al campo de filtro."
+            },
+            "containers": {
+                "name": "Objetos en contenedores",
+                "hint": "Si se activa, los objetos en contenedores siempre se mostrarán en su contenedor."
+            }
+        },
+        "spells": {
+            "title": "Conjuros",
+            "empty": "{name} no tiene conjuros, de todas formas la magia es maligna...",
+            "charges": "Cargas",
+            "staff": "Bastón",
+            "attacks": {
+                "title": "Elije una un conjuro",
+                "ok": "Tirar dados"
+            }
+        },
+        "extras": {
+            "title": "Extras",
+            "empty": "Nada que ver aquí, quizás algún día...",
+            "no-macro": "Suelta una macro aquí"
+        },
+        "actions": {
+            "title": "Acciones",
+            "empty": "{name} no tiene acciones a realizar, ¡que aburrido!",
+            "recall-knowledge": {
+                "result": "Resultado",
+                "modifier": "Mod.",
+                "target": "Objetivo",
+                "first": "1ro",
+                "second": "2do",
+                "third": "3ro",
+                "fourth": "4to",
+                "fifth": "5to",
+                "sixth": "6to",
+                "dc": "CD",
+                "unspecific": "Sin especificar",
+                "specific": "Específico"
+            },
+            "treat-wounds": {
+                "title": "{name} - Curar heridas",
+                "no-proficiency": "{name} no tiene la competencia necesaria para tratar heridas."
+            },
+            "stances": "Posiciones"
+        },
+        "hazard": {
+            "empty": "{name} no es peligroso en realidad..."
+        },
+        "popup": {
+            "close": "Cerrar"
+        },
+        "skills": {
+            "title": "Habilidades",
+            "actions": {
+                "earnIncome": "Obtener ingresos",
+                "treatWounds": "Tratar heridas",
+                "borrow-arcane-spell": "Pedir prestado un conjuro arcano",
+                "identify-magic": "Identificar magia",
+                "identify-alchemy": "Identificar alquimia",
+                "learn-spell": "Aprender un conjuro",
+                "crafting-goods": "Elaborar",
+                "staging-performance": "Interpretar",
+                "distracting-words": "Crear una distracción",
+                "gesture": "Gesticular",
+                "trick": "Engañar",
+                "stabilize": "Estabilizar",
+                "stop-bleeding": "Parar el sangrado",
+                "acting": "Actuar",
+                "comedy": "Comedia",
+                "dance": "Bailar",
+                "keyboards": "Teclados",
+                "oratory": "Oratory",
+                "percussion": "Percusión",
+                "singing": "Cantar",
+                "strings": "Cuerdas",
+                "winds": "Vientos",
+                "follow": "Seguir al experto",
+                "following": "Está siguiendo al experto"
+            },
+            "modifiers": {
+                "crowbar-missing": "Sin palanca"
+            },
+            "variant": {
+                "title": "Variant Skill",
+                "label": "Variant skill",
+                "dc": "Clase de dificultad",
+                "button": "Elegir"
+            }
+        },
+        "items": {
+            "title": "Equipo",
+            "empty": "{name} tiene los bolsillos vacíos, por desgracia.",
+            "inContainer": "Mostrar los objetos en el contenedor",
+            "outContainer": "Mostrar los objetos fuera del contenedor"
+        },
+        "deleteItem": {
+            "title": "Confirmar el borrado",
+            "ok": "Borrar",
+            "cancel": "Cancelar"
+        },
+        "hud": {
+            "resolve": {
+                "title": "Usar un punto de héroe",
+                "yes": "Aceptar",
+                "no": "Cancelar",
+                "full": "{name} está lleno de energía y no necesita descansar.",
+                "breather": {
+                    "label": "Tomarse un respiro",
+                    "msg": "Descansar durante 10 minutos, gastar un punto de resolve y recupera toda tu energía.",
+                    "used": "{name} tiene {ratio} Puntos de Magia y gasta un punto de héroe, en un descanso de 10 minutos. Recarga su energía."
+                },
+                "steel": {
+                    "msg": "Usa una acción, gasta un punto de héroes y recupera la mitad de tu energía."
+                }
+            }
+        }
+    }
+}
