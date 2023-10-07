@@ -1,3 +1,7 @@
+# 1.39.0
+
+-   added spanish localization (thanks to [HonzoNebro](https://github.com/HonzoNebro))
+
 # 1.38.0
 
 -   this is a system `5.6.0` release
