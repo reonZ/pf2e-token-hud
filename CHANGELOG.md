@@ -1,3 +1,12 @@
+# 1.40.0
+
+-   added more support for the `PF2e Staves` module
+    -   you can now change the charges of the spells
+    -   when the module is not active, a broken icon will appear instead of the usual interactive menu
+-   slightly increased the interractive inputs contrast to make them popout a bit more
+-   reduced the height of the number inputs in the main tooltip and sidebars
+-   fixed being unable to delete equipment items
+
 # 1.39.0
 
 -   added spanish localization (thanks to [HonzoNebro](https://github.com/HonzoNebro))
