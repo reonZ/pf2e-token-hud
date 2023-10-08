@@ -56,7 +56,7 @@ export async function deleteItem(event, actor) {
 
     new Dialog({
         title: localize('deleteItem.title'),
-        content: await renderTemplate('systems/pf2e/templates/actors/delete-item-dialog.hbs', { name: item.name }),
+        content: `<p>${game.i18n.format('PF2E.DeleteQuestion', { name: item.name })}</p>`,
         buttons: {
             ok: {
                 icon: '<i class="fa-solid fa-trash"></i>',
