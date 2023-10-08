@@ -53,15 +53,15 @@
                 <div class="actions">
                     {{#unless spell.isCantrip}}
 
-                    {{#if (or spell.isSpontaneous spell.isInnate spell.isCharge)}}
+                    {{#if (or spell.isSpontaneous spell.isInnate spell.isActiveCharge)}}
                     <div class="uses">
                         <input type="number" value="{{spell.uses.value}}" data-input-path="{{spell.inputPath}}"
                             data-entry-id="{{#if spell.isInnate}}{{spell.itemId}}{{else}}{{spell.entryId}}{{/if}}" placeholder="0" min="0"
-                            max="{{spell.uses.max}}" {{disabled (or spell.isCharge (not @root.isOwner))}}>
+                            max="{{spell.uses.max}}" {{disabled (not @root.isOwner)}}>
                         {{#if spell.uses.max}}
                         <input type="text" value="/  {{spell.uses.max}}" disabled>
-                        {{!-- {{else if spell.isCharge}}
-                        <a data-action="recharge-staff"><i class="fas fa-redo"></i></a> --}}
+                        {{!-- {{else if spell.isCharge}} --}}
+                        {{!-- <a data-action="recharge-staff"><i class="fa-solid fa-rotate-right recharge"></i></a> --}}
                         {{/if}}
                     </div>
 
@@ -74,10 +74,14 @@
 
                     {{/unless}}
 
-                    {{#if @root.isOwner}}
+                    {{#if (and @root.isOwner (or (not spell.isCharge) spell.isActiveCharge))}}
                     <a {{#if spell.expended}}class="disabled" {{else}}data-action="cast-spell" {{/if}}>
                         <i class="fa-solid fa-play"></i>
                     </a>
+                    {{/if}}
+
+                    {{#if (and spell.isCharge (not spell.isActiveCharge))}}
+                    <i class="fa-solid fa-link-slash"></i>
                     {{/if}}
                 </div>
             </div>

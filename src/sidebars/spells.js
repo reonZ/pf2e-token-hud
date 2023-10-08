@@ -7,6 +7,7 @@ export async function getSpellsData(actor, token, filter) {
     const focusPool = actor.system.resources.focus ?? { value: 0, max: 0 }
     const entries = actor.spellcasting.regular
     const showTradition = getSetting('tradition')
+    const stavesActive = game.modules.get('pf2e-staves')?.active
     const spells = []
     const focuses = []
     let hasFocusCantrips = false
@@ -47,6 +48,7 @@ export async function getSpellsData(actor, token, filter) {
                             ? 'system.location.uses.value'
                             : `system.slots.slot${slot.level}.value`,
                         isCharge,
+                        isActiveCharge: isCharge && stavesActive,
                         isVirtual: virtual,
                         isInnate: data.isInnate,
                         isCantrip: isCantrip,
@@ -129,6 +131,7 @@ export async function getSpellsData(actor, token, filter) {
                 spells,
                 rituals,
                 focusPool,
+                stavesActive,
                 hasFocusCantrips,
                 attackMod: hasSingleSpellAttack(attacks) ? attacks[0].mod : null,
             },
