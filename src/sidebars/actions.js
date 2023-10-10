@@ -26,23 +26,10 @@ export async function getActionsData(actor, token, filter) {
     const toggles = actor.synthetics.toggles.slice()
     const sorting = getSetting('actions')
 
-    const stances = getStancesModuleApi()
-        ?.getStances(actor)
-        .sort((a, b) => localeCompare(a.name, b.name))
+    const stances = (await getStancesModuleApi()?.getStances(actor))?.sort((a, b) => localeCompare(a.name, b.name))
 
-    let heroActions
-    const heroActionsModule = game.modules.get('pf2e-hero-actions')
-    if (heroActionsModule?.active && isCharacter) {
-        const actions = heroActionsModule.api.getHeroActions(actor)
-        const diff = actor.heroPoints.value - actions.length
-
-        heroActions = {
-            actions,
-            draw: Math.max(diff, 0),
-            discard: Math.abs(Math.min(diff, 0)),
-            canTrade: actions.length && game.settings.get('pf2e-hero-actions', 'trade'),
-        }
-    }
+    const heroActions = await getHeroActionsApi()?.getHeroActions(actor)
+    const heroDiff = heroActions ? actor.heroPoints.value - heroActions.length : undefined
 
     const isOwner = actor.isOwner
     const rollData = actor.getRollData()
@@ -143,20 +130,13 @@ export async function getActionsData(actor, token, filter) {
 
     if (sorting === 'split') sections.sort((a, b) => SECTIONS_TYPES[a.type].order - SECTIONS_TYPES[b.type].order)
 
-    if (
-        toggles.length ||
-        stances?.length ||
-        strikes?.length ||
-        blasts?.length ||
-        sections.length ||
-        heroActions?.actions.length
-    ) {
+    if (toggles.length || stances?.length || strikes?.length || blasts?.length || sections.length || heroActions?.length) {
         const nb =
             Number((stances?.length ?? 0) > 0) +
             Number((strikes?.length ?? 0) > 0) +
             Number((blasts?.length ?? 0) > 0) +
             sections.length +
-            Number((heroActions?.actions.length ?? 0) > 0)
+            Number((heroActions?.length ?? 0) > 0)
 
         return {
             contentData: {
@@ -165,7 +145,12 @@ export async function getActionsData(actor, token, filter) {
                 strikes,
                 blasts,
                 sections,
-                heroActions,
+                heroActions: heroActions && {
+                    actions: heroActions,
+                    draw: Math.max(heroDiff, 0),
+                    discard: Math.abs(Math.min(heroDiff, 0)),
+                    canTrade: heroActions.length && canTradeHeroActions(),
+                },
                 i18n: str => localize(`actions.${str}`),
                 variantLabel: label => label.replace(/.+\((.+)\)/, '$1'),
                 damageTypes: CONFIG.PF2E.damageTypes,
@@ -211,7 +196,8 @@ export function addActionsListeners(el, actor) {
     })
 
     action('hero-action-description', async event => {
-        const { description, name } = (await getHeroActionDescription(getUuid(event))) ?? {}
+        const uuid = getUuid(event)
+        const { description, name } = (await getHeroActionsApi()?.getHeroActionDetails(uuid)) ?? {}
         if (description) popup(name, description, actor)
     })
 
@@ -266,7 +252,7 @@ export function addActionsListeners(el, actor) {
 
     action('stance-toggle', event => {
         const { effectUuid } = event.currentTarget.closest('.action').dataset
-        game.modules.get('pf2e-stances')?.api.toggleStance(actor, effectUuid)
+        getStancesModuleApi()?.toggleStance(actor, effectUuid)
     })
 
     action('action-chat', event => {
@@ -275,23 +261,23 @@ export function addActionsListeners(el, actor) {
     })
 
     action('hero-action-chat', async event => {
-        await game.modules.get('pf2e-hero-actions')?.api.sendActionToChat(actor, getUuid(event))
+        await getHeroActionsApi()?.sendActionToChat(actor, getUuid(event))
     })
 
     action('draw-hero-action', async event => {
-        await game.modules.get('pf2e-hero-actions')?.api.drawHeroActions(actor)
+        await getHeroActionsApi()?.drawHeroActions(actor)
     })
 
     action('use-hero-action', async event => {
-        await game.modules.get('pf2e-hero-actions')?.api.useHeroAction(actor, getUuid(event))
+        await getHeroActionsApi()?.useHeroAction(actor, getUuid(event))
     })
 
     action('discard-hero-action', async event => {
-        await game.modules.get('pf2e-hero-actions')?.api.discardHeroActions(actor, getUuid(event))
+        await getHeroActionsApi()?.discardHeroActions(actor, getUuid(event))
     })
 
     action('trade-hero-action', async event => {
-        game.modules.get('pf2e-hero-actions')?.api.tradeHeroAction(actor)
+        getHeroActionsApi()?.tradeHeroAction(actor)
     })
 
     action('strike-attack', event => {
@@ -383,17 +369,32 @@ export function addActionsListeners(el, actor) {
     })
 }
 
-function getStancesModuleApi() {
-    const module = game.modules.get('pf2e-stances')
-    return module?.active ? module.api : undefined
+function getToolBeltModule(setting) {
+    const module = game.modules.get('pf2e-toolbelt')
+    return module?.active && game.settings.get('pf2e-toolbelt', setting) ? module : undefined
 }
 
-function getHeroActionDescription(uuid) {
-    return game.modules.get('pf2e-hero-actions')?.api.getHeroActionDetails(uuid)
+function getToolBeltApi(setting) {
+    return getToolBeltModule(setting)?.api
+}
+
+function getStancesModuleApi() {
+    const module = game.modules.get('pf2e-stances')
+    return module?.active ? module.api : getToolBeltApi('stances')?.stances
+}
+
+function getHeroActionsApi() {
+    const module = game.modules.get('pf2e-hero-actions')
+    return module?.active ? module.api : getToolBeltApi('hero')?.heroActions
+}
+
+function canTradeHeroActions() {
+    if (game.modules.get('pf2e-hero-actions')?.active) return game.settings.get('pf2e-hero-actions', 'trade')
+    if (getToolBeltModule('hero')) return game.settings.get('pf2e-toolbelt', 'hero-trade')
 }
 
 function getCharacterActions(actor) {
-    const stancesUUIDS = getStancesModuleApi()?.getActionsUUIDS() ?? new Set()
+    const stancesUUIDS = getStancesModuleApi()?.getActionsUUIDS?.() ?? new Set()
     const actionsUUIDS = new Set([...stancesUUIDS, ...skillActionsUUIDS, ...Object.values(extrasUUIDS)])
     const actions = actor.itemTypes.action.filter(item => !actionsUUIDS.has(item.sourceId))
     const feats = actor.itemTypes.feat.filter(item => item.actionCost && !stancesUUIDS.has(item.sourceId))

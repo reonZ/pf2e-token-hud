@@ -261,7 +261,8 @@
                 "title": "{name} - Treat Wounds",
                 "no-proficiency": "{name} doesn't have the required proficiency to treat wounds."
             },
-            "stances": "Stances"
+            "stances": "Stances",
+            "hero-actions": "Hero Actions"
         },
         "hazard": {
             "empty": "{name} isn't really hazardeous."

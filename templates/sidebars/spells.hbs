@@ -60,10 +60,11 @@
                             max="{{spell.uses.max}}" {{disabled (not @root.isOwner)}}>
                         {{#if spell.uses.max}}
                         <input type="text" value="/  {{spell.uses.max}}" disabled>
-                        {{!-- {{else if spell.isCharge}} --}}
-                        {{!-- <a data-action="recharge-staff"><i class="fa-solid fa-rotate-right recharge"></i></a> --}}
                         {{/if}}
                     </div>
+
+                    {{else if spell.isCharge}}
+                    <i class="fa-solid fa-link-slash"></i>
 
                     {{else if (and spell.isPrepared @root.isOwner)}}
                     <a data-action="toggle-prepared">
@@ -78,10 +79,6 @@
                     <a {{#if spell.expended}}class="disabled" {{else}}data-action="cast-spell" {{/if}}>
                         <i class="fa-solid fa-play"></i>
                     </a>
-                    {{/if}}
-
-                    {{#if (and spell.isCharge (not spell.isActiveCharge))}}
-                    <i class="fa-solid fa-link-slash"></i>
                     {{/if}}
                 </div>
             </div>
