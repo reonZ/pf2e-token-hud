@@ -1,9 +1,13 @@
+# 1.41.0
+
+-   made compatible with the `PF2e ToolBelt` module for both `Stances` and `Hero Actions`, it is still compatible with the standalone modules
+
 # 1.40.0
 
 -   added more support for the `PF2e Staves` module
     -   you can now change the charges of the spells
     -   when the module is not active, a broken icon will appear instead of the usual interactive menu
--   slightly increased the interractive inputs contrast to make them popout a bit more
+-   slightly increased the interactive inputs contrast to make them pop out a bit more
 -   reduced the height of the number inputs in the main tooltip and sidebars
 -   fixed being unable to delete equipment items
 
