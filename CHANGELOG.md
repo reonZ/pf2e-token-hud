@@ -1,6 +1,6 @@
-# 1.41.1
+# 1.42.0
 
--   updated for version `1.6.0` of `PF2e Toolbelt`
+-   updated for version `1.6.0` of `PF2e ToolBelt`
 
 # 1.41.0
 
