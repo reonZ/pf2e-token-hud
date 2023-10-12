@@ -97,7 +97,7 @@ export async function getActionsData(actor, token, filter) {
 
     let sections = {}
 
-    const actions = isCharacter ? getCharacterActions(actor) : getNpcActions(actor)
+    const actions = isCharacter ? getCharacterActions(actor, stances) : getNpcActions(actor)
     for (const action of actions) {
         if (!filterIn(action.name, filter)) continue
         if (sorting !== 'split') {
@@ -232,7 +232,7 @@ export function addActionsListeners(el, actor) {
 
     action('stance-description', event => {
         const stance = $(event.currentTarget).closest('.action')
-        showItemSummary(stance, actor)
+        showItemSummary(stance, actor, stance.data().itemName)
     })
 
     // IS OWNER
@@ -247,6 +247,7 @@ export function addActionsListeners(el, actor) {
 
     action('stance-chat', event => {
         const item = getItemFromEvent(event, actor)
+        console.log(item)
         item?.toMessage(event, { create: true })
     })
 
@@ -393,8 +394,13 @@ function canTradeHeroActions() {
     if (getToolBeltModule('hero')) return game.settings.get('pf2e-toolbelt', 'hero-trade')
 }
 
-function getCharacterActions(actor) {
-    const stancesUUIDS = getStancesModuleApi()?.getActionsUUIDS?.() ?? new Set()
+function getCharacterActions(actor, stances) {
+    console.log(stances)
+    const stancesUUIDS =
+        getStancesModuleApi()?.getActionsUUIDS?.() ??
+        (stances?.some(stance => stance.actionUUID) ? new Set(stances.map(({ actionUUID }) => actionUUID)) : undefined) ??
+        new Set()
+
     const actionsUUIDS = new Set([...stancesUUIDS, ...skillActionsUUIDS, ...Object.values(extrasUUIDS)])
     const actions = actor.itemTypes.action.filter(item => !actionsUUIDS.has(item.sourceId))
     const feats = actor.itemTypes.feat.filter(item => item.actionCost && !stancesUUIDS.has(item.sourceId))

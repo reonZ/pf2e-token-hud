@@ -26,7 +26,7 @@
 <div class="section" data-section="stances">
     <div class="header"> {{i18n "stances"}}</div>
     {{#each stances as |stance|}}
-    <div class="action" data-item-id="{{stance.actionID}}" data-effect-uuid="{{stance.effectUUID}}">
+    <div class="action" data-item-id="{{stance.actionID}}" data-effect-uuid="{{stance.effectUUID}}" data-item-name="{{stance.itemName}}">
         <div class="action-icon"><img src="systems/pf2e/icons/actions/OneAction.webp"></div>
         <a class="name" data-action="stance-description">{{stance.name}}</a>
         {{#if @root.isOwner}}
