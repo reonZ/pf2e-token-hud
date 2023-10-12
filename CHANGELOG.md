@@ -1,3 +1,7 @@
+# 1.41.1
+
+-   updated for version `1.6.0` of `PF2e Toolbelt`
+
 # 1.41.0
 
 -   made compatible with the `PF2e ToolBelt` module for both `Stances` and `Hero Actions`, it is still compatible with the standalone modules
