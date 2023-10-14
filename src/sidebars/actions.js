@@ -28,7 +28,7 @@ export async function getActionsData(actor, token, filter) {
 
     const stances = (await getStancesModuleApi()?.getStances(actor))?.sort((a, b) => localeCompare(a.name, b.name))
 
-    const heroActions = await getHeroActionsApi()?.getHeroActions(actor)
+    const heroActions = isCharacter ? await getHeroActionsApi()?.getHeroActions(actor) : undefined
     const heroDiff = heroActions ? actor.heroPoints.value - heroActions.length : undefined
 
     const isOwner = actor.isOwner
