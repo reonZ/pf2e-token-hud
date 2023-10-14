@@ -1,3 +1,7 @@
+# 1.42.1
+
+-   fixed error when opening the `actions` sidebar of an NPC with the `Hero Actions` or `PF2e Hero Actions` enabled
+
 # 1.42.0
 
 -   updated for version `1.6.0` of `PF2e ToolBelt`
