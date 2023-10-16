@@ -1,3 +1,11 @@
+# 1.43.0
+
+-   this is a `5.7.2` update
+-   fixed `Take Cover` not being a toggle
+-   fixed `monsterTraits` not existing anymore in the system
+-   fixed `stamina` & `resolve` paths having changed with latest system update
+-   fixed some debug logs remaining in production
+
 # 1.42.1
 
 -   fixed error when opening the `actions` sidebar of an NPC with the `Hero Actions` or `PF2e Hero Actions` enabled
