@@ -294,7 +294,8 @@ export class HUD extends Application {
         const othersSetting = getSetting('others')
         const isCharacter = this.isCharacter
         const { attributes } = actor
-        const { hp, sp = { max: 0, value: 0 }, ac } = attributes
+        const { hp, ac } = attributes
+        const sp = hp.sp ?? { max: 0, value: 0 }
         const useStamina = game.settings.get('pf2e', 'staminaVariant')
         const showDistance = getSetting('distance')
         const fontSize = getSetting('scale')
@@ -448,8 +449,8 @@ export class HUD extends Application {
 
         const showDeath = getSetting('show-death')
         const { heroPoints, _source } = actor
-        const { traits } = system
-        const { wounded, dying, shield, resolve, speed, adjustment } = attributes
+        const { traits, resources } = system
+        const { wounded, dying, shield, speed, adjustment } = attributes
 
         function toInfo(str) {
             return `<li>${str.trim()}</li>`
@@ -516,7 +517,7 @@ export class HUD extends Application {
             dying,
             wounded,
             shield,
-            resolve,
+            resolve: resources.resolve,
             adjustment,
             alliance: ALLIANCES[alliance === 'default' ? defaultAlliance : alliance],
             alliances,
@@ -711,7 +712,7 @@ export class HUD extends Application {
 
             const { publicNotes, privateNotes, blurb } = actor.system.details
             const traits = actor.system.traits.value.map(trait => ({
-                label: game.i18n.localize(CONFIG.PF2E.monsterTraits[trait]) ?? trait,
+                label: game.i18n.localize(CONFIG.PF2E.creatureTraits[trait]) ?? trait,
                 description: game.i18n.localize(CONFIG.PF2E.traitsDescriptions[trait]) ?? '',
             }))
 

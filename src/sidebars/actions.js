@@ -247,7 +247,6 @@ export function addActionsListeners(el, actor) {
 
     action('stance-chat', event => {
         const item = getItemFromEvent(event, actor)
-        console.log(item)
         item?.toMessage(event, { create: true })
     })
 
@@ -362,7 +361,6 @@ export function addActionsListeners(el, actor) {
                         break
                     }
                     case 'set-damage-type': {
-                        console.log(element, dataset.value)
                         await blast.setDamageType({ element, damageType: dataset.value })
                     }
                 }
@@ -395,7 +393,6 @@ function canTradeHeroActions() {
 }
 
 function getCharacterActions(actor, stances) {
-    console.log(stances)
     const stancesUUIDS =
         getStancesModuleApi()?.getActionsUUIDS?.() ??
         (stances?.some(stance => stance.actionUUID) ? new Set(stances.map(({ actionUUID }) => actionUUID)) : undefined) ??

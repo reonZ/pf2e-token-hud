@@ -11,8 +11,9 @@ export async function useResolve(actor) {
         })
     }
 
-    const { name, attributes } = actor
-    const { sp, resolve } = attributes
+    const { name, attributes, system } = actor
+    const sp = attributes.hp.sp
+    const resolve = system.resources.resolve
     const fullStamina = localize('hud.resolve.full', { name })
     const noResolve = game.i18n.format('PF2E.Actions.SteelYourResolve.NoStamina', { name })
 
@@ -33,8 +34,9 @@ export async function useResolve(actor) {
                 icon: "<i class='fas fa-check'></i>",
                 label: localize('hud.resolve.yes'),
                 callback: async html => {
-                    const { attributes } = actor
-                    const { sp, resolve } = attributes
+                    const { attributes, system } = actor
+                    const sp = attributes.hp.sp
+                    const resolve = system.resources.resolve
 
                     if (sp.value === sp.max) return toChat(fullStamina)
                     if (resolve.value < 1) return toChat(noResolve)
@@ -45,15 +47,15 @@ export async function useResolve(actor) {
                     if (selected === 'breather') {
                         toChat(localize('hud.resolve.breather.used', { name, ratio }))
                         await actor.update({
-                            'system.attributes.sp.value': sp.max,
-                            'system.attributes.resolve.value': resolve.value - 1,
+                            'system.attributes.hp.sp.value': sp.max,
+                            'system.resources.resolve.value': resolve.value - 1,
                         })
                     } else {
                         toChat(game.i18n.format('PF2E.Actions.SteelYourResolve.RecoverStamina', { name, ratio }))
                         const newSP = sp.value + Math.floor(sp.max / 2)
                         await actor.update({
-                            'system.attributes.sp.value': Math.min(newSP, sp.max),
-                            'system.attributes.resolve.value': resolve.value - 1,
+                            'system.attributes.hp.sp.value': Math.min(newSP, sp.max),
+                            'system.resources.resolve.value': resolve.value - 1,
                         })
                     }
                 },
