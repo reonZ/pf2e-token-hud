@@ -2,15 +2,13 @@ import { useResolve } from './actions/use-resolve.js'
 import { enrichHTML, getFlag, getSetting, localize, modifier, MODULE_ID, setFlag, templatePath } from './module.js'
 import { getChatMessageClass, getDamageRollClass } from './pf2e/classes.js'
 import { popup } from './popup.js'
-import { getUniqueTarget, localeCompare, RANKS } from './shared.js'
+import { getCoverEffect, getUniqueTarget, localeCompare, RANKS } from './shared.js'
 import { addActionsListeners, getActionsData } from './sidebars/actions.js'
 import { addExtrasListeners, getExtrasData } from './sidebars/extras.js'
 import { addHazardListeners, getHazardData } from './sidebars/hazard.js'
 import { addItemsListeners, getItemsData } from './sidebars/items.js'
 import { addSkillsListeners, getSkillsData } from './sidebars/skills.js'
 import { addSpellsListeners, getSpellsData } from './sidebars/spells.js'
-
-const COVER_UUID = 'Compendium.pf2e.other-effects.Item.I9lfZUiCwMiGogVi'
 
 const POSITIONS = {
     left: ['left', 'right', 'top', 'bottom'],
@@ -265,7 +263,7 @@ export class HUD extends Application {
     }
 
     get hasCover() {
-        return this.actor?.itemTypes.effect.find(effect => effect.flags.core?.sourceId === COVER_UUID)
+        return !!getCoverEffect(this.actor)
     }
 
     get isCharacter() {
@@ -865,7 +863,11 @@ export class HUD extends Application {
 
         html.find('[data-action=take-cover]').on('click', async event => {
             event.preventDefault()
-            game.pf2e.actions.get('take-cover').use({ actors: [actor], tokens: [token] })
+
+            const existing = getCoverEffect(actor)
+
+            if (existing) existing.delete()
+            else game.pf2e.actions.get('take-cover').use({ actors: [actor], tokens: [token] })
         })
 
         html.find('[data-action=roll-save]').on('click', event => {

@@ -3,6 +3,8 @@ import { listenInlineRoll } from './pf2e/inline-roll.js'
 
 export const RANKS = ['U', 'T', 'E', 'M', 'L']
 
+const COVER_UUID = 'Compendium.pf2e.other-effects.Item.I9lfZUiCwMiGogVi'
+
 export async function getItemSummary(el, actor) {
     const dataset = el.data()
     const item = dataset.itemId ? actor.items.get(dataset.itemId) : await fromUuid(dataset.uuid)
@@ -126,4 +128,8 @@ export function filterIn(value, filter) {
 
 export function localeCompare(a, b) {
     return a.localeCompare(b, game.i18n.lang)
+}
+
+export function getCoverEffect(actor) {
+    return actor?.itemTypes.effect.find(effect => effect.flags.core?.sourceId === COVER_UUID)
 }
