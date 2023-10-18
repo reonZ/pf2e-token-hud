@@ -1,6 +1,6 @@
 # 1.43.1
 
--   prevent the tooltip from showing up if the token has a secret disposition and isn't owned by the player, we wouldn't want to spoil the bean !
+-   prevent the tooltip from showing up if the token has a secret disposition and isn't owned by the player, we wouldn't want to spill the beans
 
 # 1.43.0
 
