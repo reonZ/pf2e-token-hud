@@ -178,6 +178,8 @@ export class HUD extends Application {
         const actor = token.actor
         if (!actor || actor.isOfType('loot', 'party')) return
 
+        if (token.document.disposition === CONST.TOKEN_DISPOSITIONS.SECRET && !actor.isOwner) return
+
         this.#hoveredToken = token
 
         if (token !== this.#lastToken && !this.#lock) this.close()
