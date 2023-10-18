@@ -1,3 +1,7 @@
+# 1.43.1
+
+-   prevent the tooltip from showing up if the token has a secret disposition and isn't owned by the player, we wouldn't want to spoil the bean !
+
 # 1.43.0
 
 -   this is a `5.7.2` update
