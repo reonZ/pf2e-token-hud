@@ -208,6 +208,13 @@
             <i class="fa-solid fa-play"></i>
         </a>
         {{/if}}
+        {{#if action.isExploration}}
+        {{#if action.isActive}}
+        <a data-action="exploration-toggle"><i class="fa-solid fa-toggle-on"></i></a>
+        {{else}}
+        <a data-action="exploration-toggle"><i class="fa-solid fa-toggle-off"></i></a>
+        {{/if}}
+        {{/if}}
         <a class="chat" data-action="action-chat"><i class="fa-solid fa-message"></i></a>
         {{/if}}
     </div>

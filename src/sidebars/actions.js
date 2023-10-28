@@ -9,9 +9,10 @@ import { skillActionsUUIDS } from './skills.js'
 
 const SECTIONS_TYPES = {
     action: { order: 0, label: 'PF2E.ActionsActionsHeader', actionLabel: 'PF2E.ActionTypeAction' },
-    reaction: { order: 1, label: 'PF2E.ActionTypeReaction', actionLabel: 'PF2E.ActionTypeReaction' },
-    free: { order: 2, label: 'PF2E.ActionTypeFree', actionLabel: 'PF2E.ActionTypeFree' },
-    passive: { order: 3, label: 'PF2E.ActionTypePassive', actionLabel: 'PF2E.ActionTypePassive' },
+    reaction: { order: 1, label: 'PF2E.ActionsReactionsHeader', actionLabel: 'PF2E.ActionTypeReaction' },
+    free: { order: 2, label: 'PF2E.ActionsFreeActionsHeader', actionLabel: 'PF2E.ActionTypeFree' },
+    passive: { order: 3, label: 'PF2E.NPC.PassivesLabel', actionLabel: 'PF2E.ActionTypePassive' },
+    exploration: { order: 3, label: 'PF2E.TravelSpeed.ExplorationActivity', actionLabel: 'PF2E.TabActionsExplorationLabel' },
 }
 
 const TOOLTIPS = {
@@ -100,6 +101,7 @@ export async function getActionsData(actor, token, filter) {
     const actions = isCharacter ? getCharacterActions(actor, stances) : getNpcActions(actor)
     for (const action of actions) {
         if (!filterIn(action.name, filter)) continue
+
         if (sorting !== 'split') {
             sections.action ??= []
             sections.action.push(action)
@@ -255,6 +257,17 @@ export function addActionsListeners(el, actor) {
         getStancesModuleApi()?.toggleStance(actor, effectUuid)
     })
 
+    action('exploration-toggle', event => {
+        const actionId = event.currentTarget.closest('.action').dataset.itemId
+
+        const exploration = actor.system.exploration.filter(id => actor.items.has(id))
+        if (!exploration.findSplice(id => id === actionId)) {
+            exploration.push(actionId)
+        }
+
+        actor.update({ 'system.exploration': exploration })
+    })
+
     action('action-chat', event => {
         const item = getItemFromEvent(event, actor)
         item?.toMessage(event, { create: true })
@@ -399,28 +412,37 @@ function getCharacterActions(actor, stances) {
         new Set()
 
     const actionsUUIDS = new Set([...stancesUUIDS, ...skillActionsUUIDS, ...Object.values(extrasUUIDS)])
-    const actions = actor.itemTypes.action.filter(item => !actionsUUIDS.has(item.sourceId))
-    const feats = actor.itemTypes.feat.filter(item => item.actionCost && !stancesUUIDS.has(item.sourceId))
+    const actions = actor.itemTypes.action
+    const feats = actor.itemTypes.feat.filter(item => item.actionCost)
+    const inParty = actor.parties.size > 0
+    const explorations = actor.system.exploration
 
-    return (
-        [...actions, ...feats]
-            // TODO maybe some day i will get back to this and give them their own place
-            .filter(actions => {
-                const traits = actions.system.traits.value
-                return !traits.includes('downtime') && !traits.includes('exploration')
-            })
-            .map(action => {
-                const actionCost = action.actionCost
+    return [...actions, ...feats]
+        .map(action => {
+            const sourceId = action.sourceId
+            const actionId = action.id
+            const actionCost = action.actionCost
+            const traits = action.system.traits.value
+            const isExploration = traits.includes('exploration')
 
-                return {
-                    id: action.id,
-                    type: actionCost?.type ?? 'free',
-                    cost: actionCost,
-                    name: action.name,
-                    hasEffect: !!action.system.selfEffect,
-                }
-            })
-    )
+            return {
+                sourceId,
+                id: actionId,
+                type: actionCost?.type ?? (isExploration ? 'exploration' : 'free'),
+                cost: actionCost,
+                name: action.name,
+                isExploration,
+                isDowntime: traits.includes('downtime'),
+                isActive: isExploration && explorations.includes(actionId),
+                hasEffect: !!action.system.selfEffect,
+            }
+        })
+        .filter(
+            action =>
+                !action.isDowntime &&
+                (inParty || !action.isExploration) &&
+                (action.isExploration || !actionsUUIDS.has(action.sourceId))
+        )
 }
 
 function getNpcActions(actor) {
