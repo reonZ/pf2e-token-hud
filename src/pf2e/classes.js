@@ -1,9 +1,9 @@
 export function getDamageRollClass() {
-    return CONFIG.Dice.rolls.find(R => R.name === 'DamageRoll')
+    return CONFIG.Dice.rolls.find(Roll => Roll.name === 'DamageRoll')
 }
 
 export function getDamageInstanceClass() {
-    return CONFIG.Dice.rolls.find(R => R.name === 'DamageInstance')
+    return CONFIG.Dice.rolls.find(Roll => Roll.name === 'DamageInstance')
 }
 
 export function getChatMessageClass() {

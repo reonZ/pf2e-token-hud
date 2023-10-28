@@ -383,7 +383,7 @@ A set of functions is exposed from the module to be used by third parties:
 
 ```js
 /**
- * Retrieves the API object containing the funtions
+ * Retrieves the API object containing the functions
  */
 game.modules.get('pf2e-token-hud').api
 ```

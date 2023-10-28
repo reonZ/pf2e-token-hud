@@ -1,3 +1,8 @@
+# 1.44.0
+
+-   added a `Exploration Activity` section in the actions sidebar if the character is in a party
+-   changed some action headers in the actions sidebar
+
 # 1.43.1
 
 -   prevent the tooltip from showing up if the token has a secret disposition and isn't owned by the player, we wouldn't want to spill the beans
