@@ -1,3 +1,7 @@
+# 1.44.1
+
+-   fixed hazard sidebar error
+
 # 1.44.0
 
 -   added a `Exploration Activity` section in the actions sidebar if the character is in a party
