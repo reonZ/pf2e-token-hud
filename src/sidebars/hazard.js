@@ -36,7 +36,7 @@ export function addHazardListeners(el, actor) {
         showItemSummary(action, actor)
     })
 
-    listenInlineRoll(el, actor)
+    listenInlineRoll(el[0], actor)
 
     // IS OWNER
     if (!actor.isOwner) return
