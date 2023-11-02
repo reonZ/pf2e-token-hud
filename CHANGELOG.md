@@ -1,6 +1,6 @@
 # 1.45.0
 
--   all the complex tooltips have be re-created using the foundry tooltip API in anticipation of the system ditching tooltipster
+-   all the complex tooltips have been re-created using the foundry tooltip API in anticipation of the system ditching tooltipster
     -   the design has been reproduced for the most part
     -   the ergonomic couldn't be reproduced 1:1 due to the limitations of the API (or mine)
 
