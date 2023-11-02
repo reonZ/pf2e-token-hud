@@ -9,6 +9,7 @@ import { addHazardListeners, getHazardData } from './sidebars/hazard.js'
 import { addItemsListeners, getItemsData } from './sidebars/items.js'
 import { addSkillsListeners, getSkillsData } from './sidebars/skills.js'
 import { addSpellsListeners, getSpellsData } from './sidebars/spells.js'
+import { createTooltip } from './tooltip.js'
 
 const POSITIONS = {
     left: ['left', 'right', 'top', 'bottom'],
@@ -448,7 +449,7 @@ export class HUD extends Application {
         }
 
         const showDeath = getSetting('show-death')
-        const { heroPoints, _source } = actor
+        const { heroPoints } = actor
         const { traits, resources } = system
         const { wounded, dying, shield, speed, adjustment } = attributes
 
@@ -488,27 +489,9 @@ export class HUD extends Application {
         })()
 
         let otherSpeeds = speeds
-            .map(({ value, label, index }) => `<li><a data-index="${index}">${label}: ${value}</a></li>`)
+            .map(({ value, label, index }) => `<li><a data-value="${index}">${label}: ${value}</a></li>`)
             .join('')
         if (speed.details) otherSpeeds += `<li>${game.i18n.localize('PF2E.DetailsHeading')}: ${speed.details}</li>`
-
-        const allianceSource = _source.system.details?.alliance
-        const alliance = allianceSource === null ? 'neutral' : allianceSource ?? 'default'
-        const defaultAlliance = actor.hasPlayerOwner ? 'party' : 'opposition'
-        const alliances = [
-            {
-                value: 'default',
-                label: game.i18n.format('PF2E.Actor.Creature.Alliance.Default', {
-                    alliance: game.i18n.localize(ALLIANCES[defaultAlliance].label),
-                }),
-            },
-            { value: 'opposition', label: game.i18n.localize(ALLIANCES.opposition.label) },
-            { value: 'party', label: game.i18n.localize(ALLIANCES.party.label) },
-            { value: 'neutral', label: game.i18n.localize(ALLIANCES.neutral.label) },
-        ]
-            .filter(({ value }) => value !== alliance)
-            .map(({ value, label }) => `<li><a data-alliance="${value}">${label}</a></li>`)
-            .join('')
 
         return {
             ...sharedData,
@@ -519,8 +502,7 @@ export class HUD extends Application {
             shield,
             resolve: resources.resolve,
             adjustment,
-            alliance: ALLIANCES[alliance === 'default' ? defaultAlliance : alliance],
-            alliances,
+            alliance: ALLIANCES[getAlliance(actor).alliance],
             isCharacter,
             showDeathLine: isCharacter && (showDeath === 'always' || dying.value || wounded.value),
             digitalPips: getSetting('pips'),
@@ -755,29 +737,16 @@ export class HUD extends Application {
         })
 
         const infos = html.find('[data-action=show-info]')
-        infos.tooltipster({
-            position: ['top', 'bottom', 'left', 'right'],
-            theme: 'crb-hover',
-            arrow: false,
-            animationDuration: 0,
-            contentAsHTML: true,
-            trigger: 'click',
-        })
+        const infosElements = isOwner ? infos.filter(':not(.speeds)') : infos
+        infosElements.on('click', event => {
+            const target = event.currentTarget
+            const content = target.dataset.tooltipContent
 
-        infos
-            .filter('.stealth')
-            .tooltipster('option', 'interactive', true)
-            .tooltipster('option', 'functionReady', (tooltipster, { origin, tooltip }) => {
-                this.lock()
-                $(tooltip)
-                    .find('.content-link')
-                    .on('click', () => setTimeout(() => tooltipster.close(), 10))
-            })
-            .tooltipster('option', 'functionAfter', () => this.unlock())
-
-        const infosToLeave = isOwner ? infos.filter(':not(.speeds):not(.stealth)') : infos
-        infosToLeave.on('mouseleave', event => {
-            $(event.currentTarget).tooltipster('hide')
+            if (target.classList.contains('stealth')) {
+                this.#createHUDLockedListTooltip({ content, event, direction: 'DOWN' })
+            } else {
+                createTooltip({ target, content, direction: 'UP' })
+            }
         })
 
         html.find('[data-action=open-sidebar]').on('click', this.#openSidebar.bind(this))
@@ -791,26 +760,30 @@ export class HUD extends Application {
             actor.applyAdjustment(actor.system.attributes.adjustment === adjustment ? null : adjustment)
         })
 
-        html.find('[data-action=toggle-alliance]').tooltipster({
-            position: ['bottom', 'top', 'left', 'right'],
-            theme: 'crb-hover',
-            arrow: false,
-            animationDuration: 0,
-            contentAsHTML: true,
-            trigger: 'click',
-            interactive: true,
-            functionReady: (tooltipster, { origin, tooltip }) => {
-                this.lock()
-                tooltip.querySelectorAll('[data-alliance]').forEach(alliance => {
-                    alliance.addEventListener('click', async event => {
-                        event.preventDefault()
-                        const value = alliance.dataset.alliance
-                        if (value === 'default') actor.update({ 'system.details.-=alliance': null })
-                        else actor.update({ 'system.details.alliance': value === 'neutral' ? null : value })
-                    })
-                })
-            },
-            functionAfter: () => this.unlock(),
+        html.find('[data-action=toggle-alliance]').on('click', event => {
+            const { originalAlliance, defaultAlliance } = getAlliance(actor)
+
+            const content = [
+                {
+                    value: 'default',
+                    label: game.i18n.format('PF2E.Actor.Creature.Alliance.Default', {
+                        alliance: game.i18n.localize(ALLIANCES[defaultAlliance].label),
+                    }),
+                },
+                { value: 'opposition', label: game.i18n.localize(ALLIANCES.opposition.label) },
+                { value: 'party', label: game.i18n.localize(ALLIANCES.party.label) },
+                { value: 'neutral', label: game.i18n.localize(ALLIANCES.neutral.label) },
+            ]
+
+            this.#createHUDLockedListTooltip({
+                content,
+                event,
+                selected: originalAlliance,
+                onClick: value => {
+                    if (value === 'default') actor.update({ 'system.details.-=alliance': null })
+                    else actor.update({ 'system.details.alliance': value === 'neutral' ? null : value })
+                },
+            })
         })
 
         html.find('[data-action=collision-dc]').on('click', event => {
@@ -909,19 +882,29 @@ export class HUD extends Application {
             useResolve(actor)
         })
 
-        infos
-            .filter('.speeds')
-            .tooltipster('option', 'interactive', true)
-            .tooltipster('option', 'functionReady', (tooltipster, { origin, tooltip }) => {
-                this.lock()
-                tooltip.querySelectorAll('[data-index]').forEach(speed => {
-                    speed.addEventListener('click', async event => {
-                        event.preventDefault()
-                        await setFlag(actor, `speeds.selected.${game.user.id}`, Number(speed.dataset.index))
-                    })
-                })
+        infos.filter('.speeds').on('click', event => {
+            this.#createHUDLockedListTooltip({
+                event,
+                content: event.currentTarget.dataset.tooltipContent,
+                direction: 'UP',
+                onClick: index => {
+                    setFlag(actor, `speeds.selected.${game.user.id}`, Number(index))
+                },
             })
-            .tooltipster('option', 'functionAfter', () => this.unlock())
+        })
+    }
+
+    #createHUDLockedListTooltip({ content, event, onClick, selected, direction, locked }) {
+        createTooltip({
+            content,
+            target: event.currentTarget,
+            direction,
+            selected,
+            locked: true,
+            onCreate: () => this.lock(),
+            onClick,
+            onDismiss: () => this.unlock(),
+        })
     }
 
     async showFilter() {
@@ -1038,4 +1021,15 @@ function postionFromTargetX(el, target) {
     if (x + el.width > window.innerWidth) y = window.innerWidth - el.width
     if (x < 0) x = 0
     return x
+}
+
+function getAlliance(actor) {
+    const allianceSource = actor._source.system.details?.alliance
+    const alliance = allianceSource === null ? 'neutral' : allianceSource ?? 'default'
+    const defaultAlliance = actor.hasPlayerOwner ? 'party' : 'opposition'
+    return {
+        defaultAlliance,
+        originalAlliance: alliance,
+        alliance: alliance === 'default' ? defaultAlliance : alliance,
+    }
 }

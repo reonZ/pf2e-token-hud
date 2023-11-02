@@ -90,3 +90,44 @@
         white-space: nowrap;
     }
 }
+
+[role='tooltip'] {
+    &.pf2e-token-hud-tooltip {
+        border-width: 9px;
+        border-image: url(/systems/pf2e/assets/sheet/corner-box.webp) 9 repeat;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+        white-space: nowrap;
+        padding: 4px;
+
+        > * {
+            font-size: var(--font-size);
+            min-width: 7.14em;
+            line-height: 1.2;
+            text-align: start;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .inline-roll {
+            color: var(--color-text-dark-primary);
+        }
+    }
+
+    .pf2e-token-hud-selection-tooltip {
+        li a {
+            &.selected {
+                pointer-events: none;
+            }
+
+            &:not(.selected) {
+                color: rgba(255, 255, 255, 0.5);
+            }
+
+            i {
+                min-width: 1.25em;
+                margin: 1px 4px 1px 0;
+            }
+        }
+    }
+}

@@ -15,13 +15,6 @@ const SECTIONS_TYPES = {
     exploration: { order: 3, label: 'PF2E.TravelSpeed.ExplorationActivity', actionLabel: 'PF2E.TabActionsExplorationLabel' },
 }
 
-const TOOLTIPS = {
-    delay: [500, 0],
-    position: 'top',
-    theme: 'crb-hover',
-    arrow: false,
-}
-
 export async function getActionsData(actor, token, filter) {
     const isCharacter = actor.isOfType('character')
     const toggles = actor.synthetics.toggles.slice()
@@ -303,7 +296,7 @@ export function addActionsListeners(el, actor) {
         const { action } = event.currentTarget.dataset
         const strike = getStrike(event)
         strike?.[action === 'strike-damage' ? 'damage' : 'critical']({ event })
-    }).tooltipster(TOOLTIPS)
+    })
 
     action(['toggle-roll-option', 'set-suboption'], event => {
         const toggle = event.currentTarget.closest('.toggle')
@@ -334,7 +327,7 @@ export function addActionsListeners(el, actor) {
         const selection = target.classList.contains('selected') || value === baseType ? null : value
 
         toggleWeaponTrait({ trait: 'versatile', weapon, selection })
-    }).tooltipster(TOOLTIPS)
+    })
 
     action(
         'strike-ammo',

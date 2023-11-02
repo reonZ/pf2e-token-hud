@@ -40,8 +40,7 @@
 
 {{#*inline "info"}}
 <div class="section info {{#unless content includeZero=true}}disabled{{/unless}} {{#if class}}{{class}}{{/if}}" data-action="show-info"
-    {{#if content includeZero=true}} title="<div class='hover-content info {{#if infoClass}}{{class}}{{/if}}'><ul>{{content}}</ul></div>"
-    {{/if}}>
+    {{#if content includeZero=true}}data-tooltip-content="{{content}}" {{/if}}>
     <i class="{{icon}}" data-tooltip="{{tooltip}}"></i>{{value}}
 </div>
 {{/inline}}

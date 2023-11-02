@@ -2,6 +2,7 @@ import { getFlag, getSetting, localize, setFlag } from '../module.js'
 import { IdentifyItemPopup } from '../pf2e/identify.js'
 import { showItemSummary } from '../popup.js'
 import { addNameTooltipListeners, deleteItem, editItem, filterIn, getItemFromEvent, localeCompare } from '../shared.js'
+import { createTooltip, dismissTooltip } from '../tooltip.js'
 
 const ITEMS_TYPES = {
     weapon: { order: 0, label: 'PF2E.InventoryWeaponsHeader' },
@@ -157,66 +158,66 @@ export function addItemsListeners(el, actor, token) {
         deleteItem(event, actor)
     })
 
-    el.find('[data-action=toggle-item-worn').tooltipster({
-        animation: null,
-        updateAnimation: null,
-        animationDuration: 0,
-        delay: [0, 0],
-        trigger: 'click',
-        contentAsHTML: true,
-        interactive: true,
-        arrow: false,
-        side: ['bottom', 'top'],
-        theme: 'crb-hover',
-        minWidth: 120,
-        content: '',
-        functionBefore: async function (tooltipster, { event, origin }) {
-            const item = getItemFromEvent(event, actor)
-            if (!item) return
+    el.find('[data-action=toggle-item-worn').on('click', async event => {
+        const item = getItemFromEvent(event, actor)
+        if (!item) return
 
-            const tmp = document.createElement('div')
-            tmp.innerHTML = await renderTemplate('systems/pf2e/templates/actors/partials/carry-type.hbs', { item })
+        const tmp = document.createElement('div')
+        tmp.innerHTML = await renderTemplate('systems/pf2e/templates/actors/partials/carry-type.hbs', { item })
 
-            const content = tmp.children[1]
-            const $content = $(content)
+        const content = tmp.children[1].firstElementChild
 
-            $content.find('[data-carry-type]').on('click', async event => {
+        content.querySelectorAll('[data-carry-type]').forEach(el => {
+            el.addEventListener('click', async event => {
+                const menu = event.currentTarget
                 const current = item.system.equipped
-                let { carryType, handsHeld = 0, inSlot } = $(event.currentTarget).data()
-                inSlot = inSlot === 'true'
+                const inSlot = menu.dataset.inSlot === 'true'
+                const handsHeld = Number(menu.dataset.handsHeld) || 0
+                const carryType = menu.dataset.carryType
+
+                dismissTooltip(menu)
 
                 if (
                     carryType !== current.carryType ||
                     inSlot !== current.inSlot ||
                     (carryType === 'held' && handsHeld !== current.handsHeld)
                 ) {
-                    await actor.adjustCarryType(item, { carryType, handsHeld, inSlot })
+                    actor.adjustCarryType(item, { carryType, handsHeld, inSlot })
                 }
             })
+        })
 
-            if (item.type !== 'backpack') {
-                const containers = actor.itemTypes.backpack.filter(container => container.isIdentified)
-
-                if (containers.length) {
-                    let rows = ''
-                    for (const container of containers) {
-                        rows += '<li><a class="item-control item-location-option'
-                        if (container === item.container) rows += ' selected'
-                        rows += `" data-action="send-to-container" data-container-id="${container.id}">`
-                        rows += `<i class="fas fa-box"></i>${container.name}</a></li>`
-                    }
-
-                    $content.find('ul').append(rows)
-                    $content.find('[data-action=send-to-container]').on('click', async event => {
-                        const { containerId } = event.currentTarget.dataset
-                        if (!actor.items.has(containerId)) return
-                        tooltipster.close()
-                        await item.update({ 'system.containerId': containerId })
-                    })
+        if (item.type !== 'backpack') {
+            const containers = actor.itemTypes.backpack.filter(container => container.isIdentified)
+            if (containers.length) {
+                let rows = ''
+                for (const container of containers) {
+                    rows += '<li><a class="item-control item-location-option'
+                    if (container === item.container) rows += ' selected'
+                    rows += `" data-action="send-to-container" data-container-id="${container.id}">`
+                    rows += `<i class="fas fa-box"></i>${container.name}</a></li>`
                 }
-            }
 
-            tooltipster.content(content)
-        },
+                content.insertAdjacentHTML('beforeend', rows)
+                content.querySelectorAll('[data-action=send-to-container]').forEach(el => {
+                    el.addEventListener('click', event => {
+                        const menu = event.currentTarget
+                        const containerId = menu.dataset.containerId
+                        if (!actor.items.has(containerId)) return
+
+                        dismissTooltip(menu)
+                        item.update({ 'system.containerId': containerId })
+                    })
+                })
+            }
+        }
+
+        createTooltip({
+            target: event.currentTarget,
+            content,
+            locked: true,
+            direction: 'UP',
+            selected: true,
+        })
     })
 }
