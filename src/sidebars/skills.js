@@ -471,7 +471,7 @@ export async function variantsDialog(base, dc) {
     return Dialog.prompt({
         title: localize('skills.variant.title'),
         label: localize('skills.variant.button'),
-        callback: html => ({ selected: html.find('select').val(), dc: html.find('input').val() }),
+        callback: html => ({ selected: html.find('select').val(), dc: Number(html.find('input').val()) }),
         rejectClose: false,
         content,
         options: { width: 280 },

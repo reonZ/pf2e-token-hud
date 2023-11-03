@@ -102,7 +102,7 @@ export function addExtrasListeners(el, actor, token) {
         async event => {
             const variants = await variantsDialog(null, 20)
             const note = { text: '@UUID[Compendium.pf2e.other-effects.Item.AHMUpMbaVkZ5A1KX]' }
-            if (variants !== null)
+            if (variants !== null) {
                 game.pf2e.actions.get('aid').use({
                     event,
                     actors: [actor],
@@ -111,6 +111,7 @@ export function addExtrasListeners(el, actor, token) {
                     difficultyClass: { value: variants?.dc },
                     notes: [note],
                 })
+            }
         },
         'click contextmenu'
     )
