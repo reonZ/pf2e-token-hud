@@ -1,3 +1,8 @@
+# 1.45.1
+
+-   fixed the `aid` custom DC not being taken into account
+-   changed the aid default DC to `15` in anticipation of the remaster
+
 # 1.45.0
 
 -   all the complex tooltips have been re-created using the foundry tooltip API in anticipation of the system ditching tooltipster
