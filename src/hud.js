@@ -11,6 +11,15 @@ import { addSkillsListeners, getSkillsData } from './sidebars/skills.js'
 import { addSpellsListeners, getSpellsData } from './sidebars/spells.js'
 import { createTooltip } from './tooltip.js'
 
+const HOVER_EXCEPTIONS = [
+    '#combat-popout',
+    '#sidebar',
+    '#mini-tracker',
+    '#combat-dock',
+    '#combat-carousel',
+    '[id^=pf2e-perception]',
+].join(' ')
+
 const POSITIONS = {
     left: ['left', 'right', 'top', 'bottom'],
     right: ['right', 'left', 'top', 'bottom'],
@@ -173,8 +182,7 @@ export class HUD extends Application {
     }
 
     #tokenEnter(token) {
-        if ($(window.document).find(':hover').filter('#combat-popout, #sidebar, #mini-tracker, [id^=pf2e-perception]').length)
-            return
+        if ($(window.document).find(':hover').filter(HOVER_EXCEPTIONS).length) return
 
         const actor = token.actor
         if (!actor || actor.isOfType('loot', 'party')) return
