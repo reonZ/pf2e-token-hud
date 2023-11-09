@@ -1,4 +1,5 @@
 import { getSetting, localize, modifier, MODULE_ID, templatePath } from '../module.js'
+import { ordinalString } from '../pf2e/misc.js'
 import { eventToRollParams } from '../pf2e/scripts.js'
 import { showItemSummary } from '../popup.js'
 import { addNameTooltipListeners, filterIn, getItemFromEvent, localeCompare } from '../shared.js'
@@ -134,6 +135,7 @@ export async function getSpellsData(actor, token, filter) {
                 stavesActive,
                 hasFocusCantrips,
                 attackMod: hasSingleSpellAttack(attacks) ? attacks[0].mod : null,
+                entryRank: rank => game.i18n.format('PF2E.Item.Spell.Rank.Ordinal', { rank: ordinalString(rank) }),
             },
             doubled: nb > 1 && getSetting('spells-columns'),
         }
