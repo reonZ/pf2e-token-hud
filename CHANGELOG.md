@@ -1,3 +1,8 @@
+# 1.46.0
+
+-   this is a `5.8.3` release
+-   fixed localization for spells headers that were changed in the last system update
+
 # 1.45.1
 
 -   fixed the `aid` custom DC not being taken into account
