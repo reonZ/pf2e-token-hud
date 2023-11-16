@@ -1,3 +1,11 @@
+# 1.47.0
+
+-   this is a `5.9.1` release
+-   added `Close Tooltip on Attack/Damage` (disabled by default)
+-   added `Close Tooltip on Spell Cast` (disabled by default)
+-   added `Close Tooltip on Send-to-Chat` (disabled by default)
+-   fixed app exceptions on `hoverToken` not working as intended
+
 # 1.46.0
 
 -   this is a `5.8.3` release
