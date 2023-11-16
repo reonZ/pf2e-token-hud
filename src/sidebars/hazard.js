@@ -2,7 +2,7 @@ import { enrichHTML, getSetting, modifier } from '../module.js'
 import { listenInlineRoll } from '../pf2e/inline-roll.js'
 import { showItemSummary } from '../popup.js'
 
-export async function getHazardData(actor) {
+export async function getHazardData({ actor }) {
     const { system } = actor
     const { details, traits, attributes } = system
     const { stealth } = attributes
@@ -29,7 +29,7 @@ export async function getHazardData(actor) {
     }
 }
 
-export function addHazardListeners(el, actor) {
+export function addHazardListeners({ el, actor }) {
     el.find('[data-action=action-description]').on('click', event => {
         event.preventDefault()
         const action = $(event.currentTarget).closest('.action')

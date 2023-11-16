@@ -942,7 +942,7 @@ export class HUD extends Application {
         const actor = token.actor
         const showFilter = filter !== undefined || getSetting('filter')
         const { getData, addListeners } = SIDEBARS[type]
-        const data = (await getData(actor, token, filter?.toLowerCase())) ?? {}
+        const data = (await getData({ hud: this, actor, token, filter: filter?.toLowerCase() })) ?? {}
         if (!data.contentData && !showFilter) return ui.notifications.warn(localize(`${type}.empty`, { name: this.#token.name }))
 
         const contentData = {
@@ -1009,7 +1009,7 @@ export class HUD extends Application {
         sidebar.find('.sidebar-header [data-action=sidebar-filter]').on('keydown', event => {
             if (event.key === 'Enter') this.#openSidebar(type, event.currentTarget.value.trim())
         })
-        addListeners(sidebar, actor, token)
+        addListeners({ el: sidebar, actor, token, hud: this })
 
         Hooks.callAll('renderHUDSidebar', type, sidebar, this)
 

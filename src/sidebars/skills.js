@@ -342,7 +342,7 @@ export function getSkillLabel(slug) {
     return game.i18n.localize(slug === 'perception' ? 'PF2E.PerceptionLabel' : CONFIG.PF2E.skillList[slug])
 }
 
-export async function getSkillsData(actor, token, filter) {
+export async function getSkillsData({ actor, filter }) {
     const skills = []
     const isCharacter = actor.isOfType('character')
 
@@ -410,7 +410,7 @@ export async function getSkillsData(actor, token, filter) {
     }
 }
 
-export function addSkillsListeners(el, actor, token) {
+export function addSkillsListeners({ el, actor, token, hud }) {
     el.find('[data-action=action-description]').on('click', event => {
         event.preventDefault()
         const action = $(event.currentTarget).closest('.action')
@@ -448,9 +448,13 @@ export function addSkillsListeners(el, actor, token) {
 
     el.find('[data-action=action-chat]').on('click', async event => {
         event.preventDefault()
+
         const { uuid } = event.currentTarget.closest('.action').dataset
         const item = await fromUuid(uuid)
-        if (item) unownedItemToMessage(event, item, actor, { create: true })
+        if (!item) return
+
+        unownedItemToMessage(event, item, actor, { create: true })
+        if (getSetting('chat-close')) hud.close()
     })
 }
 

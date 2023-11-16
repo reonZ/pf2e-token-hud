@@ -1,5 +1,5 @@
 import { rollRecallKnowledges } from '../actions/recall-knowledge.js'
-import { localize } from '../module.js'
+import { getSetting, localize } from '../module.js'
 import { unownedItemToMessage } from '../pf2e/item.js'
 import { showItemSummary } from '../popup.js'
 import { addNameTooltipListeners, deleteMacro, filterIn, getMacros, onDroppedMacro } from '../shared.js'
@@ -12,7 +12,7 @@ export const extrasUUIDS = {
     'point-out': 'Compendium.pf2e.actionspf2e.Item.sn2hIy1iIJX9Vpgj',
 }
 
-export async function getExtrasData(actor, token, filter) {
+export async function getExtrasData({ actor, filter }) {
     const { attributes } = actor
     const { initiative } = attributes
 
@@ -31,7 +31,7 @@ export async function getExtrasData(actor, token, filter) {
     }
 }
 
-export function addExtrasListeners(el, actor, token) {
+export function addExtrasListeners({ el, actor, token, hud }) {
     function action(action, callback, type = 'click') {
         el.find(`[data-action=${action}]`).on(type, event => {
             event.preventDefault()
@@ -71,7 +71,10 @@ export function addExtrasListeners(el, actor, token) {
     action('action-chat', async event => {
         const { uuid } = event.currentTarget.closest('.row').dataset
         const item = await fromUuid(uuid)
-        if (item) unownedItemToMessage(event, item, actor, { create: true })
+        if (!item) return
+
+        unownedItemToMessage(event, item, actor, { create: true })
+        if (getSetting('chat-close')) hud.close()
     })
 
     el.find('input[name], select[name]').on('change', async event => {

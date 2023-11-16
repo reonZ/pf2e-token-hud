@@ -69,6 +69,8 @@ export function registerSettings() {
         },
     })
 
+    register('chat-close', Boolean, false)
+
     register('observer', Boolean, true)
 
     register('see-status', Boolean, false)
@@ -155,6 +157,8 @@ export function registerSettings() {
 
     register('actions-colors', Boolean, true)
 
+    register('attack-close', Boolean, false)
+
     // items
 
     register('containers', Boolean, false)
@@ -164,6 +168,8 @@ export function registerSettings() {
     register('spells', Boolean, false)
 
     register('tradition', Boolean, false)
+
+    register('cast-close', Boolean, false)
 
     // skills
 

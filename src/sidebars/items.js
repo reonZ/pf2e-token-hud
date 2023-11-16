@@ -13,7 +13,7 @@ const ITEMS_TYPES = {
     backpack: { order: 5, label: 'PF2E.InventoryBackpackHeader' },
 }
 
-export async function getItemsData(actor, token, filter) {
+export async function getItemsData({ actor, filter }) {
     const { contents, coins, totalWealth, bulk, invested } = actor.inventory
     const openedContainers = getSetting('containers') || (getFlag(actor, `containers.${game.user.id}`) ?? [])
     const containers = {}
@@ -72,7 +72,7 @@ export async function getItemsData(actor, token, filter) {
     }
 }
 
-export function addItemsListeners(el, actor, token) {
+export function addItemsListeners({ el, actor, token, hud }) {
     const item = el.find('.item')
 
     addNameTooltipListeners(item)
@@ -99,7 +99,10 @@ export function addItemsListeners(el, actor, token) {
 
     item.find('[data-action=item-chat]').on('click', async event => {
         const item = getItemFromEvent(event, actor)
-        item?.toMessage(event, { create: true })
+        if (!item) return
+
+        item.toMessage(event, { create: true })
+        if (getSetting('chat-close')) hud.close()
     })
 
     item.on('dragstart', event => {

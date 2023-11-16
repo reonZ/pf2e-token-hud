@@ -4,7 +4,7 @@ import { eventToRollParams } from '../pf2e/scripts.js'
 import { showItemSummary } from '../popup.js'
 import { addNameTooltipListeners, filterIn, getItemFromEvent, localeCompare } from '../shared.js'
 
-export async function getSpellsData(actor, token, filter) {
+export async function getSpellsData({ actor, filter }) {
     const focusPool = actor.system.resources.focus ?? { value: 0, max: 0 }
     const entries = actor.spellcasting.regular
     const showTradition = getSetting('tradition')
@@ -152,7 +152,7 @@ function hasSingleSpellAttack(attacks) {
     return new Set(attacks.map(({ mod }) => mod)).size === 1
 }
 
-export function addSpellsListeners(el, actor, token) {
+export function addSpellsListeners({ el, actor, hud }) {
     addNameTooltipListeners(el.find('.spell'))
 
     el.find('[data-action=spell-description]').on('click', async event => {
@@ -201,8 +201,12 @@ export function addSpellsListeners(el, actor, token) {
 
     el.find('[data-action=spell-chat]').on('click', async event => {
         event.preventDefault()
+
         const item = getItemFromEvent(event, actor)
-        item?.toMessage(event, { create: true })
+        if (!item) return
+
+        item.toMessage(event, { create: true })
+        if (getSetting('chat-close')) hud.close()
     })
 
     el.find('[data-action=toggle-pips]').on('click contextmenu', async event => {
@@ -230,6 +234,7 @@ export function addSpellsListeners(el, actor, token) {
         if (!spell) return
 
         collection.entry.cast(spell, { slot: slotId, level: slotLevel })
+        if (getSetting('cast-close')) hud.close()
     })
 
     el.find('[data-input-path]').on('change', async event => {

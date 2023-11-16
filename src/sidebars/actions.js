@@ -15,7 +15,7 @@ const SECTIONS_TYPES = {
     exploration: { order: 3, label: 'PF2E.TravelSpeed.ExplorationActivity', actionLabel: 'PF2E.TabActionsExplorationLabel' },
 }
 
-export async function getActionsData(actor, token, filter) {
+export async function getActionsData({ hud, actor, filter }) {
     const isCharacter = actor.isOfType('character')
     const toggles = actor.synthetics.toggles.slice()
     const sorting = getSetting('actions')
@@ -156,7 +156,7 @@ export async function getActionsData(actor, token, filter) {
     }
 }
 
-export function addActionsListeners(el, actor) {
+export function addActionsListeners({ el, actor, hud }) {
     addNameTooltipListeners(el.find('.toggle'))
     addNameTooltipListeners(el.find('.strike'))
     addNameTooltipListeners(el.find('.action'))
@@ -242,7 +242,10 @@ export function addActionsListeners(el, actor) {
 
     action('stance-chat', event => {
         const item = getItemFromEvent(event, actor)
-        item?.toMessage(event, { create: true })
+        if (!item) return
+
+        item.toMessage(event, { create: true })
+        if (getSetting('chat-close')) hud.close()
     })
 
     action('stance-toggle', event => {
@@ -263,11 +266,18 @@ export function addActionsListeners(el, actor) {
 
     action('action-chat', event => {
         const item = getItemFromEvent(event, actor)
-        item?.toMessage(event, { create: true })
+        if (!item) return
+
+        item.toMessage(event, { create: true })
+        if (getSetting('chat-close')) hud.close()
     })
 
     action('hero-action-chat', async event => {
-        await getHeroActionsApi()?.sendActionToChat(actor, getUuid(event))
+        const api = getHeroActionsApi()
+        if (!api) return
+
+        api.sendActionToChat(actor, getUuid(event))
+        if (getSetting('chat-close')) hud.close()
     })
 
     action('draw-hero-action', async event => {
@@ -289,13 +299,17 @@ export function addActionsListeners(el, actor) {
     action('strike-attack', event => {
         const { index, altUsage } = event.currentTarget.dataset
         const strike = getStrike(event)
+
         strike?.variants[index].roll({ event, altUsage })
+        if (getSetting('attack-close')) hud.close()
     })
 
     action(['strike-damage', 'strike-critical'], event => {
         const { action } = event.currentTarget.dataset
         const strike = getStrike(event)
+
         strike?.[action === 'strike-damage' ? 'damage' : 'critical']({ event })
+        if (getSetting('attack-close')) hud.close()
     })
 
     action(['toggle-roll-option', 'set-suboption'], event => {
@@ -359,17 +373,19 @@ export function addActionsListeners(el, actor) {
                 switch (dataset.action) {
                     case 'roll-attack': {
                         const mapIncreases = Math.clamped(Number(dataset.mapIncreases), 0, 2)
-                        await blast.attack({ mapIncreases: Math.clamped(mapIncreases, 0, 2), element, damageType, melee, event })
+                        blast.attack({ mapIncreases: Math.clamped(mapIncreases, 0, 2), element, damageType, melee, event })
                         break
                     }
                     case 'roll-damage': {
-                        await blast.damage({ element, damageType, melee, outcome: dataset.outcome, event })
+                        blast.damage({ element, damageType, melee, outcome: dataset.outcome, event })
                         break
                     }
                     case 'set-damage-type': {
-                        await blast.setDamageType({ element, damageType: dataset.value })
+                        blast.setDamageType({ element, damageType: dataset.value })
                     }
                 }
+
+                if (['roll-attack', 'roll-damage'].includes(dataset.action) && getSetting('attack-close')) hud.close()
             })
     })
 }

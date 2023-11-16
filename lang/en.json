@@ -223,6 +223,18 @@
             "containers": {
                 "name": "Items in Containers",
                 "hint": "When enabled, items in containers will always be displayed in their container."
+            },
+            "attack-close": {
+                "name": "Close Tooltip on Attack/Damage",
+                "hint": "Whenever you click on a strike/blast or damage/critical button, the tooltip will close."
+            },
+            "cast-close": {
+                "name": "Close Tooltip on Spell Cast",
+                "hint": "Whenever you click on the cast-spell icon, the tooltip will close."
+            },
+            "chat-close": {
+                "name": "Close Tooltip on Send-to-Chat",
+                "hint": "Whenever you click on a send-to-chat icon, the tooltip will close."
             }
         },
         "spells": {
