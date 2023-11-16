@@ -18,7 +18,7 @@ const HOVER_EXCEPTIONS = [
     '#combat-dock',
     '#combat-carousel',
     '[id^=pf2e-perception]',
-].join(' ')
+].join(', ')
 
 const POSITIONS = {
     left: ['left', 'right', 'top', 'bottom'],
