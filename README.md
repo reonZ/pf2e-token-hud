@@ -273,6 +273,10 @@ NOTE: you don't have to hold the key before hovering over a token, hitting the k
 
 Should the tooltip get locked when hovering over it or as soon as it is rendered. This works for both the delayed and the `Hold to Display` rendering of the tooltip.
 
+## Close Tooltip on Send-to-Chat
+
+Whenever you click on a send-to-chat icon, the tooltip will close.
+
 ## Tooltip on Observe
 
 When enabled and hovering over a token the player has the `observer` permission (or in party if the option is enabled), the module will generate an uneditable version of the full tooltip.
@@ -351,6 +355,10 @@ Will sort the actions either split by categories or in a single table sorted by 
 
 Will reproduce the system coloring of the strikes attack & damage buttons, this make them more distinguishable.
 
+## Close Tooltip on Attack/Damage
+
+Whenever you click on a strike/blast or damage/critical button, the tooltip will close.
+
 ## Items in Containers
 
 When enabled, items in containers will always be displayed in their container
@@ -362,6 +370,10 @@ When enabled, it will sort the spells in a single table by type before sorting t
 ## Show Spell Tradition
 
 When enabled, the first letter of the spell tradition (arcane, occult, divine, primal) will be displayed in the spell row.
+
+## Close Tooltip on Spell Cast
+
+Whenever you click on the cast-spell icon, the tooltip will close.
 
 ## Hide Untrained Skill Actions
 
