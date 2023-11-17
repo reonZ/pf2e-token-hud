@@ -235,6 +235,10 @@
             "chat-close": {
                 "name": "Close Tooltip on Send-to-Chat",
                 "hint": "Whenever you click on a send-to-chat icon, the tooltip will close."
+            },
+            "no-dead": {
+                "name": "No Tooltip on Dead NPCs",
+                "hint": "When enabled, the tooltip won't show up on dead NPCs."
             }
         },
         "spells": {

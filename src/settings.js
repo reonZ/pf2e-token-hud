@@ -71,6 +71,8 @@ export function registerSettings() {
 
     register('chat-close', Boolean, false)
 
+    register('no-dead', Boolean, false)
+
     register('observer', Boolean, true)
 
     register('see-status', Boolean, false)

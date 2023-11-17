@@ -189,6 +189,8 @@ export class HUD extends Application {
 
         if (token.document.disposition === CONST.TOKEN_DISPOSITIONS.SECRET && !actor.isOwner) return
 
+        if (actor.isOfType('npc') && getSetting('no-dead') && actor.isDead) return
+
         this.#hoveredToken = token
 
         if (token !== this.#lastToken && !this.#lock) this.close()
