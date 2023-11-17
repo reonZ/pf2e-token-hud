@@ -70,8 +70,11 @@ export function registerSettings() {
     })
 
     register('chat-close', Boolean, false)
-
+    register('attack-close', Boolean, false)
+    register('action-close', Boolean, false)
+    register('cast-close', Boolean, false)
     register('skill-close', Boolean, false)
+    register('macro-close', Boolean, false)
 
     register('no-dead', Boolean, false)
 
@@ -161,10 +164,6 @@ export function registerSettings() {
 
     register('actions-colors', Boolean, true)
 
-    register('attack-close', Boolean, false)
-
-    register('action-close', Boolean, false)
-
     // items
 
     register('containers', Boolean, false)
@@ -175,15 +174,9 @@ export function registerSettings() {
 
     register('tradition', Boolean, false)
 
-    register('cast-close', Boolean, false)
-
     // skills
 
     register('untrained', Boolean, true)
-
-    // extras
-
-    register('macro-close', Boolean, false)
 }
 
 export function renderSettingsConfig(_, html) {
@@ -205,7 +198,6 @@ export function renderSettingsConfig(_, html) {
     beforeGroup('containers', 'client.items')
     beforeGroup('spells', 'client.spells')
     beforeGroup('untrained', 'client.skills')
-    beforeGroup('macro-close', 'client.extras')
 }
 
 function path(setting, key) {
