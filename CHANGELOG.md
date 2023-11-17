@@ -1,3 +1,7 @@
+# 1.49.1
+
+-   moved all the `Close Tooltip on ..` settings together
+
 # 1.49.0
 
 -   added `Close Tooltip on Action Use` (disabled by default) works for hero actions as well
