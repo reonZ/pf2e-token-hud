@@ -277,6 +277,10 @@ Should the tooltip get locked when hovering over it or as soon as it is rendered
 
 Whenever you click on a send-to-chat icon, the tooltip will close.
 
+## Close Tooltip on Skill Roll
+
+Whenever you click on an icon that rolls a skill check (perception checks included), the tooltip will close.
+
 ## No Tooltip on Dead NPCs
 
 When enabled, the tooltip won't show up on dead NPCs.
@@ -363,6 +367,10 @@ Will reproduce the system coloring of the strikes attack & damage buttons, this 
 
 Whenever you click on a strike/blast or damage/critical button, the tooltip will close.
 
+## Close Tooltip on Action Use
+
+Whenever you click on a use-action button, the tooltip will close.
+
 ## Items in Containers
 
 When enabled, items in containers will always be displayed in their container
@@ -384,6 +392,10 @@ Whenever you click on the cast-spell icon, the tooltip will close.
 When enabled, all skill action that require the character to be trained will be hidden from the sidebar if the actor is in fact untrained
 
 This does nothing on NPCs
+
+## Close Tooltip on Macro Use
+
+Whenever you click on a use-macro button, the tooltip will close.
 
 # Hooks
 

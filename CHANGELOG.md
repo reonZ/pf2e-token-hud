@@ -1,3 +1,9 @@
+# 1.49.0
+
+-   added `Close Tooltip on Action Use` (disabled by default) works for hero actions as well
+-   added `Close Tooltip on Skill Roll` (disabled by default) works for the skills and extra sidebars (perception checks included)
+-   added `Close Tooltip on Macro Use` (disabled by default)
+
 # 1.48.0
 
 -   added `No Tooltip on Dead NPCs` (disabled by default)
