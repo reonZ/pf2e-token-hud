@@ -64,6 +64,7 @@ export function addExtrasListeners({ el, actor, token, hud }) {
     action('use-macro', async event => {
         const macro = await getMacro(event)
         macro?.execute({ actor, token })
+        if (getSetting('macro-close')) hud.close()
     })
 
     el.on('drop', event => onDroppedMacro(event, actor))
@@ -85,6 +86,7 @@ export function addExtrasListeners({ el, actor, token, hud }) {
 
     action('roll-initiative', async event => {
         await actor.initiative.roll({ event })
+        if (getSetting('skill-close')) hud.close()
     })
 
     action('prepare-dailies', event => {
@@ -98,6 +100,7 @@ export function addExtrasListeners({ el, actor, token, hud }) {
 
     action('roll-recall-knowledge', event => {
         rollRecallKnowledges(actor)
+        if (getSetting('skill-close')) hud.close()
     })
 
     action(
@@ -114,6 +117,7 @@ export function addExtrasListeners({ el, actor, token, hud }) {
                     difficultyClass: { value: variants?.dc },
                     notes: [note],
                 })
+                if (getSetting('skill-close')) hud.close()
             }
         },
         'click contextmenu'
@@ -121,6 +125,7 @@ export function addExtrasListeners({ el, actor, token, hud }) {
 
     action('roll-point-out', event => {
         game.pf2e.actions.get('point-out').use({ event, actors: [actor], tokens: [token] })
+        if (getSetting('skill-close')) hud.close()
     })
 
     action(
@@ -129,9 +134,12 @@ export function addExtrasListeners({ el, actor, token, hud }) {
             const variants = event.type === 'contextmenu' ? await variantsDialog() : undefined
             const multipleAttackPenalty = $(event.currentTarget).data().map
             if (variants === null) return
+
             game.pf2e.actions
                 .get('escape')
                 .use({ event, actors: [actor], tokens: [token], statistic: variants?.selected, multipleAttackPenalty })
+
+            if (getSetting('skill-close')) hud.close()
         },
         'click contextmenu'
     )

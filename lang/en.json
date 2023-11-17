@@ -17,7 +17,8 @@
                 "spells": "Spells",
                 "skills": "Skills",
                 "tooltip": "Tooltip",
-                "items": "Equipment"
+                "items": "Equipment",
+                "extras": "Extras"
             }
         },
         "keybinds": {
@@ -235,6 +236,18 @@
             "chat-close": {
                 "name": "Close Tooltip on Send-to-Chat",
                 "hint": "Whenever you click on a send-to-chat icon, the tooltip will close."
+            },
+            "action-close": {
+                "name": "Close Tooltip on Action Use",
+                "hint": "Whenever you click on a use-action button, the tooltip will close."
+            },
+            "skill-close": {
+                "name": "Close Tooltip on Skill Roll",
+                "hint": "Whenever you click on an icon that rolls a skill check (perception checks included), the tooltip will close."
+            },
+            "macro-close": {
+                "name": "Close Tooltip on Macro Use",
+                "hint": "Whenever you click on a use-macro button, the tooltip will close."
             },
             "no-dead": {
                 "name": "No Tooltip on Dead NPCs",

@@ -437,6 +437,7 @@ export function addSkillsListeners({ el, actor, token, hud }) {
         event.preventDefault()
         const { slug } = event.currentTarget.dataset
         actor.getStatistic(slug)?.roll({ event })
+        if (getSetting('skill-close')) hud.close()
     })
 
     el.find('[data-action=roll-action]').on('click contextmenu', async event => {
@@ -445,7 +446,10 @@ export function addSkillsListeners({ el, actor, token, hud }) {
         const { skillSlug, slug } = target.closest('.action').data()
         const { variant, map } = target.data()
         const variants = event.type === 'contextmenu' ? await variantsDialog(skillSlug) : undefined
-        if (variants !== null) rollAction({ event, actor, token, skillSlug, slug, variant, map, skill: variants?.selected })
+        if (variants !== null) {
+            rollAction({ event, actor, token, skillSlug, slug, variant, map, skill: variants?.selected })
+            if (getSetting('skill-close')) hud.close()
+        }
     })
 
     el.find('[data-action=action-chat]').on('click', async event => {

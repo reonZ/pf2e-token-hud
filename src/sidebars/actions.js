@@ -237,6 +237,7 @@ export function addActionsListeners({ el, actor, hud }) {
         const item = getItemFromEvent(event, actor)
         if (item?.isOfType('action', 'feat')) {
             createSelfEffectMessage(item)
+            if (getSetting('action-close')) hud.close()
         }
     })
 
@@ -285,7 +286,11 @@ export function addActionsListeners({ el, actor, hud }) {
     })
 
     action('use-hero-action', async event => {
-        await getHeroActionsApi()?.useHeroAction(actor, getUuid(event))
+        const api = getHeroActionsApi()
+        if (!api) return
+
+        api.useHeroAction(actor, getUuid(event))
+        if (getSetting('action-close')) hud.close()
     })
 
     action('discard-hero-action', async event => {
