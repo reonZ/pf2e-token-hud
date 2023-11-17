@@ -153,7 +153,7 @@ const SKILLS = [
             { slug: 'grapple', cost: '1', type: 1, map: true },
             { slug: 'highJump', cost: '1', type: 1 },
             { slug: 'longJump', cost: '1', type: 1 },
-            { slug: 'reposition', cost: '1', type: 1, map: true },
+            { slug: 'reposition', cost: '1', type: 2, map: true },
             { slug: 'shove', cost: '1', type: 1, map: true },
             { slug: 'swim', cost: '1', type: 1 },
             { slug: 'trip', cost: '1', type: 2, map: true },
