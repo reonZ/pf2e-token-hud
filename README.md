@@ -277,6 +277,10 @@ Should the tooltip get locked when hovering over it or as soon as it is rendered
 
 Whenever you click on a send-to-chat icon, the tooltip will close.
 
+## No Tooltip on Dead NPCs
+
+When enabled, the tooltip won't show up on dead NPCs.
+
 ## Tooltip on Observe
 
 When enabled and hovering over a token the player has the `observer` permission (or in party if the option is enabled), the module will generate an uneditable version of the full tooltip.

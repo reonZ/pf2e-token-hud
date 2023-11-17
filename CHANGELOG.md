@@ -1,3 +1,8 @@
+# 1.48.0
+
+-   added `No Tooltip on Dead NPCs` (disabled by default)
+-   added the `reposition` variant for `athletics` skill
+
 # 1.47.0
 
 -   this is a `5.9.1` release
