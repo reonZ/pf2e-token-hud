@@ -363,6 +363,10 @@ Will sort the actions either split by categories or in a single table sorted by 
 
 Will reproduce the system coloring of the strikes attack & damage buttons, this make them more distinguishable.
 
+## Auto Apply Action Effect
+
+When enabled, usable action will have their associated effect automatically applied on use. One less button to press!
+
 ## Close Tooltip on Attack/Damage
 
 Whenever you click on a strike/blast or damage/critical button, the tooltip will close.
