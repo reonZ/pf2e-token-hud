@@ -255,7 +255,7 @@
             },
             "action-effect": {
                 "name": "Auto Apply Action Effect",
-                "hint": "When enabled, usable action will have their associated effect automatically applied on use."
+                "hint": "When enabled, usable actions will have their associated effect automatically applied on use."
             }
         },
         "spells": {
