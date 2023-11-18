@@ -1,6 +1,10 @@
+# 1.50.0
+
+-   added `Auto Apply Action Effect` (disabled by default) which automatically applies actions self effects on use
+
 # 1.49.1
 
--   moved all the `Close Tooltip on ..` settings together
+-   moved all the `Close Tooltip on...` settings together
 
 # 1.49.0
 
