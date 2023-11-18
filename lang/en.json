@@ -252,6 +252,10 @@
             "no-dead": {
                 "name": "No Tooltip on Dead NPCs",
                 "hint": "When enabled, the tooltip won't show up on dead NPCs."
+            },
+            "action-effect": {
+                "name": "Auto Apply Action Effect",
+                "hint": "When enabled, usable action will have their associated effect automatically applied on use."
             }
         },
         "spells": {

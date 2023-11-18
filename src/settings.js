@@ -164,6 +164,8 @@ export function registerSettings() {
 
     register('actions-colors', Boolean, true)
 
+    register('action-effect', Boolean, false)
+
     // items
 
     register('containers', Boolean, false)

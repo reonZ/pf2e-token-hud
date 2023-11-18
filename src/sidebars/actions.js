@@ -237,6 +237,7 @@ export function addActionsListeners({ el, actor, hud }) {
         const item = getItemFromEvent(event, actor)
         if (item?.isOfType('action', 'feat')) {
             createSelfEffectMessage(item)
+            if (getSetting('action-effect')) applyActionEffect(actor, item)
             if (getSetting('action-close')) hud.close()
         }
     })
@@ -477,4 +478,14 @@ function getNpcActions(actor) {
             hasEffect: !!item.system.selfEffect,
         }
     })
+}
+
+async function applyActionEffect(actor, item) {
+    const uuid = item.system.selfEffect?.uuid
+    if (!uuid) return
+
+    const source = (await fromUuid(uuid))?.toObject()
+    if (!source) return
+
+    actor.createEmbeddedDocuments('Item', [source])
 }
