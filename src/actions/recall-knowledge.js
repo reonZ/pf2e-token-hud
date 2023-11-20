@@ -61,6 +61,7 @@ export async function rollRecallKnowledges(actor) {
         flavor,
         speaker: ChatMessage.getSpeaker({ actor }),
         rollMode: CONST.DICE_ROLL_MODES.BLIND,
+        rolls: [roll],
         type: CONST.CHAT_MESSAGE_TYPES.ROLL,
     })
 }
