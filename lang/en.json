@@ -256,6 +256,10 @@
             "action-effect": {
                 "name": "Auto Apply Action Effect",
                 "hint": "When enabled, usable actions will have their associated effect automatically applied on use."
+            },
+            "rk-dice": {
+                "name": "Recall Knowledge - Die Roll",
+                "hint": "When enabled, the format of the Recall Knowledge action will slightly change and show the die roll which makes it compatible with the Dice So Nice module."
             }
         },
         "spells": {

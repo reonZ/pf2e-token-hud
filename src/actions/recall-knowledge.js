@@ -1,4 +1,4 @@
-import { localize, modifier, templatePath } from '../module.js'
+import { getSetting, localize, modifier, templatePath } from '../module.js'
 import { calculateDegreeOfSuccess } from '../pf2e/success.js'
 import { getUniqueTarget, RANKS } from '../shared.js'
 
@@ -55,14 +55,22 @@ export async function rollRecallKnowledges(actor) {
         )
     }
 
-    const flavor = await renderTemplate(templatePath('chat/recall-knowledge'), data)
+    const rkDice = getSetting('rk-dice')
 
-    ChatMessage.create({
-        flavor,
+    const options = {
         speaker: ChatMessage.getSpeaker({ actor }),
         rollMode: CONST.DICE_ROLL_MODES.BLIND,
         type: CONST.CHAT_MESSAGE_TYPES.ROLL,
-    })
+    }
+
+    if (rkDice) {
+        options.rolls = [roll]
+        data.rkDice = true
+    }
+
+    options.flavor = await renderTemplate(templatePath('chat/recall-knowledge'), data)
+
+    ChatMessage.create(options)
 }
 
 async function rollSkill(skill, dieResult, dcs) {

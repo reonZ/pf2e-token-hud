@@ -13,6 +13,8 @@ export function registerSettings() {
 
     register('party', Boolean, false, { scope: 'world' })
 
+    register('rk-dice', Boolean, false, { scope: 'world' })
+
     /**
      * CLIENT
      */
@@ -200,6 +202,7 @@ export function renderSettingsConfig(_, html) {
     beforeGroup('containers', 'client.items')
     beforeGroup('spells', 'client.spells')
     beforeGroup('untrained', 'client.skills')
+    // beforeGroup('', 'client.extras')
 }
 
 function path(setting, key) {
