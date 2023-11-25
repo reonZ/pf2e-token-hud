@@ -150,14 +150,14 @@ const SKILLS = [
                     },
                 ],
             },
-            { slug: 'grapple', cost: '1', type: 1, map: true },
+            { slug: 'grapple', cost: '1', type: 1, map: true, agile: true },
             { slug: 'highJump', cost: '1', type: 1 },
             { slug: 'longJump', cost: '1', type: 1 },
-            { slug: 'reposition', cost: '1', type: 2, map: true },
-            { slug: 'shove', cost: '1', type: 1, map: true },
+            { slug: 'reposition', cost: '1', type: 2, map: true, agile: true },
+            { slug: 'shove', cost: '1', type: 1, map: true, agile: true },
             { slug: 'swim', cost: '1', type: 1 },
-            { slug: 'trip', cost: '1', type: 2, map: true },
-            { slug: 'disarm', cost: '1', type: 1, map: true, trained: true },
+            { slug: 'trip', cost: '1', type: 2, map: true, agile: true },
+            { slug: 'disarm', cost: '1', type: 1, map: true, trained: true, agile: true },
         ],
     },
     {
@@ -312,8 +312,8 @@ SKILLS.forEach(skill => {
         } else if (action.map) {
             action.variants = [
                 { label: 'PF2E.Roll.Normal' },
-                { label: 'PF2E.MAPAbbreviationLabel', map: -5 },
-                { label: 'PF2E.MAPAbbreviationLabel', map: -10 },
+                { label: 'PF2E.MAPAbbreviationLabel', map: action.agile ? -4 : -5 },
+                { label: 'PF2E.MAPAbbreviationLabel', map: action.agile ? -8 : -10 },
             ]
         }
 
