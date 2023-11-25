@@ -237,6 +237,10 @@ When enabled, the last health status string will only be used for 100% instead o
 
 When enabled by the GM, the module will consider any token actor in the `Party` alliance to be observable, this is useful if you don't want your players to share visions (which the regular `observer` forces) but still want them to be able to look at other player's tooltip
 
+## Recall Knowledge - Die Roll
+
+When enabled, the format of the Recall Knowledge action will slightly change and show the die roll which makes it compatible with the Dice So Nice module
+
 # Client Settings
 
 ## Enabled

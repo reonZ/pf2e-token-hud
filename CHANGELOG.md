@@ -1,3 +1,8 @@
+# 1.51.0
+
+-   added `Recall Knowledge - Die Roll` world setting, when enabled, the format of the Recall Knowledge action will slightly change and show the die roll which makes it compatible with the Dice So Nice module
+-   athletics skill actions (except `Force Open`) now use the agile MAP modifiers
+
 # 1.50.0
 
 -   added `Auto Apply Action Effect` (disabled by default) which automatically applies actions self effects on use
