@@ -1,11 +1,11 @@
 <div class="group">
     {{#if isCharacter}}
-    <div class="section" data-tooltip="PF2E.HeroPointsLabel">
+    <div class="section" data-tooltip="PF2E.HeroPointsLabel" data-section="hero-points">
         <i class="fa-solid fa-circle-h"></i>
         {{> pips max=hero.max value=hero.value action="toggle-hero" digits=(or digitalPips (gt hero.max 4))}}
     </div>
     {{else}}
-    <div class="section">
+    <div class="section" data-section="npc-adjustement">
         <a class="adjustment" data-action="toggle-adjustment">
             {{#if (eq adjustment 'elite' )}}
             <i class="fa-solid fa-alien-8bit" data-tooltip="PF2E.NPC.Adjustment.EliteLabel"></i>
@@ -18,18 +18,19 @@
     </div>
     {{/if}}
 
-    <div class="section">
+    <div class="section" data-section="alliance">
         <a data-action="toggle-alliance">
             <i class="{{alliance.icon}}" data-tooltip="{{localize alliance.label}}"></i>
         </a>
     </div>
 
-    <div class="section">
-        <i class="fa-solid fa-user-graduate" data-tooltip="PF2E.CharacterLevelLabel"></i>{{level}}
+    <div class="section" data-section="level">
+        <i class="fa-solid fa-user-graduate" data-tooltip="PF2E.CharacterLevelLabel"></i>
+        <span>{{level}}</span>
     </div>
 
     {{#unless isCharacter}}
-    <div class="section">
+    <div class="section" data-section="npc-notes">
         <a class="notes {{#unless hasNotes}}disabled{{/unless}}" data-action="show-notes" data-tooltip="PF2E.NPC.NotesTab">
             <i class="fa-duotone fa-clipboard"></i>
         </a>
@@ -39,7 +40,7 @@
 
 {{#if hp.max}}
 <div class="group">
-    <div class="section">
+    <div class="section" data-section="temp-hp">
         <i class="fa-solid fa-heart-half-stroke" data-tooltip="PF2E.TempHitPointsShortLabel"></i>
         {{#if isOwner}}
         <input type="number" name="system.attributes.hp.temp" value="{{hp.temp}}" min="0">
@@ -47,7 +48,7 @@
         <span>{{hp.temp}}</span>
         {{/if}}
     </div>
-    <div class="section">
+    <div class="section" data-section="hp">
         <i class="fa-solid fa-heart" data-tooltip="PF2E.HitPointsShortLabel"></i>
         {{> numbers name="system.attributes.hp.value" value=hp.value max=hp.max}}
     </div>
@@ -56,11 +57,11 @@
 
 {{#if sp.max}}
 <div class="group">
-    <div class="section">
+    <div class="section" data-section="resolve">
         <a data-action="use-resolve"><i class="fa-solid fa-circle-r" data-tooltip="PF2E.ResolvePointsShortLabel"></i></a>
         {{> numbers name="system.resources.resolve.value" value=resolve.value max=resolve.max}}
     </div>
-    <div class="section">
+    <div class="section" data-section="stamina">
         <i class="fa-solid fa-heart-pulse" data-tooltip="PF2E.StaminaPointsShortLabel"></i>
         {{> numbers name="system.attributes.hp.sp.value" value=sp.value max=sp.max}}
     </div>
@@ -68,8 +69,9 @@
 {{/if}}
 
 <div class="group">
-    <div class="section">
-        <i class="fa-regular fa-helmet-battle" data-tooltip="PF2E.ArmorClassLabel"></i>{{ac}}
+    <div class="section" data-section="ac">
+        <i class="fa-regular fa-helmet-battle" data-tooltip="PF2E.ArmorClassLabel"></i>
+        <span>{{ac}}</span>
         <a data-action="take-cover" data-tooltip="PF2E.Actions.TakeCover.Title">
             {{#if hasCover}}
             <i class="fa-solid fa-block-brick"></i>
@@ -79,7 +81,7 @@
         </a>
     </div>
     {{#if shield}}
-    <div class="section">
+    <div class="section" data-section="shield">
         <a data-action="raise-shield" data-tooltip="PF2E.Actions.RaiseAShield.SingleActionTitle">
             {{#if shield.broken}}
             <i class="fa-regular fa-shield-slash"></i>
@@ -89,18 +91,19 @@
             <i class="fa-regular fa-shield"></i>
             {{/if}}
         </a>
-        ({{shield.hardness}})
+        <span>({{shield.hardness}})</span>
         {{> numbers name="shield.value" value=shield.hp.value max=shield.hp.max}}
     </div>
     {{/if}}
 </div>
 
 {{#if saves}}
-<div class="group">
+<div class="group" data-section="saves">
     {{#each saves as |save|}}
     <div class="section">
         <a data-action="roll-save" data-save="{{save.slug}}">
-            <i class="{{save.icon}}" data-tooltip="{{save.label}}"></i>{{save.value}}
+            <i class="{{save.icon}}" data-tooltip="{{save.label}}"></i>
+            <span>{{save.value}}</span>
         </a>
         {{#if save.rank}}
         <sup>{{save.rank}}</sup>
@@ -113,9 +116,10 @@
 {{#if others}}
 <div class="group">
     {{#each others as |other|}}
-    <div class="section">
+    <div class="section" data-section="other-checks">
         <a data-action="roll-other" data-slug="{{other.slug}}">
-            <i class="{{other.icon}}" data-tooltip="{{other.label}}"></i>{{other.value}}
+            <i class="{{other.icon}}" data-tooltip="{{other.label}}"></i>
+            <span>{{other.value}}</span>
         </a>
         {{#if other.rank}}
         <sup>{{other.rank}}</sup>
@@ -140,10 +144,10 @@
 {{/if}}
 
 <div class="group">
-    {{> info content=speeds.others icon=speeds.main.icon value=speeds.main.value tooltip="PF2E.Speed" class='speeds'}}
-    {{> info content=languages icon='fa-solid fa-language' tooltip="PF2E.Languages"}}
-    {{> info content=senses icon='fa-solid fa-signal-stream' tooltip="PF2E.Senses"}}
-    {{> info content=iwr icon='fa-solid fa-solid fa-ankh' tooltip="IWR"}}
+    {{> info content=speeds.others icon=speeds.main.icon value=speeds.main.value tooltip="PF2E.Speed" section="speed" class="speeds"}}
+    {{> info content=languages icon='fa-solid fa-language' tooltip="PF2E.Languages" section="languages"}}
+    {{> info content=senses icon='fa-solid fa-signal-stream' tooltip="PF2E.Senses" section="senses"}}
+    {{> info content=iwr icon='fa-solid fa-solid fa-ankh' tooltip="IWR" section="iwr"}}
 </div>
 
 <hr>
