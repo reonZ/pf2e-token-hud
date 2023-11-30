@@ -1,3 +1,8 @@
+# 1.52.0
+
+-   added spans for number in the HUD to help styling of the tooltip
+-   added extra `data-section` in the HUD to help accessibility to the differnt parts of the tooltip
+
 # 1.51.0
 
 -   added `Recall Knowledge - Die Roll` world setting, when enabled, the format of the Recall Knowledge action will slightly change and show the die roll which makes it compatible with the Dice So Nice module
