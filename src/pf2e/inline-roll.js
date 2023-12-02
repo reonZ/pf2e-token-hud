@@ -2,7 +2,7 @@ import { isInstanceOf } from '../module.js'
 import { getChatMessageClass, getMeasuredTemplateDocumentClass, getMeasuredTemplateObjectClass } from './classes.js'
 import { calculateDC } from './dc.js'
 import { htmlClosest, htmlQueryAll } from './dom.js'
-import { ErrorPF2e, getActionGlyph, sluggify, tupleHasValue } from './misc.js'
+import { ErrorPF2e, getActionGlyph, objectHasKey, sluggify, tupleHasValue } from './misc.js'
 import { eventToRollParams } from './scripts.js'
 
 const SAVE_TYPES = ['fortitude', 'reflex', 'will']
@@ -274,6 +274,8 @@ export function listenInlineRoll(html, foundryDoc) {
     for (const link of links.filter(l => l.hasAttribute('data-pf2-effect-area'))) {
         const { pf2EffectArea, pf2Distance, pf2TemplateData, pf2Traits, pf2Width } = link.dataset
         link.addEventListener('click', () => {
+            if (!canvas.ready) return
+
             if (typeof pf2EffectArea !== 'string') {
                 console.warn(`PF2e System | Could not create template'`)
                 return
@@ -301,14 +303,39 @@ export function listenInlineRoll(html, foundryDoc) {
                 }
             }
 
-            if (pf2Traits) {
-                templateData.flags = {
-                    pf2e: {
-                        origin: {
-                            traits: pf2Traits.split(','),
-                        },
-                    },
+            const flags = {
+                pf2e: {},
+            }
+
+            if (
+                objectHasKey(CONFIG.PF2E.areaTypes, pf2EffectArea) &&
+                objectHasKey(CONFIG.PF2E.areaSizes, templateData.distance)
+            ) {
+                flags.pf2e.areaType = pf2EffectArea
+            }
+
+            const messageId =
+                foundryDoc instanceof ChatMessagePF2e
+                    ? foundryDoc.id
+                    : htmlClosest(html, '[data-message-id]')?.dataset.messageId ?? null
+            if (messageId) {
+                flags.pf2e.messageId = messageId
+            }
+
+            const actor = resolveActor(foundryDoc, link)
+            if (actor || pf2Traits) {
+                const origin = {}
+                if (actor) {
+                    origin.actor = actor.uuid
                 }
+                if (pf2Traits) {
+                    origin.traits = pf2Traits.split(',')
+                }
+                flags.pf2e.origin = origin
+            }
+
+            if (!isEmpty(flags.pf2e)) {
+                templateData.flags = flags
             }
 
             const templateDoc = new (getMeasuredTemplateDocumentClass())(templateData, { parent: canvas.scene })

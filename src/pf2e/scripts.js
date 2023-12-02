@@ -3,7 +3,8 @@ function isRelevantEvent(event) {
 }
 
 export function eventToRollParams(event) {
-    const skipDefault = !game.user.settings.showRollDialogs
+    const key = rollType.type === 'check' ? 'showCheckDialogs' : 'showDamageDialogs'
+    const skipDefault = !game.user.settings[key]
     if (!isRelevantEvent(event)) return { skipDialog: skipDefault }
 
     const params = { skipDialog: event.shiftKey ? !skipDefault : skipDefault }

@@ -64,8 +64,7 @@ export function adjustDCByRarity(dc, rarity = 'common') {
 }
 
 export function calculateDC(level, { proficiencyWithoutLevel, rarity = 'common' } = {}) {
-    const pwlSetting = game.settings.get('pf2e', 'proficiencyVariant')
-    proficiencyWithoutLevel ??= pwlSetting === 'ProficiencyWithoutLevel'
+    proficiencyWithoutLevel ??= game.settings.get('pf2e', 'proficiencyVariant')
 
     const dc = dcByLevel.get(level) ?? 14
     if (proficiencyWithoutLevel) {

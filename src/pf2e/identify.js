@@ -1,15 +1,8 @@
-/**
- * Those are directly copied from the PF2e system because they are not accesible to us in the global
- */
-
 import { getChatMessageClass } from './classes.js'
 import { adjustDCByRarity, calculateDC } from './dc.js'
+import { setHasElement } from './misc.js'
 
 const MAGIC_TRADITIONS = new Set(['arcane', 'divine', 'occult', 'primal'])
-
-function setHasElement(set, value) {
-    return set.has(value)
-}
 
 function getDcRarity(item) {
     return item.traits.has('cursed') ? 'unique' : item.rarity

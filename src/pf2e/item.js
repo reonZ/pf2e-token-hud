@@ -7,16 +7,15 @@ import { getChatMessageClass } from './classes'
 import { ErrorPF2e, getActionGlyph, traitSlugToObject } from './misc'
 
 export async function unownedItemToMessage(event, item, actor, { rollMode = undefined, create = true, data = {} }) {
-    const template = `systems/pf2e/templates/chat/${item.type}-card.hbs`
+    const ChatMessagePF2e = getChatMessageClass()
+    const template = `systems/pf2e/templates/chat/${sluggify(item.type)}-card.hbs`
     const token = actor.token
     const nearestItem = event?.currentTarget.closest('.item') ?? {}
-    const ChatMessagePF2e = getChatMessageClass()
-
     const contextualData = Object.keys(data).length > 0 ? data : nearestItem.dataset || {}
     const templateData = {
         actor: actor,
         tokenId: token ? `${token.parent?.id}.${token.id}` : null,
-        item,
+        item: item,
         data: await item.getChatData(undefined, contextualData),
     }
 
@@ -26,12 +25,7 @@ export async function unownedItemToMessage(event, item, actor, { rollMode = unde
             token: actor.getActiveTokens(false, true)[0] ?? null,
         }),
         flags: {
-            core: {
-                canPopout: true,
-            },
-            pf2e: {
-                origin: { uuid: item.uuid, type: item.type },
-            },
+            pf2e: { origin: item.getOriginData() },
         },
         type: CONST.CHAT_MESSAGE_TYPES.OTHER,
     }

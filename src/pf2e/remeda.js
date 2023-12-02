@@ -9,6 +9,7 @@ export const R = {
     },
     groupBy: (...args) => purry(_groupBy(false), args),
     omit: (...args) => purry(_omit, args),
+    uniq: (...args) => purry(_uniq, args, uniqLazy),
 }
 
 function purry(fn, args, lazy) {
@@ -43,12 +44,34 @@ const _groupBy = indexed => (array, fn) => {
     return ret
 }
 
-export function fromPairs(entries) {
+function uniqLazy() {
+    const set = new Set()
+    return value => {
+        if (set.has(value)) {
+            return {
+                done: false,
+                hasNext: false,
+            }
+        }
+        set.add(value)
+        return {
+            done: false,
+            hasNext: true,
+            next: value,
+        }
+    }
+}
+
+function fromPairs(entries) {
     const out = {}
     for (const [key, value] of entries) {
         out[key] = value
     }
     return out
+}
+
+function _uniq(array) {
+    return _reduceLazy(array, uniq.lazy())
 }
 
 function _omit(data, propNames) {

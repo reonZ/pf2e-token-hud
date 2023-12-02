@@ -2,6 +2,8 @@
  * Those are directly copied from the PF2e system because they are not accesible to us in the global
  */
 
+import { R } from './remeda'
+
 const actionImgMap = {
     0: 'systems/pf2e/icons/actions/FreeAction.webp',
     free: 'systems/pf2e/icons/actions/FreeAction.webp',
@@ -52,14 +54,12 @@ export function ErrorPF2e(message) {
 }
 
 export function getSelectedOrOwnActors(types, useOwnCharacter = true) {
-    const actors = canvas.tokens.controlled
-        .flatMap(token => (token.actor ? token.actor : []))
-        .filter(actor => actor.isOwner)
-        .filter(actor => !types || actor.isOfType(...types))
-
-    if (actors.length === 0 && game.user.character && useOwnCharacter) actors.push(game.user.character)
-
-    return actors
+    return R.uniq(
+        game.user
+            .getActiveTokens()
+            .filter(t => types.length === 0 || t.actor?.isOfType(...types))
+            .flatMap(t => t.actor ?? [])
+    )
 }
 
 export function tupleHasValue(array, value) {

@@ -9,9 +9,7 @@
             "discord": "Idle#3251"
         }
     ],
-    "esmodules": [
-        "scripts/main.js"
-    ],
+    "esmodules": ["scripts/main.js"],
     "compatibility": {
         "minimum": "11.315",
         "verified": "11"
@@ -68,7 +66,7 @@
                 "type": "system",
                 "manifest": "https://raw.githubusercontent.com/foundryvtt/pf2e/master/system.json",
                 "compatibility": {
-                    "minimum": "5.9.1"
+                    "minimum": "5.10.0"
                 }
             }
         ]
