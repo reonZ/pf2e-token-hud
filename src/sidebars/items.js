@@ -5,7 +5,7 @@ import { addNameTooltipListeners, deleteItem, editItem, filterIn, getItemFromEve
 import { createTooltip, dismissTooltip } from '../tooltip.js'
 
 const ITEMS_TYPES = {
-    weapon: { order: 0, label: 'PF2E.Actor.Inventory.Section.WeaponsAndShields' },
+    weaponAndShield: { order: 0, label: 'PF2E.Actor.Inventory.Section.WeaponsAndShields' },
     armor: { order: 1, label: 'TYPES.Item.armor' },
     consumable: { order: 2, label: 'PF2E.Item.Consumable.Plural' },
     equipment: { order: 3, label: 'TYPES.Item.equipment' },
@@ -20,15 +20,16 @@ export async function getItemsData({ actor, filter }) {
     let categories = {}
 
     for (const item of contents) {
-        if (!ITEMS_TYPES[item.type]) continue
+        const type = item.type === 'shield' || item.type === 'weapon' ? 'weaponAndShield' : item.type
+        if (!ITEMS_TYPES[type]) continue
 
         const containerId = item.system.containerId
-        if (item.type !== 'backpack' && containerId && (openedContainers === true || openedContainers.includes(containerId))) {
+        if (type !== 'backpack' && containerId && (openedContainers === true || openedContainers.includes(containerId))) {
             containers[containerId] ??= []
             containers[containerId].push(item)
         } else {
-            categories[item.type] ??= []
-            categories[item.type].push(item)
+            categories[type] ??= []
+            categories[type].push(item)
         }
     }
 
