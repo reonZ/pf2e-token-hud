@@ -174,7 +174,13 @@ export function registerSettings() {
 
     // spells
 
-    register('spells', Boolean, false)
+    register('spells-sort', String, 'disabled', {
+        choices: {
+            disabled: path('spells-sort', 'choices.disabled'),
+            type: path('spells-sort', 'choices.type'),
+            entry: path('spells-sort', 'choices.entry'),
+        },
+    })
 
     register('tradition', Boolean, false)
 

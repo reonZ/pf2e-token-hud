@@ -67,9 +67,14 @@
                     "render": "On Tooltip Render"
                 }
             },
-            "spells": {
-                "name": "Sort Spells By Type",
-                "hint": "Should the spells be sorted by types before alphabetically in a same table."
+            "spells-sort": {
+                "name": "Sort Spells By",
+                "hint": "How should the spell be sorted in a same table. They will still be sorted alphabetically as a second sorting.",
+                "choices": {
+                    "disabled": "Alphabetical Order",
+                    "type": "Spell Type",
+                    "entry": "Spellcasting Entry"
+                }
             },
             "scrollbar": {
                 "name": "Sidebar Scrollbar",
