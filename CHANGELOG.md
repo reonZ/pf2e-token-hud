@@ -1,3 +1,9 @@
+# 1.54.0
+
+-   removed the `Sort Spells By Type` setting
+-   added `Sort Spells By` multi-choice setting which let you sort the spells in a same table by `Spell Type` or `Spellcasting Entry` before sorting them in `Alphabetical Order`
+-   fixed the spells header for rituals
+
 # 1.53.0
 
 -   this is a `5.10.0` release

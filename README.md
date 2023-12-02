@@ -381,11 +381,11 @@ Whenever you click on a use-action button, the tooltip will close.
 
 ## Items in Containers
 
-When enabled, items in containers will always be displayed in their container
+When enabled, items in containers will always be displayed in their container.
 
-## Sort Spells by Type
+## Sort Spells by
 
-When enabled, it will sort the spells in a single table by type before sorting them by name.
+You can choose to sort the spells in a same table by `Spell Type` or `Spellcasting Entry` before sorting them in `Alphabetical Order`.
 
 ## Show Spell Tradition
 
@@ -397,9 +397,9 @@ Whenever you click on the cast-spell icon, the tooltip will close.
 
 ## Hide Untrained Skill Actions
 
-When enabled, all skill action that require the character to be trained will be hidden from the sidebar if the actor is in fact untrained
+When enabled, all skill action that require the character to be trained will be hidden from the sidebar if the actor is in fact untrained.
 
-This does nothing on NPCs
+This does nothing on NPCs.
 
 ## Close Tooltip on Macro Use
 
