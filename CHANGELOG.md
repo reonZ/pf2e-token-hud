@@ -1,7 +1,14 @@
+# 1.53.0
+
+-   this is a `5.10.0` release
+-   updated a lot of system helpers to be in sync with the recent changes
+-   fixed equipment sidebar headers
+-   fixed shields not showing up anywhere in the equipment sidebar (they are now with the weapons)
+
 # 1.52.0
 
--   added spans for number in the HUD to help styling of the tooltip
--   added extra `data-section` in the HUD to help accessibility to the differnt parts of the tooltip
+-   added spans for numbers in the HUD to help styling of the tooltip
+-   added extra `data-section` in the HUD to help accessibility to the different parts of the tooltip
 
 # 1.51.0
 
