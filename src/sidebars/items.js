@@ -5,12 +5,12 @@ import { addNameTooltipListeners, deleteItem, editItem, filterIn, getItemFromEve
 import { createTooltip, dismissTooltip } from '../tooltip.js'
 
 const ITEMS_TYPES = {
-    weapon: { order: 0, label: 'PF2E.InventoryWeaponsHeader' },
-    armor: { order: 1, label: 'PF2E.InventoryArmorHeader' },
-    consumable: { order: 2, label: 'PF2E.InventoryConsumablesHeader' },
-    equipment: { order: 3, label: 'PF2E.InventoryEquipmentHeader' },
-    treasure: { order: 4, label: 'PF2E.InventoryTreasureHeader' },
-    backpack: { order: 5, label: 'PF2E.InventoryBackpackHeader' },
+    weapon: { order: 0, label: 'PF2E.Actor.Inventory.Section.WeaponsAndShields' },
+    armor: { order: 1, label: 'TYPES.Item.armor' },
+    consumable: { order: 2, label: 'PF2E.Item.Consumable.Plural' },
+    equipment: { order: 3, label: 'TYPES.Item.equipment' },
+    treasure: { order: 4, label: 'TYPES.Item.treasure' },
+    backpack: { order: 5, label: 'PF2E.Item.Container.Plural' },
 }
 
 export async function getItemsData({ actor, filter }) {
