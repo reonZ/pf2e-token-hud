@@ -9,9 +9,7 @@
             "discord": "Idle#3251"
         }
     ],
-    "esmodules": [
-        "scripts/main.js"
-    ],
+    "esmodules": ["scripts/main.js"],
     "compatibility": {
         "minimum": "11.315",
         "verified": "11"
@@ -24,21 +22,7 @@
     "download": "https://github.com/reonZ/pf2e-token-hud/releases/download/1.54.0/module.zip",
     "changelog": "https://github.com/reonZ/pf2e-token-hud/blob/master/CHANGELOG.md",
     "bugs": "https://github.com/reonZ/pf2e-token-hud/issues",
-    "styles": [
-        "styles/global.css",
-        "styles/chat.css",
-        "styles/dialogs.css",
-        "styles/hud.css",
-        "styles/inner.css",
-        "styles/sidebar.css",
-        "styles/popup.css",
-        "styles/sidebars/actions.css",
-        "styles/sidebars/items.css",
-        "styles/sidebars/spells.css",
-        "styles/sidebars/skills.css",
-        "styles/sidebars/extras.css",
-        "styles/sidebars/hazard.css"
-    ],
+    "styles": ["styles/itt.css"],
     "languages": [
         {
             "lang": "en",
