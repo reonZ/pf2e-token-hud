@@ -74,7 +74,6 @@ export async function getSpellsData({ actor, filter }) {
                             ? 'PF2E.SpellFocusLabel'
                             : 'PF2E.SpellPreparedLabel',
                         order: isCharge ? 0 : data.isPrepared ? 1 : isFocus ? 2 : data.isInnate ? 3 : data.isSpontaneous ? 4 : 5,
-                        entryName: entry.name,
                     })
                 }
 
@@ -101,7 +100,7 @@ export async function getSpellsData({ actor, filter }) {
                 ? (a, b) => (a.order === b.order ? localeCompare(a.name, b.name) : a.order - b.order)
                 : sortingSetting === 'entry'
                 ? (a, b) => {
-                      const compareEntries = localeCompare(a.entryName, b.entryName)
+                      const compareEntries = localeCompare(a.entryId, b.entryId)
                       if (compareEntries !== 0) return compareEntries
                       return localeCompare(a.name, b.name)
                   }
