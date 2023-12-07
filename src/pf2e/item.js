@@ -4,7 +4,7 @@
  */
 
 import { getChatMessageClass } from './classes'
-import { ErrorPF2e, getActionGlyph, traitSlugToObject } from './misc'
+import { ErrorPF2e, getActionGlyph, sluggify, traitSlugToObject } from './misc'
 
 export async function unownedItemToMessage(event, item, actor, { rollMode = undefined, create = true, data = {} }) {
     const ChatMessagePF2e = getChatMessageClass()
