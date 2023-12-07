@@ -1,3 +1,8 @@
+# 1.54.1
+
+-   fixed not being able to send skill actions to chat
+-   use spellcasting entry id instead of name to sort spells by `Spellcasting Entry` in the chance that multiple entries share the same name
+
 # 1.54.0
 
 -   removed the `Sort Spells By Type` setting
