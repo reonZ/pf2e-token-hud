@@ -279,10 +279,6 @@ export class HUD extends Application {
         return !!getCoverEffect(this.actor)
     }
 
-    get isCharacter() {
-        return this.actor?.isOfType('character')
-    }
-
     get sidebar() {
         return this.element?.find('> .sidebar') ?? []
     }
@@ -303,7 +299,7 @@ export class HUD extends Application {
         let distance = null
         const savesSetting = getSetting('saves')
         const othersSetting = getSetting('others')
-        const isCharacter = this.isCharacter
+        const isCharacter = actor.isOfType('character')
         const { attributes } = actor
         const { hp, ac } = attributes
         const sp = hp.sp ?? { max: 0, value: 0 }
@@ -950,8 +946,9 @@ export class HUD extends Application {
         const contentData = {
             ...(data.contentData ?? {}),
             isGM: game.user.isGM,
-            isCharacter: this.isCharacter,
+            isCharacter: actor.isOfType('character'),
             isOwner: actor.isOwner,
+            isCreature: actor.isOfType('creature'),
         }
 
         this.lock()

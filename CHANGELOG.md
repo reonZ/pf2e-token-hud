@@ -1,3 +1,12 @@
+# 1.55.0
+
+-   added a `Use Item` button to consumables items in the Equipment sidebar
+    -   consumables need to have at least a max uses value of 1
+    -   consumables need to have at least one use remaining
+    -   consumables need to have a formula or be wands/scrolls
+-   added a `Close Tooltip on Item Use` setting (disabled by default)
+-   improved some sidebars styling
+
 # 1.54.1
 
 -   fixed not being able to send skill actions to chat
