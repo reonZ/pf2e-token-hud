@@ -60,6 +60,13 @@
                     </a>
                     {{/if}}
 
+                    {{#if (and @root.isCreature (eq item.type "consumable") item.isIdentified item.uses.max item.uses.value
+                    (or item.formula (eq item.category 'wand') (eq item.category 'scroll')))}}
+                    <a data-action="use-item" data-tooltip="{{@root.i18n 'use'}}">
+                        <i class="fa-solid fa-play"></i>
+                    </a>
+                    {{/if}}
+
                     {{#if (and (eq item.type 'backpack') (ne @root.containers true))}}
                     <a data-action="toggle-contains-items">
                         {{#if (includes @root.containers item.id)}}

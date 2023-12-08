@@ -77,6 +77,7 @@ export function registerSettings() {
     register('cast-close', Boolean, false)
     register('skill-close', Boolean, false)
     register('macro-close', Boolean, false)
+    register('use-close', Boolean, false)
 
     register('no-dead', Boolean, false)
 

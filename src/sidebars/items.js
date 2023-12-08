@@ -98,6 +98,14 @@ export function addItemsListeners({ el, actor, token, hud }) {
     // IS OWNER
     if (!actor.isOwner) return
 
+    item.find('[data-action=use-item]').on('click', event => {
+        const item = getItemFromEvent(event, actor)
+        if (!item) return
+
+        item.consume()
+        if (getSetting('use-close')) hud.close()
+    })
+
     item.find('[data-action=item-chat]').on('click', async event => {
         const item = getItemFromEvent(event, actor)
         if (!item) return

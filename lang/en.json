@@ -254,6 +254,10 @@
                 "name": "Close Tooltip on Macro Use",
                 "hint": "Whenever you click on a use-macro button, the tooltip will close."
             },
+            "use-close": {
+                "name": "Close Tooltip on Item Use",
+                "hint": "Whenever you click on a use-item button, the tooltip will close."
+            },
             "no-dead": {
                 "name": "No Tooltip on Dead NPCs",
                 "hint": "When enabled, the tooltip won't show up on dead NPCs."
@@ -354,7 +358,8 @@
             "title": "Equipment",
             "empty": "{name} has empty pockets, sadly.",
             "inContainer": "Display Items in Container",
-            "outContainer": "Display Items in Categories"
+            "outContainer": "Display Items in Categories",
+            "use": "Use Item"
         },
         "deleteItem": {
             "title": "Delete Confirmation",
