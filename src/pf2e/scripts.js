@@ -2,7 +2,7 @@ function isRelevantEvent(event) {
     return !!event && 'ctrlKey' in event && 'metaKey' in event && 'shiftKey' in event
 }
 
-export function eventToRollParams(event) {
+export function eventToRollParams(event, rollType) {
     const key = rollType.type === 'check' ? 'showCheckDialogs' : 'showDamageDialogs'
     const skipDefault = !game.user.settings[key]
     if (!isRelevantEvent(event)) return { skipDialog: skipDefault }

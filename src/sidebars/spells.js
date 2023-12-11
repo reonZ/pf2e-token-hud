@@ -216,7 +216,7 @@ export function addSpellsListeners({ el, actor, hud }) {
             statistic = attacks[0].statistic
         }
 
-        const rollParams = eventToRollParams(event)
+        const rollParams = eventToRollParams(event, { type: 'check' })
         const { map } = event.currentTarget.dataset
         if (map) {
             rollParams.modifiers = [new game.pf2e.Modifier({ label: 'PF2E.MultipleAttackPenalty', modifier: Number(map) })]
