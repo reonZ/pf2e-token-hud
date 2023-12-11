@@ -8,9 +8,20 @@ export async function getSpellsData({ actor, filter }) {
     const focusPool = actor.system.resources.focus ?? { value: 0, max: 0 }
     const entries = actor.spellcasting.regular
     const showTradition = getSetting('tradition')
-    const stavesActive = game.modules.get('pf2e-staves')?.active
+
+    const pf2eStavesActive = game.modules.get('pf2e-staves')?.active
+    const pf2eDailies = game.modules.get('pf2e-dailies')
+    const pf2eDailiesActive = pf2eDailies?.active
+    const stavesActive = pf2eStavesActive || (pf2eDailiesActive && isNewerVersion(pf2eDailies.version, '2.14.0'))
+    const chargesPath = pf2eStavesActive
+        ? 'flags.pf2e-staves.charges'
+        : pf2eDailiesActive
+        ? 'flags.pf2e-dailies.staff.charges'
+        : ''
+
     const spells = []
     const focuses = []
+
     let hasFocusCantrips = false
 
     await Promise.all(
@@ -20,8 +31,16 @@ export async function getSpellsData({ actor, filter }) {
             const data = await entry.getSheetData()
             const isFocus = data.isFocusPool
             const isCharge = entry.system?.prepared?.value === 'charge'
-            const isStaff = getProperty(entry, 'flags.pf2e-staves.staveID') !== undefined
-            const charges = { value: getProperty(entry, 'flags.pf2e-staves.charges') ?? 0 }
+
+            const charges = (() => {
+                const dailiesData = pf2eDailiesActive && pf2eDailies.api.getSpellcastingEntryStaffData(entry)
+                const { charges, max } = dailiesData ?? getProperty(entry, 'flags.pf2e-staves.charges') ?? { charges: 0, max: 0 }
+                return {
+                    value: charges,
+                    max,
+                    noMax: true,
+                }
+            })()
 
             for (const slot of data.levels) {
                 if (!slot.active.length || slot.uses?.max === 0) continue
@@ -46,7 +65,7 @@ export async function getSpellsData({ actor, filter }) {
                         itemId: spell.id,
                         inputId: data.isInnate ? spell.id : data.id,
                         inputPath: isCharge
-                            ? 'flags.pf2e-staves.charges'
+                            ? chargesPath
                             : data.isInnate
                             ? 'system.location.uses.value'
                             : `system.slots.slot${slot.level}.value`,
@@ -63,9 +82,7 @@ export async function getSpellsData({ actor, filter }) {
                         expended: expended ?? (isFocus && !isCantrip ? focusPool.value <= 0 : false),
                         action: spell.system.time.value,
                         type: isCharge
-                            ? isStaff
-                                ? `${MODULE_ID}.spells.staff`
-                                : `${MODULE_ID}.spells.charges`
+                            ? `${MODULE_ID}.spells.staff`
                             : data.isInnate
                             ? 'PF2E.PreparationTypeInnate'
                             : data.isSpontaneous
@@ -142,7 +159,6 @@ export async function getSpellsData({ actor, filter }) {
                 spells,
                 rituals,
                 focusPool,
-                stavesActive,
                 hasFocusCantrips,
                 attackMod: hasSingleSpellAttack(attacks) ? attacks[0].mod : null,
                 entryRank: rank => game.i18n.format('PF2E.Item.Spell.Rank.Ordinal', { rank: ordinalString(rank) }),
