@@ -1,3 +1,16 @@
+# 1.56.0
+
+-   this is a `5.10.5` release
+-   added support for the `Preparing a Staff` feature of `PF2e Dailies`
+-   added a tooltip for the temporary icon of items in the equipment sidebar
+-   updated popup inline links to be in sync with the recent system changes
+-   tooltips for overflown names will now only appear when the name itself is hovered over
+-   changed how the `Use Item` feature works
+    -   it now indicates when an item is normally usable but currently can't
+    -   you can't use an item if it has a quantity of 0, if it has no uses remaining or if it is `dropped`
+-   fixed issue with spell slot index when prepared spellcasting entry had empty slots in between spells
+-   fixed error when using the `Spell Attack` buttons at the top of the spells sidebar
+
 # 1.55.0
 
 -   added a `Use Item` button to consumables items in the Equipment sidebar

@@ -16,12 +16,12 @@
         "minimum": "11.315",
         "verified": "11"
     },
-    "version": "1.55.0",
+    "version": "1.56.0",
     "manifestPlusVersion": "1.2.0",
     "url": "https://github.com/reonZ/pf2e-token-hud",
     "readme": "https://github.com/reonZ/pf2e-token-hud/blob/master/README.md",
     "manifest": "https://raw.githubusercontent.com/reonZ/pf2e-token-hud/master/module.json",
-    "download": "https://github.com/reonZ/pf2e-token-hud/releases/download/1.55.0/module.zip",
+    "download": "https://github.com/reonZ/pf2e-token-hud/releases/download/1.56.0/module.zip",
     "changelog": "https://github.com/reonZ/pf2e-token-hud/blob/master/CHANGELOG.md",
     "bugs": "https://github.com/reonZ/pf2e-token-hud/issues",
     "styles": [
@@ -56,7 +56,7 @@
                 "type": "system",
                 "manifest": "https://raw.githubusercontent.com/foundryvtt/pf2e/master/system.json",
                 "compatibility": {
-                    "minimum": "5.10.0"
+                    "minimum": "5.10.5"
                 }
             }
         ]
