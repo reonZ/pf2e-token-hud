@@ -141,6 +141,10 @@
                                 .worn {
                                     font-size: 0.94em;
                                 }
+
+                                a.disabled {
+                                    pointer-events: none;
+                                }
                             }
                         }
                     }

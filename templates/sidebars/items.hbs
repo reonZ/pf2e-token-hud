@@ -60,9 +60,8 @@
                     </a>
                     {{/if}}
 
-                    {{#if (and @root.isCreature (eq item.type "consumable") item.isIdentified item.uses.max item.uses.value
-                    (or item.formula (eq item.category 'wand') (eq item.category 'scroll')))}}
-                    <a data-action="use-item" data-tooltip="{{@root.i18n 'use'}}">
+                    {{#if (@root.canUseItem item)}}
+                    <a data-action="use-item" data-tooltip="{{@root.i18n 'use'}}" {{#if (@root.itemDisabled item)}}class="disabled" {{/if}}>
                         <i class="fa-solid fa-play"></i>
                     </a>
                     {{/if}}

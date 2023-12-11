@@ -15,6 +15,7 @@ const ITEMS_TYPES = {
 
 export async function getItemsData({ actor, filter }) {
     const { contents, coins, totalWealth, bulk, invested } = actor.inventory
+    const isCreature = actor.isOfType('creature')
     const openedContainers = getSetting('containers') || (getFlag(actor, `containers.${game.user.id}`) ?? [])
     const containers = {}
     let categories = {}
@@ -68,6 +69,13 @@ export async function getItemsData({ actor, filter }) {
                 i18n: str => localize(`items.${str}`),
                 invested: invested ? `${game.i18n.localize('PF2E.InvestedLabel')}: ${invested.value} / ${invested.max}` : '',
                 wealth: { coins: coins.goldValue, total: totalWealth.goldValue },
+                canUseItem: item =>
+                    isCreature &&
+                    item.type === 'consumable' &&
+                    item.isIdentified &&
+                    item.uses.max &&
+                    (item.formula || ['wand', 'scroll'].includes(item.category)),
+                itemDisabled: item => !item.quantity || !item.uses.value || item.system.equipped.carryType === 'dropped',
             },
         }
     }
