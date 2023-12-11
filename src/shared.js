@@ -21,23 +21,25 @@ export async function getItemSummary(el, actor) {
 }
 
 export function addNameTooltipListeners(el) {
-    el.on('mouseenter', event => {
+    const targetEl = el.find('.name')
+
+    targetEl.on('mouseenter', event => {
         event.preventDefault()
 
-        const target = event.currentTarget.querySelector('.name')
+        const target = event.currentTarget
         const { width } = target.getBoundingClientRect()
         if (target.scrollWidth <= Math.ceil(width)) return
 
         const name = target.innerHTML.trim()
-        game.tooltip.activate(event.currentTarget, { text: name })
+        game.tooltip.activate(event.currentTarget, { text: name, direction: TooltipManager.TOOLTIP_DIRECTIONS.UP })
     })
 
-    el.on('mouseleave', event => {
+    targetEl.on('mouseleave', event => {
         event.preventDefault()
         game.tooltip.deactivate()
     })
 
-    el.on('mousedown', event => {
+    targetEl.on('mousedown', event => {
         game.tooltip.deactivate()
     })
 }
