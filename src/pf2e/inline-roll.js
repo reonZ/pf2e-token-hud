@@ -1,5 +1,5 @@
 import { isInstanceOf } from '../module.js'
-import { getChatMessageClass, getMeasuredTemplateDocumentClass, getMeasuredTemplateObjectClass } from './classes.js'
+import { getChatMessageClass } from './classes.js'
 import { calculateDC } from './dc.js'
 import { htmlClosest, htmlQueryAll } from './dom.js'
 import { ErrorPF2e, getActionGlyph, objectHasKey, sluggify, tupleHasValue } from './misc.js'
@@ -143,7 +143,7 @@ export function listenInlineRoll(html, foundryDoc) {
                 ...(pf2Traits?.split(',').map(o => o.trim()) ?? []),
                 ...(pf2RollOptions?.split(',').map(o => o.trim()) ?? []),
             ]
-            const eventRollParams = eventToRollParams(event)
+            const eventRollParams = eventToRollParams(event, { type: 'check' })
 
             switch (pf2Check) {
                 case 'flat': {
@@ -314,10 +314,9 @@ export function listenInlineRoll(html, foundryDoc) {
                 flags.pf2e.areaType = pf2EffectArea
             }
 
-            const messageId =
-                foundryDoc instanceof ChatMessagePF2e
-                    ? foundryDoc.id
-                    : htmlClosest(html, '[data-message-id]')?.dataset.messageId ?? null
+            const messageId = isInstanceOf(foundryDoc, 'ChatMessagePF2e')
+                ? foundryDoc.id
+                : htmlClosest(html, '[data-message-id]')?.dataset.messageId ?? null
             if (messageId) {
                 flags.pf2e.messageId = messageId
             }
@@ -338,8 +337,7 @@ export function listenInlineRoll(html, foundryDoc) {
                 templateData.flags = flags
             }
 
-            const templateDoc = new (getMeasuredTemplateDocumentClass())(templateData, { parent: canvas.scene })
-            new (getMeasuredTemplateObjectClass())(templateDoc).drawPreview()
+            canvas.templates.createPreview(templateData)
         })
     }
 
