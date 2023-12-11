@@ -28,10 +28,12 @@ export async function getSpellsData({ actor, filter }) {
 
                 const slotSpells = []
                 const isCantrip = slot.isCantrip
-                const actives = slot.active.filter(x => x && x.uses?.max !== 0)
 
-                for (let slotId = 0; slotId < actives.length; slotId++) {
-                    const { spell, expended, virtual, uses, castLevel } = actives[slotId]
+                for (let slotId = 0; slotId < slot.active.length; slotId++) {
+                    const active = slot.active[slotId]
+                    if (!active || active.uses?.max === 0) continue
+
+                    const { spell, expended, virtual, uses, castLevel } = active
                     if (!filterIn(spell.name, filter)) continue
 
                     slotSpells.push({
