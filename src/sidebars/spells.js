@@ -33,12 +33,17 @@ export async function getSpellsData({ actor, filter }) {
             const isCharge = entry.system?.prepared?.value === 'charge'
 
             const charges = (() => {
+                if (!isCharge) return
+
                 const dailiesData = pf2eDailiesActive && pf2eDailies.api.getSpellcastingEntryStaffData(entry)
-                const { charges, max } = dailiesData ?? getProperty(entry, 'flags.pf2e-staves.charges') ?? { charges: 0, max: 0 }
+                const { charges, max, canPayCost } = dailiesData ??
+                    getProperty(entry, 'flags.pf2e-staves.charges') ?? { charges: 0, max: 0 }
+
                 return {
                     value: charges,
                     max,
                     noMax: true,
+                    canPayCost: canPayCost ?? (() => true),
                 }
             })()
 
@@ -79,7 +84,9 @@ export async function getSpellsData({ actor, filter }) {
                         isSpontaneous: data.isSpontaneous || data.isFlexible,
                         slotLevel: slot.level,
                         uses: uses ?? (isCharge ? charges : slot.uses),
-                        expended: expended ?? (isFocus && !isCantrip ? focusPool.value <= 0 : false),
+                        expended: isCharge
+                            ? !charges.canPayCost(slot.level)
+                            : expended ?? (isFocus && !isCantrip ? focusPool.value <= 0 : false),
                         action: spell.system.time.value,
                         type: isCharge
                             ? `${MODULE_ID}.spells.staff`
