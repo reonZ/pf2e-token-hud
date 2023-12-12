@@ -1,3 +1,7 @@
+# 1.56.2
+
+-   fixed sending a spell to chat not using the heightened level
+
 # 1.56.1
 
 -   staff spellcasting entry spells will now be shown as expended when appropriate, taking into account possible use of spontaneous spell slots
