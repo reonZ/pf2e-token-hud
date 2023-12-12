@@ -238,7 +238,7 @@ export function addSpellsListeners({ el, actor, hud }) {
         const item = getItemFromEvent(event, actor)
         if (!item) return
 
-        item.toMessage(event, { create: true })
+        item.toMessage(event)
         if (getSetting('chat-close')) hud.close()
     })
 

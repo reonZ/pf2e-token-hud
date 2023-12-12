@@ -34,7 +34,7 @@
         {{/if}}
     </div>
     {{#each entry as |spell|}}
-    <div class="spell item-box{{#if spell.expended}} expended{{/if}}{{#if spell.isVirtual}} virtual{{/if}}"
+    <div class="spell item item-box{{#if spell.expended}} expended{{/if}}{{#if spell.isVirtual}} virtual{{/if}}"
         data-entry-id="{{spell.entryId}}" data-slot-id="{{spell.slotId}}" data-expended="{{spell.expended}}"
         data-slot-level="{{spell.slotLevel}}" data-item-id="{{spell.itemId}}" data-cast-level="{{spell.castLevel}}">
         <div class="item-img hover" data-action="spell-chat">
