@@ -20,23 +20,9 @@ export function registerSettings() {
      */
     register('enabled', Boolean, true, { onChange: enableModule })
 
-    register('position', String, 'right', {
-        choices: {
-            left: path('position', 'choices.left'),
-            right: path('position', 'choices.right'),
-            top: path('position', 'choices.top'),
-            bottom: path('position', 'choices.bottom'),
-        },
-    })
+    register('position', String, 'right', { choices: ['left', 'right', 'top', 'bottom'] })
 
-    register('small-position', String, 'top', {
-        choices: {
-            left: path('position', 'choices.left'),
-            right: path('position', 'choices.right'),
-            top: path('position', 'choices.top'),
-            bottom: path('position', 'choices.bottom'),
-        },
-    })
+    register('small-position', String, 'top', { choices: ['left', 'right', 'top', 'bottom'] })
 
     register('delay', Number, 250, {
         range: {
@@ -56,20 +42,10 @@ export function registerSettings() {
 
     register('use-holding', String, 'none', {
         hint: path('use-holding', isGM ? 'choices.gm.hint' : 'choices.player.hint'),
-        choices: {
-            none: path('use-holding', 'choices.none'),
-            half: path('use-holding', isGM ? 'choices.gm.half' : 'choices.player.half'),
-            all: path('use-holding', isGM ? 'choices.gm.all' : 'choices.player.all'),
-        },
+        choices: ['none', isGM ? 'gm.half' : 'player.half', isGM ? 'gm.all' : 'player.all'],
     })
 
-    register('autolock', String, 'none', {
-        choices: {
-            none: path('autolock', 'choices.none'),
-            hover: path('autolock', 'choices.hover'),
-            render: path('autolock', 'choices.render'),
-        },
-    })
+    register('autolock', String, 'none', { choices: ['none', 'hover', 'render'] })
 
     register('chat-close', Boolean, false)
     register('attack-close', Boolean, false)
@@ -87,31 +63,13 @@ export function registerSettings() {
 
     // tooltip
 
-    register('saves', String, 'bonus', {
-        choices: {
-            none: path('saves', 'choices.none'),
-            bonus: path('saves', 'choices.bonus'),
-            dc: path('saves', 'choices.dc'),
-        },
-    })
+    register('saves', String, 'bonus', { choices: ['none', 'bonus', 'dc'] })
 
-    register('others', String, 'none', {
-        choices: {
-            none: path('saves', 'choices.none'),
-            bonus: path('saves', 'choices.bonus'),
-            dc: path('saves', 'choices.dc'),
-        },
-    })
+    register('others', String, 'none', { choices: ['none', 'bonus', 'dc'] })
 
     register('ranks', Boolean, false)
 
-    register('show-death', String, 'always', {
-        choices: {
-            none: path('show-death', 'choices.none'),
-            always: path('show-death', 'choices.always'),
-            only: path('show-death', 'choices.only'),
-        },
-    })
+    register('show-death', String, 'always', { choices: ['none', 'always', 'only'] })
 
     register('force-speed', Boolean, false)
 
@@ -121,13 +79,7 @@ export function registerSettings() {
 
     // distance
 
-    register('distance', String, 'all', {
-        choices: {
-            none: path('distance', 'choices.none'),
-            self: path('distance', 'choices.self'),
-            all: path('distance', 'choices.all'),
-        },
-    })
+    register('distance', String, 'all', { choices: ['none', 'self', 'all'] })
 
     register('unit', String, '')
 
@@ -157,13 +109,7 @@ export function registerSettings() {
 
     // actions
 
-    register('actions', String, 'split', {
-        choices: {
-            name: path('actions', 'choices.name'),
-            type: path('actions', 'choices.type'),
-            split: path('actions', 'choices.split'),
-        },
-    })
+    register('actions', String, 'split', { choices: ['name', 'type', 'split'] })
 
     register('actions-colors', Boolean, true)
 
@@ -175,13 +121,7 @@ export function registerSettings() {
 
     // spells
 
-    register('spells-sort', String, 'disabled', {
-        choices: {
-            disabled: path('spells-sort', 'choices.disabled'),
-            type: path('spells-sort', 'choices.type'),
-            entry: path('spells-sort', 'choices.entry'),
-        },
-    })
+    register('spells-sort', String, 'disabled', { choices: ['disabled', 'type', 'entry'] })
 
     register('tradition', Boolean, false)
 
@@ -217,6 +157,13 @@ function path(setting, key) {
 }
 
 function register(name, type, defValue, extra = {}) {
+    if (Array.isArray(extra.choices)) {
+        extra.choices = extra.choices.reduce((choices, choice) => {
+            choices[choice] = path(name, `choices.${choice}`)
+            return choices
+        }, {})
+    }
+
     game.settings.register(MODULE_ID, name, {
         name: path(name, 'name'),
         hint: path(name, 'hint'),

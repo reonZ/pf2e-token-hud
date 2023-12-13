@@ -52,7 +52,13 @@
             },
             "small-position": {
                 "name": "Small Tooltip Position",
-                "hint": "Select a preferred side for the small version of the tooltip, same logic applies than for the regular one."
+                "hint": "Select a preferred side for the small version of the tooltip, same logic applies than for the regular one.",
+                "choices": {
+                    "left": "Left",
+                    "right": "Right",
+                    "top": "Top",
+                    "bottom": "Bottom"
+                }
             },
             "delay": {
                 "name": "Tooltip Delay",
@@ -200,7 +206,12 @@
             },
             "others": {
                 "name": "Perception, Stealth, Athletics",
-                "hint": "Should the perception, stealth and athletics bonus/DC be shown in the tooltip."
+                "hint": "Should the perception, stealth and athletics bonus/DC be shown in the tooltip.",
+                "choices": {
+                    "none": "Disabled",
+                    "bonus": "Show Bonus",
+                    "dc": "Show DC"
+                }
             },
             "ranks": {
                 "name": "Display Ranks",
