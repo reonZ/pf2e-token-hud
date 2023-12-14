@@ -53,15 +53,6 @@ export function ErrorPF2e(message) {
     return Error(`PF2e System | ${message}`)
 }
 
-export function getSelectedOrOwnActors(types, useOwnCharacter = true) {
-    return R.uniq(
-        game.user
-            .getActiveTokens()
-            .filter(t => types.length === 0 || t.actor?.isOfType(...types))
-            .flatMap(t => t.actor ?? [])
-    )
-}
-
 export function tupleHasValue(array, value) {
     return array.includes(value)
 }
