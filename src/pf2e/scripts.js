@@ -14,3 +14,8 @@ export function eventToRollParams(event, rollType) {
 
     return params
 }
+
+export function eventToRollMode(event) {
+    if (!isRelevantEvent(event) || !event.ctrlKey || !event.metaKey) return 'roll'
+    return game.user.isGM ? 'gmroll' : 'blindroll'
+}

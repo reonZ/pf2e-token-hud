@@ -38,7 +38,7 @@ export async function unownedItemToMessage(event, item, actor, { rollMode = unde
     return create ? ChatMessagePF2e.create(chatData, { renderSheet: false }) : new ChatMessagePF2e(chatData)
 }
 
-export async function createSelfEffectMessage(item) {
+export async function createSelfEffectMessage(item, rollMode = 'roll') {
     if (!item.system.selfEffect) {
         throw ErrorPF2e(
             [
@@ -54,10 +54,7 @@ export async function createSelfEffectMessage(item) {
     const ChatMessagePF2e = getChatMessageClass()
     const speaker = ChatMessagePF2e.getSpeaker({ actor, token })
     const flavor = await renderTemplate('systems/pf2e/templates/chat/action/flavor.hbs', {
-        action: {
-            glyph: getActionGlyph(actionCost),
-            title: item.name,
-        },
+        action: { title: item.name, glyph: getActionGlyph(actionCost) },
         item,
         traits: item.system.traits.value.map(t => traitSlugToObject(t, CONFIG.PF2E.actionTraits)),
     })
@@ -82,6 +79,7 @@ export async function createSelfEffectMessage(item) {
         description,
     })
     const flags = { pf2e: { context: { type: 'self-effect', item: item.id } } }
+    const messageData = ChatMessagePF2e.applyRollMode({ speaker, flavor, content, flags }, rollMode)
 
-    return ChatMessagePF2e.create({ speaker, flavor, content, flags })
+    return ChatMessagePF2e.create(messageData)
 }

@@ -1,6 +1,7 @@
 import { enrichHTML, getSetting, localize, templatePath } from '../module.js'
 import { createSelfEffectMessage } from '../pf2e/item.js'
 import { getActionIcon } from '../pf2e/misc.js'
+import { eventToRollMode } from '../pf2e/scripts.js'
 import { toggleWeaponTrait } from '../pf2e/weapon.js'
 import { popup, showItemSummary } from '../popup.js'
 import { addNameTooltipListeners, filterIn, getItemFromEvent, localeCompare } from '../shared.js'
@@ -236,7 +237,7 @@ export function addActionsListeners({ el, actor, hud }) {
     action('use-action', event => {
         const item = getItemFromEvent(event, actor)
         if (item?.isOfType('action', 'feat')) {
-            createSelfEffectMessage(item)
+            createSelfEffectMessage(item, eventToRollMode(event))
             if (getSetting('action-effect')) applyActionEffect(actor, item)
             if (getSetting('action-close')) hud.close()
         }
