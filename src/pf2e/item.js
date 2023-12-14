@@ -4,38 +4,45 @@
  */
 
 import { getChatMessageClass } from './classes'
+import { htmlClosest } from './dom'
 import { ErrorPF2e, getActionGlyph, sluggify, traitSlugToObject } from './misc'
+import { eventToRollMode } from './scripts'
 
-export async function unownedItemToMessage(event, item, actor, { rollMode = undefined, create = true, data = {} }) {
+export async function unownedItemToMessage(event, item, actor, options) {
     const ChatMessagePF2e = getChatMessageClass()
+
+    // Basic template rendering data
     const template = `systems/pf2e/templates/chat/${sluggify(item.type)}-card.hbs`
     const token = actor.token
-    const nearestItem = event?.currentTarget.closest('.item') ?? {}
-    const contextualData = Object.keys(data).length > 0 ? data : nearestItem.dataset || {}
+    const nearestItem = htmlClosest(event?.target, '.item')
+    const rollOptions = options.data ?? { ...(nearestItem?.dataset ?? {}) }
     const templateData = {
-        actor: actor,
+        actor,
         tokenId: token ? `${token.parent?.id}.${token.id}` : null,
-        item: item,
-        data: await item.getChatData(undefined, contextualData),
+        item,
+        data: await item.getChatData(undefined, rollOptions),
     }
 
-    const chatData = {
-        speaker: ChatMessagePF2e.getSpeaker({
-            actor: actor,
-            token: actor.getActiveTokens(false, true)[0] ?? null,
-        }),
-        flags: {
-            pf2e: { origin: item.getOriginData() },
+    // Basic chat message data
+    const originalEvent = event instanceof MouseEvent ? event : event?.originalEvent
+    const rollMode = options.rollMode ?? eventToRollMode(originalEvent)
+    const chatData = ChatMessagePF2e.applyRollMode(
+        {
+            type: CONST.CHAT_MESSAGE_TYPES.OTHER,
+            speaker: ChatMessagePF2e.getSpeaker({
+                actor: actor,
+                token: actor.getActiveTokens(false, true).at(0),
+            }),
+            content: await renderTemplate(template, templateData),
+            flags: { pf2e: { origin: item.getOriginData() } },
         },
-        type: CONST.CHAT_MESSAGE_TYPES.OTHER,
-    }
+        rollMode
+    )
 
-    rollMode ??= event?.ctrlKey || event?.metaKey ? 'blindroll' : game.settings.get('core', 'rollMode')
-    if (['gmroll', 'blindroll'].includes(rollMode)) chatData.whisper = ChatMessagePF2e.getWhisperRecipients('GM').map(u => u.id)
-    if (rollMode === 'blindroll') chatData.blind = true
-
-    chatData.content = await renderTemplate(template, templateData)
-    return create ? ChatMessagePF2e.create(chatData, { renderSheet: false }) : new ChatMessagePF2e(chatData)
+    // Create the chat message
+    return options.create ?? true
+        ? ChatMessagePF2e.create(chatData, { rollMode, renderSheet: false })
+        : new ChatMessagePF2e(chatData, { rollMode })
 }
 
 export async function createSelfEffectMessage(item, rollMode = 'roll') {
