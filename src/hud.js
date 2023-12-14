@@ -185,7 +185,7 @@ export class HUD extends Application {
         if ($(window.document).find(':hover').filter(HOVER_EXCEPTIONS).length) return
 
         const actor = token.actor
-        if (!actor || actor.isOfType('loot', 'party')) return
+        if (!actor || actor.isOfType('loot', 'party', 'army')) return
 
         if (token.document.disposition === CONST.TOKEN_DISPOSITIONS.SECRET && !actor.isOwner) return
 
