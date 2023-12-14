@@ -11,6 +11,7 @@ Hooks.once('setup', async () => {
         creature: templatePath('tooltips/creature'),
         hazard: templatePath('tooltips/hazard'),
         vehicle: templatePath('tooltips/vehicle'),
+        army: templatePath('tooltips/army'),
     })
 })
 

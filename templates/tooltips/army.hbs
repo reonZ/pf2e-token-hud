@@ -1,0 +1,16 @@
+<div class="group">
+    <div class="section">
+        <i class="fa-solid fa-user-graduate" data-tooltip="PF2E.CharacterLevelLabel"></i>{{level}}
+    </div>
+
+    <div class="section">
+        <i class="fa-solid fa-face-spiral-eyes" data-tooltip="PF2E.Kingmaker.Army.RoutThreshold"></i>
+        <span>{{hp.routThreshold}}</span>
+    </div>
+
+    <div class="section">
+        <i class="fa-solid fa-heart" data-tooltip="PF2E.HitPointsShortLabel"></i>
+        {{> numbers name="system.attributes.hp.value" value=hp.value max=hp.max}}
+    </div>
+</div>
+{{log this}}

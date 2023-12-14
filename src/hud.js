@@ -185,7 +185,7 @@ export class HUD extends Application {
         if ($(window.document).find(':hover').filter(HOVER_EXCEPTIONS).length) return
 
         const actor = token.actor
-        if (!actor || actor.isOfType('loot', 'party', 'army')) return
+        if (!actor || actor.isOfType('loot', 'party')) return
 
         if (token.document.disposition === CONST.TOKEN_DISPOSITIONS.SECRET && !actor.isOwner) return
 
@@ -377,8 +377,30 @@ export class HUD extends Application {
             isObserver: this.#isObserved,
             name: token.document.name,
             hp,
-            ac: ac.value,
             level,
+        }
+
+        if (actor.isOfType('army')) {
+            const BASIC_WAR_ACTIONS_FOLDER = 'Vqp8b64uH35zkncy'
+            const pack = game.packs.get('pf2e.kingmaker-features')
+            const compendiumFeatures = ((await pack?.getDocuments({ type: 'campaignFeature' })) ?? []).filter(
+                d => d instanceof Item && d.isOfType('campaignFeature')
+            )
+
+            sharedData = {
+                ...sharedData,
+                basicWarActions: compendiumFeatures
+                    .filter(d => d.system.category === 'army-war-action' && d.folder?.id === BASIC_WAR_ACTIONS_FOLDER)
+                    .map(i => new CONFIG.Item.documentClass(i.toObject(true), { parent: this.actor }))
+                    .filter(i => i.isOfType('campaignFeature')),
+            }
+
+            return sharedData
+        }
+
+        sharedData = {
+            ...sharedData,
+            ac: ac.value,
             hasActions: itemTypes.action.length || system.actions?.filter(action => action.visible !== false).length,
         }
 
