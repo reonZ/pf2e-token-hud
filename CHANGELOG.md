@@ -1,3 +1,9 @@
+# 1.57.0
+
+-   this is a `5.11.0` release
+-   added support for army (though it only has a barebone tooltip for now)
+-   updated some system changes
+
 # 1.56.2
 
 -   fixed sending a spell to chat not using the heightened level
