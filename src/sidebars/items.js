@@ -70,11 +70,7 @@ export async function getItemsData({ actor, filter }) {
                 invested: invested ? `${game.i18n.localize('PF2E.InvestedLabel')}: ${invested.value} / ${invested.max}` : '',
                 wealth: { coins: coins.goldValue, total: totalWealth.goldValue },
                 canUseItem: item =>
-                    isCreature &&
-                    item.type === 'consumable' &&
-                    item.isIdentified &&
-                    item.uses.max &&
-                    (item.formula || ['wand', 'scroll'].includes(item.category)),
+                    isCreature && item.type === 'consumable' && item.isIdentified && item.uses.max && !item.isAmmunition,
                 itemDisabled: item => !item.quantity || !item.uses.value || item.system.equipped.carryType === 'dropped',
             },
         }
