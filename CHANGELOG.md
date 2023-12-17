@@ -1,3 +1,7 @@
+# 1.57.1
+
+-   fixed `Use Hold Keybind` settings not working, to avoid any breaking issues, the setting was fully reset and you will need to re-enable it
+
 # 1.57.0
 
 -   this is a `5.11.0` release
