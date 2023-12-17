@@ -3,13 +3,12 @@
  * So it is not technically a direct copy/paste of the system code but a slightly rearanged version
  */
 
-import { getChatMessageClass } from './classes'
 import { htmlClosest } from './dom'
 import { ErrorPF2e, getActionGlyph, sluggify, traitSlugToObject } from './misc'
 import { eventToRollMode } from './scripts'
 
 export async function unownedItemToMessage(event, item, actor, options) {
-    const ChatMessagePF2e = getChatMessageClass()
+    const ChatMessagePF2e = ChatMessage.implementation
 
     // Basic template rendering data
     const template = `systems/pf2e/templates/chat/${sluggify(item.type)}-card.hbs`
@@ -58,7 +57,7 @@ export async function createSelfEffectMessage(item, rollMode = 'roll') {
     const { actor, actionCost } = item
     const token = actor.getActiveTokens(true, true).shift() ?? null
 
-    const ChatMessagePF2e = getChatMessageClass()
+    const ChatMessagePF2e = ChatMessage.implementation
     const speaker = ChatMessagePF2e.getSpeaker({ actor, token })
     const flavor = await renderTemplate('systems/pf2e/templates/chat/action/flavor.hbs', {
         action: { title: item.name, glyph: getActionGlyph(actionCost) },

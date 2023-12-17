@@ -1,4 +1,3 @@
-import { getChatMessageClass } from './classes.js'
 import { adjustDCByRarity, calculateDC } from './dc.js'
 import { setHasElement } from './misc.js'
 
@@ -112,7 +111,7 @@ export class IdentifyItemPopup extends FormApplication {
                 skills,
             })
 
-            await getChatMessageClass().create({ user: game.user.id, content })
+            await ChatMessage.implementation.create({ user: game.user.id, content })
         })
     }
 

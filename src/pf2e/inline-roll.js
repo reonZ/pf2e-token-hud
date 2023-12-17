@@ -1,5 +1,4 @@
 import { isInstanceOf } from '../module.js'
-import { getChatMessageClass } from './classes.js'
 import { calculateDC } from './dc.js'
 import { htmlClosest, htmlQueryAll } from './dom.js'
 import { ErrorPF2e, getActionGlyph, objectHasKey, sluggify, tupleHasValue } from './misc.js'
@@ -79,7 +78,7 @@ function repostAction(target, foundryDoc = null) {
         }
     })()
 
-    const ChatMessagePF2e = getChatMessageClass()
+    const ChatMessagePF2e = ChatMessage.implementation
     const speaker = actor
         ? ChatMessagePF2e.getSpeaker({ actor, token: actor.getActiveTokens(false, true).shift() })
         : ChatMessagePF2e.getSpeaker()

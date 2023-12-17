@@ -1,6 +1,6 @@
 import { useResolve } from './actions/use-resolve.js'
 import { enrichHTML, getFlag, getSetting, localize, modifier, MODULE_ID, setFlag, templatePath } from './module.js'
-import { getChatMessageClass, getDamageRollClass } from './pf2e/classes.js'
+import { getDamageRollClass } from './pf2e/classes.js'
 import { popup } from './popup.js'
 import { getCoverEffect, getUniqueTarget, localeCompare, RANKS } from './shared.js'
 import { addActionsListeners, getActionsData } from './sidebars/actions.js'
@@ -711,7 +711,7 @@ export class HUD extends Application {
         if (!actor) return
 
         const isOwner = token.isOwner
-        const ChatMessagePF2e = getChatMessageClass()
+        const ChatMessagePF2e = ChatMessage.implementation
 
         if (getSetting('tooltips')) {
             html.find('.inner [data-tooltip]').attr('data-tooltip', '')
