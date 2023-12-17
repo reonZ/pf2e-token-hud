@@ -40,9 +40,13 @@ export function registerSettings() {
         },
     })
 
-    register('use-holding', String, 'none', {
-        hint: path('use-holding', isGM ? 'choices.gm.hint' : 'choices.player.hint'),
-        choices: ['none', isGM ? 'gm.half' : 'player.half', isGM ? 'gm.all' : 'player.all'],
+    register('key-holding', String, 'none', {
+        hint: path('key-holding', isGM ? 'choices.gm.hint' : 'choices.player.hint'),
+        choices: {
+            none: path('key-holding', 'choices.none'),
+            half: path('key-holding', isGM ? 'choices.gm.half' : 'choices.player.half'),
+            all: path('key-holding', isGM ? 'choices.gm.all' : 'choices.player.all'),
+        },
     })
 
     register('autolock', String, 'none', { choices: ['none', 'hover', 'render'] })

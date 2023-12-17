@@ -155,7 +155,7 @@
                     "only": "仅在有以上状态时显示"
                 }
             },
-            "use-holding": {
+            "key-holding": {
                 "name": "使用长按显示的快捷键",
                 "choices": {
                     "none": "禁用",

@@ -155,7 +155,7 @@
                     "only": "Mostrar solo cuando aplique"
                 }
             },
-            "use-holding": {
+            "key-holding": {
                 "name": "Usar el mantener pulsado",
                 "choices": {
                     "none": "Desactivado",

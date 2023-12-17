@@ -167,7 +167,7 @@
                     "only": "Only when needed"
                 }
             },
-            "use-holding": {
+            "key-holding": {
                 "name": "Use Hold Keybind",
                 "choices": {
                     "none": "Disabled",

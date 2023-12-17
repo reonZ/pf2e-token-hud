@@ -141,7 +141,7 @@ export class HUD extends Application {
     }
 
     setHolding(held) {
-        const holding = getSetting('use-holding')
+        const holding = getSetting('key-holding')
         if (holding === 'none') return
 
         this.#holding = held
@@ -174,7 +174,7 @@ export class HUD extends Application {
         let isObserved
         const isParty = actor.system.details.alliance === 'party'
 
-        if (game.user.isGM && getSetting('use-holding') === 'half' && !this.#holding) isObserved = false
+        if (game.user.isGM && getSetting('key-holding') === 'half' && !this.#holding) isObserved = false
         else if (actor.isOfType('familiar') && !actor.master) isObserved = false
         else isObserved = token.isOwner || (getSetting('observer') && (token.observer || (isParty && getSetting('party'))))
 
@@ -197,7 +197,7 @@ export class HUD extends Application {
 
         if (this.mousedown || this.#lock || this.#softLock || token === this.#token) return
 
-        const holding = getSetting('use-holding')
+        const holding = getSetting('key-holding')
         const isObserved = this.#checkIfObserved(token)
         if (holding !== 'none' && !this.#holding && (holding === 'all' || isObserved)) return
 

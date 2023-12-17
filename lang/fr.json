@@ -155,7 +155,7 @@
                     "only": "Uniquement lorsque nécessaire"
                 }
             },
-            "use-holding": {
+            "key-holding": {
                 "name": "Utiliser Presser le raccourci clavier",
                 "choices": {
                     "none": "Désactivée",

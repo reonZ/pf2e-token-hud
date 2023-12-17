@@ -3,7 +3,7 @@ import { getHud, getSetting, MODULE_ID } from './module.js'
 export function registerKeybindings() {
     register('hold', {
         onDown: () => {
-            if (getSetting('use-holding') !== 'none') getHud()?.setHolding(true)
+            if (getSetting('key-holding') !== 'none') getHud()?.setHolding(true)
         },
         onUp: () => {
             getHud()?.setHolding(false)
