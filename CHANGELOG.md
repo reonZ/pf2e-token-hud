@@ -1,3 +1,8 @@
+# 1.58.0
+
+-   removed `Strikes & Damages System Colors` setting, the module always uses the colored style
+-   fixed styling of selected versatile damage variants
+
 # 1.57.1
 
 -   fixed `Use Hold Keybind` settings not working, to avoid any breaking issues, the setting was fully reset and you will need to re-enable it
