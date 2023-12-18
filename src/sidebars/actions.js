@@ -152,7 +152,6 @@ export async function getActionsData({ hud, actor, filter }) {
                 damageTypes: CONFIG.PF2E.damageTypes,
             },
             doubled: nb > 1 && getSetting('actions-columns'),
-            classes: [getSetting('actions-colors') ? 'attack-damage-system-colors' : ''],
         }
     }
 }

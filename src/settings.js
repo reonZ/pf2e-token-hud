@@ -115,7 +115,7 @@ export function registerSettings() {
 
     register('actions', String, 'split', { choices: ['name', 'type', 'split'] })
 
-    register('actions-colors', Boolean, true)
+    // register('actions-colors', Boolean, true)
 
     register('action-effect', Boolean, false)
 
