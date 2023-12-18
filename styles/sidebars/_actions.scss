@@ -130,6 +130,31 @@
                         --modular-bg-color: #6a6a6a;
 
                         .variant {
+                            &[data-action='strike-attack'],
+                            &[data-action='roll-attack'] {
+                                &:not(.disabled) {
+                                    background: var(--secondary);
+                                }
+                            }
+
+                            &[data-action='strike-damage'],
+                            &[data-action='strike-critical'],
+                            &[data-action='roll-damage'] {
+                                &:not(.disabled) {
+                                    background: var(--primary);
+                                }
+                            }
+
+                            &[data-action='strike-attack'],
+                            &[data-action='roll-attack'],
+                            &[data-action='strike-damage'],
+                            &[data-action='strike-critical'] {
+                                &:not(.disabled):hover {
+                                    box-shadow: none;
+                                    text-shadow: 0 0 2px white;
+                                }
+                            }
+
                             .activity-icon {
                                 line-height: 1;
                             }
@@ -198,11 +223,12 @@
 
                                 &.selected {
                                     cursor: default;
-                                    background: var(--light);
-
-                                    &:hover {
-                                        box-shadow: none;
-                                    }
+                                    background: #e7e2e2;
+                                    color: #424242;
+                                    font-size: calc(1em - 1px);
+                                    box-shadow: inset 0 0 3px 1px black;
+                                    border: 0;
+                                    padding-inline: 3px 2px;
                                 }
 
                                 &.disabled {
@@ -256,43 +282,6 @@
                     .chat {
                         margin-top: 2px;
                         font-size: 0.9em;
-                    }
-                }
-            }
-        }
-
-        &.attack-damage-system-colors {
-            .sidebar-content {
-                .section {
-                    .strike {
-                        .variants {
-                            .variant {
-                                &[data-action='strike-attack'],
-                                &[data-action='roll-attack'] {
-                                    &:not(.disabled) {
-                                        background: var(--secondary);
-                                    }
-                                }
-
-                                &[data-action='strike-damage'],
-                                &[data-action='strike-critical'],
-                                &[data-action='roll-damage'] {
-                                    &:not(.disabled) {
-                                        background: var(--primary);
-                                    }
-                                }
-
-                                &[data-action='strike-attack'],
-                                &[data-action='roll-attack'],
-                                &[data-action='strike-damage'],
-                                &[data-action='strike-critical'] {
-                                    &:not(.disabled):hover {
-                                        box-shadow: none;
-                                        text-shadow: 0 0 2px white;
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
             }
