@@ -1,3 +1,7 @@
+# 1.59.0
+
+-   modified the popup dialog when right-clicking on a skill action to offer the possibility to set the MAP modifier as agile
+
 # 1.58.0
 
 -   removed `Strikes & Damages System Colors` setting, the module always uses the colored style
