@@ -362,7 +362,8 @@
                 "title": "Variant Skill",
                 "label": "Variant skill",
                 "dc": "Difficulty Class",
-                "button": "Select"
+                "button": "Select",
+                "agile": "Is Agile?"
             }
         },
         "items": {

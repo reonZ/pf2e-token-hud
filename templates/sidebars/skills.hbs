@@ -17,7 +17,8 @@
         {{/if}}
     </div>
     {{#each actions as |action|}}
-    <div class="action" data-slug="{{action.slug}}" data-skill-slug="{{skill.slug}}" data-uuid="{{action.uuid}}">
+    <div class="action" data-slug="{{action.slug}}" data-skill-slug="{{skill.slug}}" data-uuid="{{action.uuid}}"
+        data-action-name="{{action.name}}">
         <div class="name">
             {{#if action.variants}}
             <span>{{action.name}} {{{actionGlyph action.cost}}}</span>
@@ -41,8 +42,9 @@
         {{#if action.variants}}
         <div class="variants">
             {{#each action.variants as |variant|}}
-            <div class="variant" data-action="roll-action" data-variant="{{variant.slug}}" data-map="{{variant.map}}">
-                {{localize variant.label penalty=variant.map}}
+            <div class="variant" data-action="roll-action" data-variant="{{variant.slug}}" data-map="{{variant.map}}" {{#if (ne
+                variant.agile undefined)}} data-agile="{{variant.agile}}" {{/if}}>
+                {{localize variant.label penalty=variant.mapValue}}
             </div>
             {{/each}}
         </div>

@@ -1,14 +1,20 @@
 <div class="pf2e-token-hud variant">
     <p>
         <strong>{{i18n 'label'}}</strong>
-        <select>
-            {{selectOptions skills selected=selected nameAttr="slug" labelAttr="label"}}
+        <select name="skill">
+            {{selectOptions skills selected=skill nameAttr="slug" labelAttr="label"}}
         </select>
     </p>
     {{#if dc inclueZero=true}}
     <p>
         <strong>{{i18n 'dc'}}</strong>
-        <input type="number" value="{{dc}}" min="0">
+        <input type="number" name="dc" value="{{dc}}" min="0">
+    </p>
+    {{/if}}
+    {{#if (ne agile undefined)}}
+    <p>
+        <strong>{{i18n 'agile'}}</strong>
+        <input type="checkbox" name="agile" {{checked agile}}>
     </p>
     {{/if}}
 </div>

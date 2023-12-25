@@ -310,10 +310,12 @@ SKILLS.forEach(skill => {
                 label: `${MODULE_ID}.skills.actions.${variant}`,
             }))
         } else if (action.map) {
+            const agile = !!action.agile
+
             action.variants = [
                 { label: 'PF2E.Roll.Normal' },
-                { label: 'PF2E.MAPAbbreviationLabel', map: action.agile ? -4 : -5 },
-                { label: 'PF2E.MAPAbbreviationLabel', map: action.agile ? -8 : -10 },
+                { label: 'PF2E.MAPAbbreviationLabel', map: 1, agile, mapValue: agile ? -4 : -5 },
+                { label: 'PF2E.MAPAbbreviationLabel', map: 2, agile, mapValue: agile ? -8 : -10 },
             ]
         }
 
@@ -442,12 +444,25 @@ export function addSkillsListeners({ el, actor, token, hud }) {
 
     el.find('[data-action=roll-action]').on('click contextmenu', async event => {
         event.preventDefault()
+
         const target = $(event.currentTarget)
-        const { skillSlug, slug } = target.closest('.action').data()
-        const { variant, map } = target.data()
-        const variants = event.type === 'contextmenu' ? await variantsDialog(skillSlug) : undefined
+        const { skillSlug, slug, actionName } = target.closest('.action').data()
+        const { variant, map, agile } = target.data()
+
+        const variants = event.type === 'contextmenu' ? await variantsDialog(actionName, { skill: skillSlug, agile }) : undefined
+
         if (variants !== null) {
-            rollAction({ event, actor, token, skillSlug, slug, variant, map, skill: variants?.selected })
+            rollAction({
+                event,
+                actor,
+                token,
+                skillSlug,
+                slug,
+                variant,
+                map,
+                skill: variants?.skill,
+                agile: variants?.agile ?? agile,
+            })
             if (getSetting('skill-close')) hud.close()
         }
     })
@@ -468,27 +483,37 @@ function isFollowingAnExpert(actor) {
     return actor.itemTypes.effect.find(effect => effect.sourceId === FOLLOW_THE_EXPERT_UUID)
 }
 
-export async function variantsDialog(base, dc) {
+export async function variantsDialog(action, { dc, agile, skill } = {}) {
     const skills = SKILLS_SLUGS.map(slug => ({ slug, label: getSkillLabel(slug) }))
 
     const content = await renderTemplate(templatePath('dialogs/variant'), {
         i18n: str => localize(`skills.variant.${str}`),
         dc,
+        skill,
+        agile,
         skills,
-        selected: base,
     })
 
     return Dialog.prompt({
-        title: localize('skills.variant.title'),
+        title: action,
         label: localize('skills.variant.button'),
-        callback: html => ({ selected: html.find('select').val(), dc: Number(html.find('input').val()) }),
+        callback: html => ({
+            skill: html.find('select').val(),
+            dc: Number(html.find('[name=dc]').val()),
+            agile: html.find('[name=agile]').is(':checked'),
+        }),
         rejectClose: false,
         content,
         options: { width: 280 },
     })
 }
 
-function rollAction({ event, actor, skillSlug, slug, variant, map, skill, token }) {
+export function getMapModifier(map, agile) {
+    const modifier = map === 1 ? (agile ? -4 : -5) : agile ? -8 : -10
+    return new game.pf2e.Modifier({ label: 'PF2E.MultipleAttackPenalty', modifier })
+}
+
+function rollAction({ event, actor, skillSlug, slug, variant, map, agile, skill, token }) {
     const action = SKILLS_MAP[skillSlug].actions[slug]
     const type = action.type === 3 ? 3 : game.pf2e.actions.has(slug) ? 2 : 1
 
@@ -517,6 +542,11 @@ function rollAction({ event, actor, skillSlug, slug, variant, map, skill, token 
         }
     }
 
+    if (map) {
+        const modifier = getMapModifier(map, agile)
+        options.modifiers.push(modifier)
+    }
+
     if (action.custom) {
         action.custom(actor, options)
         return
@@ -528,13 +558,11 @@ function rollAction({ event, actor, skillSlug, slug, variant, map, skill, token 
     // old actions
     if (type === 1) {
         options.skill = skill
-        if (map) options.modifiers.push(new game.pf2e.Modifier({ label: 'PF2E.MultipleAttackPenalty', modifier: map }))
         game.pf2e.actions[slug](options)
     }
     // new actions
     else if (type === 2) {
         options.statistic = skill
-        if (map) options.multipleAttackPenalty = map / -5
         game.pf2e.actions.get(slug).use(options)
     }
     // exception for old actions that only accept one actor argument

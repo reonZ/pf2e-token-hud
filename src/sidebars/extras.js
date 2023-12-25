@@ -3,7 +3,7 @@ import { getSetting, localize } from '../module.js'
 import { unownedItemToMessage } from '../pf2e/item.js'
 import { showItemSummary } from '../popup.js'
 import { addNameTooltipListeners, deleteMacro, filterIn, getMacros, onDroppedMacro } from '../shared.js'
-import { variantsDialog, getSkillLabel, SKILLS_SLUGS } from './skills.js'
+import { variantsDialog, getSkillLabel, SKILLS_SLUGS, getMapModifier } from './skills.js'
 
 export const extrasUUIDS = {
     aid: 'Compendium.pf2e.actionspf2e.Item.HCl3pzVefiv9ZKQW',
@@ -106,14 +106,14 @@ export function addExtrasListeners({ el, actor, token, hud }) {
     action(
         'roll-aid',
         async event => {
-            const variants = await variantsDialog(null, 15)
+            const variants = await variantsDialog(game.i18n.localize('PF2E.Actions.Aid.Title'), { dc: 15 })
             const note = { text: '@UUID[Compendium.pf2e.other-effects.Item.AHMUpMbaVkZ5A1KX]' }
             if (variants !== null) {
                 game.pf2e.actions.get('aid').use({
                     event,
                     actors: [actor],
                     tokens: [token],
-                    statistic: variants?.selected,
+                    statistic: variants?.skill,
                     difficultyClass: { value: variants?.dc },
                     notes: [note],
                 })
@@ -131,13 +131,24 @@ export function addExtrasListeners({ el, actor, token, hud }) {
     action(
         'roll-escape',
         async event => {
-            const variants = event.type === 'contextmenu' ? await variantsDialog() : undefined
-            const multipleAttackPenalty = $(event.currentTarget).data().map
+            const map = $(event.currentTarget).data().map
+            const variants =
+                event.type === 'contextmenu'
+                    ? await variantsDialog(game.i18n.localize('PF2E.Actions.Escape.Title'), { agile: map ? false : undefined })
+                    : undefined
             if (variants === null) return
+
+            const modifiers = []
+
+            if (map) {
+                const agile = variants?.agile
+                const modifier = getMapModifier(map, agile)
+                modifiers.push(modifier)
+            }
 
             game.pf2e.actions
                 .get('escape')
-                .use({ event, actors: [actor], tokens: [token], statistic: variants?.selected, multipleAttackPenalty })
+                .use({ event, actors: [actor], tokens: [token], statistic: variants?.skill, modifiers })
 
             if (getSetting('skill-close')) hud.close()
         },
