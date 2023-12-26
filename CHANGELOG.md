@@ -1,3 +1,7 @@
+# 1.59.1
+
+-   fixed settings spells header not showing
+
 # 1.59.0
 
 -   modified the popup dialog when right-clicking on a skill action to offer the possibility to set the MAP modifier as agile
