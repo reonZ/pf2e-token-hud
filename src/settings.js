@@ -151,7 +151,7 @@ export function renderSettingsConfig(_, html) {
     beforeGroup('height', 'client.sidebar')
     beforeGroup('actions', 'client.actions')
     beforeGroup('containers', 'client.items')
-    beforeGroup('spells', 'client.spells')
+    beforeGroup('spells-sort', 'client.spells')
     beforeGroup('untrained', 'client.skills')
     // beforeGroup('', 'client.extras')
 }
