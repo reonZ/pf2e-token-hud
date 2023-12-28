@@ -219,10 +219,11 @@ export function addItemsListeners({ el, actor, token, hud }) {
                     el.addEventListener('click', event => {
                         const menu = event.currentTarget
                         const containerId = menu.dataset.containerId
-                        if (!actor.items.has(containerId)) return
+                        const container = actor.items.get(containerId)
+                        if (!container) return
 
                         dismissTooltip(menu)
-                        item.update({ 'system.containerId': containerId })
+                        actor.stowOrUnstow(item, container)
                     })
                 })
             }
