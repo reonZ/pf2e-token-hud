@@ -98,7 +98,7 @@ export async function getSpellsData({ actor, filter }) {
                             : data.isFlexible
                             ? 'PF2E.SpellFlexibleLabel'
                             : isFocus
-                            ? 'PF2E.SpellFocusLabel'
+                            ? 'PF2E.TraitFocus'
                             : 'PF2E.SpellPreparedLabel',
                         order: isCharge ? 0 : data.isPrepared ? 1 : isFocus ? 2 : data.isInnate ? 3 : data.isSpontaneous ? 4 : 5,
                     })
