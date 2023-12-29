@@ -17,6 +17,10 @@ export async function getItemSummary(el, actor) {
     await actor.sheet.itemRenderer.renderItemSummary(description, item, data)
     listenInlineRoll(description, item)
 
+    if (dataset.castRank) {
+        description.dataset.castRank = dataset.castRank
+    }
+
     return description
 }
 
