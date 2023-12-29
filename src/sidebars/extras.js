@@ -13,8 +13,7 @@ export const extrasUUIDS = {
 }
 
 export async function getExtrasData({ actor, filter }) {
-    const { attributes } = actor
-    const { initiative } = attributes
+    const initiative = actor.system.initiative
 
     return {
         contentData: {

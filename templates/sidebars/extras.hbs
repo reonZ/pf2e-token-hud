@@ -1,7 +1,7 @@
 {{#if initiative}}
 <div class="row" data-row="initiative">
     {{> roll action='roll-initiative' label='PF2E.InitiativeLabel'}}
-    <select name="system.attributes.initiative.statistic" {{disabled (not isOwner)}}>
+    <select name="system.initiative.statistic" {{disabled (not isOwner)}}>
         {{selectOptions initiative.skills selected=initiative.selected nameAttr="slug" labelAttr="label"}}
     </select>
 </div>
