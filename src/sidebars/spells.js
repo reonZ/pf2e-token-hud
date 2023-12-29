@@ -57,14 +57,14 @@ export async function getSpellsData({ actor, filter }) {
                     const active = slot.active[slotId]
                     if (!active || active.uses?.max === 0) continue
 
-                    const { spell, expended, virtual, uses, castLevel } = active
+                    const { spell, expended, virtual, uses, castRank } = active
                     if (!filterIn(spell.name, filter)) continue
 
                     slotSpells.push({
                         name: spell.name,
                         img: spell.img,
                         tradition,
-                        castLevel: castLevel ?? spell.level,
+                        castLevel: castRank ?? spell.level,
                         slotId,
                         entryId,
                         itemId: spell.id,
