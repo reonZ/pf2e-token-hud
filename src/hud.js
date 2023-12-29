@@ -478,7 +478,7 @@ export class HUD extends Application {
 
         const showDeath = getSetting('show-death')
         const { heroPoints } = actor
-        const { traits, resources } = system
+        const { traits, resources, perception } = system
         const { wounded, dying, shield, speed, adjustment } = attributes
 
         function toInfo(str) {
@@ -495,8 +495,6 @@ export class HUD extends Application {
             .sort(sort)
             .map(toInfo)
             .join('')
-
-        const senses = isCharacter ? traits.senses.map(x => x.label) : traits.senses.value?.split(',')
 
         const speeds = SPEEDS.map(({ type, icon }, index) => ({
             index,
@@ -549,7 +547,10 @@ export class HUD extends Application {
                 toIWR(immunities, 'PF2E.ImmunitiesLabel') +
                 toIWR(weaknesses, 'PF2E.WeaknessesLabel') +
                 toIWR(resistances, 'PF2E.ResistancesLabel'),
-            senses: senses?.filter(Boolean).map(toInfo).join(''),
+            senses: perception.senses
+                .map(x => x.label)
+                ?.map(toInfo)
+                .join(''),
             languages,
             hasSpells: actor.spellcasting.some(x => x.category !== 'items'),
             hasNotes: !isCharacter && (system.details.publicNotes || (system.details.privateNotes && isOwner)),
