@@ -79,6 +79,10 @@
                     }
 
                     &.expended {
+                        .item-img {
+                            filter: grayscale(1);
+                        }
+
                         .details {
                             .name {
                                 color: var(--color-disabled);
