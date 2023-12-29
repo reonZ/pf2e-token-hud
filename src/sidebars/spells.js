@@ -47,7 +47,7 @@ export async function getSpellsData({ actor, filter }) {
                 }
             })()
 
-            for (const slot of data.levels) {
+            for (const slot of data.groups) {
                 if (!slot.active.length || slot.uses?.max === 0) continue
 
                 const slotSpells = []
@@ -141,7 +141,7 @@ export async function getSpellsData({ actor, filter }) {
     }
 
     const ritualData = await actor.spellcasting.ritual?.getSheetData()
-    const rituals = ritualData?.levels.flatMap((slot, slotId) =>
+    const rituals = ritualData?.groups.flatMap((slot, slotId) =>
         slot.active
             .map(({ spell }) => {
                 if (!filterIn(spell.name, filter)) return
