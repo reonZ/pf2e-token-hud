@@ -36,7 +36,7 @@
     {{#each entry as |spell|}}
     <div class="spell item item-box{{#if spell.expended}} expended{{/if}}{{#if spell.isVirtual}} virtual{{/if}}"
         data-entry-id="{{spell.entryId}}" data-slot-id="{{spell.slotId}}" data-expended="{{spell.expended}}"
-        data-slot-level="{{spell.slotLevel}}" data-item-id="{{spell.itemId}}" data-cast-level="{{spell.castLevel}}">
+        data-group-id="{{spell.groupId}}" data-item-id="{{spell.itemId}}" data-cast-rank="{{spell.castRank}}">
         <div class="item-img hover" data-action="spell-chat">
             <img src="{{spell.img}}">
             {{#if @root.isOwner}}
@@ -94,7 +94,7 @@
 <div class="entry" data-entry="rituals">
     <div class="header">{{localize 'PF2E.Actor.Creature.Spellcasting.Rituals'}}</div>
     {{#each rituals as |ritual|}}
-    <div class="spell item-box" data-slot-level="{{ritual.level}}" data-cast-level="{{ritual.level}}" data-entry-id="rituals"
+    <div class="spell item-box" data-group-id="{{ritual.rank}}" data-cast-rank="{{ritual.rank}}" data-entry-id="rituals"
         data-item-id="{{ritual.itemId}}">
         <div class="item-img hover" data-action="spell-chat">
             <img src="{{ritual.img}}">
@@ -105,7 +105,7 @@
         <div class="details">
             <a class="name" data-action="spell-description">{{ritual.name}}</a>
             <div class="extras">
-                <div class="type">{{localize 'PF2E.LevelN' level=ritual.level}}</div>
+                <div class="type">{{localize 'PF2E.LevelN' level=ritual.rank}}</div>
                 <div class="actions">
                     <span>{{ritual.time}}</span>
                     {{#if @root.isOwner}}

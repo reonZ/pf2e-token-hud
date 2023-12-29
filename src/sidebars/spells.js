@@ -1,5 +1,5 @@
 import { getSetting, localize, modifier, MODULE_ID, templatePath } from '../module.js'
-import { ordinalString } from '../pf2e/misc.js'
+import { coerceToSpellGroupId, ordinalString, spellSlotGroupIdToNumber } from '../pf2e/misc.js'
 import { eventToRollParams } from '../pf2e/scripts.js'
 import { showItemSummary } from '../popup.js'
 import { addNameTooltipListeners, filterIn, getItemFromEvent, localeCompare } from '../shared.js'
@@ -47,14 +47,15 @@ export async function getSpellsData({ actor, filter }) {
                 }
             })()
 
-            for (const slot of data.groups) {
-                if (!slot.active.length || slot.uses?.max === 0) continue
+            for (const group of data.groups) {
+                if (!group.active.length || group.uses?.max === 0) continue
 
                 const slotSpells = []
-                const isCantrip = slot.isCantrip
+                const isCantrip = group.id === 'cantrips'
+                const groupNumber = spellSlotGroupIdToNumber(group.id)
 
-                for (let slotId = 0; slotId < slot.active.length; slotId++) {
-                    const active = slot.active[slotId]
+                for (let slotId = 0; slotId < group.active.length; slotId++) {
+                    const active = group.active[slotId]
                     if (!active || active.uses?.max === 0) continue
 
                     const { spell, expended, virtual, uses, castRank } = active
@@ -64,7 +65,7 @@ export async function getSpellsData({ actor, filter }) {
                         name: spell.name,
                         img: spell.img,
                         tradition,
-                        castLevel: castRank ?? spell.level,
+                        castRank: castRank ?? spell.rank,
                         slotId,
                         entryId,
                         itemId: spell.id,
@@ -73,7 +74,7 @@ export async function getSpellsData({ actor, filter }) {
                             ? chargesPath
                             : data.isInnate
                             ? 'system.location.uses.value'
-                            : `system.slots.slot${slot.level}.value`,
+                            : `system.slots.slot${groupNumber}.value`,
                         isCharge,
                         isActiveCharge: isCharge && stavesActive,
                         isVirtual: virtual,
@@ -82,10 +83,10 @@ export async function getSpellsData({ actor, filter }) {
                         isFocus,
                         isPrepared: data.isPrepared,
                         isSpontaneous: data.isSpontaneous || data.isFlexible,
-                        slotLevel: slot.level,
-                        uses: uses ?? (isCharge ? charges : slot.uses),
+                        groupId: group.id,
+                        uses: uses ?? (isCharge ? charges : group.uses),
                         expended: isCharge
-                            ? !charges.canPayCost(slot.level)
+                            ? !charges.canPayCost(groupNumber)
                             : expended ?? (isFocus && !isCantrip ? focusPool.value <= 0 : false),
                         action: spell.system.time.value,
                         type: isCharge
@@ -112,8 +113,8 @@ export async function getSpellsData({ actor, filter }) {
                         }
                     }
 
-                    spells[slot.level] ??= []
-                    spells[slot.level].push(...slotSpells)
+                    spells[groupNumber] ??= []
+                    spells[groupNumber].push(...slotSpells)
                 }
             }
         })
@@ -141,8 +142,8 @@ export async function getSpellsData({ actor, filter }) {
     }
 
     const ritualData = await actor.spellcasting.ritual?.getSheetData()
-    const rituals = ritualData?.groups.flatMap((slot, slotId) =>
-        slot.active
+    const rituals = ritualData?.groups.flatMap((group, slotId) =>
+        group.active
             .map(({ spell }) => {
                 if (!filterIn(spell.name, filter)) return
                 return {
@@ -150,7 +151,7 @@ export async function getSpellsData({ actor, filter }) {
                     img: spell.img,
                     slotId,
                     itemId: spell.id,
-                    level: spell.level,
+                    rank: spell.rank,
                     time: spell.system.time.value,
                 }
             })
@@ -251,22 +252,22 @@ export function addSpellsListeners({ el, actor, hud }) {
 
     el.find('[data-action=toggle-prepared]').on('click', event => {
         event.preventDefault()
-        const { slotLevel, slotId, entryId, expended } = $(event.currentTarget).closest('.spell').data()
+        const { groupId, slotId, entryId, expended } = $(event.currentTarget).closest('.spell').data()
         const collection = actor.spellcasting.collections.get(entryId)
-        collection?.setSlotExpendedState(slotLevel ?? 0, slotId ?? 0, expended !== true)
+        collection?.setSlotExpendedState(coerceToSpellGroupId(groupId), slotId || 0, expended !== true)
     })
 
     el.find('[data-action=cast-spell]').on('click', event => {
         event.preventDefault()
 
-        const { slotLevel, slotId, entryId, itemId } = $(event.currentTarget).closest('.spell').data()
-        const collection = actor.spellcasting.collections.get(entryId, { strict: true })
+        const { castRank, slotId, entryId, itemId } = $(event.currentTarget).closest('.spell').data()
+        const collection = actor.spellcasting.collections.get(entryId)
         if (!collection) return
 
-        const spell = collection.get(itemId, { strict: true })
+        const spell = collection.get(itemId)
         if (!spell) return
 
-        collection.entry.cast(spell, { slot: slotId, level: slotLevel })
+        collection.entry.cast(spell, { rank: castRank, slotId: slotId })
         if (getSetting('cast-close')) hud.close()
     })
 
