@@ -147,7 +147,7 @@ export function listenInlineRoll(html, foundryDoc) {
             switch (pf2Check) {
                 case 'flat': {
                     for (const actor of actors) {
-                        const flatCheck = new Statistic(actor, {
+                        const flatCheck = new actor.saves.reflex.constructor(actor, {
                             label: '',
                             slug: 'flat',
                             modifiers: [],
