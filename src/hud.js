@@ -478,7 +478,7 @@ export class HUD extends Application {
 
         const showDeath = getSetting('show-death')
         const { heroPoints } = actor
-        const { traits, resources, perception } = system
+        const { resources, perception, details } = system
         const { wounded, dying, shield, speed, adjustment } = attributes
 
         function toInfo(str) {
@@ -489,7 +489,7 @@ export class HUD extends Application {
             return localeCompare(a, b)
         }
 
-        const languages = traits?.languages?.value
+        const languages = details?.languages?.value
             .map(x => game.i18n.localize(CONFIG.PF2E.languages[x]))
             .filter(Boolean)
             .sort(sort)
