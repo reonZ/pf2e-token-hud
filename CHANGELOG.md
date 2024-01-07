@@ -1,3 +1,14 @@
+# 1.60.0
+
+-   this is a `5.12.0` release
+-   updated all? the system data changes that were done
+-   added the prepared toggle button to cantrips as is now done in the system
+-   now grey out the expended spell images
+-   fixed sending item to container data update
+-   fixed rolling damage from a spell description (in the popup) not using the heightened rank
+-   fixed languages, senses and speed tooltip labels
+-   fixed focus spell category label
+
 # 1.59.1
 
 -   fixed settings spells header not showing
