@@ -809,7 +809,7 @@ export class HUD extends Application {
                 event,
                 selected: originalAlliance,
                 onClick: value => {
-                    if (value === 'default') actor.update({ 'system.details.-=alliance': null })
+                    if (value === 'default') actor.update({ 'system.details.-=alliance': true })
                     else actor.update({ 'system.details.alliance': value === 'neutral' ? null : value })
                 },
             })
@@ -923,7 +923,7 @@ export class HUD extends Application {
         })
     }
 
-    #createHUDLockedListTooltip({ content, event, onClick, selected, direction, locked }) {
+    #createHUDLockedListTooltip({ content, event, onClick, selected, direction }) {
         createTooltip({
             content,
             target: event.currentTarget,

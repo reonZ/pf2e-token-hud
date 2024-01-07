@@ -27,7 +27,7 @@ export async function createTooltip({
                 content = content
                     .map(({ value, label }) => {
                         const selectedClass = value === selected ? 'class="selected"' : ''
-                        return `<li><a  ${selectedClass} data-value="${value}">${label}</a></li>`
+                        return `<li><a ${selectedClass} data-value="${value}">${label}</a></li>`
                     })
                     .join('')
             }
