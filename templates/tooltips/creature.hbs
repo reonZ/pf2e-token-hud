@@ -24,6 +24,14 @@
         </a>
     </div>
 
+    {{#unless isCharacter}}
+    <div class="section" data-section="attitude">
+        <a data-action="toggle-attitude">
+            <i class="{{attitude.icon}}" data-tooltip="{{localize attitude.label}}"></i>
+        </a>
+    </div>
+    {{/unless}}
+
     <div class="section" data-section="level">
         <i class="fa-solid fa-user-graduate" data-tooltip="PF2E.CharacterLevelLabel"></i>
         <span>{{level}}</span>

@@ -33,6 +33,14 @@ const ALLIANCES = {
     neutral: { icon: 'fa-solid fa-face-meh', label: 'PF2E.Actor.Creature.Alliance.Neutral' },
 }
 
+const ATTITUDES = {
+    helpful: { icon: 'fa-solid fa-face-laugh-beam', label: 'Helpful' },
+    friendly: { icon: 'fa-solid fa-face-grin-wide', label: 'Friendly' },
+    indifferent: { icon: 'fa-solid fa-face-meh', label: 'Indifferent' },
+    unfriendly: { icon: 'fa-solid fa-face-frown', label: 'Unfriendly' },
+    hostile: { icon: 'fa-solid fa-face-angry', label: 'Hostile' },
+}
+
 const SPEEDS = [
     { type: 'land', icon: 'fa-solid fa-shoe-prints' },
     { type: 'burrow', icon: 'fa-solid fa-chevrons-down' },
@@ -529,6 +537,7 @@ export class HUD extends Application {
             resolve: resources.resolve,
             adjustment,
             alliance: ALLIANCES[getAlliance(actor).alliance],
+            attitude: ATTITUDES[getAttitude(actor).attitude],
             isCharacter,
             showDeathLine: isCharacter && (showDeath === 'always' || dying.value || wounded.value),
             digitalPips: getSetting('pips'),
@@ -815,6 +824,28 @@ export class HUD extends Application {
             })
         })
 
+        html.find('[data-action=toggle-attitude]').on('click', event => {
+            const { attitude } = getAttitude(actor)
+
+            const content = [
+                { value: 'helpful', label: game.i18n.localize(ATTITUDES.helpful.label) },
+                { value: 'friendly', label: game.i18n.localize(ATTITUDES.friendly.label) },
+                { value: 'indifferent', label: game.i18n.localize(ATTITUDES.indifferent.label) },
+                { value: 'unfriendly', label: game.i18n.localize(ATTITUDES.unfriendly.label) },
+                { value: 'hostile', label: game.i18n.localize(ATTITUDES.hostile.label) },
+            ]
+
+            this.#createHUDLockedListTooltip({
+                content,
+                event,
+                selected: attitude,
+                onClick: value => {
+                    if (value === 'default') actor.update({ 'flags.pf2e-hud.attitude': null })
+                    else actor.update({ 'flags.pf2e-hud.attitude': value === 'default' ? null : value })
+                },
+            })
+        })
+
         html.find('[data-action=collision-dc]').on('click', event => {
             event.preventDefault()
             const dc = actor.system.attributes.collisionDC.value || 15
@@ -1061,5 +1092,13 @@ function getAlliance(actor) {
         defaultAlliance,
         originalAlliance: alliance,
         alliance: alliance === 'default' ? defaultAlliance : alliance,
+    }
+}
+
+function getAttitude(actor) {
+    const attitudeSource = actor.flags?.['pf2e-hud']?.attitude
+    const attitude = attitudeSource ? attitudeSource : 'indifferent'
+    return {
+        attitude
     }
 }
