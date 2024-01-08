@@ -1,3 +1,7 @@
+# 1.60.1
+
+-   updated missed system helpers that were changed in the recent updates
+
 # 1.60.0
 
 -   this is a `5.12.0` release
