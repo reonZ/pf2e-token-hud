@@ -37,7 +37,7 @@ export async function popup(title, content, actor) {
 export async function showItemSummary(el, actor, title) {
 	const description = await getItemSummary(el, actor);
 	if (description) {
-		popupTitle = title ?? el.find(".name").html();
+		const popupTitle = title ?? el.find(".name").html();
 		popup(popupTitle.trim(), description, actor);
 	}
 }
