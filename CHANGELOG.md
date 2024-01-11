@@ -1,3 +1,7 @@
+# 1.60.2
+
+-   fixed popup error
+
 # 1.60.1
 
 -   updated missed system helpers that were changed in the recent updates
