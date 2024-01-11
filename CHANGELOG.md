@@ -1,3 +1,7 @@
+# 1.60.3
+
+-   fixed empty spellcasting entry slots error
+
 # 1.60.2
 
 -   fixed popup error
