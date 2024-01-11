@@ -170,6 +170,7 @@ export async function getSpellsData({ actor, filter }) {
 				  : (a, b) => localeCompare(a.name, b.name);
 
 		for (const entry of spells) {
+			if (!entry) continue;
 			entry.sort(sort);
 		}
 	}
