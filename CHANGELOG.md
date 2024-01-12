@@ -1,3 +1,8 @@
+# 1.60.4
+
+-   updated some skill actions to use their "modern" version
+-   fixed non-existent skill actions error
+
 # 1.60.3
 
 -   fixed empty spellcasting entry slots error
