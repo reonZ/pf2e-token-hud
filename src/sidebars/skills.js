@@ -618,7 +618,14 @@ function rollAction({
 	token,
 }) {
 	const action = SKILLS_MAP[skillSlug].actions[slug];
-	const type = action.type === 3 ? 3 : game.pf2e.actions.has(slug) ? 2 : 1;
+	const type =
+		action.type === 3
+			? 3
+			: game.pf2e.actions.has(slug)
+			  ? 2
+			  : slug in game.pf2e.actions
+				  ? 1
+				  : undefined;
 
 	skill ??= action.noSkill ? undefined : skillSlug;
 
