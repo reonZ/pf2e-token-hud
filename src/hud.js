@@ -830,11 +830,14 @@ export class HUD extends Application {
 			event.preventDefault();
 
 			const { publicNotes, privateNotes, blurb } = actor.system.details;
-			const traits = actor.system.traits.value.map((trait) => ({
-				label: game.i18n.localize(CONFIG.PF2E.creatureTraits[trait]) ?? trait,
-				description:
-					game.i18n.localize(CONFIG.PF2E.traitsDescriptions[trait]) ?? "",
-			}));
+			const whitelist = Object.keys(CONFIG.PF2E.creatureTraits);
+			const traits = actor.system.traits.value
+				.filter(whitelist.includes, whitelist)
+				.map((trait) => ({
+					label: game.i18n.localize(CONFIG.PF2E.creatureTraits[trait]) ?? trait,
+					description:
+						game.i18n.localize(CONFIG.PF2E.traitsDescriptions[trait]) ?? "",
+				}));
 
 			const content = await renderTemplate(templatePath("show-notes"), {
 				traits,
