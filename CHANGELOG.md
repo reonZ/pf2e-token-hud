@@ -1,3 +1,7 @@
+# 1.60.5
+
+-   filter out npc pre-remaster traits shown in the `Notes` popup
+
 # 1.60.4
 
 -   updated some skill actions to use their "modern" version
