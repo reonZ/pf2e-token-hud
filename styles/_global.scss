@@ -129,5 +129,14 @@
                 margin: 1px 4px 1px 0;
             }
         }
+
+        &.pf2e-token-hud-carry-type {
+            max-width: 12em;
+
+            li {
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
     }
 }

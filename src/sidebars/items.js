@@ -83,7 +83,7 @@ export async function getItemsData({ actor, filter }) {
 		return {
 			doubled: categories.length > 1 && getSetting("items-columns"),
 			contentData: {
-				canCarry: !!actor.adjustCarryType,
+				canCarry: !!actor.changeCarryType,
 				categories,
 				bulk,
 				containers: openedContainers,
@@ -215,21 +215,19 @@ export function addItemsListeners({ el, actor, token, hud }) {
 		const item = getItemFromEvent(event, actor);
 		if (!item) return;
 
-		const tmp = document.createElement("div");
-		tmp.innerHTML = await renderTemplate(
+		const content = document.createElement("div");
+		content.innerHTML = await renderTemplate(
 			"systems/pf2e/templates/actors/partials/carry-type.hbs",
 			{ item },
 		);
 
-		const content = tmp.children[1].firstElementChild;
-
 		for (const el of content.querySelectorAll("[data-carry-type]")) {
 			el.addEventListener("click", async (event) => {
 				const menu = event.currentTarget;
-				const current = item.system.equipped;
-				const inSlot = menu.dataset.inSlot === "true";
-				const handsHeld = Number(menu.dataset.handsHeld) || 0;
 				const carryType = menu.dataset.carryType;
+				const handsHeld = Number(menu.dataset.handsHeld) || 0;
+				const inSlot = menu.dataset.inSlot !== undefined;
+				const current = item.system.equipped;
 
 				dismissTooltip(menu);
 
@@ -238,7 +236,7 @@ export function addItemsListeners({ el, actor, token, hud }) {
 					inSlot !== current.inSlot ||
 					(carryType === "held" && handsHeld !== current.handsHeld)
 				) {
-					actor.adjustCarryType(item, { carryType, handsHeld, inSlot });
+					actor.changeCarryType(item, { carryType, handsHeld, inSlot });
 				}
 			});
 		}
@@ -247,6 +245,7 @@ export function addItemsListeners({ el, actor, token, hud }) {
 			const containers = actor.itemTypes.backpack.filter(
 				(container) => container.isIdentified,
 			);
+
 			if (containers.length) {
 				let rows = "";
 				for (const container of containers) {
@@ -281,6 +280,7 @@ export function addItemsListeners({ el, actor, token, hud }) {
 			locked: true,
 			direction: "UP",
 			selected: true,
+			cssClass: "carry-type",
 		});
 	});
 }
