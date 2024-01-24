@@ -36,6 +36,24 @@
         .description {
             overflow-y: auto;
             overflow-x: hidden;
+
+            .tags.paizo-style {
+                .tag {
+                    &.property {
+                        margin-left: var(--space-2);
+                        border-width: var(--space-1);
+                        height: calc(1rem + var(--space-1));
+                    }
+
+                    &:not(.property) {
+                        color: var(--color-text-trait);
+
+                        + .tag.property {
+                            margin-left: var(--space-4);
+                        }
+                    }
+                }
+            }
         }
 
         .notes-header {
