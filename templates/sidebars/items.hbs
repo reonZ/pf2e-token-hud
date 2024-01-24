@@ -119,6 +119,38 @@
             </div>
         </div>
     </div>
+    {{#each item.subitems as |subitem|}}
+    <div class="item item-box subitem" data-subitem-id="{{subitem.id}}" data-item-id="{{item.id}}" data-item-type="{{subitem.type}}">
+        <div class="sub-spacer"></div>
+
+        <div class="item-img hover" data-action="item-chat">
+            <img src="{{subitem.img}}" draggable="false">
+            {{#if @root.isOwner}}
+            <i class="fa-solid fa-message"></i>
+            {{/if}}
+        </div>
+
+        <div class="details">
+            <a data-action="item-description" class="name rarity {{subitem.rarity}}">{{subitem.name}}</a>
+
+            <div class="extras">
+                <div></div>
+
+                <div class="actions">
+                    {{#if @root.isOwner}}
+                    {{#if (or @root.isGM item.isIdentified)}}
+                    <a data-action="detach-item"><i class="fa-solid fa-paperclip"></i></a>
+                    <a data-action="edit-item"><i class="fa-solid fa-pen-to-square"></i></a>
+                    {{/if}}
+                    <a data-action="delete-item"><i class="fa-solid fa-trash"></i></a>
+                    {{/if}}
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    {{/each}}
     {{/each}}
 </div>
 {{/each}}

@@ -1,5 +1,6 @@
 import { getFlag, getSetting, localize, setFlag } from "../module.js";
 import { IdentifyItemPopup } from "../pf2e/identify.js";
+import { detachSubitem } from "../pf2e/item.js";
 import { showItemSummary } from "../popup.js";
 import {
 	addNameTooltipListeners,
@@ -199,6 +200,20 @@ export function addItemsListeners({ el, actor, token, hud }) {
 		if (!item) return;
 		if (item.isIdentified) item.setIdentificationStatus("unidentified");
 		else new IdentifyItemPopup(item).render(true);
+	});
+
+	el.find("[data-action=detach-item]").on("click", (event) => {
+		event.preventDefault();
+		const { itemId, subitemId } =
+			event.currentTarget.closest("[data-item-id]").dataset;
+
+		const item = actor.items.get(itemId);
+		if (!item) return;
+
+		const subitem = item.subitems.get(subitemId);
+		if (!subitem) return;
+
+		detachSubitem(item, subitem, event.ctrlKey);
 	});
 
 	el.find("[data-action=edit-item]").on("click", (event) => {

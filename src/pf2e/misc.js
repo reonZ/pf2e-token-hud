@@ -113,3 +113,10 @@ export function coerceToSpellGroupId(value) {
 	const numericValue = Number(value) || NaN;
 	return numericValue.between(1, 10) ? numericValue : null;
 }
+
+export function localizer(prefix) {
+	return (...[suffix, formatArgs]) =>
+		formatArgs
+			? game.i18n.format(`${prefix}.${suffix}`, formatArgs)
+			: game.i18n.localize(`${prefix}.${suffix}`);
+}

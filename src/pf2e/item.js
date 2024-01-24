@@ -3,8 +3,14 @@
  * So it is not technically a direct copy/paste of the system code but a slightly rearanged version
  */
 
-import { htmlClosest } from "./dom";
-import { ErrorPF2e, getActionGlyph, sluggify, traitSlugToObject } from "./misc";
+import { createHTMLElement, htmlClosest } from "./dom";
+import {
+	ErrorPF2e,
+	getActionGlyph,
+	localizer,
+	sluggify,
+	traitSlugToObject,
+} from "./misc";
 import { eventToRollMode } from "./scripts";
 
 export async function unownedItemToMessage(event, item, actor, options) {
@@ -113,4 +119,37 @@ export async function createSelfEffectMessage(item, rollMode = "roll") {
 	);
 
 	return ChatMessagePF2e.create(messageData);
+}
+
+export async function detachSubitem(item, subitem, skipConfirm) {
+	const localize = localizer("PF2E.Item.Physical.Attach.Detach");
+	const confirmed =
+		skipConfirm ||
+		(await Dialog.confirm({
+			title: localize("Label"),
+			content: createHTMLElement("p", {
+				children: [localize("Prompt", { attachable: subitem.name })],
+			}).outerHTML,
+		}));
+	if (!confirmed) return;
+
+	const deletePromise = subitem.delete();
+	const createPromise = (async () => {
+		// Find a stack match, cloning the subitem as worn so the search won't fail due to it being equipped
+		const stack = item.actor?.inventory.findStackableItem(
+			subitem.clone({ "system.equipped.carryType": "worn" }),
+		);
+		return (
+			stack?.update({ "system.quantity": stack.quantity + 1 }) ??
+			Item.implementation.create(
+				mergeObject(subitem.toObject(), {
+					_id: null,
+					"system.containerId": item.system.containerId,
+				}),
+				{ parent: item.actor },
+			)
+		);
+	})();
+
+	await Promise.all([deletePromise, createPromise]);
 }

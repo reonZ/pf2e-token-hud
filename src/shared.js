@@ -87,8 +87,10 @@ export async function deleteItem(event, actor) {
 }
 
 export function getItemFromEvent(event, actor) {
-	const { itemId } = event.currentTarget.closest("[data-item-id]").dataset;
-	return actor.items.get(itemId);
+	const { itemId, subitemId } =
+		event.currentTarget.closest("[data-item-id]").dataset;
+	const item = actor.items.get(itemId);
+	return subitemId ? item.subitems.get(subitemId) : item;
 }
 
 export function getMacros(actor) {
