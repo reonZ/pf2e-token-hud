@@ -53,39 +53,6 @@ export function addNameTooltipListeners(el) {
 	});
 }
 
-export function editItem(event, actor) {
-	event.preventDefault();
-	const item = getItemFromEvent(event, actor);
-	item?.sheet.render(true, { focus: true });
-}
-
-export async function deleteItem(event, actor) {
-	event.preventDefault();
-
-	const item = getItemFromEvent(event, actor);
-	if (!item) return;
-
-	if (event.ctrlKey) return item.delete();
-
-	new Dialog({
-		title: localize("deleteItem.title"),
-		content: `<p>${game.i18n.format("PF2E.DeleteQuestion", {
-			name: item.name,
-		})}</p>`,
-		buttons: {
-			ok: {
-				icon: '<i class="fa-solid fa-trash"></i>',
-				label: localize("deleteItem.ok"),
-				callback: () => item.delete(),
-			},
-			cancel: {
-				icon: '<i class="fas fa-times"></i>',
-				label: localize("deleteItem.cancel"),
-			},
-		},
-	}).render(true);
-}
-
 export function getItemFromEvent(event, actor) {
 	const { itemId, subitemId } =
 		event.currentTarget.closest("[data-item-id]").dataset;

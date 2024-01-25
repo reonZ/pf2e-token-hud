@@ -4,8 +4,6 @@ import { detachSubitem } from "../pf2e/item.js";
 import { showItemSummary } from "../popup.js";
 import {
 	addNameTooltipListeners,
-	deleteItem,
-	editItem,
 	filterIn,
 	getItemFromEvent,
 	localeCompare,
@@ -218,12 +216,17 @@ export function addItemsListeners({ el, actor, token, hud }) {
 
 	el.find("[data-action=edit-item]").on("click", (event) => {
 		event.preventDefault();
-		editItem(event, actor);
+		const item = getItemFromEvent(event, actor);
+		item?.sheet.render(true, { focus: true });
 	});
 
 	el.find("[data-action=delete-item]").on("click", (event) => {
 		event.preventDefault();
-		deleteItem(event, actor);
+		const item = getItemFromEvent(event, actor);
+		if (!item) return;
+
+		if (event.ctrlKey) item.delete();
+		else item.deleteDialog();
 	});
 
 	el.find("[data-action=toggle-item-worn").on("click", async (event) => {
