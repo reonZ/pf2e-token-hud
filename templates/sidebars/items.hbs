@@ -124,7 +124,7 @@
                 {{!-- if parentId --}}
                 {{/if}}
 
-                {{#if (and @root.isOwner parentId (or @root.isGM item.isIdentified))}}
+                {{#if (and parentId (or @root.isGM item.isIdentified))}}
                 <a data-action="detach-item"><i class="fa-solid fa-paperclip"></i></a>
                 {{/if}}
 
