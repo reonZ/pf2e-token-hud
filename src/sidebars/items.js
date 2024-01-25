@@ -95,10 +95,10 @@ export async function getItemsData({ actor, filter }) {
 				wealth: { coins: coins.goldValue, total: totalWealth.goldValue },
 				canUseItem: (item) =>
 					isCreature &&
-					item.type === "consumable" &&
+					item.isOfType("consumable") &&
 					item.isIdentified &&
 					item.uses.max &&
-					!item.isAmmunition,
+					!item.isAmmo,
 				itemDisabled: (item) =>
 					!item.quantity ||
 					!item.uses.value ||
