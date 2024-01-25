@@ -70,9 +70,11 @@
             }
 
             .item-box {
+                --box-margin: 2px;
+
                 display: flex;
                 height: var(--item-height);
-                margin-top: 2px;
+                margin-top: var(--box-margin);
             }
 
             .item-img {

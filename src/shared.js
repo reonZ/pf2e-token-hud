@@ -54,10 +54,10 @@ export function addNameTooltipListeners(el) {
 }
 
 export function getItemFromEvent(event, actor) {
-	const { itemId, subitemId } =
+	const { itemId, parentId } =
 		event.currentTarget.closest("[data-item-id]").dataset;
-	const item = actor.items.get(itemId);
-	return subitemId ? item.subitems.get(subitemId) : item;
+	const item = actor.items.get(parentId ?? itemId);
+	return parentId ? item?.subitems.get(itemId) : item;
 }
 
 export function getMacros(actor) {

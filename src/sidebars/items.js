@@ -103,6 +103,10 @@ export async function getItemsData({ actor, filter }) {
 					!item.quantity ||
 					!item.uses.value ||
 					item.system.equipped.carryType === "dropped",
+				isInContainer: (category, item) => {
+					if (category.type !== "backpack") return false;
+					return !item.isOfType("backpack") && item.isInContainer;
+				},
 			},
 		};
 	}
@@ -202,16 +206,16 @@ export function addItemsListeners({ el, actor, token, hud }) {
 
 	el.find("[data-action=detach-item]").on("click", (event) => {
 		event.preventDefault();
-		const { itemId, subitemId } =
+		const { itemId, parentId } =
 			event.currentTarget.closest("[data-item-id]").dataset;
 
-		const item = actor.items.get(itemId);
-		if (!item) return;
+		const parent = actor.items.get(parentId);
+		if (!parent) return;
 
-		const subitem = item.subitems.get(subitemId);
+		const subitem = parent.subitems.get(itemId);
 		if (!subitem) return;
 
-		detachSubitem(item, subitem, event.ctrlKey);
+		detachSubitem(parent, subitem, event.ctrlKey);
 	});
 
 	el.find("[data-action=edit-item]").on("click", (event) => {

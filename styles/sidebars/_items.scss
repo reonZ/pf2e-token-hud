@@ -149,13 +149,9 @@
                         }
                     }
 
+                    &.subitem,
                     &.in-container {
-                        margin-left: 8px;
                         font-size: 0.86em;
-                    }
-
-                    &.subitem {
-                        font-size: 0.9em;
 
                         .sub-spacer {
                             position: relative;
@@ -165,19 +161,23 @@
                             &::after {
                                 border-left: 1px solid var(--color-pf-alternate);
                                 content: '';
-                                height: 50%;
+                                height: calc(50% + var(--box-margin));
                                 left: 2px;
                                 position: absolute;
-                                top: 0;
+
                                 width: var(--space-5);
                             }
 
-                            &::before {
+                            &:not(.straight)::before {
                                 border-bottom: 1px solid var(--color-pf-alternate);
                             }
 
+                            &::before {
+                                top: calc(-1 * var(--box-margin) - 1px);
+                            }
+
                             &::after {
-                                top: 50%;
+                                top: calc(50% - var(--box-margin));
                             }
                         }
                     }
