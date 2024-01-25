@@ -34,6 +34,12 @@ const HOVER_EXCEPTIONS = [
 	"[id^=pf2e-perception]",
 ].join(", ");
 
+const PLACEMENT_BY_TYPE = {
+	spells: "spellcasting",
+	items: "inventory",
+	skills: "proficiencies",
+};
+
 const POSITIONS = {
 	left: ["left", "right", "top", "bottom"],
 	right: ["right", "left", "top", "bottom"],
@@ -1128,6 +1134,12 @@ export class HUD extends Application {
 		const actor = token.actor;
 		const showFilter = filter !== undefined || getSetting("filter");
 		const { getData, addListeners } = SIDEBARS[type];
+
+		const placement = PLACEMENT_BY_TYPE[type] ?? "actions";
+		const toggles = actor.synthetics.toggles.filter(
+			(toggle) => toggle.placement === placement,
+		);
+
 		const data =
 			(await getData({
 				hud: this,
@@ -1135,10 +1147,12 @@ export class HUD extends Application {
 				token,
 				filter: filter?.toLowerCase(),
 			})) ?? {};
-		if (!data.contentData && !showFilter)
+
+		if (!data.contentData && !showFilter && !toggles.length) {
 			return ui.notifications.warn(
 				localize(`${type}.empty`, { name: this.#token.name }),
 			);
+		}
 
 		const contentData = {
 			...(data.contentData ?? {}),
@@ -1173,6 +1187,8 @@ export class HUD extends Application {
 			filter,
 			filterLabel: localize("filter"),
 			showFilter,
+			toggles,
+			isOwner: actor.isOwner,
 			content: (
 				await renderTemplate(templatePath(`sidebars/${type}`), contentData)
 			).trim(),
@@ -1201,6 +1217,7 @@ export class HUD extends Application {
 		sidebar.style.top = `${top}px`;
 
 		sidebar = $(sidebar);
+
 		sidebar
 			.find(".sidebar-header [data-action=sidebar-filter-clear]")
 			.on("click", (event) => {
@@ -1208,12 +1225,27 @@ export class HUD extends Application {
 				sidebar.find(".sidebar-header [data-action=sidebar-filter]").val("");
 				this.#openSidebar(type, "");
 			});
+
 		sidebar
 			.find(".sidebar-header [data-action=sidebar-filter]")
 			.on("keydown", (event) => {
 				if (event.key === "Enter")
 					this.#openSidebar(type, event.currentTarget.value.trim());
 			});
+
+		sidebar.find(".sidebar-toggles [data-action]").on("change", (event) => {
+			const toggle = event.currentTarget.closest(".toggle");
+			const { domain, option, itemId } = toggle.dataset;
+			const suboption = toggle.querySelector("select")?.value ?? null;
+			actor.toggleRollOption(
+				domain,
+				option,
+				itemId ?? null,
+				toggle.querySelector("input").checked,
+				suboption,
+			);
+		});
+
 		addListeners({ el: sidebar, actor, token, hud: this });
 
 		Hooks.callAll("renderHUDSidebar", type, sidebar, this);

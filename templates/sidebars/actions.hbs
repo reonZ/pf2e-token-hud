@@ -1,27 +1,3 @@
-{{#if toggles.length}}
-<div class="toggles">
-    {{#each toggles as |toggle|}}
-    {{#if (or (not toggle.scope) (eq toggle.scope "actions-tab"))}}
-    <div class="toggle" data-item-id="{{toggle.itemId}}" data-domain="{{toggle.domain}}" data-option="{{toggle.option}}"
-        data-scope="{{toggle.scope}}">
-        <label>
-            <input type="checkbox" {{#if toggle.alwaysActive}} class="hidden" {{/if}} data-action="toggle-roll-option" {{disabled (or (not
-                toggle.enabled) (not @root.isOwner))}} {{checked toggle.checked}} />
-            <div class="name {{#if (not (or toggle.checked toggle.enabled))}}unchecked-disabled{{/if}}">{{localize toggle.label}}</div>
-        </label>
-        {{#if toggle.suboptions}}
-        <select data-action="set-suboption">
-            {{#each toggle.suboptions as |suboption|}}
-            <option value="{{suboption.value}}" {{#if suboption.selected}} selected{{/if}}>{{localize suboption.label}}</option>
-            {{/each}}
-        </select>
-        {{/if}}
-    </div>
-    {{/if}}
-    {{/each}}
-</div>
-{{/if}}
-
 {{#if stances.length}}
 <div class="section" data-section="stances">
     <div class="header"> {{i18n "stances"}}</div>

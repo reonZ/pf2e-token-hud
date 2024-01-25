@@ -56,6 +56,58 @@
             }
         }
 
+        .sidebar-toggles {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 3px 6px 0px 2px;
+            line-height: 1.1;
+            gap: 4px;
+            margin-bottom: var(--inner-padding);
+
+            > * {
+                break-inside: avoid;
+            }
+
+            .toggle {
+                display: flex;
+                flex-wrap: wrap;
+
+                label {
+                    display: flex;
+                    align-items: center;
+                    gap: 2px;
+                    overflow: hidden;
+
+                    input {
+                        margin: 0;
+                        height: 1.1em;
+                    }
+
+                    .name {
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+
+                        &.unchecked-disable {
+                            color: var(--color-text-dark-inactive);
+                        }
+                    }
+                }
+
+                select {
+                    --margin: 1.3em;
+
+                    flex: 1;
+                    border: none;
+                    height: 1.4em;
+                    margin-left: var(--margin);
+                    padding: 0;
+                    max-width: calc(100% - var(--margin));
+                }
+            }
+        }
+
         .sidebar-content {
             display: flex;
             flex-direction: column;

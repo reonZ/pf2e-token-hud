@@ -3,53 +3,9 @@
         --max-width: 20em;
 
         .sidebar-content {
-            .toggles,
             .section {
                 > * {
                     break-inside: avoid;
-                }
-            }
-
-            .toggles {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                padding: 3px 6px 0px 2px;
-                line-height: 1.1;
-                gap: 4px;
-
-                .toggle {
-                    display: flex;
-                    flex-direction: column;
-
-                    label {
-                        display: flex;
-                        align-items: center;
-                        gap: 2px;
-                        overflow: hidden;
-
-                        input {
-                            margin: 0;
-                            height: 1.1em;
-                        }
-
-                        .name {
-                            white-space: nowrap;
-                            text-overflow: ellipsis;
-                            overflow: hidden;
-
-                            &.unchecked-disable {
-                                color: var(--color-text-dark-inactive);
-                            }
-                        }
-                    }
-
-                    select {
-                        border: none;
-                        height: 1.4em;
-                        margin-left: 18px;
-                        padding: 0;
-                    }
                 }
             }
 

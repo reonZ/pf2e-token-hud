@@ -43,7 +43,6 @@ const SECTIONS_TYPES = {
 
 export async function getActionsData({ hud, actor, filter }) {
 	const isCharacter = actor.isOfType("character");
-	const toggles = actor.synthetics.toggles.slice();
 	const sorting = getSetting("actions");
 
 	const stances = (await getStancesModuleApi()?.getStances(actor))?.sort(
@@ -169,7 +168,6 @@ export async function getActionsData({ hud, actor, filter }) {
 		);
 
 	if (
-		toggles.length ||
 		stances?.length ||
 		strikes?.length ||
 		blasts?.length ||
@@ -185,7 +183,6 @@ export async function getActionsData({ hud, actor, filter }) {
 
 		return {
 			contentData: {
-				toggles,
 				stances,
 				strikes,
 				blasts,
@@ -373,19 +370,6 @@ export function addActionsListeners({ el, actor, hud }) {
 
 		strike?.[action === "strike-damage" ? "damage" : "critical"]({ event });
 		if (getSetting("attack-close")) hud.close();
-	});
-
-	action(["toggle-roll-option", "set-suboption"], (event) => {
-		const toggle = event.currentTarget.closest(".toggle");
-		const { domain, option, itemId } = toggle.dataset;
-		const suboption = toggle.querySelector("select")?.value ?? null;
-		actor.toggleRollOption(
-			domain,
-			option,
-			itemId ?? null,
-			toggle.querySelector("input").checked,
-			suboption,
-		);
 	});
 
 	action("strike-auxiliary", (event) => {
