@@ -8,8 +8,9 @@ const COVER_UUID = "Compendium.pf2e.other-effects.Item.I9lfZUiCwMiGogVi";
 export async function getItemSummary(el, actor) {
 	const dataset = el.data();
 	const item = dataset.itemId
-		? actor.items.get(dataset.itemId)
+		? getItemFromElement(el[0], actor)
 		: await fromUuid(dataset.uuid);
+
 	const data = await item?.getChatData({ secrets: actor.isOwner }, dataset);
 	if (!data) return;
 
@@ -53,11 +54,15 @@ export function addNameTooltipListeners(el) {
 	});
 }
 
-export function getItemFromEvent(event, actor) {
-	const { itemId, parentId } =
-		event.currentTarget.closest("[data-item-id]").dataset;
+export function getItemFromElement(el, actor) {
+	const { itemId, parentId } = el.dataset;
 	const item = actor.items.get(parentId ?? itemId);
 	return parentId ? item?.subitems.get(itemId) : item;
+}
+
+export function getItemFromEvent(event, actor) {
+	const el = event.currentTarget.closest("[data-item-id]");
+	return getItemFromElement(el, actor);
 }
 
 export function getMacros(actor) {
