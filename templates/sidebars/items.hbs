@@ -60,7 +60,7 @@
                     </a>
                     {{/if}}
 
-                    {{#if (@root.canUseItem item)}}
+                    {{#if (and @root.isOwner (@root.canUseItem item))}}
                     <a data-action="use-item" data-tooltip="{{@root.i18n 'use'}}" {{#if (@root.itemDisabled item)}}class="disabled" {{/if}}>
                         <i class="fa-solid fa-play"></i>
                     </a>
