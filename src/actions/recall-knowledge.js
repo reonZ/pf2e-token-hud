@@ -1,5 +1,5 @@
 import { getSetting, localize, modifier, templatePath } from "../module.js";
-import { calculateDegreeOfSuccess } from "../pf2e/success.js";
+import { DegreeOfSuccess } from "../pf2e/success.js";
 import { RANKS, getUniqueTarget } from "../shared.js";
 
 const SKILLS = [
@@ -117,7 +117,7 @@ async function rollSkill(skill, dieResult, dcs) {
 		rankLabel: RANKS[rank],
 		checks: dcs?.map((dc) => {
 			if (!dc) return "-";
-			const success = calculateDegreeOfSuccess(total, dieResult, dc);
+			const success = new DegreeOfSuccess(roll, dc).value;
 			return {
 				success,
 				icon: SUCCESS[success].icon,
