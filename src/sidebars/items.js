@@ -215,7 +215,7 @@ export function addItemsListeners({ el, actor, token, hud }) {
 		const subitem = parent.subitems.get(itemId);
 		if (!subitem) return;
 
-		detachSubitem(parent, subitem, event.ctrlKey);
+		detachSubitem(subitem, event.ctrlKey);
 	});
 
 	el.find("[data-action=edit-item]").on("click", (event) => {

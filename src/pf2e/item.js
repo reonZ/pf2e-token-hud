@@ -12,16 +12,15 @@ export async function unownedItemToMessage(event, item, actor, options) {
 	const ChatMessagePF2e = ChatMessage.implementation;
 
 	// Basic template rendering data
-	const template = `systems/pf2e/templates/chat/${sluggify(
-		item.type,
-	)}-card.hbs`;
+	const type = sluggify(item.type);
+	const template = `systems/pf2e/templates/chat/${type}-card.hbs`;
 	const token = actor.token;
 	const nearestItem = htmlClosest(event?.target, ".item");
 	const rollOptions = options.data ?? { ...(nearestItem?.dataset ?? {}) };
 	const templateData = {
-		actor,
+		actor: actor,
 		tokenId: token ? `${token.parent?.id}.${token.id}` : null,
-		item,
+		item: item,
 		data: await item.getChatData(undefined, rollOptions),
 	};
 
@@ -116,7 +115,10 @@ export async function createSelfEffectMessage(item, rollMode = "roll") {
 	return ChatMessagePF2e.create(messageData);
 }
 
-export async function detachSubitem(item, subitem, skipConfirm) {
+export async function detachSubitem(subitem, skipConfirm) {
+	const parentItem = subitem.parentItem;
+	if (!parentItem) throw ErrorPF2e("Subitem has no parent item");
+
 	const localize = localizer("PF2E.Item.Physical.Attach.Detach");
 	const confirmed =
 		skipConfirm ||
@@ -131,7 +133,7 @@ export async function detachSubitem(item, subitem, skipConfirm) {
 	const deletePromise = subitem.delete();
 	const createPromise = (async () => {
 		// Find a stack match, cloning the subitem as worn so the search won't fail due to it being equipped
-		const stack = item.actor?.inventory.findStackableItem(
+		const stack = parentItem.actor?.inventory.findStackableItem(
 			subitem.clone({ "system.equipped.carryType": "worn" }),
 		);
 		return (
@@ -139,9 +141,9 @@ export async function detachSubitem(item, subitem, skipConfirm) {
 			Item.implementation.create(
 				mergeObject(subitem.toObject(), {
 					_id: null,
-					"system.containerId": item.system.containerId,
+					"system.containerId": parentItem.system.containerId,
 				}),
-				{ parent: item.actor },
+				{ parent: parentItem.actor },
 			)
 		);
 	})();
