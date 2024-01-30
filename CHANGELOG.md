@@ -1,3 +1,15 @@
+#
+
+-   this is a `5.13.0` release
+-   updated the different helpers and data changes made in the system
+-   added a max width to the `carry-type` menu for long container names
+-   added support for sub-items (attachments)
+-   now close the popup when the `use` button in an item description is clicked
+-   roll option toggles will now show up in their respective sidebar
+-   fixed item description popup tags styling
+-   fixed ammunition showing the `use` button
+-   fixed consumables `use` button showing to observers
+
 # 1.60.5
 
 -   filter out npc pre-remaster traits shown in the `Notes` popup
