@@ -19,6 +19,6 @@
         "esbuild": "0.x"
     },
     "dependencies": {
-        "remeda": "^1.39.0"
+        "remeda": "^1.33.0"
     }
 }
