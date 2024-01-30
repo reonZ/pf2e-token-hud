@@ -1,0 +1,24 @@
+{
+    "name": "pf2e-token-hud",
+    "scripts": {
+        "build": "esbuild src/main.js --bundle --keep-names --minify --sourcemap --outdir=scripts",
+        "dev": "esbuild src/main.js --bundle --keep-names --watch --sourcemap --outdir=scripts"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/reonZ/pf2e-token-hud.git"
+    },
+    "author": "Idle",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/reonZ/pf2e-token-hud/issues"
+    },
+    "homepage": "https://github.com/reonZ/pf2e-token-hud#readme",
+    "devDependencies": {
+        "@biomejs/biome": "1.4.x",
+        "esbuild": "0.x"
+    },
+    "dependencies": {
+        "remeda": "^1.39.0"
+    }
+}
