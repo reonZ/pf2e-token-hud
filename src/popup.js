@@ -30,6 +30,11 @@ export async function popup(title, content, actor) {
 		.querySelector("[data-action=close-popup]")
 		.addEventListener("click", () => popup.remove());
 
+	const consumeLinks = popup.querySelectorAll("[data-action='consume']");
+	for (const link of consumeLinks) {
+		link.addEventListener("click", () => popup.remove());
+	}
+
 	el.append(popup);
 	hud.lock();
 }
