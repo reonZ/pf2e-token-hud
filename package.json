@@ -15,7 +15,7 @@
     },
     "homepage": "https://github.com/reonZ/pf2e-token-hud#readme",
     "devDependencies": {
-        "@biomejs/biome": "1.4.x",
+        "@biomejs/biome": "1.5.x",
         "esbuild": "0.x"
     },
     "dependencies": {
