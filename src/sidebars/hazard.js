@@ -1,5 +1,5 @@
 import { enrichHTML, getSetting, modifier } from "../module.js";
-import { listenInlineRoll } from "../pf2e/inline-roll.js";
+import { InlineRollLinks } from "../pf2e/inline-roll.js";
 import { showItemSummary } from "../popup.js";
 
 export async function getHazardData({ actor }) {
@@ -39,7 +39,7 @@ export function addHazardListeners({ el, actor }) {
 		showItemSummary(action, actor);
 	});
 
-	listenInlineRoll(el[0], actor);
+	InlineRollLinks.listen(el[0], actor);
 
 	// IS OWNER
 	if (!actor.isOwner) return;

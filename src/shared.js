@@ -1,5 +1,5 @@
-import { getFlag, localize, setFlag } from "./module.js";
-import { listenInlineRoll } from "./pf2e/inline-roll.js";
+import { getFlag, setFlag } from "./module.js";
+import { InlineRollLinks } from "./pf2e/inline-roll.js";
 
 export const RANKS = ["U", "T", "E", "M", "L"];
 
@@ -18,7 +18,7 @@ export async function getItemSummary(el, actor) {
 	description.classList.add("description");
 
 	await actor.sheet.itemRenderer.renderItemSummary(description, item, data);
-	listenInlineRoll(description, item);
+	InlineRollLinks.listen(description, item);
 
 	if (dataset.castRank) {
 		description.dataset.castRank = dataset.castRank;
