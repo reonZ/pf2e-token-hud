@@ -1,8 +1,3 @@
-/**
- * This one is used to create chat message for items directly picked from compendiums
- * So it is not technically a direct copy/paste of the system code but a slightly rearanged version
- */
-
 import { createHTMLElement, htmlClosest } from "./dom";
 import {
 	ErrorPF2e,

@@ -1,7 +1,3 @@
-/**
- * Those are directly copied from the PF2e system because they are not accesible to us in the global
- */
-
 const dcAdjustments = new Map([
 	["incredibly-easy", -10],
 	["very-easy", -5],

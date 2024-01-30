@@ -1,8 +1,3 @@
-/**
- * Those are copied from the PF2e system because they are not accesible to us in the global
- * adjusted to be independent function
- */
-
 export const DEGREE_OF_SUCCESS = {
 	CRITICAL_FAILURE: 0,
 	FAILURE: 1,
