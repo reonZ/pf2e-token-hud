@@ -32,7 +32,6 @@ const LABELS = {
 	"borrow-arcane-spell": `${MODULE_ID}.skills.actions.borrow-arcane-spell`,
 	"identify-magic": `${MODULE_ID}.skills.actions.identify-magic`,
 	"identify-alchemy": `${MODULE_ID}.skills.actions.identify-alchemy`,
-	"learn-spell": `${MODULE_ID}.skills.actions.learn-spell`,
 	"crafting-goods": `${MODULE_ID}.skills.actions.crafting-goods`,
 	"staging-performance": `${MODULE_ID}.skills.actions.staging-performance`,
 };
@@ -51,7 +50,7 @@ const ACTIONS_UUIDS = {
 	"borrow-arcane-spell": "Compendium.pf2e.actionspf2e.Item.OizxuPb44g3eHPFh",
 	"decipher-writing": "Compendium.pf2e.actionspf2e.Item.d9gbpiQjChYDYA2L",
 	"identify-magic": "Compendium.pf2e.actionspf2e.Item.eReSHVEPCsdkSL4G",
-	"learn-spell": "Compendium.pf2e.actionspf2e.Item.Q5iIYCFdqJFM31GW",
+	"learn-a-spell": "Compendium.pf2e.actionspf2e.Item.Q5iIYCFdqJFM31GW",
 	climb: "Compendium.pf2e.actionspf2e.Item.pprgrYQ1QnIDGZiy",
 	"force-open": "Compendium.pf2e.actionspf2e.Item.SjmKHgI7a5Z9JzBx",
 	grapple: "Compendium.pf2e.actionspf2e.Item.PMbdMWc2QroouFGD",
@@ -103,7 +102,7 @@ const DUPLICATE_SKILLS = {
 	"recall-knowledge": { slug: "recall-knowledge", cost: "1", secret: true },
 	"decipher-writing": { slug: "decipher-writing", type: 2, trained: true },
 	"identify-magic": { slug: "identify-magic", trained: true },
-	"learn-spell": { slug: "learn-spell", trained: true },
+	"learn-a-spell": { slug: "learn-a-spell", trained: true },
 };
 
 const SKILLS = [
@@ -131,7 +130,7 @@ const SKILLS = [
 			{ slug: "borrow-arcane-spell", trained: true },
 			"decipher-writing",
 			"identify-magic",
-			"learn-spell",
+			"learn-a-spell",
 		],
 	},
 	{
@@ -244,7 +243,7 @@ const SKILLS = [
 			{ slug: "command-an-animal", cost: "1", type: 2 }, //
 			// 'recall-knowledge',
 			"identify-magic",
-			"learn-spell",
+			"learn-a-spell",
 			{
 				slug: "treatWounds",
 				type: 1,
@@ -259,7 +258,7 @@ const SKILLS = [
 			// 'recall-knowledge', //
 			"decipher-writing",
 			"identify-magic",
-			"learn-spell",
+			"learn-a-spell",
 		],
 	},
 	{
@@ -290,7 +289,7 @@ const SKILLS = [
 			// 'recall-knowledge', //
 			"decipher-writing",
 			"identify-magic",
-			"learn-spell",
+			"learn-a-spell",
 		],
 	},
 	{
