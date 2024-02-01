@@ -21,7 +21,6 @@ import {
 
 export async function getSpellsData({ actor, filter }) {
 	const focusPool = actor.system.resources.focus ?? { value: 0, max: 0 };
-	const entries = actor.spellcasting.regular;
 	const showTradition = getSetting("tradition");
 
 	const pf2eStavesActive = game.modules.get("pf2e-staves")?.active;
@@ -39,119 +38,164 @@ export async function getSpellsData({ actor, filter }) {
 	const spells = [];
 	const focuses = [];
 
+	let rituals;
 	let hasFocusCantrips = false;
 
-	await Promise.all(
-		entries.map(async (entry) => {
-			const entryId = entry.id;
-			const tradition = showTradition && entry.statistic.label[0];
-			const data = await entry.getSheetData();
-			const isFocus = data.isFocusPool;
-			const isCharge = entry.system?.prepared?.value === "charge";
+	const entries = await Promise.all(
+		actor.spellcasting.collections.map(async (spells) => {
+			return {
+				entry: spells.entry,
+				data: await spells.entry.getSheetData({ spells }),
+			};
+		}),
+	);
 
-			const charges = (() => {
-				if (!isCharge) return;
+	for (const { entry, data } of entries) {
+		if (data.isRitual) {
+			rituals = data.groups.flatMap((group, slotId) =>
+				group.active
+					.map(({ spell }) => {
+						if (!filterIn(spell.name, filter)) return;
+						return {
+							name: spell.name,
+							img: spell.img,
+							slotId,
+							itemId: spell.id,
+							rank: spell.rank,
+							time: spell.system.time.value,
+						};
+					})
+					.filter(Boolean),
+			);
+			continue;
+		}
 
-				const dailiesData =
-					pf2eDailiesActive &&
-					pf2eDailies.api.getSpellcastingEntryStaffData(entry);
-				const { charges, max, canPayCost } = dailiesData ??
-					getProperty(entry, "flags.pf2e-staves.charges") ?? {
-						charges: 0,
-						max: 0,
-					};
+		const entryId = data.id;
+		const tradition = showTradition && data.statistic.label[0];
+		const isFocus = data.isFocusPool;
+		const isCharge = entry.system?.prepared?.value === "charge";
+		const isInnate = data.isInnate;
+		const isPrepared = data.isPrepared;
+		const isSpontaneous = data.isSpontaneous;
+		const isFlexible = data.isFlexible;
 
-				return {
-					value: charges,
-					max,
-					noMax: true,
-					canPayCost: canPayCost ?? (() => true),
+		const consumable = (() => {
+			if (data.category !== "items") return;
+			const itemId = entry.id.split("-")[0];
+			return actor.items.get(itemId);
+		})();
+
+		const charges = (() => {
+			if (!isCharge) return;
+
+			const dailiesData =
+				pf2eDailiesActive &&
+				pf2eDailies.api.getSpellcastingEntryStaffData(entry);
+			const { charges, max, canPayCost } = dailiesData ??
+				getProperty(entry, "flags.pf2e-staves.charges") ?? {
+					charges: 0,
+					max: 0,
 				};
-			})();
 
-			for (const group of data.groups) {
-				if (!group.active.length || group.uses?.max === 0) continue;
+			return {
+				value: charges,
+				max,
+				noMax: true,
+				canPayCost: canPayCost ?? (() => true),
+			};
+		})();
 
-				const slotSpells = [];
-				const isCantrip = group.id === "cantrips";
-				const groupNumber = spellSlotGroupIdToNumber(group.id);
+		for (const group of data.groups) {
+			if (!group.active.length || group.uses?.max === 0) continue;
 
-				for (let slotId = 0; slotId < group.active.length; slotId++) {
-					const active = group.active[slotId];
-					if (!active || active.uses?.max === 0) continue;
+			const slotSpells = [];
+			const isCantrip = group.id === "cantrips";
+			const groupNumber = spellSlotGroupIdToNumber(group.id);
 
-					const { spell, expended, virtual, uses, castRank } = active;
-					if (!filterIn(spell.name, filter)) continue;
+			for (let slotId = 0; slotId < group.active.length; slotId++) {
+				const active = group.active[slotId];
+				if (!active || active.uses?.max === 0) continue;
 
-					slotSpells.push({
-						name: spell.name,
-						img: spell.img,
-						tradition,
-						castRank: castRank ?? spell.rank,
-						slotId,
-						entryId,
-						itemId: spell.id,
-						inputId: data.isInnate ? spell.id : data.id,
-						inputPath: isCharge
-							? chargesPath
-							: data.isInnate
+				const { spell, expended, virtual, uses, castRank } = active;
+				if (!filterIn(spell.name, filter)) continue;
+
+				slotSpells.push({
+					name: spell.name,
+					img: spell.img,
+					tradition,
+					castRank: castRank ?? spell.rank,
+					slotId,
+					entryId,
+					itemId: spell.id,
+					inputId: isInnate ? spell.id : data.id,
+					inputPath: consumable
+						? "system.uses.value"
+						: isCharge
+						  ? chargesPath
+						  : isInnate
 							  ? "system.location.uses.value"
 							  : `system.slots.slot${groupNumber}.value`,
-						isCharge,
-						isActiveCharge: isCharge && stavesActive,
-						isVirtual: virtual,
-						isInnate: data.isInnate,
-						isCantrip: isCantrip,
-						isFocus,
-						isPrepared: data.isPrepared,
-						isSpontaneous: data.isSpontaneous || data.isFlexible,
-						groupId: group.id,
-						uses: uses ?? (isCharge ? charges : group.uses),
-						expended: isCharge
-							? !charges.canPayCost(groupNumber)
-							: expended ??
-							  (isFocus && !isCantrip ? focusPool.value <= 0 : false),
-						action: spell.system.time.value,
-						type: isCharge
-							? `${MODULE_ID}.spells.staff`
-							: data.isInnate
+					isCharge,
+					isActiveCharge: isCharge && stavesActive,
+					isVirtual: virtual,
+					isInnate,
+					isCantrip,
+					isFocus,
+					isPrepared,
+					isSpontaneous: isSpontaneous || isFlexible,
+					groupId: group.id,
+					consumable,
+					uses: consumable
+						? consumable.system.uses
+						: isCharge
+						  ? charges
+						  : uses ?? group.uses,
+					expended: isCharge
+						? !charges.canPayCost(groupNumber)
+						: expended ??
+						  (isFocus && !isCantrip ? focusPool.value <= 0 : false),
+					action: spell.system.time.value,
+					type: consumable
+						? "TYPES.Item.consumable"
+						: isCharge
+						  ? `${MODULE_ID}.spells.staff`
+						  : isInnate
 							  ? "PF2E.PreparationTypeInnate"
-							  : data.isSpontaneous
+							  : isSpontaneous
 								  ? "PF2E.PreparationTypeSpontaneous"
-								  : data.isFlexible
+								  : isFlexible
 									  ? "PF2E.SpellFlexibleLabel"
 									  : isFocus
 										  ? "PF2E.TraitFocus"
 										  : "PF2E.SpellPreparedLabel",
-						order: isCharge
-							? 0
-							: data.isPrepared
-							  ? 1
-							  : isFocus
-								  ? 2
-								  : data.isInnate
-									  ? 3
-									  : data.isSpontaneous
-										  ? 4
-										  : 5,
-					});
-				}
-
-				if (slotSpells.length) {
-					if (isFocus) {
-						if (isCantrip) hasFocusCantrips = true;
-						else {
-							focuses.push(...slotSpells);
-							continue;
-						}
-					}
-
-					spells[groupNumber] ??= [];
-					spells[groupNumber].push(...slotSpells);
-				}
+					order: isCharge
+						? 0
+						: isPrepared
+						  ? 1
+						  : isFocus
+							  ? 2
+							  : isInnate
+								  ? 3
+								  : isSpontaneous
+									  ? 4
+									  : 5,
+				});
 			}
-		}),
-	);
+
+			if (slotSpells.length) {
+				if (isFocus) {
+					if (isCantrip) hasFocusCantrips = true;
+					else {
+						focuses.push(...slotSpells);
+						continue;
+					}
+				}
+
+				spells[groupNumber] ??= [];
+				spells[groupNumber].push(...slotSpells);
+			}
+		}
+	}
 
 	if (spells.length) {
 		const sortingSetting = getSetting("spells-sort");
@@ -181,23 +225,6 @@ export async function getSpellsData({ actor, filter }) {
 		hasFocusCantrips = false;
 	}
 
-	const ritualData = await actor.spellcasting.ritual?.getSheetData();
-	const rituals = ritualData?.groups.flatMap((group, slotId) =>
-		group.active
-			.map(({ spell }) => {
-				if (!filterIn(spell.name, filter)) return;
-				return {
-					name: spell.name,
-					img: spell.img,
-					slotId,
-					itemId: spell.id,
-					rank: spell.rank,
-					time: spell.system.time.value,
-				};
-			})
-			.filter(Boolean),
-	);
-
 	if (spells.length || rituals?.length) {
 		const attacks = getSpellAttacks(actor);
 
@@ -208,6 +235,7 @@ export async function getSpellsData({ actor, filter }) {
 				rituals,
 				focusPool,
 				hasFocusCantrips,
+				i18n: (str) => localize(`spells.${str}`),
 				attackMod: hasSingleSpellAttack(attacks) ? attacks[0].mod : null,
 				entryRank: (rank) =>
 					game.i18n.format("PF2E.Item.Spell.Rank.Ordinal", {
@@ -288,6 +316,15 @@ export function addSpellsListeners({ el, actor, hud }) {
 		statistic?.check.roll(rollParams);
 	});
 
+	el.find("[data-action=draw-item]").on("click", async (event) => {
+		event.preventDefault();
+
+		const item = getItemFromEvent(event, actor);
+		if (!item) return;
+
+		actor.changeCarryType(item, { carryType: "held", handsHeld: 1 });
+	});
+
 	el.find("[data-action=spell-chat]").on("click", async (event) => {
 		event.preventDefault();
 
@@ -324,16 +361,25 @@ export function addSpellsListeners({ el, actor, hud }) {
 	el.find("[data-action=cast-spell]").on("click", (event) => {
 		event.preventDefault();
 
-		const { castRank, slotId, entryId, itemId } = $(event.currentTarget)
-			.closest(".spell")
-			.data();
+		const { castRank, slotId, entryId, itemId } =
+			event.currentTarget.closest(".spell").dataset;
+
 		const collection = actor.spellcasting.collections.get(entryId);
 		if (!collection) return;
 
 		const spell = collection.get(itemId);
 		if (!spell) return;
 
-		collection.entry.cast(spell, { rank: castRank, slotId: slotId });
+		const maybeCastRank = Number(castRank) || NaN;
+		if (Number.isInteger(maybeCastRank) && maybeCastRank.between(1, 10)) {
+			if (!spell.parentItem?.consume()) {
+				collection.entry.cast(spell, {
+					rank: maybeCastRank,
+					slotId: Number(slotId),
+				});
+			}
+		}
+
 		if (getSetting("cast-close")) hud.close();
 	});
 

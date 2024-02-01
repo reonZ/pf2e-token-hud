@@ -290,7 +290,9 @@
             "attacks": {
                 "title": "Select a Spellcasting Entry",
                 "ok": "Roll"
-            }
+            },
+            "cast": "Cast a Spell",
+            "draw": "Draw Consumable"
         },
         "extras": {
             "title": "Extras",

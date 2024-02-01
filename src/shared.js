@@ -55,7 +55,13 @@ export function addNameTooltipListeners(el) {
 }
 
 export function getItemFromElement(el, actor) {
-	const { itemId, parentId } = el.dataset;
+	const { itemId, parentId, entryId, castRank } = el.dataset;
+
+	if (entryId) {
+		const collection = actor.spellcasting.collections.get(entryId);
+		return collection?.get(itemId);
+	}
+
 	const item = actor.items.get(parentId ?? itemId);
 	return parentId ? item?.subitems.get(itemId) : item;
 }

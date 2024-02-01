@@ -33,6 +33,7 @@
         </div>
         {{/if}}
     </div>
+
     {{#each entry as |spell|}}
     <div class="spell item item-box{{#if spell.expended}} expended{{/if}}{{#if spell.isVirtual}} virtual{{/if}}"
         data-entry-id="{{spell.entryId}}" data-slot-id="{{spell.slotId}}" data-expended="{{spell.expended}}"
@@ -51,11 +52,12 @@
                     {{localize spell.type}} {{{actionGlyph spell.action}}}
                 </div>
                 <div class="actions">
-                    {{#if (and (not spell.isCantrip) (or spell.isSpontaneous spell.isInnate spell.isActiveCharge))}}
+                    {{#if (and (not spell.isCantrip) (or spell.isSpontaneous spell.isInnate spell.isActiveCharge spell..consumable))}}
                     <div class="uses">
                         <input type="number" value="{{spell.uses.value}}" data-input-path="{{spell.inputPath}}"
-                            data-entry-id="{{#if spell.isInnate}}{{spell.itemId}}{{else}}{{spell.entryId}}{{/if}}" placeholder="0" min="0"
-                            max="{{spell.uses.max}}" {{disabled (not @root.isOwner)}}>
+                            data-entry-id="{{#if spell.isInnate}}{{spell.itemId}}{{else if spell.consumable}}{{spell.consumable.id}}{{else}}{{spell.entryId}}{{/if}}"
+                            placeholder="0" min="0" max="{{spell.uses.max}}" {{disabled (or (not @root.isOwner) (and spell.uses.autoDestroy
+                            (eq spell.uses.max 1) (lte spell.uses.value 1)))}}>
                         {{#if (and spell.uses.max (not spell.uses.noMax))}}
                         <input type="text" value="/  {{spell.uses.max}}" disabled>
                         {{/if}}
@@ -69,9 +71,16 @@
                     {{/if}}
 
                     {{#if (and @root.isOwner (or (not spell.isCharge) spell.isActiveCharge))}}
-                    <a {{#if spell.expended}}class="disabled" {{else}}data-action="cast-spell" {{/if}}>
+                    {{#if (eq spell.consumable.isEquipped false)}}
+                    <a {{#if spell.expended}}class="disabled" {{else}}data-action="draw-item" data-item-id="{{spell.consumable.id}}" {{/if}}
+                        data-tooltip="{{@root.i18n 'draw'}}">
+                        <i class="fa-solid fa-hand-back-fist"></i>
+                    </a>
+                    {{else}}
+                    <a {{#if spell.expended}}class="disabled" {{else}}data-action="cast-spell" {{/if}} data-tooltip="{{@root.i18n 'cast'}}">
                         <i class="fa-solid fa-play"></i>
                     </a>
+                    {{/if}}
                     {{/if}}
                 </div>
             </div>
