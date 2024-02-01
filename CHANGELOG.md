@@ -1,3 +1,11 @@
+# 1.62.0
+
+-   this is a `5.13.1` release
+-   added support for wands and scrolls in the spells sidebar
+    -   their type label is `Consumable`
+    -   you must first `Draw` the item before being able to `Cast` it
+    -   you can modify the item charges
+
 # 1.61.0
 
 -   this is a `5.13.0` release
