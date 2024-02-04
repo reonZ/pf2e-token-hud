@@ -1,3 +1,7 @@
+# 1.62.2
+
+-   fixed issue with equipment identification dialog
+
 # 1.62.1
 
 -   replace the `Consumable` spell category with the appropriate `Wand` or `Scroll` in the spells sidebar
