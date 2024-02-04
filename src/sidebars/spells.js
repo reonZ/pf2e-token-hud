@@ -156,7 +156,7 @@ export async function getSpellsData({ actor, filter }) {
 						  (isFocus && !isCantrip ? focusPool.value <= 0 : false),
 					action: spell.system.time.value,
 					type: consumable
-						? "TYPES.Item.consumable"
+						? `PF2E.Item.Consumable.Category.${consumable.category}`
 						: isCharge
 						  ? `${MODULE_ID}.spells.staff`
 						  : isInnate
