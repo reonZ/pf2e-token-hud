@@ -85,7 +85,7 @@ export class IdentifyItemPopup extends FormApplication {
 		};
 	}
 
-	activateListeners($form) {
+	activateListeners($html) {
 		const html = $html[0];
 
 		const updateButton = html.querySelector("button.update-identification");
