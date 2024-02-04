@@ -1,3 +1,7 @@
+# 1.62.1
+
+-   replace the `Consumable` spell category with the appropriate `Wand` or `Scroll` in the spells sidebar
+
 # 1.62.0
 
 -   this is a `5.13.1` release
