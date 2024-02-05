@@ -52,7 +52,7 @@
                     {{localize spell.type}} {{{actionGlyph spell.action}}}
                 </div>
                 <div class="actions">
-                    {{#if (and (not spell.isCantrip) (or spell.isSpontaneous spell.isInnate spell.isActiveCharge spell..consumable))}}
+                    {{#if (and (not spell.isCantrip) (or spell.isSpontaneous spell.isInnate spell.isActiveCharge spell.consumable))}}
                     <div class="uses">
                         <input type="number" value="{{spell.uses.value}}" data-input-path="{{spell.inputPath}}"
                             data-entry-id="{{#if spell.isInnate}}{{spell.itemId}}{{else if spell.consumable}}{{spell.consumable.id}}{{else}}{{spell.entryId}}{{/if}}"
