@@ -1,3 +1,7 @@
+# 1.62.3
+
+-   fixed issue with prepared spells showing charges instead of the `+-` toggle
+
 # 1.62.2
 
 -   fixed issue with equipment identification dialog
