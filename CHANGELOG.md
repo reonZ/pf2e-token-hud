@@ -1,3 +1,7 @@
+# 1.62.4
+
+-   fixed main HUD `Spells` icon being disabled if a character only had consumable spells
+
 # 1.62.3
 
 -   fixed issue with prepared spells showing charges instead of the `+-` toggle
