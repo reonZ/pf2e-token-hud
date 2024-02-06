@@ -651,7 +651,9 @@ export class HUD extends Application {
 				?.map(toInfo)
 				.join(""),
 			languages,
-			hasSpells: actor.spellcasting.some((x) => x.category !== "items"),
+			hasSpells: actor.spellcasting.some(
+				(entry) => entry.category !== "items" || entry.id.endsWith("-casting"),
+			),
 			hasNotes:
 				!isCharacter &&
 				(system.details.publicNotes ||
