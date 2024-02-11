@@ -233,7 +233,7 @@ export function addItemsListeners({ el, actor, token, hud }) {
 		else item.deleteDialog();
 	});
 
-	el.find("[data-action=toggle-item-worn").on("click", async (event) => {
+	el.find("[data-action=toggle-item-worn]").on("click", async (event) => {
 		const item = getItemFromEvent(event, actor);
 		if (!item) return;
 
