@@ -106,18 +106,22 @@ async function rollSkill(skill, dieResult, dcs) {
 	});
 
 	const mod = roll.total - roll.dice[0].total;
-	const total = dieResult + mod;
+
+	const fakeRoll = {
+		dieValue: dieResult,
+		modifier: mod,
+	};
 
 	return {
 		mod,
 		rank,
 		label,
-		total,
+		total: dieResult + mod,
 		modifier: modifier(mod),
 		rankLabel: RANKS[rank],
 		checks: dcs?.map((dc) => {
 			if (!dc) return "-";
-			const success = new DegreeOfSuccess(roll, dc).value;
+			const success = new DegreeOfSuccess(fakeRoll, dc).value;
 			return {
 				success,
 				icon: SUCCESS[success].icon,
