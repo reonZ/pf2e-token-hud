@@ -1,3 +1,7 @@
+# 1.62.5
+
+-   fixed degree of success snafu with the targeted `Recall Knowledge` skill action
+
 # 1.62.4
 
 -   fixed main HUD `Spells` icon being disabled if a character only had consumable spells
