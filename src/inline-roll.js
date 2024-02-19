@@ -123,8 +123,9 @@ export const InlineRollLinks = {
 				pf2Adjustment,
 				pf2Roller,
 				pf2RollOptions,
-				overrideTraits,
 			} = link.dataset;
+			const overrideTraits = "overrideTraits" in link.dataset;
+			const targetOwner = "targetOwner" in link.dataset;
 
 			if (!pf2Check) return;
 
@@ -180,7 +181,10 @@ export const InlineRollLinks = {
 
 						for (const actor of actors) {
 							const statistic = (() => {
-								if (pf2Check in CONFIG.PF2E.magicTraditions) {
+								if (
+									pf2Check in CONFIG.PF2E.magicTraditions &&
+									actor.isOfType("creature")
+								) {
 									const bestSpellcasting =
 										actor.spellcasting
 											.filter((c) => c.tradition === pf2Check)
@@ -201,7 +205,9 @@ export const InlineRollLinks = {
 							}
 
 							const targetActor = pf2Defense
-								? game.user.targets.first()?.actor
+								? targetOwner
+									? parent
+									: game.user.targets.first()?.actor
 								: null;
 
 							const dcValue = (() => {
@@ -400,7 +406,7 @@ export const InlineRollLinks = {
 		return `<span data-visibility="${showDC}">${flavor}</span> ${target.outerHTML}`.trim();
 	},
 
-	repostAction: (target, foundryDoc = null) => {
+	repostAction: async (target, foundryDoc = null) => {
 		if (
 			!["pf2Action", "pf2Check", "pf2EffectArea"].some(
 				(d) => d in target.dataset,
@@ -447,11 +453,7 @@ export const InlineRollLinks = {
 				  ? { pf2e: { origin: fu.deepClone(message.flags.pf2e.origin) } }
 				  : {};
 
-		ChatMessagePF2e.create({
-			speaker,
-			content,
-			flags,
-		});
+		return ChatMessagePF2e.create({ speaker, content, flags });
 	},
 
 	/** Give inline damage-roll links from items flavor text of the item name */

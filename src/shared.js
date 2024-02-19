@@ -1,5 +1,5 @@
+import { InlineRollLinks } from "./inline-roll.js";
 import { getFlag, setFlag } from "./module.js";
-import { InlineRollLinks } from "./pf2e/inline-roll.js";
 
 export const RANKS = ["U", "T", "E", "M", "L"];
 

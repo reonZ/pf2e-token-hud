@@ -1,5 +1,5 @@
+import { InlineRollLinks } from "../inline-roll.js";
 import { enrichHTML, getSetting, modifier } from "../module.js";
-import { InlineRollLinks } from "../pf2e/inline-roll.js";
 import { showItemSummary } from "../popup.js";
 
 export async function getHazardData({ actor }) {
