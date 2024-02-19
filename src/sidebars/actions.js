@@ -1,8 +1,8 @@
+import { objectHasKey } from "module-api";
 import { enrichHTML, getSetting, localize, templatePath } from "../module.js";
 import { createSelfEffectMessage } from "../pf2e/item.js";
 import { getActionIcon } from "../pf2e/misc.js";
 import { eventToRollMode } from "../pf2e/scripts.js";
-import { toggleWeaponTrait } from "../pf2e/weapon.js";
 import { popup, showItemSummary } from "../popup.js";
 import {
 	addNameTooltipListeners,
@@ -384,19 +384,25 @@ export function addActionsListeners({ el, actor, hud }) {
 		strike.auxiliaryActions?.[index]?.execute({ selection: modular });
 	});
 
-	action("toggle-versatile", (event) => {
+	action("toggle-versatile", async (event) => {
 		const weapon = getStrike(event)?.item;
 		if (!weapon) return;
 
 		const target = event.currentTarget;
 		const { value } = target.dataset;
-		const baseType = weapon?.system.damage.damageType ?? null;
+		const baseType = weapon.system.damage.damageType ?? null;
 		const selection =
 			target.classList.contains("selected") || value === baseType
 				? null
 				: value;
+		const selectionIsValid =
+			objectHasKey(CONFIG.PF2E.damageTypes, selection) || selection === null;
+		if (!selectionIsValid) return;
 
-		toggleWeaponTrait({ trait: "versatile", weapon, selection });
+		await weapon.system.traits.toggles.update({
+			trait: "versatile",
+			selected: selection,
+		});
 	});
 
 	action(
