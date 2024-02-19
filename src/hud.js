@@ -1,3 +1,4 @@
+import { getDamageRollClass } from "module-api";
 import { useResolve } from "./actions/use-resolve.js";
 import {
 	MODULE_ID,
@@ -9,7 +10,6 @@ import {
 	setFlag,
 	templatePath,
 } from "./module.js";
-import { getDamageRollClass } from "./pf2e/classes.js";
 import { popup } from "./popup.js";
 import {
 	RANKS,
