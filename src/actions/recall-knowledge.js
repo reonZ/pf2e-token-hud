@@ -1,5 +1,5 @@
+import { DegreeOfSuccess } from "module-api";
 import { getSetting, localize, modifier, templatePath } from "../module.js";
-import { DegreeOfSuccess } from "../pf2e/success.js";
 import { RANKS, getUniqueTarget } from "../shared.js";
 
 const SKILLS = [
