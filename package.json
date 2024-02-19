@@ -19,6 +19,6 @@
         "esbuild": "0.x"
     },
     "dependencies": {
-        "module-api": "file:../../../../dev/module-api"
+        "module-api": "github:reonZ/module-api"
     }
 }
