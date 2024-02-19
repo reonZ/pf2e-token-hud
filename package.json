@@ -19,6 +19,6 @@
         "esbuild": "0.x"
     },
     "dependencies": {
-        "remeda": "^1.33.0"
+        "module-api": "file:../../../../dev/module-api"
     }
 }
