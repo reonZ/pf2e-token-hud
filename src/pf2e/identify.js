@@ -1,4 +1,4 @@
-import * as R from "remeda";
+import { R } from "module-api";
 import { adjustDCByRarity, calculateDC } from "./dc.js";
 import { setHasElement } from "./misc.js";
 

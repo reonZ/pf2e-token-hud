@@ -1,4 +1,4 @@
-import * as R from "remeda";
+import { R } from "module-api";
 import { calculateDC } from "./dc";
 import { htmlClosest, htmlQueryAll } from "./dom";
 import {
