@@ -1,12 +1,12 @@
 import {
 	ErrorPF2e,
 	R,
+	calculateDC,
 	getActionGlyph,
 	objectHasKey,
 	sluggify,
 	tupleHasValue,
 } from "module-api";
-import { calculateDC } from "./dc";
 import { htmlClosest, htmlQueryAll } from "./dom";
 import { eventToRollParams } from "./scripts";
 
