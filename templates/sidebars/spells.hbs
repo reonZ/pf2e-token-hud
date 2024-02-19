@@ -15,7 +15,8 @@
 {{#if spells.length}}
 {{#each spells as |entry|}}
 {{#if entry includeZero=true}}
-<div class="entry" data-entry="{{#if (eq @index 0)}}cantrip{{else if (eq @index 12)}}focus{{else}}{{@index}}{{/if}}">
+<div class="entry"
+    data-entry="{{#if (eq @index 0)}}cantrip{{else if (eq @index 12)}}focus{{else}}{{@index}}{{/if}}">
     <div class="header">
         {{#if (eq @index 0)}}
         {{localize 'PF2E.Actor.Creature.Spellcasting.Cantrips'}}
@@ -28,7 +29,8 @@
         {{#if (or (eq @index 12) (and (eq @index 0) @root.hasFocusCantrips))}}
         <div class="pips" data-action="toggle-pips">
             {{#times @root.focusPool.max}}
-            <i class="{{#if (gt @root.focusPool.value this)}}fas fa-dot-circle{{else}}far fa-circle{{/if}}"></i>
+            <i
+                class="{{#if (gt @root.focusPool.value this)}}fas fa-dot-circle{{else}}far fa-circle{{/if}}"></i>
             {{/times}}
         </div>
         {{/if}}
@@ -36,8 +38,9 @@
 
     {{#each entry as |spell|}}
     <div class="spell item item-box{{#if spell.expended}} expended{{/if}}{{#if spell.isVirtual}} virtual{{/if}}"
-        data-entry-id="{{spell.entryId}}" data-slot-id="{{spell.slotId}}" data-expended="{{spell.expended}}"
-        data-group-id="{{spell.groupId}}" data-item-id="{{spell.itemId}}" data-cast-rank="{{spell.castRank}}">
+        data-entry-id="{{spell.entryId}}" data-slot-id="{{spell.slotId}}"
+        data-expended="{{spell.expended}}" data-group-id="{{spell.groupId}}"
+        data-item-id="{{spell.itemId}}" data-cast-rank="{{spell.castRank}}">
         <div class="item-img hover" data-action="spell-chat">
             <img src="{{spell.img}}">
             {{#if @root.isOwner}}
@@ -52,32 +55,38 @@
                     {{localize spell.type}} {{{actionGlyph spell.action}}}
                 </div>
                 <div class="actions">
-                    {{#if (and (not spell.isCantrip) (or spell.isSpontaneous spell.isInnate spell.isActiveCharge spell.consumable))}}
+                    {{#if (and (not spell.isCantrip) (or spell.isSpontaneous spell.isInnate
+                    spell.isActiveCharge spell.consumable))}}
                     <div class="uses">
-                        <input type="number" value="{{spell.uses.value}}" data-input-path="{{spell.inputPath}}"
+                        <input type="number" value="{{spell.uses.value}}"
+                            data-input-path="{{spell.inputPath}}"
                             data-entry-id="{{#if spell.isInnate}}{{spell.itemId}}{{else if spell.consumable}}{{spell.consumable.id}}{{else}}{{spell.entryId}}{{/if}}"
-                            placeholder="0" min="0" max="{{spell.uses.max}}" {{disabled (or (not @root.isOwner) (and spell.uses.autoDestroy
-                            (eq spell.uses.max 1) (lte spell.uses.value 1)))}}>
+                            placeholder="0" min="0" max="{{spell.uses.max}}" {{disabled (or (not
+                            @root.isOwner) (and spell.uses.autoDestroy (eq spell.uses.max 1) (lte
+                            spell.uses.value 1)))}}>
                         {{#if (and spell.uses.max (not spell.uses.noMax))}}
                         <input type="text" value="/  {{spell.uses.max}}" disabled>
                         {{/if}}
                     </div>
                     {{else if (and (not spell.isCantrip) spell.isCharge)}}
                     <i class="fa-solid fa-link-slash"></i>
-                    {{else if (and spell.isPrepared @root.isOwner)}}
+                    {{else if (and spell.isPrepared @root.isOwner (not spell.isCantrip))}}
                     <a data-action="toggle-prepared">
-                        <i class="fas fa-fw {{#if spell.expended}}fa-plus-square{{else}}fa-minus-square{{/if}}"></i>
+                        <i
+                            class="fas fa-fw {{#if spell.expended}}fa-plus-square{{else}}fa-minus-square{{/if}}"></i>
                     </a>
                     {{/if}}
 
                     {{#if (and @root.isOwner (or (not spell.isCharge) spell.isActiveCharge))}}
                     {{#if (eq spell.consumable.isEquipped false)}}
-                    <a {{#if spell.expended}}class="disabled" {{else}}data-action="draw-item" data-item-id="{{spell.consumable.id}}" {{/if}}
+                    <a {{#if spell.expended}}class="disabled" {{else}}data-action="draw-item"
+                        data-item-id="{{spell.consumable.id}}" {{/if}}
                         data-tooltip="{{@root.i18n 'draw'}}">
                         <i class="fa-solid fa-hand-back-fist"></i>
                     </a>
                     {{else}}
-                    <a {{#if spell.expended}}class="disabled" {{else}}data-action="cast-spell" {{/if}} data-tooltip="{{@root.i18n 'cast'}}">
+                    <a {{#if spell.expended}}class="disabled" {{else}}data-action="cast-spell"
+                        {{/if}} data-tooltip="{{@root.i18n 'cast'}}">
                         <i class="fa-solid fa-play"></i>
                     </a>
                     {{/if}}
@@ -96,8 +105,8 @@
 <div class="entry" data-entry="rituals">
     <div class="header">{{localize 'PF2E.Actor.Creature.Spellcasting.Rituals'}}</div>
     {{#each rituals as |ritual|}}
-    <div class="spell item-box" data-group-id="{{ritual.rank}}" data-cast-rank="{{ritual.rank}}" data-entry-id="rituals"
-        data-item-id="{{ritual.itemId}}">
+    <div class="spell item-box" data-group-id="{{ritual.rank}}" data-cast-rank="{{ritual.rank}}"
+        data-entry-id="rituals" data-item-id="{{ritual.itemId}}">
         <div class="item-img hover" data-action="spell-chat">
             <img src="{{ritual.img}}">
             {{#if @root.isOwner}}
