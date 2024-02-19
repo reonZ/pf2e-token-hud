@@ -2,13 +2,13 @@ import {
 	ErrorPF2e,
 	R,
 	calculateDC,
+	eventToRollParams,
 	getActionGlyph,
 	objectHasKey,
 	sluggify,
 	tupleHasValue,
 } from "module-api";
 import { htmlClosest, htmlQueryAll } from "./dom";
-import { eventToRollParams } from "./scripts";
 
 const SAVE_TYPES = ["fortitude", "reflex", "will"];
 const inlineSelector = ["action", "check", "effect-area"]

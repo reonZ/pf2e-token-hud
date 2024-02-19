@@ -1,5 +1,6 @@
 import {
 	coerceToSpellGroupId,
+	eventToRollParams,
 	ordinalString,
 	spellSlotGroupIdToNumber,
 } from "module-api";
@@ -10,7 +11,6 @@ import {
 	modifier,
 	templatePath,
 } from "../module.js";
-import { eventToRollParams } from "../pf2e/scripts.js";
 import { showItemSummary } from "../popup.js";
 import {
 	addNameTooltipListeners,

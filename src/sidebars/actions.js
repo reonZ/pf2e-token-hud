@@ -1,10 +1,10 @@
 import {
 	createSelfEffectMessage,
+	eventToRollMode,
 	getActionIcon,
 	objectHasKey,
 } from "module-api";
 import { enrichHTML, getSetting, localize, templatePath } from "../module.js";
-import { eventToRollMode } from "../pf2e/scripts.js";
 import { popup, showItemSummary } from "../popup.js";
 import {
 	addNameTooltipListeners,
