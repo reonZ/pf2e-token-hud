@@ -1,6 +1,9 @@
-import { createSelfEffectMessage, objectHasKey } from "module-api";
+import {
+	createSelfEffectMessage,
+	getActionIcon,
+	objectHasKey,
+} from "module-api";
 import { enrichHTML, getSetting, localize, templatePath } from "../module.js";
-import { getActionIcon } from "../pf2e/misc.js";
 import { eventToRollMode } from "../pf2e/scripts.js";
 import { popup, showItemSummary } from "../popup.js";
 import {

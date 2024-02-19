@@ -1,13 +1,13 @@
-import { R } from "module-api";
-import { calculateDC } from "./dc";
-import { htmlClosest, htmlQueryAll } from "./dom";
 import {
 	ErrorPF2e,
+	R,
 	getActionGlyph,
 	objectHasKey,
 	sluggify,
 	tupleHasValue,
-} from "./misc";
+} from "module-api";
+import { calculateDC } from "./dc";
+import { htmlClosest, htmlQueryAll } from "./dom";
 import { eventToRollParams } from "./scripts";
 
 const SAVE_TYPES = ["fortitude", "reflex", "will"];

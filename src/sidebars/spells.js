@@ -1,15 +1,15 @@
 import {
+	coerceToSpellGroupId,
+	ordinalString,
+	spellSlotGroupIdToNumber,
+} from "module-api";
+import {
 	MODULE_ID,
 	getSetting,
 	localize,
 	modifier,
 	templatePath,
 } from "../module.js";
-import {
-	coerceToSpellGroupId,
-	ordinalString,
-	spellSlotGroupIdToNumber,
-} from "../pf2e/misc.js";
 import { eventToRollParams } from "../pf2e/scripts.js";
 import { showItemSummary } from "../popup.js";
 import {

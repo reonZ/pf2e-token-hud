@@ -1,6 +1,5 @@
-import { R } from "module-api";
+import { R, setHasElement } from "module-api";
 import { adjustDCByRarity, calculateDC } from "./dc.js";
-import { setHasElement } from "./misc.js";
 
 const MAGIC_TRADITIONS = new Set(["arcane", "divine", "occult", "primal"]);
 
