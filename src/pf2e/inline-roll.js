@@ -4,11 +4,12 @@ import {
 	calculateDC,
 	eventToRollParams,
 	getActionGlyph,
+	htmlClosest,
+	htmlQueryAll,
 	objectHasKey,
 	sluggify,
 	tupleHasValue,
 } from "module-api";
-import { htmlClosest, htmlQueryAll } from "./dom";
 
 const SAVE_TYPES = ["fortitude", "reflex", "will"];
 const inlineSelector = ["action", "check", "effect-area"]
