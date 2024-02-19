@@ -1,6 +1,6 @@
+import { detachSubitem } from "module-api";
 import { getFlag, getSetting, localize, setFlag } from "../module.js";
 import { IdentifyItemPopup } from "../pf2e/identify.js";
-import { detachSubitem } from "../pf2e/item.js";
 import { showItemSummary } from "../popup.js";
 import {
 	addNameTooltipListeners,

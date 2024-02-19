@@ -1,6 +1,6 @@
+import { unownedItemToMessage } from "module-api";
 import { rollRecallKnowledges } from "../actions/recall-knowledge.js";
 import { getSetting, localize } from "../module.js";
-import { unownedItemToMessage } from "../pf2e/item.js";
 import { showItemSummary } from "../popup.js";
 import {
 	addNameTooltipListeners,
@@ -170,15 +170,13 @@ export function addExtrasListeners({ el, actor, token, hud }) {
 				modifiers.push(modifier);
 			}
 
-			game.pf2e.actions
-				.get("escape")
-				.use({
-					event,
-					actors: [actor],
-					tokens: [token],
-					statistic: variants?.skill,
-					modifiers,
-				});
+			game.pf2e.actions.get("escape").use({
+				event,
+				actors: [actor],
+				tokens: [token],
+				statistic: variants?.skill,
+				modifiers,
+			});
 
 			if (getSetting("skill-close")) hud.close();
 		},

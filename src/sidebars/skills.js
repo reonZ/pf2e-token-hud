@@ -1,3 +1,4 @@
+import { unownedItemToMessage } from "module-api";
 import {
 	getSetting,
 	hasFeat,
@@ -5,7 +6,6 @@ import {
 	modifier,
 	templatePath,
 } from "../module.js";
-import { unownedItemToMessage } from "../pf2e/item.js";
 import { showItemSummary } from "../popup.js";
 import { filterIn, localeCompare } from "../shared.js";
 
