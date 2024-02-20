@@ -34,6 +34,7 @@ const HOVER_EXCEPTIONS = [
 ].join(", ");
 
 const PLACEMENT_BY_TYPE = {
+	actions: "actions",
 	spells: "spellcasting",
 	items: "inventory",
 	skills: "proficiencies",
@@ -1136,10 +1137,12 @@ export class HUD extends Application {
 		const showFilter = filter !== undefined || getSetting("filter");
 		const { getData, addListeners } = SIDEBARS[type];
 
-		const placement = PLACEMENT_BY_TYPE[type] ?? "actions";
-		const toggles = actor.synthetics.toggles.filter(
-			(toggle) => toggle.placement === placement,
-		);
+		const placement = PLACEMENT_BY_TYPE[type];
+		const toggles = placement
+			? actor.synthetics.toggles.filter(
+					(toggle) => toggle.placement === placement,
+			  )
+			: [];
 
 		const data =
 			(await getData({
