@@ -1,4 +1,9 @@
-import { IdentifyItemPopup, detachSubitem } from "module-api";
+import {
+	IdentifyItemPopup,
+	createTooltip,
+	detachSubitem,
+	dismissTooltip,
+} from "module-api";
 import { getFlag, getSetting, localize, setFlag } from "../module.js";
 import { showItemSummary } from "../popup.js";
 import {
@@ -7,7 +12,6 @@ import {
 	getItemFromEvent,
 	localeCompare,
 } from "../shared.js";
-import { createTooltip, dismissTooltip } from "../tooltip.js";
 
 const ITEMS_TYPES = {
 	weaponAndShield: {

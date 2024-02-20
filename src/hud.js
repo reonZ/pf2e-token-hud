@@ -1,4 +1,4 @@
-import { getDamageRollClass } from "module-api";
+import { createTooltip, getDamageRollClass } from "module-api";
 import { useResolve } from "./actions/use-resolve.js";
 import {
 	MODULE_ID,
@@ -23,7 +23,6 @@ import { addHazardListeners, getHazardData } from "./sidebars/hazard.js";
 import { addItemsListeners, getItemsData } from "./sidebars/items.js";
 import { addSkillsListeners, getSkillsData } from "./sidebars/skills.js";
 import { addSpellsListeners, getSpellsData } from "./sidebars/spells.js";
-import { createTooltip } from "./tooltip.js";
 
 const HOVER_EXCEPTIONS = [
 	"#combat-popout",
