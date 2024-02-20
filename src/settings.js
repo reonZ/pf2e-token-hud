@@ -1,3 +1,4 @@
+import { registerSetting, settingPath } from "module-api";
 import { MODULE_ID, enableModule, localize } from "./module.js";
 
 export function registerSettings() {
@@ -49,14 +50,20 @@ export function registerSettings() {
 	});
 
 	register("key-holding", String, "none", {
-		hint: path("key-holding", isGM ? "choices.gm.hint" : "choices.player.hint"),
+		hint: settingPath(
+			"key-holding",
+			isGM ? "choices.gm.hint" : "choices.player.hint",
+		),
 		choices: {
-			none: path("key-holding", "choices.none"),
-			half: path(
+			none: settingPath("key-holding", "choices.none"),
+			half: settingPath(
 				"key-holding",
 				isGM ? "choices.gm.half" : "choices.player.half",
 			),
-			all: path("key-holding", isGM ? "choices.gm.all" : "choices.player.all"),
+			all: settingPath(
+				"key-holding",
+				isGM ? "choices.gm.all" : "choices.player.all",
+			),
 		},
 	});
 
@@ -176,21 +183,9 @@ export function renderSettingsConfig(_, html) {
 	// beforeGroup('', 'client.extras')
 }
 
-function path(setting, key) {
-	return `${MODULE_ID}.settings.${setting}.${key}`;
-}
-
 function register(name, type, defValue, extra = {}) {
-	if (Array.isArray(extra.choices)) {
-		extra.choices = extra.choices.reduce((choices, choice) => {
-			choices[choice] = path(name, `choices.${choice}`);
-			return choices;
-		}, {});
-	}
-
-	game.settings.register(MODULE_ID, name, {
-		name: path(name, "name"),
-		hint: path(name, "hint"),
+	registerSetting({
+		name,
 		scope: "client",
 		config: true,
 		type,

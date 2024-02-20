@@ -1,3 +1,4 @@
+import { registerModule } from "module-api";
 import { registerKeybindings } from "./keybindings.js";
 import {
 	MODULE_ID,
@@ -9,6 +10,8 @@ import {
 } from "./module.js";
 import { registerSettings, renderSettingsConfig } from "./settings.js";
 import { deleteMacro, getMacros, onDroppedMacro } from "./shared.js";
+
+registerModule("pf2e-token-hud");
 
 Hooks.once("setup", async () => {
 	registerSettings();
