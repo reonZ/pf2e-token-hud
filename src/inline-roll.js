@@ -57,9 +57,7 @@ export const InlineRollLinks = {
 		}
 	},
 
-	listen: (html, doc = null) => {
-		const foundryDoc = doc ?? resolveDocument(html, doc);
-
+	listen: (html, foundryDoc = resolveDocument(html)) => {
 		const links = htmlQueryAll(html, inlineSelector).filter((l) =>
 			["A", "SPAN"].includes(l.nodeName),
 		);
@@ -437,7 +435,7 @@ export const InlineRollLinks = {
 		const speaker = actor
 			? ChatMessagePF2e.getSpeaker({
 					actor,
-					token: actor.getActiveTokens(false, true).shift(),
+					token: actor.getActiveTokens(true, true).shift(),
 			  })
 			: ChatMessagePF2e.getSpeaker();
 
