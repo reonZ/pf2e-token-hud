@@ -1137,12 +1137,16 @@ export class HUD extends Application {
 		const showFilter = filter !== undefined || getSetting("filter");
 		const { getData, addListeners } = SIDEBARS[type];
 
-		const placement = PLACEMENT_BY_TYPE[type];
-		const toggles = placement
-			? actor.synthetics.toggles.filter(
+		const toggles = (() => {
+			const placement = PLACEMENT_BY_TYPE[type];
+			if (!placement) return;
+
+			return Object.values(this.actor.synthetics.toggles).flatMap((domain) =>
+				Object.values(domain).filter(
 					(toggle) => toggle.placement === placement,
-			  )
-			: [];
+				),
+			);
+		})();
 
 		const data =
 			(await getData({
