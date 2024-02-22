@@ -1,4 +1,4 @@
-import { InlineRollLinks } from "../inline-roll.js";
+import { InlineRollLinks } from "module-api";
 import { enrichHTML, getSetting, modifier } from "../module.js";
 import { showItemSummary } from "../popup.js";
 

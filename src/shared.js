@@ -1,4 +1,4 @@
-import { InlineRollLinks } from "./inline-roll.js";
+import { InlineRollLinks } from "module-api";
 import { getFlag, setFlag } from "./module.js";
 
 export const RANKS = ["U", "T", "E", "M", "L"];
