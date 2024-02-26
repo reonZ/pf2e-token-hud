@@ -98,9 +98,9 @@ const ACTIONS_UUIDS = {
 };
 
 const DUPLICATE_SKILLS = {
-	escape: { slug: "escape", cost: "1", type: 2, noSkill: true },
+	escape: { slug: "escape", cost: "1", noSkill: true },
 	"recall-knowledge": { slug: "recall-knowledge", cost: "1", secret: true },
-	"decipher-writing": { slug: "decipher-writing", type: 2, trained: true },
+	"decipher-writing": { slug: "decipher-writing", trained: true },
 	"identify-magic": { slug: "identify-magic", trained: true },
 	"learn-a-spell": { slug: "learn-a-spell", trained: true },
 };
@@ -109,18 +109,18 @@ const SKILLS = [
 	{
 		slug: "perception",
 		actions: [
-			{ slug: "sense-motive", cost: "1", type: 2 },
-			{ slug: "seek", cost: "1", type: 2 },
+			{ slug: "sense-motive", cost: "1" },
+			{ slug: "seek", cost: "1" },
 		],
 	},
 	{
 		slug: "acrobatics",
 		actions: [
-			{ slug: "balance", cost: "1", type: 2 },
+			{ slug: "balance", cost: "1" },
 			// 'escape',
-			{ slug: "tumble-through", cost: "1", type: 2 },
-			{ slug: "maneuver-in-flight", cost: "1", type: 2, trained: true },
-			{ slug: "squeeze", type: 2, trained: true },
+			{ slug: "tumble-through", cost: "1" },
+			{ slug: "maneuver-in-flight", cost: "1", trained: true },
+			{ slug: "squeeze", trained: true },
 		],
 	},
 	{
@@ -136,12 +136,11 @@ const SKILLS = [
 	{
 		slug: "athletics",
 		actions: [
-			{ slug: "climb", cost: "1", type: 1 },
+			{ slug: "climb", cost: "1" },
 			// 'escape',
 			{
 				slug: "force-open",
 				cost: "1",
-				type: 1,
 				map: true,
 				modifiers: [
 					{
@@ -159,17 +158,16 @@ const SKILLS = [
 					},
 				],
 			},
-			{ slug: "grapple", cost: "1", type: 1, map: true, agile: true },
-			{ slug: "high-jump", cost: "1", type: 1 },
-			{ slug: "long-jump", cost: "1", type: 1 },
-			{ slug: "reposition", cost: "1", type: 2, map: true, agile: true },
-			{ slug: "shove", cost: "1", type: 1, map: true, agile: true },
-			{ slug: "swim", cost: "1", type: 1 },
-			{ slug: "trip", cost: "1", type: 2, map: true, agile: true },
+			{ slug: "grapple", cost: "1", map: true, agile: true },
+			{ slug: "high-jump", cost: "1" },
+			{ slug: "long-jump", cost: "1" },
+			{ slug: "reposition", cost: "1", map: true, agile: true },
+			{ slug: "shove", cost: "1", map: true, agile: true },
+			{ slug: "swim", cost: "1" },
+			{ slug: "trip", cost: "1", map: true, agile: true },
 			{
 				slug: "disarm",
 				cost: "1",
-				type: 1,
 				map: true,
 				trained: true,
 				agile: true,
@@ -180,8 +178,8 @@ const SKILLS = [
 		slug: "crafting",
 		actions: [
 			// 'recall-knowledge',
-			{ slug: "repair", type: 1 },
-			{ slug: "craft", type: 1, trained: true },
+			{ slug: "repair" },
+			{ slug: "craft", trained: true },
 			{ slug: "crafting-goods", trained: true },
 			{ slug: "earnIncome", type: 3, trained: true },
 			{ slug: "identify-alchemy", trained: true },
@@ -193,12 +191,11 @@ const SKILLS = [
 			{
 				slug: "create-a-diversion",
 				cost: "1",
-				type: 1,
 				variants: ["distracting-words", "gesture", "trick"],
 			},
-			{ slug: "impersonate", type: 1 },
-			{ slug: "lie", type: 1 },
-			{ slug: "feint", cost: "1", type: 1, trained: true },
+			{ slug: "impersonate" },
+			{ slug: "lie" },
+			{ slug: "feint", cost: "1", trained: true },
 		],
 	},
 	{
@@ -207,20 +204,16 @@ const SKILLS = [
 			{
 				slug: "bonMot",
 				cost: "1",
-				type: 1,
 				condition: (actor) => hasFeat(actor, BON_MOT_UUID),
 			},
-			{ slug: "gather-information", type: 1 },
-			{ slug: "make-an-impression", type: 1 },
-			{ slug: "request", cost: "1", type: 1 },
+			{ slug: "gather-information" },
+			{ slug: "make-an-impression" },
+			{ slug: "request", cost: "1" },
 		],
 	},
 	{
 		slug: "intimidation",
-		actions: [
-			{ slug: "coerce", type: 2 },
-			{ slug: "demoralize", cost: "1", type: 2 },
-		],
+		actions: [{ slug: "coerce" }, { slug: "demoralize", cost: "1" }],
 	},
 	{
 		slug: "medicine",
@@ -228,25 +221,23 @@ const SKILLS = [
 			{
 				slug: "administer-first-aid",
 				cost: "2",
-				type: 2,
 				variants: ["stabilize", "stop-bleeding"],
 				rollOption: "administer-first-aid",
 			},
-			{ slug: "treat-disease", type: 2, trained: true },
-			{ slug: "treat-poison", cost: "1", type: 2, trained: true },
-			{ slug: "treatWounds", type: 1, trained: true },
+			{ slug: "treat-disease", trained: true },
+			{ slug: "treat-poison", cost: "1", trained: true },
+			{ slug: "treatWounds", trained: true },
 		],
 	},
 	{
 		slug: "nature",
 		actions: [
-			{ slug: "command-an-animal", cost: "1", type: 2 }, //
+			{ slug: "command-an-animal", cost: "1" }, //
 			// 'recall-knowledge',
 			"identify-magic",
 			"learn-a-spell",
 			{
 				slug: "treatWounds",
-				type: 1,
 				trained: true,
 				condition: (actor) => hasFeat(actor, NATURAL_MEDICINE_UUID),
 			},
@@ -267,7 +258,6 @@ const SKILLS = [
 			{
 				slug: "perform",
 				cost: "1",
-				type: 1,
 				variants: [
 					"acting",
 					"comedy",
@@ -296,35 +286,35 @@ const SKILLS = [
 		slug: "society",
 		actions: [
 			// 'recall-knowledge', //
-			{ slug: "subsist", type: 2 },
-			{ slug: "create-forgery", type: 2, trained: true },
+			{ slug: "subsist" },
+			{ slug: "create-forgery", trained: true },
 			"decipher-writing",
 		],
 	},
 	{
 		slug: "stealth",
 		actions: [
-			{ slug: "conceal-an-object", cost: "1", type: 2 },
-			{ slug: "hide", cost: "1", type: 2 },
-			{ slug: "sneak", cost: "1", type: 2 },
+			{ slug: "conceal-an-object", cost: "1" },
+			{ slug: "hide", cost: "1" },
+			{ slug: "sneak", cost: "1" },
 		],
 	},
 	{
 		slug: "survival",
 		actions: [
-			{ slug: "sense-direction", type: 1 },
-			{ slug: "subsist", type: 2 },
+			{ slug: "sense-direction" },
+			{ slug: "subsist" },
 			{ slug: "cover-tracks", trained: true },
-			{ slug: "track", type: 1, trained: true },
+			{ slug: "track", trained: true },
 		],
 	},
 	{
 		slug: "thievery",
 		actions: [
-			{ slug: "palm-an-object", cost: "1", type: 2 },
-			{ slug: "steal", cost: "1", type: 2 },
-			{ slug: "disable-device", cost: "2", type: 2, trained: true },
-			{ slug: "pick-a-lock", cost: "2", type: 2, trained: true },
+			{ slug: "palm-an-object", cost: "1" },
+			{ slug: "steal", cost: "1" },
+			{ slug: "disable-device", cost: "2", trained: true },
+			{ slug: "pick-a-lock", cost: "2", trained: true },
 		],
 	},
 ];
