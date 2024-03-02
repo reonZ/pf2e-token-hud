@@ -2,7 +2,8 @@
 <div class="section" data-section="stances">
     <div class="header"> {{i18n "stances"}}</div>
     {{#each stances as |stance|}}
-    <div class="action" data-item-id="{{stance.actionID}}" data-effect-uuid="{{stance.effectUUID}}" data-item-name="{{stance.itemName}}">
+    <div class="action" data-item-id="{{stance.actionID}}" data-effect-uuid="{{stance.effectUUID}}"
+        data-item-name="{{stance.itemName}}">
         <div class="action-icon"><img src="systems/pf2e/icons/actions/OneAction.webp"></div>
         <a class="name" data-action="stance-description">{{stance.name}}</a>
         {{#if @root.isOwner}}
@@ -23,8 +24,9 @@
     <div class="header"> {{localize "PF2E.Actor.Attacks"}}</div>
 
     {{#each blasts as |blast|}}
-    <div class="strike details blast" data-element="{{blast.element}}" data-damage-type={{blast.damageType}}
-        data-item-id="{{blast.item.id}}" data-item-type="{{blast.item.type}}">
+    <div class="strike details blast" data-element="{{blast.element}}"
+        data-damage-type={{blast.damageType}} data-item-id="{{blast.item.id}}"
+        data-item-type="{{blast.item.type}}">
         <a class="name" data-action="blast-description">{{localize blast.label}}</a>
 
         {{> blast blast=blast melee=true}}
@@ -34,8 +36,9 @@
         <div class="variants">
             <div class="versatiles">
                 {{#each blast.damageTypes as |damageType|}}
-                <div class="variant {{#if damageType.selected}}selected{{/if}}" data-action="set-damage-type"
-                    data-value="{{damageType.value}}" data-tooltip="{{damageType.label}}">
+                <div class="variant {{#if damageType.selected}}selected{{/if}}"
+                    data-action="set-damage-type" data-value="{{damageType.value}}"
+                    data-tooltip="{{damageType.label}}">
                     <i class="fa-solid fa-{{damageType.icon}} fa-fw"></i>
                 </div>
                 {{/each}}
@@ -46,7 +49,8 @@
     {{/each}}
 
     {{#each strikes as |strike|}}
-    <div class="strike details {{#unless strike.visible}} hidden{{/unless}}" data-index="{{strike.index}}">
+    <div class="strike details {{#unless strike.visible}} hidden{{/unless}}"
+        data-index="{{strike.index}}">
         {{#if @root.isCharacter}}
         <a class="name" data-action="strike-description">{{strike.label}}</a>
         {{else}}
@@ -70,7 +74,7 @@
         {{/if}}
         {{/unless}}
 
-        {{#if strike.ready}}
+        {{#if (and strike.ready strike.canStrike)}}
         {{> strike strike=strike}}
         {{#if strike.altUsages.length}}
         {{#each strike.altUsages as |altUsage|}}
@@ -100,7 +104,8 @@
             {{/if}}
 
             {{#each strike.auxiliaryActions as |action|}}
-            <div class="variant {{#unless @root.isOwner}}disabled{{/unless}}" data-action="strike-auxiliary" data-index="{{@index}}">
+            <div class="variant {{#unless @root.isOwner}}disabled{{/unless}}"
+                data-action="strike-auxiliary" data-index="{{@index}}">
                 <span class="action-glyph">{{action.glyph}}</span>
                 {{action.label}}
                 {{#if action.options}}
@@ -202,8 +207,9 @@
 {{#*inline "strike"}}
 <div class="variants">
     {{#each strike.variants as |variant|}}
-    <div class="variant {{#if (or (eq strike.quantity 0) (not @root.isOwner))}}disabled{{/if}}" data-action="strike-attack"
-        data-index="{{@index}}" {{#if ../altUsage}}data-alt-usage="{{../altUsage}}" {{/if}}>
+    <div class="variant {{#if (or (eq strike.quantity 0) (not @root.isOwner))}}disabled{{/if}}"
+        data-action="strike-attack" data-index="{{@index}}" {{#if
+        ../altUsage}}data-alt-usage="{{../altUsage}}" {{/if}}>
         {{#if (eq @index 0)}}
         {{#if @root.isCharacter}}
         {{localize "PF2E.WeaponStrikeLabel"}}
@@ -219,8 +225,9 @@
 </div>
 <div class="variants">
     {{/unless}}
-    <div class="variant damage {{#unless @root.isOwner}}disabled{{/unless}}" data-action="strike-damage"
-        data-tooltip="{{strike.damageFormula}}" data-tooltip-direction="UP" {{#if altUsage}}data-alt-usage="{{altUsage}}" {{/if}}>
+    <div class="variant damage {{#unless @root.isOwner}}disabled{{/unless}}"
+        data-action="strike-damage" data-tooltip="{{strike.damageFormula}}"
+        data-tooltip-direction="UP" {{#if altUsage}}data-alt-usage="{{altUsage}}" {{/if}}>
         {{#if @root.isCharacter}}
         {{localize "PF2E.DamageLabel"}}
         {{else}}
@@ -228,16 +235,19 @@
         {{/if}}
     </div>
     <div class="variant {{#unless @root.isOwner}}disabled{{/unless}}" data-action="strike-critical"
-        data-tooltip="{{strike.criticalFormula}}" data-tooltip-direction="UP" {{#if altUsage}}data-alt-usage="{{altUsage}}" {{/if}}>
+        data-tooltip="{{strike.criticalFormula}}" data-tooltip-direction="UP" {{#if
+        altUsage}}data-alt-usage="{{altUsage}}" {{/if}}>
         {{localize "PF2E.CriticalDamageLabel"}}
     </div>
     {{/if}}
 
     {{#if (ne altUsage undefined)}}
     {{#if strike.item.isThrown}}
-    <img class="alt-usage-icon" src="systems/pf2e/icons/mdi/thrown.svg" data-tooltip="{{localize 'PF2E.Item.Weapon.ThrownUsage.Label'}}" />
+    <img class="alt-usage-icon" src="systems/pf2e/icons/mdi/thrown.svg"
+        data-tooltip="{{localize 'PF2E.Item.Weapon.ThrownUsage.Label'}}" />
     {{else}}
-    <img class="alt-usage-icon" src="systems/pf2e/icons/mdi/sword.svg" data-tooltip="{{localize 'PF2E.Item.Weapon.MeleeUsage.Label'}}" />
+    <img class="alt-usage-icon" src="systems/pf2e/icons/mdi/sword.svg"
+        data-tooltip="{{localize 'PF2E.Item.Weapon.MeleeUsage.Label'}}" />
     {{/if}}
     {{/if}}
 </div>
@@ -263,18 +273,21 @@
         {{@root.variantLabel blast.maps.ranged.map2}}
         {{/if}}
     </div>
-    <div class="variant damage" data-action="roll-damage" data-melee="{{melee}}" data-outcome="success"
+    <div class="variant damage" data-action="roll-damage" data-melee="{{melee}}"
+        data-outcome="success"
         data-formula="{{#if melee}}{{blast.formula.melee.damage}}{{else}}{{blast.formula.ranged.damage}}{{/if}}"
         data-tooltip="{{#if melee}}{{blast.formula.melee.damage}}{{else}}{{blast.formula.ranged.damage}}{{/if}}">
         {{localize "PF2E.DamageLabel"}}
     </div>
-    <div class="variant damage" data-action="roll-damage" data-melee="{{melee}}" data-outcome="critical-success"
+    <div class="variant damage" data-action="roll-damage" data-melee="{{melee}}"
+        data-outcome="critical-success"
         data-formula="{{#if melee}}{{blast.formula.melee.critical}}{{else}}{{blast.formula.ranged.critical}}{{/if}}"
         data-tooltip="{{#if melee}}{{blast.formula.melee.critical}}{{else}}{{blast.formula.ranged.critical}}{{/if}}">
         {{localize "PF2E.CriticalDamageLabel"}}
     </div>
     {{#unless melee}}
-    <i class="fa-regular fa-meteor fa-rotate-180 alt-usage-icon" data-tooltip="{{blast.range.label}}"></i>
+    <i class="fa-regular fa-meteor fa-rotate-180 alt-usage-icon"
+        data-tooltip="{{blast.range.label}}"></i>
     {{/unless}}
 </div>
 {{/inline}}
