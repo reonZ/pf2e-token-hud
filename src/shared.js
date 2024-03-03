@@ -1,31 +1,8 @@
-import { InlineRollLinks } from "module-api";
 import { getFlag, setFlag } from "./module.js";
 
 export const RANKS = ["U", "T", "E", "M", "L"];
 
 const COVER_UUID = "Compendium.pf2e.other-effects.Item.I9lfZUiCwMiGogVi";
-
-export async function getItemSummary(el, actor) {
-	const dataset = el.data();
-	const item = dataset.itemId
-		? getItemFromElement(el[0], actor)
-		: await fromUuid(dataset.uuid);
-
-	const data = await item?.getChatData({ secrets: actor.isOwner }, dataset);
-	if (!data) return;
-
-	const description = document.createElement("div");
-	description.classList.add("popup-description");
-
-	await actor.sheet.itemRenderer.renderItemSummary(description, item, data);
-	InlineRollLinks.listen(description, item);
-
-	if (dataset.castRank) {
-		description.dataset.castRank = dataset.castRank;
-	}
-
-	return description;
-}
 
 export function addNameTooltipListeners(el) {
 	const targetEl = el.find(".name");

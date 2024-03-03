@@ -1,5 +1,6 @@
+import { InlineRollLinks } from "module-api";
 import { enrichHTML, getHud, localize } from "./module.js";
-import { getItemSummary } from "./shared.js";
+import { getItemFromElement } from "./shared.js";
 
 export async function popup(title, content, actor) {
 	const hud = getHud();
@@ -30,7 +31,7 @@ export async function popup(title, content, actor) {
 		.querySelector("[data-action=close-popup]")
 		.addEventListener("click", () => popup.remove());
 
-	const consumeLinks = popup.querySelectorAll("[data-action='consume']");
+	const consumeLinks = popup.querySelectorAll("[data-action^='consume-']");
 	for (const link of consumeLinks) {
 		link.addEventListener("click", () => popup.remove());
 	}
@@ -40,9 +41,33 @@ export async function popup(title, content, actor) {
 }
 
 export async function showItemSummary(el, actor, title) {
-	const description = await getItemSummary(el, actor);
-	if (description) {
-		const popupTitle = title ?? el.find(".name").html();
-		popup(popupTitle.trim(), description, actor);
+	const dataset = el.data();
+	const item = dataset.itemId
+		? getItemFromElement(el[0], actor)
+		: await fromUuid(dataset.uuid);
+
+	const data = await item?.getChatData({ secrets: actor.isOwner }, dataset);
+	if (!data) return;
+
+	const description = document.createElement("div");
+	description.classList.add("popup-description");
+
+	await actor.sheet.itemRenderer.renderItemSummary(description, item, data);
+	InlineRollLinks.listen(description, item);
+
+	if (item.isOfType("consumable")) {
+		const consumeLinks = description.querySelectorAll(
+			"[data-action='consume-item']",
+		);
+		for (const btn of consumeLinks) {
+			btn.addEventListener("click", () => item.consume());
+		}
 	}
+
+	if (dataset.castRank) {
+		description.dataset.castRank = dataset.castRank;
+	}
+
+	const popupTitle = title ?? el.find(".name").html();
+	popup(popupTitle.trim(), description, actor);
 }
