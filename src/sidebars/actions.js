@@ -252,7 +252,7 @@ export function addActionsListeners({ el, actor, hud }) {
 		if (!strike) return;
 
 		const description = document.createElement("div");
-		description.classList.add("description");
+		description.classList.add("popup-description");
 		// this one is a copy of the system template, there is nothing to generate it
 		description.innerHTML = await renderTemplate(
 			templatePath("strike-description"),

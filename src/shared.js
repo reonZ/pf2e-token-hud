@@ -15,7 +15,7 @@ export async function getItemSummary(el, actor) {
 	if (!data) return;
 
 	const description = document.createElement("div");
-	description.classList.add("description");
+	description.classList.add("popup-description");
 
 	await actor.sheet.itemRenderer.renderItemSummary(description, item, data);
 	InlineRollLinks.listen(description, item);

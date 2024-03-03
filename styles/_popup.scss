@@ -33,11 +33,13 @@
             }
         }
 
-        .description {
+        .popup-description {
             overflow-y: auto;
             overflow-x: hidden;
 
             .tags.paizo-style {
+                padding: 0;
+
                 .tag {
                     &.property {
                         margin-left: var(--space-2);
