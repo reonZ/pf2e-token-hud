@@ -79,7 +79,9 @@ export async function rollRecallKnowledges(actor) {
 
 	const options = {
 		speaker: ChatMessage.getSpeaker({ actor }),
-		rollMode: CONST.DICE_ROLL_MODES.BLIND,
+		rollMode: game.pf2e.settings.metagame.secretChecks
+			? CONST.DICE_ROLL_MODES.PUBLIC
+			: CONST.DICE_ROLL_MODES.BLIND,
 		type: CONST.CHAT_MESSAGE_TYPES.ROLL,
 	};
 
