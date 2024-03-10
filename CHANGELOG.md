@@ -1,3 +1,14 @@
+# 1.63.0
+
+-   this is a `5.14.0` release
+-   updated the module to maintain compatibility with the latest system version
+-   removed prepared toggle from cantrips in the `spells` sidebar
+-   recall knowledge will respect the new `Show Secret Checks` metagame setting
+-   show shields in the actions sidebar even when in a stance that normally removes all other strikes
+-   fixed roll options showing up in the `extras` sidebar
+-   fixed some styling quirks with the popup
+-   fixed not being able to consume items from the popup
+
 # 1.62.5
 
 -   fixed degree of success snafu with the targeted `Recall Knowledge` skill action
