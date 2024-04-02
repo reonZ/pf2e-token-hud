@@ -358,7 +358,7 @@
                 "following": "Is Following an Expert"
             },
             "modifiers": {
-                "crowbar-missing": "No Crowbar"
+                "no-crowbar": "No Crowbar"
             },
             "variant": {
                 "title": "Variant Skill",
