@@ -1,3 +1,9 @@
+# 1.64.0
+
+-   is now compatible with the version `3.0.0` of `PF2e Dailies`
+-   no longer be compatible with previous versions of `PF2e Dailies`
+-   no longer offer backward compatibility support for `PF2e Staves`
+
 # 1.63.0
 
 -   this is a `5.14.0` release
@@ -378,15 +384,15 @@ Hooks.callAll('renderHUDSidebar', type: string, sidebar: jQuery, hud: HUD)
 
 ```js
 // get the first selected token found
-const token = canvas.tokens.controlled[0]
+const token = canvas.tokens.controlled[0];
 // retrieve the HUD object
-const hud = game.modules.get('pf2e-token-hud').api.getHud()
+const hud = game.modules.get("pf2e-token-hud").api.getHud();
 // set the token as the current HUD token
-hud.setToken(token)
+hud.setToken(token);
 // render the HUD on screen
-hud.render()
+hud.render();
 // lock the HUD until a click is made outside
-hud.lock()
+hud.lock();
 ```
 
 # 1.25.0
