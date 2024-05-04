@@ -20,8 +20,8 @@
                         right: 4px;
 
                         i {
-                            font-size: 1.1em;
-                            margin-top: 1px;
+                            font-size: 0.9em;
+                            margin-left: 3px;
                         }
                     }
                 }
@@ -86,25 +86,25 @@
                         --modular-bg-color: #6a6a6a;
 
                         .variant {
-                            &[data-action='strike-attack'],
-                            &[data-action='roll-attack'] {
+                            &[data-action="strike-attack"],
+                            &[data-action="roll-attack"] {
                                 &:not(.disabled) {
                                     background: var(--secondary);
                                 }
                             }
 
-                            &[data-action='strike-damage'],
-                            &[data-action='strike-critical'],
-                            &[data-action='roll-damage'] {
+                            &[data-action="strike-damage"],
+                            &[data-action="strike-critical"],
+                            &[data-action="roll-damage"] {
                                 &:not(.disabled) {
                                     background: var(--primary);
                                 }
                             }
 
-                            &[data-action='strike-attack'],
-                            &[data-action='roll-attack'],
-                            &[data-action='strike-damage'],
-                            &[data-action='strike-critical'] {
+                            &[data-action="strike-attack"],
+                            &[data-action="roll-attack"],
+                            &[data-action="strike-damage"],
+                            &[data-action="strike-critical"] {
                                 &:not(.disabled):hover {
                                     box-shadow: none;
                                     text-shadow: 0 0 2px white;

@@ -321,7 +321,12 @@
                 "no-proficiency": "{name} doesn't have the required proficiency to treat wounds."
             },
             "stances": "Stances",
-            "hero-actions": "Hero Actions"
+            "heroActions": {
+                "label": "Hero Actions",
+                "redraw": "Redraw all Hero Actions",
+                "draw": "Draw missing Hero Actions",
+                "trade": "Trade Hero Actions"
+            }
         },
         "hazard": {
             "empty": "{name} isn't really hazardeous."

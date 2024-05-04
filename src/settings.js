@@ -2,194 +2,179 @@ import { registerSetting, settingPath } from "module-api";
 import { MODULE_ID, enableModule, localize } from "./module.js";
 
 export function registerSettings() {
-	const isGM =
-		game.data.users.find((x) => x._id === game.data.userId).role >=
-		CONST.USER_ROLES.GAMEMASTER;
+    const isGM =
+        game.data.users.find((x) => x._id === game.data.userId).role >= CONST.USER_ROLES.GAMEMASTER;
 
-	/**
-	 * GM
-	 */
-	const statuses = ["first", "second", "third", "fourth"]
-		.map((x) => localize(`settings.status.statuses.${x}`))
-		.join(", ");
-	register("status", String, statuses, { scope: "world" });
+    /**
+     * GM
+     */
+    const statuses = ["first", "second", "third", "fourth"]
+        .map((x) => localize(`settings.status.statuses.${x}`))
+        .join(", ");
+    register("status", String, statuses, { scope: "world" });
 
-	register("last-status", Boolean, false, { scope: "world" });
+    register("last-status", Boolean, false, { scope: "world" });
 
-	register("party", Boolean, false, { scope: "world" });
+    register("party", Boolean, false, { scope: "world" });
 
-	register("rk-dice", Boolean, false, { scope: "world" });
+    register("rk-dice", Boolean, false, { scope: "world" });
 
-	/**
-	 * CLIENT
-	 */
-	register("enabled", Boolean, true, { onChange: enableModule });
+    /**
+     * CLIENT
+     */
+    register("enabled", Boolean, true, { onChange: enableModule });
 
-	register("position", String, "right", {
-		choices: ["left", "right", "top", "bottom"],
-	});
+    register("position", String, "right", {
+        choices: ["left", "right", "top", "bottom"],
+    });
 
-	register("small-position", String, "top", {
-		choices: ["left", "right", "top", "bottom"],
-	});
+    register("small-position", String, "top", {
+        choices: ["left", "right", "top", "bottom"],
+    });
 
-	register("delay", Number, 250, {
-		range: {
-			min: 0,
-			max: 2000,
-			step: 50,
-		},
-	});
+    register("delay", Number, 250, {
+        range: {
+            min: 0,
+            max: 2000,
+            step: 50,
+        },
+    });
 
-	register("scale", Number, 14, {
-		range: {
-			min: 10,
-			max: 30,
-			step: 1,
-		},
-	});
+    register("scale", Number, 14, {
+        range: {
+            min: 10,
+            max: 30,
+            step: 1,
+        },
+    });
 
-	register("key-holding", String, "none", {
-		hint: settingPath(
-			"key-holding",
-			isGM ? "choices.gm.hint" : "choices.player.hint",
-		),
-		choices: {
-			none: settingPath("key-holding", "choices.none"),
-			half: settingPath(
-				"key-holding",
-				isGM ? "choices.gm.half" : "choices.player.half",
-			),
-			all: settingPath(
-				"key-holding",
-				isGM ? "choices.gm.all" : "choices.player.all",
-			),
-		},
-	});
+    register("key-holding", String, "none", {
+        hint: settingPath("key-holding", isGM ? "choices.gm.hint" : "choices.player.hint"),
+        choices: {
+            none: settingPath("key-holding", "choices.none"),
+            half: settingPath("key-holding", isGM ? "choices.gm.half" : "choices.player.half"),
+            all: settingPath("key-holding", isGM ? "choices.gm.all" : "choices.player.all"),
+        },
+    });
 
-	register("autolock", String, "none", {
-		choices: ["none", "hover", "render"],
-	});
+    register("autolock", String, "none", {
+        choices: ["none", "hover", "render"],
+    });
 
-	register("chat-close", Boolean, false);
-	register("attack-close", Boolean, false);
-	register("action-close", Boolean, false);
-	register("cast-close", Boolean, false);
-	register("skill-close", Boolean, false);
-	register("macro-close", Boolean, false);
-	register("use-close", Boolean, false);
+    register("chat-close", Boolean, false);
+    register("attack-close", Boolean, false);
+    register("action-close", Boolean, false);
+    register("cast-close", Boolean, false);
+    register("skill-close", Boolean, false);
+    register("macro-close", Boolean, false);
+    register("use-close", Boolean, false);
 
-	register("no-dead", Boolean, false);
+    register("no-dead", Boolean, false);
 
-	register("observer", Boolean, true);
+    register("observer", Boolean, true);
 
-	register("see-status", Boolean, false);
+    register("see-status", Boolean, false);
 
-	// tooltip
+    // tooltip
 
-	register("saves", String, "bonus", { choices: ["none", "bonus", "dc"] });
+    register("saves", String, "bonus", { choices: ["none", "bonus", "dc"] });
 
-	register("others", String, "none", { choices: ["none", "bonus", "dc"] });
+    register("others", String, "none", { choices: ["none", "bonus", "dc"] });
 
-	register("ranks", Boolean, false);
+    register("ranks", Boolean, false);
 
-	register("show-death", String, "always", {
-		choices: ["none", "always", "only"],
-	});
+    register("show-death", String, "always", {
+        choices: ["none", "always", "only"],
+    });
 
-	register("force-speed", Boolean, false);
+    register("force-speed", Boolean, false);
 
-	register("tooltips", Boolean, false);
+    register("tooltips", Boolean, false);
 
-	register("pips", Boolean, false);
+    register("pips", Boolean, false);
 
-	// distance
+    // distance
 
-	register("distance", String, "all", { choices: ["none", "self", "all"] });
+    register("distance", String, "all", { choices: ["none", "self", "all"] });
 
-	register("unit", String, "");
+    register("unit", String, "");
 
-	// sidebar
+    // sidebar
 
-	register("height", String, "");
+    register("height", String, "");
 
-	register("filter", Boolean, false);
+    register("filter", Boolean, false);
 
-	register("scrollbar", Boolean, true);
+    register("scrollbar", Boolean, true);
 
-	register("hazard-width", Number, 32, {
-		range: {
-			min: 14,
-			max: 50,
-			step: 1,
-		},
-	});
+    register("hazard-width", Number, 32, {
+        range: {
+            min: 14,
+            max: 50,
+            step: 1,
+        },
+    });
 
-	register("actions-columns", Boolean, false);
+    register("actions-columns", Boolean, false);
 
-	register("items-columns", Boolean, false);
+    register("items-columns", Boolean, false);
 
-	register("spells-columns", Boolean, false);
+    register("spells-columns", Boolean, false);
 
-	register("skills-columns", Boolean, false);
+    register("skills-columns", Boolean, false);
 
-	// actions
+    // actions
 
-	register("actions", String, "split", { choices: ["name", "type", "split"] });
+    register("actions", String, "split", { choices: ["name", "type", "split"] });
 
-	// register('actions-colors', Boolean, true)
+    // items
 
-	register("action-effect", Boolean, false);
+    register("containers", Boolean, false);
 
-	// items
+    // spells
 
-	register("containers", Boolean, false);
+    register("spells-sort", String, "disabled", {
+        choices: ["disabled", "type", "entry"],
+    });
 
-	// spells
+    register("tradition", Boolean, false);
 
-	register("spells-sort", String, "disabled", {
-		choices: ["disabled", "type", "entry"],
-	});
+    // skills
 
-	register("tradition", Boolean, false);
-
-	// skills
-
-	register("untrained", Boolean, true);
+    register("untrained", Boolean, true);
 }
 
 export function renderSettingsConfig(_, html) {
-	const tab = html.find(`.tab[data-tab=${MODULE_ID}]`);
+    const tab = html.find(`.tab[data-tab=${MODULE_ID}]`);
 
-	function beforeGroup(name, key, dom = "h3") {
-		const localized = localize(`menu.${key}`);
-		tab
-			.find(`[name="${MODULE_ID}.${name}"]`)
-			.closest(".form-group")
-			.before(`<${dom}>${localized}</${dom}>`);
-	}
+    function beforeGroup(name, key, dom = "h3") {
+        const localized = localize(`menu.${key}`);
+        tab.find(`[name="${MODULE_ID}.${name}"]`)
+            .closest(".form-group")
+            .before(`<${dom}>${localized}</${dom}>`);
+    }
 
-	if (game.user.isGM) {
-		beforeGroup("enabled", "client.header", "h2");
-	}
+    if (game.user.isGM) {
+        beforeGroup("enabled", "client.header", "h2");
+    }
 
-	beforeGroup("saves", "client.tooltip");
-	beforeGroup("distance", "client.distance");
-	beforeGroup("height", "client.sidebar");
-	beforeGroup("actions", "client.actions");
-	beforeGroup("containers", "client.items");
-	beforeGroup("spells-sort", "client.spells");
-	beforeGroup("untrained", "client.skills");
-	// beforeGroup('', 'client.extras')
+    beforeGroup("saves", "client.tooltip");
+    beforeGroup("distance", "client.distance");
+    beforeGroup("height", "client.sidebar");
+    beforeGroup("actions", "client.actions");
+    beforeGroup("containers", "client.items");
+    beforeGroup("spells-sort", "client.spells");
+    beforeGroup("untrained", "client.skills");
+    // beforeGroup('', 'client.extras')
 }
 
 function register(name, type, defValue, extra = {}) {
-	registerSetting({
-		name,
-		scope: "client",
-		config: true,
-		type,
-		default: defValue,
-		...extra,
-	});
+    registerSetting({
+        name,
+        scope: "client",
+        config: true,
+        type,
+        default: defValue,
+        ...extra,
+    });
 }

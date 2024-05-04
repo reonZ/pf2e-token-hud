@@ -147,13 +147,23 @@
 {{#if heroActions}}
 <div class="section" data-section="hero-actions">
     <div class="header">
-        {{i18n 'hero-actions'}}
+        {{i18n 'heroActions.label'}}
         {{#if @root.isOwner}}
         <div class="menu">
-            {{#if heroActions.draw}}
-            <a data-action="draw-hero-action">+{{heroActions.draw}}</a>
-            {{else if heroActions.canTrade}}
-            <a data-action="trade-hero-action"><i class="fa-solid fa-handshake"></i></a>
+            {{#if heroActions.usesCount}}
+            <a data-action="draw-hero-action" data-tooltip="{{i18n 'heroActions.redraw'}}">
+                <i class="fa-regular fa-cards-blank"></i>
+            </a>
+            {{else if heroActions.mustDraw}}
+            <a data-action="draw-hero-action" data-tooltip="{{i18n 'heroActions.draw'}}">
+                <i class="fa-regular fa-cards-blank"></i> +{{heroActions.diff}}
+            </a>
+            {{/if}}
+            {{#if heroActions.canTrade}}
+            <a type="button" data-action="trade-hero-action"
+                data-tooltip="{{i18n 'heroActions.trade'}}">
+                <i class="fas fa-right-left"></i>
+            </a>
             {{/if}}
         </div>
         {{/if}}
@@ -163,10 +173,15 @@
         <div class="action-icon"><img src="systems/pf2e/icons/actions/Passive.webp"></div>
         <a class="name" data-action="hero-action-description">{{action.name}}</a>
         {{#if @root.isOwner}}
-        {{#if ../heroActions.discard}}
-        <a data-action="discard-hero-action"><i class="fa-solid fa-trash"></i></a>
-        {{else}}
-        <a data-action="use-hero-action"><i class="fa-solid fa-play"></i></a>
+        {{#if ../heroActions.canUse}}
+        <a data-action="use-hero-action">
+            <i class="fa-solid fa-play"></i>
+        </a>
+        {{/if}}
+        {{#if ../heroActions.mustDiscard}}
+        <a data-action="discard-hero-action">
+            <i class="fa-solid fa-trash"></i>
+        </a>
         {{/if}}
         <a class="chat" data-action="hero-action-chat"><i class="fa-solid fa-message"></i></a>
         {{/if}}
