@@ -146,8 +146,7 @@ export async function getActionsData({ hud, actor, filter }) {
         sections.sort((a, b) => SECTIONS_TYPES[a.type].order - SECTIONS_TYPES[b.type].order);
 
     const heroActionApi = getHeroActionsApi();
-    const heroActions =
-        isCharacter && heroActionApi ? heroActionApi.getHeroActions(actor) : undefined;
+    const heroActions = isCharacter && heroActionApi ? heroActionApi.getHeroActions(actor) : [];
 
     if (
         stances?.length ||
@@ -164,7 +163,7 @@ export async function getActionsData({ hud, actor, filter }) {
             Number((heroActions?.length ?? 0) > 0);
 
         const heroPoints = actor.heroPoints.value;
-        const usesCount = heroActionApi.usesCountVariant();
+        const usesCount = heroActionApi?.usesCountVariant();
         const heroPointsDiff = heroPoints - heroActions.length;
         const mustDiscard = !usesCount && heroPointsDiff < 0;
         const mustDraw = !usesCount && heroPointsDiff > 0;
@@ -175,7 +174,7 @@ export async function getActionsData({ hud, actor, filter }) {
                 strikes,
                 blasts,
                 sections,
-                heroActions: heroActions && {
+                heroActions: heroActions.length && {
                     actions: heroActions,
                     usesCount,
                     mustDiscard,
