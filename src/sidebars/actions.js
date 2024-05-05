@@ -146,15 +146,10 @@ export async function getActionsData({ hud, actor, filter }) {
         sections.sort((a, b) => SECTIONS_TYPES[a.type].order - SECTIONS_TYPES[b.type].order);
 
     const heroActionApi = getHeroActionsApi();
-    const heroActions = isCharacter && heroActionApi ? heroActionApi.getHeroActions(actor) : [];
+    const heroActions =
+        isCharacter && heroActionApi ? heroActionApi.getHeroActions(actor) : undefined;
 
-    if (
-        stances?.length ||
-        strikes?.length ||
-        blasts?.length ||
-        sections.length ||
-        heroActions?.length
-    ) {
+    if (stances?.length || strikes?.length || blasts?.length || sections.length || heroActions) {
         const nb =
             Number((stances?.length ?? 0) > 0) +
             Number((strikes?.length ?? 0) > 0) +
@@ -162,28 +157,35 @@ export async function getActionsData({ hud, actor, filter }) {
             sections.length +
             Number((heroActions?.length ?? 0) > 0);
 
-        const heroPoints = actor.heroPoints.value;
-        const usesCount = heroActionApi?.usesCountVariant();
-        const heroPointsDiff = heroPoints - heroActions.length;
-        const mustDiscard = !usesCount && heroPointsDiff < 0;
-        const mustDraw = !usesCount && heroPointsDiff > 0;
-
         return {
             contentData: {
                 stances,
                 strikes,
                 blasts,
                 sections,
-                heroActions: heroActions.length && {
-                    actions: heroActions,
-                    usesCount,
-                    mustDiscard,
-                    mustDraw,
-                    canUse: (usesCount && heroPoints > 0) || heroPointsDiff >= 0,
-                    canTrade:
-                        heroActions.length && !mustDiscard && !mustDraw && heroActionApi.canTrade(),
-                    diff: Math.abs(heroPointsDiff),
-                },
+                heroActions: (() => {
+                    if (!heroActions) return;
+
+                    const heroPoints = actor.heroPoints.value;
+                    const usesCount = heroActionApi.usesCountVariant();
+                    const heroPointsDiff = heroPoints - heroActions.length;
+                    const mustDiscard = !usesCount && heroPointsDiff < 0;
+                    const mustDraw = !usesCount && heroPointsDiff > 0;
+
+                    return {
+                        actions: heroActions,
+                        usesCount,
+                        mustDiscard,
+                        mustDraw,
+                        canUse: (usesCount && heroPoints > 0) || heroPointsDiff >= 0,
+                        canTrade:
+                            heroActions.length &&
+                            !mustDiscard &&
+                            !mustDraw &&
+                            heroActionApi.canTrade(),
+                        diff: Math.abs(heroPointsDiff),
+                    };
+                })(),
                 i18n: (str) => localize(`actions.${str}`),
                 variantLabel: (label) => label.replace(/.+\((.+)\)/, "$1"),
                 damageTypes: CONFIG.PF2E.damageTypes,
