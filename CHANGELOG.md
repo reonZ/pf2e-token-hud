@@ -1,7 +1,11 @@
+# 1.65.0
+
+-   is now compatible with the version `2.0.0` of `PF2e Toolbelt`
+
 # 1.64.0
 
 -   is now compatible with the version `3.0.0` of `PF2e Dailies`
--   no longer be compatible with previous versions of `PF2e Dailies`
+-   no longer compatible with previous versions of `PF2e Dailies`
 -   no longer offer backward compatibility support for `PF2e Staves`
 
 # 1.63.0
