@@ -1,3 +1,7 @@
+# 1.65.1
+
+-   fixed issue when `PF2e Toolbelt` isn't active
+
 # 1.65.0
 
 -   is now compatible with the version `2.0.0` of `PF2e Toolbelt`
