@@ -1,3 +1,7 @@
+# 1.65.2
+
+-   fixed the issues with `PF2e Toolbelt` hero actions
+
 # 1.65.1
 
 -   fixed issue when `PF2e Toolbelt` isn't active
