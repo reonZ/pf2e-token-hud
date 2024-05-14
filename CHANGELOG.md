@@ -1,3 +1,7 @@
+# 1.66.0
+
+-   this is a `6.0.0-beta1` release
+
 # 1.65.2
 
 -   fixed the issues with `PF2e Toolbelt` hero actions
