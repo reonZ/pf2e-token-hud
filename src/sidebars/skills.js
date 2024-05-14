@@ -476,7 +476,7 @@ export function addSkillsListeners({ el, actor, token, hud }) {
         if (following) return await following.delete();
 
         const source = (await fromUuid(FOLLOW_THE_EXPERT_UUID)).toObject();
-        setProperty(source, "flags.core.sourceId", FOLLOW_THE_EXPERT_UUID);
+        foundry.utils.setProperty(source, "flags.core.sourceId", FOLLOW_THE_EXPERT_UUID);
         await actor.createEmbeddedDocuments("Item", [source]);
     });
 

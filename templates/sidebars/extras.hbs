@@ -2,7 +2,7 @@
 <div class="row" data-row="initiative">
     {{> roll action='roll-initiative' label='PF2E.InitiativeLabel'}}
     <select name="system.initiative.statistic" {{disabled (not isOwner)}}>
-        {{selectOptions initiative.skills selected=initiative.selected nameAttr="slug" labelAttr="label"}}
+        {{selectOptions initiative.skills selected=initiative.selected valueAttr="slug" labelAttr="label"}}
     </select>
 </div>
 <hr>

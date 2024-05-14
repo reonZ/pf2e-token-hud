@@ -88,12 +88,9 @@
             {{#if (and strike.ammunition strike.ready)}}
             <div class="variant {{#unless @root.isOwner}}disabled{{/unless}}">
                 <select class="ammos" data-action="strike-ammo" {{disabled (not @root.isOwner)}}>
-                    {{#select strike.ammunition.selected.id}}
                     <option value="">{{localize "PF2E.NoAmmoLabel"}}</option>
-                    {{#each strike.ammunition.compatible as |ammo|}}
-                    <option value="{{ammo.id}}">{{ammo.name}} ({{ammo.quantity}})</option>
-                    {{/each}}
-                    {{/select}}
+                    {{selectOptions strike.ammunition.compatible
+                    selected=strike.ammunition.selected.id valueAttr='id' labelAttr='label'}}
                 </select>
             </div>
             {{#if (gt strike.item.ammo.uses.max 1)}}

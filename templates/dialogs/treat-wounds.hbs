@@ -3,7 +3,7 @@
         <strong>{{localize 'PF2E.SkillLabel'}}: </strong>
         {{#if (gt skills.length 1)}}
         <select name="skill">
-            {{selectOptions skills selected='medicine' nameAttr="slug" labelAttr="label"}}
+            {{selectOptions skills selected='medicine' valueAttr="slug" labelAttr="label"}}
         </select>
         {{else}}
         <span>{{skills.[0].label}}</span>

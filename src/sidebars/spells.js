@@ -12,19 +12,8 @@ export async function getSpellsData({ actor, filter }) {
     const focusPool = actor.system.resources.focus ?? { value: 0, max: 0 };
     const showTradition = getSetting("tradition");
     const pf2eDailies = game.modules.get("pf2e-dailies");
-    const pf2eDailiesActive = pf2eDailies?.active && isNewerVersion(pf2eDailies.version, "2.24.0");
-
-    // const pf2eStavesActive = game.modules.get("pf2e-staves")?.active;
-    // const pf2eDailies = game.modules.get("pf2e-dailies");
-    // const pf2eDailiesActive = pf2eDailies?.active;
-    // const stavesActive =
-    // 	pf2eStavesActive ||
-    // 	(pf2eDailiesActive && isNewerVersion(pf2eDailies.version, "2.14.0"));
-    // const chargesPath = pf2eStavesActive
-    // 	? "flags.pf2e-staves.charges"
-    // 	: pf2eDailiesActive
-    // 	  ? "flags.pf2e-dailies.staff.charges"
-    // 	  : "";
+    const pf2eDailiesActive =
+        pf2eDailies?.active && foundry.utils.isNewerVersion(pf2eDailies.version, "2.24.0");
 
     const spells = [];
     const focuses = [];

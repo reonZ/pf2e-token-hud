@@ -420,9 +420,9 @@ export function addActionsListeners({ el, actor, hud }) {
 
                 switch (dataset.action) {
                     case "roll-attack": {
-                        const mapIncreases = Math.clamped(Number(dataset.mapIncreases), 0, 2);
+                        const mapIncreases = Math.clamp(Number(dataset.mapIncreases), 0, 2);
                         blast.attack({
-                            mapIncreases: Math.clamped(mapIncreases, 0, 2),
+                            mapIncreases: Math.clamp(mapIncreases, 0, 2),
                             element,
                             damageType,
                             melee,
@@ -464,20 +464,11 @@ function getToolBeltApi(setting) {
 }
 
 function getStancesModuleApi() {
-    const module = game.modules.get("pf2e-stances");
-    return module?.active ? module.api : getToolBeltApi("stances.enabled")?.stances;
+    return getToolBeltApi("stances.enabled")?.stances;
 }
 
 function getHeroActionsApi() {
-    const module = game.modules.get("pf2e-hero-actions");
-    return module?.active ? module.api : getToolBeltApi("heroActions.enabled")?.heroActions;
-}
-
-function canTradeHeroActions() {
-    if (game.modules.get("pf2e-hero-actions")?.active)
-        return game.settings.get("pf2e-hero-actions", "trade");
-    if (getToolBeltModule("heroActions.enabled"))
-        return game.settings.get("pf2e-toolbelt", "heroActions.trade");
+    return getToolBeltApi("heroActions.enabled")?.heroActions;
 }
 
 function getCharacterActions(actor, stances) {

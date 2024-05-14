@@ -9,12 +9,11 @@
             "discord": "Idle#3251"
         }
     ],
-    "esmodules": [
-        "scripts/main.js"
-    ],
+    "esmodules": ["scripts/main.js"],
     "compatibility": {
-        "minimum": "11.315",
-        "verified": "11.315"
+        "minimum": "12.322",
+        "verified": "12.322",
+        "maximum": "12"
     },
     "version": "1.65.2",
     "manifestPlusVersion": "1.2.0",
@@ -24,9 +23,7 @@
     "download": "https://github.com/reonZ/pf2e-token-hud/releases/download/1.65.2/module.zip",
     "changelog": "https://github.com/reonZ/pf2e-token-hud/blob/master/CHANGELOG.md",
     "bugs": "https://github.com/reonZ/pf2e-token-hud/issues",
-    "styles": [
-        "styles/itt.css"
-    ],
+    "styles": ["styles/itt.css"],
     "languages": [
         {
             "lang": "en",
@@ -56,7 +53,7 @@
                 "type": "system",
                 "manifest": "https://raw.githubusercontent.com/foundryvtt/pf2e/master/system.json",
                 "compatibility": {
-                    "minimum": "5.15.0"
+                    "minimum": "6.0.0-beta1"
                 }
             }
         ]

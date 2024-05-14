@@ -2,7 +2,7 @@
     <p>
         <strong>{{i18n 'label'}}</strong>
         <select name="skill">
-            {{selectOptions skills selected=skill nameAttr="slug" labelAttr="label"}}
+            {{selectOptions skills selected=skill valueAttr="slug" labelAttr="label"}}
         </select>
     </p>
     {{#if dc inclueZero=true}}

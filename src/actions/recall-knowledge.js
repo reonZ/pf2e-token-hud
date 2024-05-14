@@ -18,7 +18,7 @@ const SUCCESS = {
 };
 
 export async function rollRecallKnowledges(actor) {
-    const roll = await new Roll("1d20").evaluate({ async: true });
+    const roll = await new Roll("1d20").evaluate();
     const dieResult = roll.dice[0].total;
     const dieSuccess = dieResult === 1 ? "0" : dieResult === 20 ? "3" : "";
     const lores = Object.values(actor.skills).filter((skill) => skill.lore);
@@ -70,7 +70,6 @@ export async function rollRecallKnowledges(actor) {
         rollMode: game.pf2e.settings.metagame.secretChecks
             ? CONST.DICE_ROLL_MODES.PUBLIC
             : CONST.DICE_ROLL_MODES.BLIND,
-        type: CONST.CHAT_MESSAGE_TYPES.ROLL,
     };
 
     if (rkDice) {
