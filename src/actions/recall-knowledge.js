@@ -63,19 +63,13 @@ export async function rollRecallKnowledges(actor) {
         );
     }
 
-    const rkDice = getSetting("rk-dice");
-
     const options = {
         speaker: ChatMessage.getSpeaker({ actor }),
         rollMode: game.pf2e.settings.metagame.secretChecks
             ? CONST.DICE_ROLL_MODES.PUBLIC
             : CONST.DICE_ROLL_MODES.BLIND,
+        rolls: [roll],
     };
-
-    if (rkDice) {
-        options.rolls = [roll];
-        data.rkDice = true;
-    }
 
     options.flavor = await renderTemplate(templatePath("chat/recall-knowledge"), data);
 

@@ -3,9 +3,6 @@
     <h4 class="action">
         <span class="pf2-icon larger">A</span>
         <strong>{{localize 'PF2E.RecallKnowledge.Label'}}</strong>
-        {{#unless rkDice}}
-        <span>({{localize 'PF2E.Roll.Roll'}}: <span class="success {{dieSuccess}}">{{dieResult}}</span>)</span>
-        {{/unless}}
     </h4>
 
     {{#if target}}
@@ -15,7 +12,8 @@
     {{/if}}
 
     <div class="tags">
-        <span class="tag" data-slug="concentrate" data-description="PF2E.TraitDescriptionConcentrate">
+        <span class="tag" data-slug="concentrate"
+            data-description="PF2E.TraitDescriptionConcentrate">
             {{localize 'PF2E.TraitConcentrate'}}
         </span>
         <span class="tag" data-slug="secret" data-description="PF2E.TraitDescriptionSecret">
@@ -45,7 +43,8 @@
         <span class="name rank {{skill.rank}}">{{skill.label}}<sup>{{skill.rankLabel}}</sup></span>
         <span class="success {{@root.dieSuccess}}">{{skill.total}}</span>
         {{#each skill.checks as |check|}}
-        <span class="success {{check.success}}" data-tooltip="PF2E.Check.Result.Degree.Check.{{check.title}}">{{{check.icon}}}</span>
+        <span class="success {{check.success}}"
+            data-tooltip="PF2E.Check.Result.Degree.Check.{{check.title}}">{{{check.icon}}}</span>
         {{/each}}
         {{/each}}
     </div>

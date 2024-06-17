@@ -17,7 +17,7 @@ export function registerSettings() {
 
     register("party", Boolean, false, { scope: "world" });
 
-    register("rk-dice", Boolean, false, { scope: "world" });
+    // register("rk-dice", Boolean, false, { scope: "world" });
 
     /**
      * CLIENT
