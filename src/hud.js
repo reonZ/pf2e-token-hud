@@ -719,12 +719,13 @@ export class HUD extends Application {
         const element = this.element[0];
         const scale = token.worldTransform.a;
         const hud = element.getBoundingClientRect();
+        const gridSize = canvas.grid.size;
         const targetCoords = canvas.clientCoordinatesFromCanvas(token.document._source);
         const target = {
             x: targetCoords.x,
             y: targetCoords.y,
-            width: token.hitArea.width * scale,
-            height: token.hitArea.height * scale,
+            width: token.document.width * gridSize * scale,
+            height: token.document.height * gridSize * scale,
             get right() {
                 return this.x + this.width;
             },
