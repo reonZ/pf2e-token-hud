@@ -1,3 +1,8 @@
+# 1.67.0
+
+-   made the tooltip usable on hex maps, though the token hover precision makes it hard and awkward to use
+-   removed the `Recall Knowledge - Die Roll` setting, recall knowledge message will now always contain the roll, this fixes the changes made in v12 preventing a non-roll message from being private/blind
+
 # 1.66.0
 
 -   this is a `6.0.0-beta1` release

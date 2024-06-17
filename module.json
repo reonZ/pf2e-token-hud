@@ -1,7 +1,6 @@
 {
     "id": "pf2e-token-hud",
     "title": "PF2e Interactive Token Tooltip",
-    "author": "Idle",
     "description": "",
     "authors": [
         {
@@ -13,16 +12,15 @@
         "scripts/main.js"
     ],
     "compatibility": {
-        "minimum": "12.322",
-        "verified": "12.322",
+        "minimum": "12.327",
+        "verified": "12.327",
         "maximum": "12"
     },
-    "version": "1.66.0",
-    "manifestPlusVersion": "1.2.0",
+    "version": "1.67.0",
     "url": "https://github.com/reonZ/pf2e-token-hud",
     "readme": "https://github.com/reonZ/pf2e-token-hud/blob/master/README.md",
     "manifest": "https://raw.githubusercontent.com/reonZ/pf2e-token-hud/master/module.json",
-    "download": "https://github.com/reonZ/pf2e-token-hud/releases/download/1.66.0/module.zip",
+    "download": "https://github.com/reonZ/pf2e-token-hud/releases/download/1.67.0/module.zip",
     "changelog": "https://github.com/reonZ/pf2e-token-hud/blob/master/CHANGELOG.md",
     "bugs": "https://github.com/reonZ/pf2e-token-hud/issues",
     "styles": [
@@ -57,7 +55,7 @@
                 "type": "system",
                 "manifest": "https://raw.githubusercontent.com/foundryvtt/pf2e/master/system.json",
                 "compatibility": {
-                    "minimum": "6.0.0-beta1"
+                    "minimum": "6.0.2"
                 }
             }
         ]
