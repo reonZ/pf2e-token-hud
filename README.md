@@ -1,6 +1,6 @@
 # FoundryVTT PF2e Interactive Token Tooltip
 
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/K3K6M2V13)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/K3K6M2V13) or [Stripe](https://buy.stripe.com/cN23dy0hd0gW5nq3cc) directly
 
 ### This module will generate an interactive token tooltip to access all the most used features in PF2e actors sheets.
 
@@ -421,7 +421,7 @@ A set of functions is exposed from the module to be used by third parties:
 /**
  * Retrieves the API object containing the functions
  */
-game.modules.get('pf2e-token-hud').api
+game.modules.get("pf2e-token-hud").api;
 ```
 
 ```js
@@ -429,7 +429,7 @@ game.modules.get('pf2e-token-hud').api
  * @param {boolean} [element] - when true, the dom element of the HUD will be returned instead
  * @returns {HUD | JQuery | null} return the HUD object, its dom element or null
  */
-getHud: (element?: boolean) => HUD | JQuery | null
+getHud: (element?: boolean) => HUD | JQuery | null;
 ```
 
 # CHANGELOG
