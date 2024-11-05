@@ -2,7 +2,8 @@
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/K3K6M2V13) or [Stripe](https://buy.stripe.com/cN23dy0hd0gW5nq3cc) directly
 
-# $\color{red}{IMPORTANT:}$ this module isn't maintained anymore and starts breaking apart with system version 6.1.0
+> [!CAUTION]
+> This module isn't maintained anymore and starts breaking apart with system version 6.1.0
 
 # Main Tooltip
 
